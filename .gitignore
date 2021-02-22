@@ -1,0 +1,3 @@
+dist/*
+build/*
+py_Ultroid.egg-info/*
