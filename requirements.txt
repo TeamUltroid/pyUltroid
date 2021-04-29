@@ -3,7 +3,7 @@ cryptg
 cairosvg
 emoji
 GitPython
-googletrans==3.1.0a0
+googletrans==4.0.0rc1
 heroku3
 imutils
 lottie
