@@ -25,7 +25,7 @@ setuptools.setup(
     install_requires=[
         "telethon>=1.19.5",
         "redis",
-        "python-decouple==3.3",
+        "python-decouple==3.4",
         "cryptg",
         "python-dotenv==0.17.0",
     ],
