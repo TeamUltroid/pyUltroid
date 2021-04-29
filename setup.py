@@ -27,7 +27,7 @@ setuptools.setup(
         "redis",
         "python-decouple==3.3",
         "cryptg",
-        "python-dotenv==0.15.0",
+        "python-dotenv==0.17.0",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
