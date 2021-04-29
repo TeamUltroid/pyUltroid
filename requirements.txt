@@ -17,7 +17,7 @@ pycairo
 pydantic
 PyDictionary
 PyPDF2
-python-decouple==3.3
+python-decouple==3.4
 pytz
 redis
 requests>=2.18.4
