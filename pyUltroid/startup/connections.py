@@ -137,15 +137,14 @@ def client_connection(String=None, only_user=False):
 
 
 def vc_connection(udB, ultroid_bot):
-    VC_SESSION = Var.VC_SESSION if Var.VC_SESSION else udB.get("VC_SESSION")
+    VC_SESSION = Var.VC_SESSION or udB.get("VC_SESSION")
     if VC_SESSION:
         if VC_SESSION == Var.SESSION:
             return ultroid_bot
         try:
-            vcClient = TelegramClient(
+            return TelegramClient(
                 StringSession(VC_SESSION), api_id=Var.API_ID, api_hash=Var.API_HASH
             ).start()
-            return vcClient
         except (AuthKeyDuplicatedError, PhoneNumberInvalidError, EOFError):
             LOGS.info("Your VC_SESSION Expired. Deleting VC_SESSION from redis...")
             LOGS.info("Renew/Change it to Use Voice/Video Chat from VC Account...")

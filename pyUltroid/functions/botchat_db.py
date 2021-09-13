@@ -38,7 +38,6 @@ def tag_add(msg, chat, user):
 
 def who_tag(msg):
     ok = eval(udB.get("BOTCHAT"))
-    if ok.get("TAG"):
-        if ok["TAG"].get(msg):
-            return ok["TAG"][msg]
+    if ok.get("TAG") and ok["TAG"].get(msg):
+        return ok["TAG"][msg]
     return False, False

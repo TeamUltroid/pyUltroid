@@ -137,8 +137,6 @@ async def admin_check(event):
         perms = await event.client.get_permissions(event.chat_id, event.sender_id)
     except UserNotParticipantError:
         return False
-    if isinstance(
+    return isinstance(
         perms.participant, (ChannelParticipantAdmin, ChannelParticipantCreator)
-    ):
-        return True
-    return False
+    )

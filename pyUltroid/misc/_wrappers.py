@@ -12,8 +12,6 @@ def sudo():
         async def wrapper(event):
             if event.out or str(event.sender_id) in sudoers():
                 await function(event)
-            else:
-                pass
 
         return wrapper
 

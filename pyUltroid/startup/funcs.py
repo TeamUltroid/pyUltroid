@@ -128,8 +128,9 @@ async def autobot():
             LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
         else:
             LOGS.info(
-                f"Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
+                'Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot'
             )
+
             exit(1)
     elif isdone.startswith("Done!"):
         token = isdone.split("`")[1]
@@ -142,8 +143,9 @@ async def autobot():
         LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
     else:
         LOGS.info(
-            f"Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
+            'Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot'
         )
+
         exit(1)
 
 

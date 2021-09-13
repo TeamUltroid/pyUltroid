@@ -13,19 +13,12 @@ def str_to_list(text):  # Returns List
 
 
 def list_to_str(list):  # Returns String
-    str = ""
-    for x in list:
-        str += f"{x} "
+    str = "".join(f"{x} " for x in list)
     return str.strip()
 
 
 def are_all_num(list):  # Takes List , Returns Boolean
-    flag = True
-    for item in list:
-        if not item.isdigit():
-            flag = False
-            break
-    return flag
+    return all(item.isdigit() for item in list)
 
 
 def get_source_channels():  # Returns List
@@ -47,10 +40,7 @@ def get_no_source_channels():  # Returns List
 
 def is_source_channel_added(id):
     channels = get_source_channels()
-    if str(id) in channels:
-        return True
-    else:
-        return False
+    return str(id) in channels
 
 
 def add_source_channel(id):  # Take int or str with numbers only , Returns Boolean
@@ -97,10 +87,7 @@ def get_no_destinations():  # Returns List
 
 def is_destination_added(id):
     channels = get_destinations()
-    if str(id) in channels:
-        return True
-    else:
-        return False
+    return str(id) in channels
 
 
 def add_destination(id):  # Take int or str with numbers only , Returns Boolean
