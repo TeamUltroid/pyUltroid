@@ -32,6 +32,4 @@ def rem_gblacklist(id):
 
 def is_gblacklisted(id):
     ok = get_gblacklists()
-    if id in ok:
-        return True
-    return False
+    return id in ok

@@ -24,10 +24,9 @@ def add_filter(chat, word, msg, media):
 
 def rem_filter(chat, word):
     ok = eval(udB.get("FILTERS"))
-    if ok.get(chat):
-        if ok[chat].get(word):
-            ok[chat].pop(word)
-            udB.set("FILTERS", str(ok))
+    if ok.get(chat) and ok[chat].get(word):
+        ok[chat].pop(word)
+        udB.set("FILTERS", str(ok))
 
 
 def rem_all_filter(chat):
@@ -47,8 +46,5 @@ def get_filter(chat):
 def list_filter(chat):
     ok = eval(udB.get("NOTE"))
     if ok.get(chat):
-        txt = ""
-        for z in ok[chat]:
-            txt += f"👉 `{z}`\n"
-        return txt
+        return "".join(f"👉 `{z}`\n" for z in ok[chat])
     return False

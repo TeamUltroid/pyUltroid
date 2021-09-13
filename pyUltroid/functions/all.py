@@ -170,9 +170,7 @@ def get_data(types, data):
                 if m["acodec"] == "none":
                     id = str(m["format_id"]) + "+" + str(audio[-1].split()[0])
                     j = f"{id} {note} {humanbytes(size+a_size)}"
-                    video.append(j)
-                else:
-                    video.append(j)
+                video.append(j)
     except BaseException:
         pass
     if types == "audio":
@@ -206,7 +204,7 @@ async def dler(ev, url, opts=None, download=False):
         await ev.edit("`Getting Data from YouTube..`")
         return YoutubeDL(opts).extract_info(url=url, download=download)
     except Exception as e:
-        await ev.edit(f"{str(type(e))}: {str(e)}")
+        await ev.edit(f'{type(e)}: {e}')
         return
 
 
@@ -287,10 +285,7 @@ def updater():
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
     changelog, tl_chnglog = gen_chlog(repo, f"HEAD..upstream/{ac_br}")
-    if changelog:
-        return True
-    else:
-        return False
+    return bool(changelog)
 
 
 # ----------------Fast Upload/Download----------------
@@ -395,10 +390,7 @@ def find_font_size(text, font, image, target_width_ratio):
 
 def make_logo(imgpath, text, funt, **args):
     fill = args.get("fill")
-    if args.get("width_ratio"):
-        width_ratio = args.get("width_ratio")
-    else:
-        width_ratio = width_ratio
+    width_ratio = args.get("width_ratio") or width_ratio
     stroke_width = int(args.get("stroke_width"))
     stroke_fill = args.get("stroke_fill")
 
@@ -544,28 +536,27 @@ def lucks(luck):
 
 async def ban_time(event, time_str):
     """Simplify ban time from text"""
-    if any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
-        unit = time_str[-1]
-        time_int = time_str[:-1]
-        if not time_int.isdigit():
-            return await event.edit("Invalid time amount specified.")
-        if unit == "s":
-            bantime = int(time.time() + int(time_int))
-        elif unit == "m":
-            bantime = int(time.time() + int(time_int) * 60)
-        elif unit == "h":
-            bantime = int(time.time() + int(time_int) * 60 * 60)
-        elif unit == "d":
-            bantime = int(time.time() + int(time_int) * 24 * 60 * 60)
-        else:
-            return ""
-        return bantime
-    else:
+    if not any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
         return await event.edit(
             "Invalid time type specified. Expected s, m,h, or d, got: {}".format(
                 time_str[-1]
             )
         )
+    unit = time_str[-1]
+    time_int = time_str[:-1]
+    if not time_int.isdigit():
+        return await event.edit("Invalid time amount specified.")
+    if unit == "s":
+        bantime = int(time.time() + int(time_int))
+    elif unit == "m":
+        bantime = int(time.time() + int(time_int) * 60)
+    elif unit == "h":
+        bantime = int(time.time() + int(time_int) * 60 * 60)
+    elif unit == "d":
+        bantime = int(time.time() + int(time_int) * 24 * 60 * 60)
+    else:
+        return ""
+    return bantime
 
 
 # ----------------- Load \\ Unloader ----------------
@@ -611,9 +602,8 @@ async def safeinstall(event):
             n = event.text
             q = n[9:]
             if q != "f":
-                xx = open(downloaded_file_name, "r")
-                yy = xx.read()
-                xx.close()
+                with open(downloaded_file_name, "r") as xx:
+                    yy = xx.read()
                 try:
                     for dan in DANGER:
                         if re.search(dan, yy):
@@ -702,13 +692,13 @@ def time_formatter(milliseconds):
         + ((str(minutes) + "m:") if minutes else "")
         + ((str(seconds) + "s") if seconds else "")
     )
-    if tmp != "":
-        if tmp.endswith(":"):
-            return tmp[:-1]
-        else:
-            return tmp
-    else:
+    if tmp == "":
         return "0 s"
+
+    if tmp.endswith(":"):
+        return tmp[:-1]
+    else:
+        return tmp
 
 
 def humanbytes(size):
@@ -729,10 +719,11 @@ async def progress(current, total, event, start, type_of_ps, file_name=None):
         speed = current / diff
         time_to_completion = round((total - current) / speed) * 1000
         progress_str = "`[{0}{1}] {2}%`\n\n".format(
-            "".join(["●" for i in range(math.floor(percentage / 5))]),
-            "".join(["" for i in range(20 - math.floor(percentage / 5))]),
+            "".join("●" for i in range(math.floor(percentage / 5))),
+            "".join("" for i in range(20 - math.floor(percentage / 5))),
             round(percentage, 2),
         )
+
         tmp = (
             progress_str
             + "`{0} of {1}`\n\n`✦ Speed: {2}/s`\n\n`✦ ETA: {3}`\n\n".format(
@@ -769,14 +760,13 @@ def ReTrieveFile(input_file_name):
     RMBG_API = udB.get("RMBG_API")
     headers = {"X-API-Key": RMBG_API}
     files = {"image_file": (input_file_name, open(input_file_name, "rb"))}
-    r = requests.post(
+    return requests.post(
         "https://api.remove.bg/v1.0/removebg",
         headers=headers,
         files=files,
         allow_redirects=True,
         stream=True,
     )
-    return r
 
 
 async def get_paste(data, extension="txt"):
@@ -826,8 +816,7 @@ def autopicsearch(query):
     link = f"https://unsplash.com/s/photos/{query}"
     extra = requests.get(link)
     res = bs(extra.content, "html.parser", from_encoding="utf-8")
-    results = res.find_all("a", "_2Mc8_")
-    return results
+    return res.find_all("a", "_2Mc8_")
 
 
 async def randomchannel(tochat, channel, range1, range2, caption=None):
@@ -924,8 +913,9 @@ async def heroku_logs(event):
         event.chat_id,
         file="ultroid-heroku.log",
         thumb="resources/extras/ultroid.jpg",
-        caption=f"**Ultroid Heroku Logs.**",
+        caption='**Ultroid Heroku Logs.**',
     )
+
     os.remove("ultroid-heroku.log")
     await xx.delete()
 
@@ -935,7 +925,7 @@ async def def_logs(ult):
         ult.chat_id,
         file="ultroid.log",
         thumb="resources/extras/ultroid.jpg",
-        caption=f"**Ultroid Logs.**",
+        caption='**Ultroid Logs.**',
     )
 
 
@@ -959,18 +949,21 @@ async def calcc(cmd, event):
     sys.stderr = old_stderr
     evaluation = ""
     if exc:
-        evaluation = exc
+        return exc
     elif stderr:
-        evaluation = stderr
+        return stderr
     elif stdout:
-        evaluation = stdout
+        return stdout
     else:
-        evaluation = "Success"
-    return evaluation
+        return "Success"
 
 
 async def aexecc(code, event):
-    exec(f"async def __aexecc(event): " + "".join(f"\n {l}" for l in code.split("\n")))
+    exec(
+        'async def __aexecc(event): '
+        + "".join(f"\n {l}" for l in code.split("\n"))
+    )
+
     return await locals()["__aexecc"](event)
 
 
@@ -1059,8 +1052,7 @@ def local_mediainfo(file):
         return "doc"
     else:
         try:
-            l = resolve_bot_file_id(file)
-            return l
+            return resolve_bot_file_id(file)
         except ValueError:
             return "doc"
 
@@ -1068,9 +1060,7 @@ def local_mediainfo(file):
 def mediainfo(media):
     xx = str((str(media)).split("(", maxsplit=1)[0])
     m = ""
-    if xx == "MessageMediaPhoto":
-        m = "pic"
-    elif xx == "MessageMediaDocument":
+    if xx == "MessageMediaDocument":
         mim = media.document.mime_type
         if mim == "application/x-tgsticker":
             m = "sticker animated"
@@ -1095,6 +1085,8 @@ def mediainfo(media):
             m = "audio"
         else:
             m = "document"
+    elif xx == "MessageMediaPhoto":
+        m = "pic"
     elif xx == "MessageMediaWebPage":
         m = "web"
     return m
@@ -1124,10 +1116,7 @@ def duration_s(file, stime):
     x = round(tsec / 5)
     y = round(tsec / 5 + int(stime))
     pin = stdr(x)
-    if y < tsec:
-        pon = stdr(y)
-    else:
-        pon = stdr(tsec)
+    pon = stdr(y) if y < tsec else stdr(tsec)
     return pin, pon
 
 
@@ -1140,12 +1129,11 @@ def stdr(seconds):
         hours = "0" + str(hours)
     if len(str(seconds)) == 1:
         seconds = "0" + str(seconds)
-    dur = (
+    return (
         ((str(hours) + ":") if hours else "00:")
         + ((str(minutes) + ":") if minutes else "00:")
         + ((str(seconds)) if seconds else "")
     )
-    return dur
 
 
 # ------------------Gdrive Helpers----------------
@@ -1164,8 +1152,8 @@ def list_files(http):
         except KeyError:
             pass
     lists = f"**Total files found in Gdrive:** `{len(files.keys())}`\n\n"
-    for l in files:
-        lists += f"• [{l}]({files[l]})\n"
+    for l, value in files.items():
+        lists += f'• [{l}]({value})\n'
     return lists
 
 
@@ -1246,7 +1234,7 @@ async def DoTeskWithDir(http, input_directory, event, parent_id):
 
 def file_ops(file_path):
     mime_type = guess_type(file_path)[0]
-    mime_type = mime_type if mime_type else "text/plain"
+    mime_type = mime_type or "text/plain"
     file_name = file_path.split("/")[-1]
     return file_name, mime_type
 
@@ -1314,18 +1302,25 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
             speed = round(uploaded / diff, 2)
             eta = round((t_size - uploaded) / speed)
             progress_str = "`{0}{1} {2}%`".format(
-                "".join(["●" for i in range(math.floor(percentage / 5))]),
-                "".join(["" for i in range(20 - math.floor(percentage / 5))]),
+                "".join("●" for i in range(math.floor(percentage / 5))),
+                "".join("" for i in range(20 - math.floor(percentage / 5))),
                 round(percentage, 2),
             )
+
             current_message = (
-                f"`✦ Uploading to G-Drive`\n\n"
-                + f"`✦ File Name:` `{file_name}`\n\n"
-                + f"{progress_str}\n\n"
-                + f"`✦ Uploaded:` `{humanbytes(uploaded)} of {humanbytes(t_size)}`\n"
+                (
+                    (
+                        (
+                            '`✦ Uploading to G-Drive`\n\n'
+                            + f"`✦ File Name:` `{file_name}`\n\n"
+                        )
+                        + f"{progress_str}\n\n"
+                    )
+                    + f"`✦ Uploaded:` `{humanbytes(uploaded)} of {humanbytes(t_size)}`\n"
+                )
                 + f"`✦ Speed:` `{humanbytes(speed)}`\n"
-                + f"`✦ ETA:` `{time_formatter(eta*1000)}`"
-            )
+            ) + f"`✦ ETA:` `{time_formatter(eta*1000)}`"
+
             if display_message != current_message:
                 try:
                     await event.edit(current_message)
@@ -1335,8 +1330,7 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
     file_id = response.get("id")
     drive_service.permissions().insert(fileId=file_id, body=permissions).execute()
     file = drive_service.files().get(fileId=file_id).execute()
-    download_url = file.get("webContentLink")
-    return download_url
+    return file.get("webContentLink")
 
 
 # ------------------GoGoAnime Scrapper----------------
@@ -1398,29 +1392,25 @@ def get_anime_src_res(search_str):
     res = list(tjson.keys())
     if "errors" in res:
         return f"**Error** : `{tjson['errors'][0]['message']}`"
-    else:
-        tjson = tjson["data"]["Media"]
-        if "bannerImage" in tjson.keys():
-            banner = tjson["bannerImage"]
-        else:
-            banner = None
-        title = tjson["title"]["romaji"]
-        year = tjson["startDate"]["year"]
-        episodes = tjson["episodes"]
-        link = f"https://anilist.co/anime/{tjson['id']}"
-        ltitle = f"[{title}]({link})"
-        info = f"**Type**: {tjson['format']}"
-        info += f"\n**Genres**: "
-        for g in tjson["genres"]:
-            info += g + " "
-        info += f"\n**Status**: {tjson['status']}"
-        info += f"\n**Episodes**: {tjson['episodes']}"
-        info += f"\n**Year**: {tjson['startDate']['year']}"
-        info += f"\n**Score**: {tjson['averageScore']}"
-        info += f"\n**Duration**: {tjson['duration']} min\n"
-        temp = f"{tjson['description']}"
-        info += "__" + (re.sub("<br>", "\n", temp)).strip() + "__"
-        return banner, ltitle, year, episodes, info
+    tjson = tjson["data"]["Media"]
+    banner = tjson["bannerImage"] if "bannerImage" in tjson.keys() else None
+    title = tjson["title"]["romaji"]
+    year = tjson["startDate"]["year"]
+    episodes = tjson["episodes"]
+    link = f"https://anilist.co/anime/{tjson['id']}"
+    ltitle = f"[{title}]({link})"
+    info = f"**Type**: {tjson['format']}"
+    info += '\n**Genres**: '
+    for g in tjson["genres"]:
+        info += g + " "
+    info += f"\n**Status**: {tjson['status']}"
+    info += f"\n**Episodes**: {tjson['episodes']}"
+    info += f"\n**Year**: {tjson['startDate']['year']}"
+    info += f"\n**Score**: {tjson['averageScore']}"
+    info += f"\n**Duration**: {tjson['duration']} min\n"
+    temp = f"{tjson['description']}"
+    info += "__" + (re.sub("<br>", "\n", temp)).strip() + "__"
+    return banner, ltitle, year, episodes, info
 
 
 # -----------------Random Stuff--------------
@@ -1472,7 +1462,6 @@ async def get_user_info(event):
 async def resize_photo(photo):
     """Resize the given photo to 512x512"""
     image = Image.open(photo)
-    maxsize = (512, 512)
     if (image.width and image.height) < 512:
         size1 = image.width
         size2 = image.height
@@ -1489,6 +1478,7 @@ async def resize_photo(photo):
         sizenew = (size1new, size2new)
         image = image.resize(sizenew)
     else:
+        maxsize = (512, 512)
         image.thumbnail(maxsize)
     return image
 
@@ -1503,12 +1493,11 @@ async def get_full_user(event):
                     or previous_message.forward.channel_id
                 )
             )
-            return replied_user, None
         else:
             replied_user = await event.client(
                 GetFullUserRequest(previous_message.sender_id)
             )
-            return replied_user, None
+        return replied_user, None
     else:
         input_str = None
         try:
@@ -1624,12 +1613,11 @@ async def fetch_info(chat, event):
     except Exception as e:
         msg_info = None
         print("Exception:", e)
-    first_msg_valid = (
-        True
-        if msg_info and msg_info.messages and msg_info.messages[0].id == 1
-        else False
+    first_msg_valid = bool(
+        msg_info and msg_info.messages and msg_info.messages[0].id == 1
     )
-    creator_valid = True if first_msg_valid and msg_info.users else False
+
+    creator_valid = bool(first_msg_valid and msg_info.users)
     creator_id = msg_info.users[0].id if creator_valid else None
     creator_firstname = (
         msg_info.users[0].first_name
@@ -1736,7 +1724,7 @@ async def fetch_info(chat, event):
         except Exception as e:
             print("Exception:", e)
     if bots_list:
-        for bot in bots_list:
+        for _ in bots_list:
             bots += 1
 
     caption = "<b>CHAT INFO:</b>\n"
@@ -1794,7 +1782,6 @@ async def fetch_info(chat, event):
             caption += f", <code>{slowmode_time}s</code>\n\n"
         else:
             caption += "\n\n"
-    if not broadcast:
         caption += f"Supergroup: {supergroup}\n\n"
     if hasattr(chat_obj_info, "restricted"):
         caption += f"Restricted: {restricted}\n"

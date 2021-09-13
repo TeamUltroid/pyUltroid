@@ -20,7 +20,7 @@ except BaseException:
 
 def gban(user, reason):
     ok = list_gbanned()
-    ok.update({user: reason if reason else "No Reasons"})
+    ok.update({user: reason or "No Reasons"})
     udB.set("GBAN", str(ok))
 
 
@@ -39,8 +39,7 @@ def is_gbanned(user):
 
 
 def list_gbanned():
-    ok = eval(udB.get("GBAN"))
-    return ok
+    return eval(udB.get("GBAN"))
 
 
 def gmute(user):
@@ -58,11 +57,8 @@ def ungmute(user):
 
 def is_gmuted(user):
     ok = list_gmuted()
-    if user in ok:
-        return True
-    return False
+    return user in ok
 
 
 def list_gmuted():
-    ok = eval(udB.get("GMUTE"))
-    return ok
+    return eval(udB.get("GMUTE"))

@@ -18,8 +18,7 @@ from .all import dler, uploader
 def get_yt_link(query):
     search = VideosSearch(query, limit=1).result()
     data = search["result"][0]
-    link = data["link"]
-    return link
+    return data["link"]
 
 
 async def download_yt(event, link, ytd):

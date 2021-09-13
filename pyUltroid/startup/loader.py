@@ -90,7 +90,7 @@ def plugin_loader(addons=None, pmbot=None, manager=None, vcbot=None):
         for plugin_name in files:
             if plugin_name.endswith(".py"):
                 load_pmbot(plugin_name[:-3])
-        LOGS.info(f"Ultroid - PM Bot Message Forwards - Enabled.")
+        LOGS.info('Ultroid - PM Bot Message Forwards - Enabled.')
         LOGS.info("-" * 70)
 
     # vc bot
