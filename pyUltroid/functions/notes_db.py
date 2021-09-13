@@ -24,10 +24,9 @@ def add_note(chat, word, msg, media):
 
 def rem_note(chat, word):
     ok = eval(udB.get("NOTE"))
-    if ok.get(chat):
-        if ok[chat].get(word):
-            ok[chat].pop(word)
-            udB.set("NOTE", str(ok))
+    if ok.get(chat) and ok[chat].get(word):
+        ok[chat].pop(word)
+        udB.set("NOTE", str(ok))
 
 
 def rem_all_note(chat):
@@ -39,17 +38,13 @@ def rem_all_note(chat):
 
 def get_notes(chat, word):
     ok = eval(udB.get("NOTE"))
-    if ok.get(chat):
-        if ok[chat].get(word):
-            return ok[chat][word]
+    if ok.get(chat) and ok[chat].get(word):
+        return ok[chat][word]
     return False
 
 
 def list_note(chat):
     ok = eval(udB.get("NOTE"))
     if ok.get(chat):
-        txt = ""
-        for z in ok[chat]:
-            txt += f"👉 #{z}\n"
-        return txt
+        return "".join(f"👉 #{z}\n" for z in ok[chat])
     return False

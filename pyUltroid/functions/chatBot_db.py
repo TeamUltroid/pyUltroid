@@ -22,25 +22,20 @@ def get_all_added(chat):
 
 def chatbot_stats(chat, id):
     ok = eval(udB["CHATBOT_USERS"])
-    if ok.get(chat):
-        if id in ok[chat]:
-            return True
-    return False
+    return bool(ok.get(chat) and id in ok[chat])
 
 
 def add_chatbot(chat, id):
     ok = eval(udB["CHATBOT_USERS"])
     if not ok.get(chat):
         ok.update({chat: [id]})
-    else:
-        if id not in ok[chat]:
-            ok[chat].append(id)
+    elif id not in ok[chat]:
+        ok[chat].append(id)
     return udB.set("CHATBOT_USERS", str(ok))
 
 
 def rem_chatbot(chat, id):
     ok = eval(udB["CHATBOT_USERS"])
-    if ok.get(chat):
-        if id in ok[chat]:
-            ok[chat].remove(id)
+    if ok.get(chat) and id in ok[chat]:
+        ok[chat].remove(id)
     return udB.set("CHATBOT_USERS", str(ok))

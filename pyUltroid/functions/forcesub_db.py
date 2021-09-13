@@ -36,12 +36,12 @@ def get_forcesetting(chat_id):
 
 def rem_forcesub(chat_id):
     omk = get_chats()
-    if str(chat_id) in omk.keys():
-        try:
-            del omk[str(chat_id)]
-            udB.set("FORCESUB", str(omk))
-            return True
-        except KeyError:
-            return False
-    else:
+    if str(chat_id) not in omk.keys():
         return None
+
+    try:
+        del omk[str(chat_id)]
+        udB.set("FORCESUB", str(omk))
+        return True
+    except KeyError:
+        return False

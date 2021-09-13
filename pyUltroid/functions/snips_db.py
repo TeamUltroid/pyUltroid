@@ -35,7 +35,4 @@ def get_snips(word):
 
 def list_snip():
     ok = eval(udB.get("SNIP"))
-    txt = ""
-    for z in ok:
-        txt += f"👉 ${z}\n"
-    return txt
+    return "".join(f"👉 ${z}\n" for z in ok)

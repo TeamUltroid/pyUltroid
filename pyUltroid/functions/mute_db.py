@@ -25,15 +25,11 @@ def mute(chat, id):
 
 def unmute(chat, id):
     ok = eval(udB.get("MUTE"))
-    if ok.get(chat):
-        if id in ok[chat]:
-            ok[chat].remove(id)
+    if ok.get(chat) and id in ok[chat]:
+        ok[chat].remove(id)
     udB.set("MUTE", str(ok))
 
 
 def is_muted(chat, id):
     ok = eval(udB.get("MUTE"))
-    if ok.get(chat):
-        if id in ok[chat]:
-            return True
-    return False
+    return bool(ok.get(chat) and id in ok[chat])

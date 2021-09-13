@@ -51,7 +51,6 @@ def check_echo(chat, user):
 def list_echo(chat):
     x = eval(udB.get("ECHO"))
     try:
-        k = x[chat]
-        return k
+        return x[chat]
     except BaseException:
         return

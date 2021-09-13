@@ -31,6 +31,6 @@ if not udB.get("DUAL_HNDLR"):
     udB.set("DUAL_HNDLR", "/")
 
 Evar = udB.get("SUDO_HNDLR")
-SUDO_HNDLR = Evar if Evar else HNDLR
+SUDO_HNDLR = Evar or HNDLR
 
 Hosted_On = where_hosted()

@@ -40,6 +40,4 @@ def disapprove_user(id):
 
 def is_approved(id):
     ok = get_approved()
-    if id in ok:
-        return True
-    return False
+    return id in ok
