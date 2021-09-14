@@ -19,12 +19,11 @@ class Loader:
         self.path = path
         self.key = key
 
-    def load(self, log=True, func=None):
+    def load(self, log=True, func=import_module):
         files = sorted(glob.glob(self.path + "/*.py"))
         for plugin in files:
             if not func:
                 plugin = plugin[:-3].replace("/", ".")
-                func = import_module
             try:
                 func(plugin)
                 if log:
