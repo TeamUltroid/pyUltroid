@@ -59,7 +59,7 @@ from telethon.tl.types import (
     MessageActionChannelMigrateFrom,
     MessageEntityMentionName,
 )
-from telethon.utils import get_display_name, get_input_location, resolve_bot_file_id
+from telethon.utils import get_display_name, get_input_location
 from youtube_dl import YoutubeDL
 
 from .. import *
