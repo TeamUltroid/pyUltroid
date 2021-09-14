@@ -32,7 +32,7 @@ class Loader:
         for plugin in files:
             plugin = Path(plugin).stem
             try:
-                self.func(plugin[:-3])
+                self.func(plugin)
                 if log:
                     LOGS.info(f"Ultroid - {self.key} -  Installed - {plugin}")
             except Exception as exc:
