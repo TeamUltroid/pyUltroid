@@ -1389,7 +1389,7 @@ def get_anime_src_res(search_str):
           format
           status
           duration
-          average._core
+          averageScore
           genres
           bannerImage
       }
@@ -1419,7 +1419,7 @@ def get_anime_src_res(search_str):
     info += f"\n**Status**: {tjson['status']}"
     info += f"\n**Episodes**: {tjson['episodes']}"
     info += f"\n**Year**: {tjson['startDate']['year']}"
-    info += f"\n**._core**: {tjson['average._core']}"
+    info += f"\n**Score**: {tjson['averageScore']}"
     info += f"\n**Duration**: {tjson['duration']} min\n"
     temp = f"{tjson['description']}"
     info += "__" + (re.sub("<br>", "\n", temp)).strip() + "__"
