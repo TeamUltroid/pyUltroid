@@ -65,12 +65,11 @@ class RedisConnection(Redis):
         database = Redis(**kwargs, decode_responses=True)
         try:
             database.ping()
+            LOGS.info("Connected to Redis Database")
         except BaseException:
-            self.reconnect_redis(**kwargs)
-
-    def reconnect_redis(**kwargs):
-        await asyncio.sleep(5)
-        return self.connect_redis(**kwargs)
+            LOGS.warning("Reconnecting to Redis Database!")
+            time.sleep(5)
+            self.connect_redis(**kwargs)
 
 
 def def_redis_connection():
