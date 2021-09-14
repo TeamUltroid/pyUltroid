@@ -1,13 +1,20 @@
+# Ultroid - UserBot
+# Copyright (C) 2021 TeamUltroid
+#
+# This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
+# PLease read the GNU Affero General Public License in
+# <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
+
 DEVLIST = [
-    719195224,  # @xditya
+    719195224,   # @xditya
     1322549723,  # @danish_00
     1444249738,  # @KarbonCopy
     1903729401,  # @its_buddhhu
     1303895686,  # @Sipak_OP
-    611816596,  # @Arnab431
+    611816596,   # @Arnab431
     1318486004,  # @sppidy
-    803243487,  # @hellboi_atul
-    1152902819,  # @Anonymous_Machinee,
+    803243487,   # @hellboi_atul
+    1152902819,  # @Anonymous_Machinee
     1976800417,  # Da Alt of Simpak
 ]
 
