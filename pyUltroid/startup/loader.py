@@ -6,19 +6,12 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-from pathlib import Path
 from importlib import import_module
+
 from git import Repo
 
 from .. import LOGS, udB
-from .utils import (
-    load_addons,
-    load_assistant,
-    load_manager,
-    load_plugins,
-    load_pmbot,
-    load_vc,
-)
+from .utils import load_addons, load_assistant, load_manager, load_pmbot, load_vc
 
 
 class Loader:
@@ -37,6 +30,7 @@ class Loader:
                 LOGS.info(f"Ultroid - {self.key} - ERROR - {plugin}")
                 LOGS.exception(exc)
         LOGS.info("-" * 70)
+
 
 def plugin_loader(addons=None, pmbot=None, manager=None, vcbot=None):
 
