@@ -32,7 +32,7 @@ class UltroidClient(TelegramClient):
                     logger.error(
                         f"Error Installing {files.split('/')[-1]}\n{format_exc()}"
                     )
-            logger.info(" Installed all plugins ".center(20, "~"))
+            logger.info("~"*20 + " Installed all plugins " + "~"*20)
 
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
@@ -42,7 +42,7 @@ class UltroidClient(TelegramClient):
         self.me = await self.get_me()
 
         if self.me.bot:
-            logger.info(f"Logged in as {self.me.username}")
+            logger.info(f"Logged in as @{self.me.username}")
         else:
             logger.info(f"Logged in as {get_display_name(self.me)}")
 
