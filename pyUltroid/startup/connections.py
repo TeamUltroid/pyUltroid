@@ -199,5 +199,4 @@ def where_hosted():
         return "termux"
     elif os.getenv("WINDOW"):
         return "win"
-    else:
-        return "local"
+    return "local"
