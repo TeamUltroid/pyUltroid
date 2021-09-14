@@ -1,4 +1,5 @@
-import aiohttp
+import json
+import aiohttp, requests
 from bs4 import BeautifulSoup as bs
 from faker import Faker
 
@@ -23,6 +24,86 @@ def unsplashsearch(query, limit=None):
         uri = bst.find_all("img", "oCCRx")[0]["src"]
         images_src.append(uri)
     return images_src
+
+
+# ------------------GoGoAnime Scrapper----------------
+# Base Credits - TG@Madepranav
+
+
+def airing_eps():
+    async with Client.get("https://gogoanime.ai/") as out:
+        resp = await out.read()
+    soup = bs(resp, "html.parser")
+    anime = soup.find("nav", {"class": "menu_series cron"}).find("ul")
+    air = "**Currently airing anime.**\n\n"
+    c = 1
+    for link in anime.find_all("a"):
+        airing_link = link.get("href")
+        name = link.get("title")
+        link = airing_link.split("/")
+        if c == 21:
+            break
+        air += f"**{c}.** [{name}]({airing_link})\n"
+        c += 1
+    return air
+
+
+def get_anime_src_res(search_str):
+    query = """
+    query ($id: Int,$search: String) {
+      Media (id: $id, type: ANIME,search: $search) {
+        id
+        title {
+          romaji
+          english
+        }
+        description (asHtml: false)
+        startDate{
+            year
+          }
+          episodes
+          chapters
+          volumes
+          season
+          type
+          format
+          status
+          duration
+          averageScore
+          genres
+          bannerImage
+      }
+    }
+    """
+    response = (
+        requests.post(
+            "https://graphql.anilist.co",
+            json={"query": query, "variables": {"search": search_str}},
+        )
+    ).text
+    tjson = json.loads(response)
+    res = list(tjson.keys())
+    if "errors" in res:
+        return f"**Error** : `{tjson['errors'][0]['message']}`"
+    tjson = tjson["data"]["Media"]
+    banner = tjson["bannerImage"] if "bannerImage" in tjson.keys() else None
+    title = tjson["title"]["romaji"]
+    year = tjson["startDate"]["year"]
+    episodes = tjson["episodes"]
+    link = f"https://anilist.co/anime/{tjson['id']}"
+    ltitle = f"[{title}]({link})"
+    info = f"**Type**: {tjson['format']}"
+    info += "\n**Genres**: "
+    for g in tjson["genres"]:
+        info += g + " "
+    info += f"\n**Status**: {tjson['status']}"
+    info += f"\n**Episodes**: {tjson['episodes']}"
+    info += f"\n**Year**: {tjson['startDate']['year']}"
+    info += f"\n**Score**: {tjson['averageScore']}"
+    info += f"\n**Duration**: {tjson['duration']} min\n"
+    temp = f"{tjson['description']}"
+    info += "__" + (re.sub("<br>", "\n", temp)).strip() + "__"
+    return banner, ltitle, year, episodes, info
 
 
 # ---------------- Random User Gen ----------------
