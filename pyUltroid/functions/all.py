@@ -235,9 +235,7 @@ async def get_videos_link(url):
 async def updateme_requirements():
     """To Update requirements"""
     try:
-        _, __ = await bash(sys.executable, "-m", "pip", "install", "--no-cache-dir", "-r", reqs]
-            ),
-        )
+        _, __ = await bash(f"{sys.executable} -m pip install --no-cache-dir -r {reqs}")
     except Exception:
         return format_exc()
 
