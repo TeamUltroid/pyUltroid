@@ -20,7 +20,7 @@ class Loader:
         self.key = key
 
     def load(self, log=True, func=None):
-        files = sorted(glob.glob(path + "/*.py"))
+        files = sorted(glob.glob(self.path + "/*.py"))
         for plugin in files:
             if not func:
                 plugin = plugin[:-3].replace("/", ".")
