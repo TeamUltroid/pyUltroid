@@ -204,7 +204,7 @@ async def dler(ev, url, opts=None, download=False):
         await ev.edit("`Getting Data from YouTube..`")
         return YoutubeDL(opts).extract_info(url=url, download=download)
     except Exception as e:
-        await ev.edit(f'{type(e)}: {e}')
+        await ev.edit(f"{type(e)}: {e}")
         return
 
 
@@ -913,7 +913,7 @@ async def heroku_logs(event):
         event.chat_id,
         file="ultroid-heroku.log",
         thumb="resources/extras/ultroid.jpg",
-        caption='**Ultroid Heroku Logs.**',
+        caption="**Ultroid Heroku Logs.**",
     )
 
     os.remove("ultroid-heroku.log")
@@ -925,7 +925,7 @@ async def def_logs(ult):
         ult.chat_id,
         file="ultroid.log",
         thumb="resources/extras/ultroid.jpg",
-        caption='**Ultroid Logs.**',
+        caption="**Ultroid Logs.**",
     )
 
 
@@ -947,7 +947,6 @@ async def calcc(cmd, event):
     stderr = redirected_error.getvalue()
     sys.stdout = old_stdout
     sys.stderr = old_stderr
-    evaluation = ""
     if exc:
         return exc
     elif stderr:
@@ -959,10 +958,7 @@ async def calcc(cmd, event):
 
 
 async def aexecc(code, event):
-    exec(
-        'async def __aexecc(event): '
-        + "".join(f"\n {l}" for l in code.split("\n"))
-    )
+    exec("async def __aexecc(event): " + "".join(f"\n {l}" for l in code.split("\n")))
 
     return await locals()["__aexecc"](event)
 
@@ -1153,7 +1149,7 @@ def list_files(http):
             pass
     lists = f"**Total files found in Gdrive:** `{len(files.keys())}`\n\n"
     for l, value in files.items():
-        lists += f'• [{l}]({value})\n'
+        lists += f"• [{l}]({value})\n"
     return lists
 
 
@@ -1311,7 +1307,7 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
                 (
                     (
                         (
-                            '`✦ Uploading to G-Drive`\n\n'
+                            "`✦ Uploading to G-Drive`\n\n"
                             + f"`✦ File Name:` `{file_name}`\n\n"
                         )
                         + f"{progress_str}\n\n"
@@ -1400,7 +1396,7 @@ def get_anime_src_res(search_str):
     link = f"https://anilist.co/anime/{tjson['id']}"
     ltitle = f"[{title}]({link})"
     info = f"**Type**: {tjson['format']}"
-    info += '\n**Genres**: '
+    info += "\n**Genres**: "
     for g in tjson["genres"]:
         info += g + " "
     info += f"\n**Status**: {tjson['status']}"
