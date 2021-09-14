@@ -2,18 +2,16 @@ from telethon.tl.types import ChatBannedRights
 
 # ------------------Lock Unlock----------------
 
+
 def lock_unlock(query, lock=True):
     """
-   `Used in locks plugin`
-    Is there any better way to do this? 
+    `Used in locks plugin`
+     Is there any better way to do this?
     """
     rights = ChatBannedRights(None)
     _do = not lock
     if query == "msgs":
-        for i in ["send_messages",
-            "invite_users", 
-            "pin_messages"
-            "change_info"]:
+        for i in ["send_messages", "invite_users", "pin_messages" "change_info"]:
             setattr(rights, i, _do)
     elif unluck == "media":
         setattr(rights, "send_media", _do)
@@ -37,4 +35,5 @@ def lock_unlock(query, lock=True):
         return None
     return rights
 
-#---------------- END ---------------- #
+
+# ---------------- END ---------------- #
