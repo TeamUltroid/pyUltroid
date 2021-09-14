@@ -7,7 +7,8 @@ DEVLIST = [
     611816596,  # @Arnab431
     1318486004,  # @sppidy
     803243487,  # @hellboi_atul
-    1152902819,  # @Anonymous_Machinee
+    1152902819,  # @Anonymous_Machinee,
+    1976800417, #Da Alt of Simpak
 ]
 
 stickers = [
