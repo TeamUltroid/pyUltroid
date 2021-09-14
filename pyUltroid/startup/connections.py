@@ -9,7 +9,7 @@ import os
 import time
 from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
 
-import redis
+from redis import Redis
 from telethon import TelegramClient
 from telethon import __version__ as vers
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError, PhoneNumberInvalidError
@@ -43,23 +43,34 @@ LOGS.info(f"Telethon Version - {vers}")
 LOGS.info(f"Ultroid Version - {ultroid_version}")
 
 
-def connect_redis():
-    Var.REDIS_PASSWORD = Var.REDIS_PASSWORD or Var.REDISPASSWORD
-    if Var.REDIS_URI and Var.REDIS_PASSWORD:
-        return def_redis_connection()
-    elif Var.REDIS_PASSWORD and Var.REDISHOST and Var.REDISPORT and Var.REDISUSER:
-        # for railway.app deploys.
-        LOGS.info("Getting Connection With Redis Database")
-        return redis.Redis(
-            host=Var.REDISHOST,
-            port=Var.REDISPORT,
-            password=Var.REDIS_PASSWORD,
-            decode_responses=True,
-        )
-    else:
-        LOGS.info("Getting Connection With Redis Database")
-        time.sleep(3.5)
-        return connect_qovery_redis()
+class RedisConnection(Redis):
+    def __init__(
+        self,
+        host: str,
+        port: int = None,
+        password: str,
+        platform: str,
+    ):
+        if platform.lower() in ["heroku", "github actions"]:
+            if port:
+                port = self.port
+            elif ":" in host and not port:
+                port = int(self.host.split(":")[1])
+            else:
+                raise ValueError("Port Number not found")
+            return self.connect_redis(host=self.host, port=port, password=self.password)
+
+
+    def connect_redis(self, **kwargs):
+        database = Redis(**kwargs, decode_responses=True)
+        try:
+            database.ping()
+        except:
+            self.reconnect_redis(**kwargs)
+
+    def reconnect_redis(**kwargs):
+        await asyncio.sleep(5)
+        return self.connect_redis(**kwargs)
 
 
 def def_redis_connection():
@@ -194,7 +205,7 @@ def where_hosted():
     elif os.getenv("KUBERNETES_PORT"):
         return "qovery"
     elif os.getenv("HOSTNAME"):
-        return "workflows"
+        return "github actions"
     elif os.getenv("ANDROID_ROOT"):
         return "termux"
     elif os.getenv("WINDOW"):
