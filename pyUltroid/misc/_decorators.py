@@ -33,7 +33,7 @@ from telethon.utils import get_display_name
 
 from .. import *
 from ..dB import DEVLIST
-from ..dB.core import LIST, LOADED
+from ..dB._core import LIST, LOADED
 from ..functions.all import bash
 from ..functions.all import time_formatter as tf
 from ..functions.sudos import is_fullsudo

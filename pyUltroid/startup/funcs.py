@@ -30,7 +30,7 @@ from telethon.tl.types import (
 )
 
 from .. import *
-from ..dB.database import Var
+from ..dB._database import Var
 from ..functions.all import updater
 from .utils import load_addons
 

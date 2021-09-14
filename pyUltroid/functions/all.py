@@ -63,8 +63,8 @@ from telethon.utils import get_display_name, get_input_location, resolve_bot_fil
 from youtube_dl import YoutubeDL
 
 from .. import *
-from ..dB.core import *
-from ..dB.database import Var
+from ..dB._core import *
+from ..dB._database import Var
 from ..misc import *
 from ..misc._wrappers import *
 from ..startup.utils import *
@@ -1389,7 +1389,7 @@ def get_anime_src_res(search_str):
           format
           status
           duration
-          averageScore
+          average._core
           genres
           bannerImage
       }
@@ -1419,7 +1419,7 @@ def get_anime_src_res(search_str):
     info += f"\n**Status**: {tjson['status']}"
     info += f"\n**Episodes**: {tjson['episodes']}"
     info += f"\n**Year**: {tjson['startDate']['year']}"
-    info += f"\n**Score**: {tjson['averageScore']}"
+    info += f"\n**._core**: {tjson['average._core']}"
     info += f"\n**Duration**: {tjson['duration']} min\n"
     temp = f"{tjson['description']}"
     info += "__" + (re.sub("<br>", "\n", temp)).strip() + "__"

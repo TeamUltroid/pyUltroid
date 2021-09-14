@@ -14,8 +14,8 @@ def load_plugins(plugin_name):
     if plugin_name.startswith("__"):
         return
     from .. import HNDLR, LOGS, asst, udB, ultroid_bot
-    from ..dB.core import HELP, PLUGINS
-    from ..dB.database import Var
+    from ..dB._core import HELP, PLUGINS
+    from ..dB._database import Var
     from ..misc import _supporter as xxx
     from ..misc._assistant import (
         asst_cmd,
@@ -77,8 +77,8 @@ def load_addons(plugin_name):
     if plugin_name.startswith("__"):
         return
     from .. import HNDLR, LOGS, asst, udB, ultroid_bot
-    from ..dB.core import ADDONS, HELP
-    from ..dB.database import Var
+    from ..dB._core import ADDONS, HELP
+    from ..dB._database import Var
     from ..misc import _supporter as xxx
     from ..misc._assistant import (
         asst_cmd,
@@ -258,7 +258,7 @@ def load_vc(plugin_name):
     if plugin_name.startswith("__"):
         return
     from .. import HNDLR, LOGS, asst, udB, ultroid_bot, vcClient
-    from ..dB.core import VC_HELP
+    from ..dB._core import VC_HELP
 
     path = Path(f"vcbot/{plugin_name}.py")
     name = "vcbot.{}".format(plugin_name)

@@ -15,7 +15,7 @@ from telethon import __version__ as vers
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError, PhoneNumberInvalidError
 from telethon.sessions import StringSession
 
-from ..dB.database import Var
+from ..dB._database import Var
 from ..version import __version__ as ver
 from ..version import ultroid_version
 

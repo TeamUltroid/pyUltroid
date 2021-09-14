@@ -23,8 +23,8 @@ from pyUltroid.misc._decorators import *
 from pyUltroid.misc._wrappers import eod, eor
 
 from .. import udB, ultroid_bot
-from ..dB.core import LIST
-from ..dB.database import Var
+from ..dB._core import LIST
+from ..dB._database import Var
 
 ALIVE_NAME = ultroid_bot.me.first_name
 BOTLOG = int(udB.get("LOG_CHANNEL"))
