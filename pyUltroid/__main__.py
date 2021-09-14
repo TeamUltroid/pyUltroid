@@ -18,7 +18,7 @@ from telethon.errors.rpcerrorlist import (
 )
 
 from . import *
-from .dB.database import Var
+from .dB._database import Var
 from .startup.funcs import (
     autobot,
     autopilot,
