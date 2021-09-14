@@ -35,10 +35,10 @@ class Loader:
         LOGS.info("-" * 70)
 
 
-def plugin_loader(addons=None, pmbot=None, manager=None, vcbot=None):
+def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for assistant
-    Loader(path="assistant", key="Assistant", func=load_assistant).load()
+    Loader(path="assistant", key="Assistant").load()
 
     # for addons
     if addons == "True" or not addons:
