@@ -33,7 +33,6 @@ import heroku3
 import httplib2
 import requests
 from apiclient.http import MediaFileUpload
-from bs4 import BeautifulSoup as bs
 from emoji import emojize
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
@@ -1140,6 +1139,7 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
     drive_service.permissions().insert(fileId=file_id, body=permissions).execute()
     file = drive_service.files().get(fileId=file_id).execute()
     return file.get("webContentLink")
+
 
 # -----------------Random Stuff--------------
 # @buddhhu
