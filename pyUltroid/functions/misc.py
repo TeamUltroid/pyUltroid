@@ -1,5 +1,7 @@
 import json
-import aiohttp, requests
+
+import aiohttp
+import requests
 from bs4 import BeautifulSoup as bs
 from faker import Faker
 
