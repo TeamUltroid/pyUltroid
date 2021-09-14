@@ -7,12 +7,11 @@
 
 import os
 import time
-from urllib.request import urlretrieve
 
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtubesearchpython import VideosSearch
 
-from .all import dler, uploader
+from .all import dler, uploader, download_file
 
 
 def get_yt_link(query):
@@ -28,7 +27,7 @@ async def download_yt(event, link, ytd):
     title = info["title"]
     id = info["id"]
     thumb = title + ".jpg"
-    urlretrieve(f"https://i.ytimg.com/vi/{id}/hqdefault.jpg", thumb)
+    await download_file(f"https://i.ytimg.com/vi/{id}/hqdefault.jpg", thumb)
     duration = info["duration"]
     ext = "." + ytd["outtmpl"].split(".")[-1]
     file = title + ext
