@@ -18,6 +18,7 @@ from telethon.sessions import StringSession
 from ..dB._database import Var
 from ..version import __version__ as ver
 from ..version import ultroid_version
+from .exceptions import RedisError
 
 LOGS = getLogger("pyUltLog")
 
@@ -57,7 +58,7 @@ class RedisConnection(Redis):
             elif ":" in host and not port:
                 port = int(self.host.split(":")[1])
             else:
-                raise ValueError("Port Number not found")
+                raise RedisError("Port Number not found")
             return self.connect_redis(host=self.host, port=port, password=self.password)
 
     def connect_redis(self, **kwargs):
