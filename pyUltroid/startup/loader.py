@@ -7,7 +7,7 @@
 
 import os
 from pathlib import Path
-
+from importlib import import_module
 from git import Repo
 
 from .. import LOGS, udB
@@ -22,17 +22,15 @@ from .utils import (
 
 
 class Loader:
-    def __init__(self, path="plugins", key="Official", func=load_plugins):
+    def __init__(self, path="plugins", key="Official"):
         self.path = path
         self.key = key
-        self.func = func
 
     def load(self, log=True):
         files = sorted(glob.glob(path + "/*.py"))
         for plugin in files:
-            plugin = Path(plugin).stem
             try:
-                self.func(plugin)
+                import_module(plugin[:-3].replace("/", "."))
                 if log:
                     LOGS.info(f"Ultroid - {self.key} -  Installed - {plugin}")
             except Exception as exc:
@@ -40,11 +38,7 @@ class Loader:
                 LOGS.exception(exc)
         LOGS.info("-" * 70)
 
-
 def plugin_loader(addons=None, pmbot=None, manager=None, vcbot=None):
-
-    # for userbot
-    Loader().load()
 
     # for assistant
     Loader(path="assistant", key="Assistant", func=load_assistant).load()
