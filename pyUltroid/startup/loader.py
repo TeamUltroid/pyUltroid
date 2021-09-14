@@ -11,7 +11,7 @@ from importlib import import_module
 from git import Repo
 
 from .. import LOGS, udB
-from .utils import load_addons
+from .utils import load_addons, load_assistant, load_manager, load_plugins, load_pmbot, load_vc
 
 
 class Loader:
@@ -19,12 +19,11 @@ class Loader:
         self.path = path
         self.key = key
 
-    def load(self, log=True, func=None):
+    def load(self, log=True, func=import_module):
         files = sorted(glob.glob(self.path + "/*.py"))
         for plugin in files:
             if not func:
                 plugin = plugin[:-3].replace("/", ".")
-                func = import_module
             try:
                 func(plugin)
                 if log:
@@ -38,7 +37,7 @@ class Loader:
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for assistant
-    Loader(path="assistant", key="Assistant").load()
+    Loader(path="assistant", key="Assistant").load(func=load_assistant)
 
     # for addons
     if addons == "True" or not addons:
@@ -59,12 +58,12 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # group manager
     if manager == "True":
-        Loader(path="assistant/manager", key="Group Manager").load()
+        Loader(path="assistant/manager", key="Group Manager").load(func=load_manager)
 
     # chat via assistant
     if pmbot == "True":
-        Loader(path="assistant/pmbot", key="PM Bot").load(log=False)
+        Loader(path="assistant/pmbot", key="PM Bot").load(log=False, func=load_pmbot)
 
     # vc bot
     if vcbot == "True":
-        Loader(path="vcbot", key="VCBot").load()
+        Loader(path="vcbot", key="VCBot").load(load_vc)
