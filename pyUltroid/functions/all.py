@@ -429,6 +429,7 @@ def make_logo(imgpath, text, funt, **args):
 
 # --------------------------------------
 
+
 async def ban_time(event, time_str):
     """Simplify ban time from text"""
     if not any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
