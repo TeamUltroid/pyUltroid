@@ -8,7 +8,7 @@
 import os
 
 from git import Repo
-
+from pathlib import Path
 from .. import LOGS, udB
 from .utils import (
     load_addons,
@@ -19,31 +19,34 @@ from .utils import (
     load_vc,
 )
 
+class Loader:
+    def __init__(self, path="plugins", key="Official", func=load_plugins):
+        self.path = path
+        self.key = key
+        self.func = func
+
+    def load(self, log=True):
+        files = sorted(glob.glob(path + "/*.py"))
+        for plugin in files:
+            plugin = Path(plugin).stem
+            try:
+                self.func(plugin[:-3])
+                if log:
+                    LOGS.info(f"Ultroid - {self.key} -  Installed - {plugin}")
+            except Exception as exc:
+                LOGS.info(f"Ultroid - {self.key} - ERROR - {plugin}")
+                LOGS.exception(exc)
+        LOGS.info("-" * 70)
+
+
 
 def plugin_loader(addons=None, pmbot=None, manager=None, vcbot=None):
+
     # for userbot
-    files = sorted(os.listdir("plugins"))
-    for plugin_name in files:
-        try:
-            if plugin_name.endswith(".py"):
-                load_plugins(plugin_name[:-3])
-                LOGS.info(f"Ultroid - Official -  Installed - {plugin_name}")
-        except Exception as exc:
-            LOGS.info(f"Ultroid - Official - ERROR - {plugin_name}")
-            LOGS.exception(exc)
-    LOGS.info("-" * 70)
+    Loader().load()
 
     # for assistant
-    files = sorted(os.listdir("assistant"))
-    for plugin_name in files:
-        try:
-            if plugin_name.endswith(".py"):
-                load_assistant(plugin_name[:-3])
-                LOGS.info(f"Ultroid - Assistant -  Installed - {plugin_name}")
-        except Exception as exc:
-            LOGS.info(f"Ultroid - Assistant - ERROR - {plugin_name}")
-            LOGS.exception(exc)
-    LOGS.info("-" * 70)
+    Loader(path="assistant", key="Assistant", func=load_assistant).load()
 
     # for addons
     if addons == "True" or not addons:
@@ -60,48 +63,16 @@ def plugin_loader(addons=None, pmbot=None, manager=None, vcbot=None):
         if os.path.exists("addons/addons.txt"):
             # generally addons req already there so it won't take much time
             os.system("pip3 install --no-cache-dir -r addons/addons.txt")
-        files = sorted(os.listdir("addons"))
-        for plugin_name in files:
-            try:
-                if plugin_name.endswith(".py"):
-                    load_addons(plugin_name[:-3])
-                    LOGS.info(f"Ultroid - Addons -  Installed - {plugin_name}")
-            except Exception as exc:
-                LOGS.info(f"Ultroid - Addons - ERROR - {plugin_name}")
-                LOGS.exception(exc)
-        LOGS.info("-" * 70)
+        Loader(path="addons", key="Addons", func=load_addons).load()
 
     # group manager
     if manager == "True":
-        files = sorted(os.listdir("assistant/manager"))
-        for plugin_name in files:
-            if plugin_name.endswith(".py"):
-                try:
-                    load_manager(plugin_name[:-3])
-                    LOGS.info(f"Ultroid - Group Manager - Installed - {plugin_name}.")
-                except Exception as exc:
-                    LOGS.info(f"Ultroid - Group Manager - ERROR - {plugin_name}")
-                    LOGS.exception(exc)
-        LOGS.info("-" * 70)
+        Loader(path="assistant/manager", key="Group Manager", func=load_manager).load()
 
     # chat via assistant
     if pmbot == "True":
-        files = sorted(os.listdir("assistant/pmbot"))
-        for plugin_name in files:
-            if plugin_name.endswith(".py"):
-                load_pmbot(plugin_name[:-3])
-        LOGS.info('Ultroid - PM Bot Message Forwards - Enabled.')
-        LOGS.info("-" * 70)
+        Loader(path="assistant/pmbot", key="PM Bot", func=load_pmbot).load(log=False)
 
     # vc bot
     if vcbot == "True":
-        files = sorted(os.listdir("vcbot"))
-        for plugin_name in files:
-            if plugin_name.endswith(".py"):
-                try:
-                    load_vc(plugin_name[:-3])
-                    LOGS.info(f"Ultroid - VC Bot - Installed - {plugin_name}.")
-                except Exception as exc:
-                    LOGS.info(f"Ultroid - VC Bot - ERROR - {plugin_name}")
-                    LOGS.exception(exc)
-        LOGS.info("-" * 70)
+        Loader(path="vcbot", key="VCBot", func=load_vc).load()
