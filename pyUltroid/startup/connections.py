@@ -60,12 +60,11 @@ class RedisConnection(Redis):
                 raise ValueError("Port Number not found")
             return self.connect_redis(host=self.host, port=port, password=self.password)
 
-
     def connect_redis(self, **kwargs):
         database = Redis(**kwargs, decode_responses=True)
         try:
             database.ping()
-        except:
+        except BaseException:
             self.reconnect_redis(**kwargs)
 
     def reconnect_redis(**kwargs):
