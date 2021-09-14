@@ -25,8 +25,7 @@ def get_sudos():  # Returns List
     sudos = udB.get("SUDOS")
     if sudos is None or sudos == "":
         return [""]
-    else:
-        return str_to_list(sudos)
+    return str_to_list(sudos)
 
 
 def is_sudo(id):  # Take int or str with numbers only , Returns Boolean
