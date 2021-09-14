@@ -37,7 +37,7 @@ class Loader:
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for assistant
-    Loader(path="assistant", key="Assistant").load(func=load_assistant)
+    Loader(path="assistant", key="Assistant").load()
 
     # for addons
     if addons == "True" or not addons:
@@ -58,12 +58,12 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # group manager
     if manager == "True":
-        Loader(path="assistant/manager", key="Group Manager").load(func=load_manager)
+        Loader(path="assistant/manager", key="Group Manager").load()
 
     # chat via assistant
     if pmbot == "True":
-        Loader(path="assistant/pmbot", key="PM Bot").load(log=False, func=load_pmbot)
+        Loader(path="assistant/pmbot", key="PM Bot").load(log=False)
 
     # vc bot
     if vcbot == "True":
-        Loader(path="vcbot", key="VCBot").load(load_vc)
+        Loader(path="vcbot", key="VCBot").load()
