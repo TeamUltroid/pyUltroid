@@ -28,7 +28,7 @@ from .startup.funcs import (
     startup_stuff,
     updater,
 )
-from .startup.loader import plugin_loader
+from .startup.loader import load_other_plugins
 
 # Option to Auto Update On Restarts..
 if udB.get("UPDATE_ON_RESTART") and updater() and os.path.exists(".git"):
@@ -97,7 +97,7 @@ vcbot = udB.get("VCBOT") or Var.VCBOT
 if Hosted_On == "railway" and not udB.get("VCBOT"):
     vcbot = "False"
 
-plugin_loader(addons=addons, pmbot=pmbot, manager=manager, vcbot=vcbot)
+load_other_plugins(addons=addons, pmbot=pmbot, manager=manager, vcbot=vcbot)
 
 
 suc_msg = """
