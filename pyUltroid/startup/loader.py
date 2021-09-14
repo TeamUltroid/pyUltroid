@@ -11,7 +11,7 @@ from importlib import import_module
 from git import Repo
 
 from .. import LOGS, udB
-from .utils import load_addons, load_assistant, load_manager, load_pmbot, load_vc
+from .utils import load_addons, load_assistant
 
 
 class Loader:
