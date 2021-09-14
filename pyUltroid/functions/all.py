@@ -22,6 +22,7 @@ from math import sqrt
 from mimetypes import guess_type
 from os import execl
 from pathlib import Path
+from traceback import format_exc
 from sys import executable
 
 import aiofiles
@@ -69,8 +70,8 @@ from ..misc._wrappers import *
 from ..startup.utils import *
 from ..version import ultroid_version
 from . import DANGER
-from ._FastTelethon import download_file as downloadable
-from ._FastTelethon import upload_file as uploadable
+from .FastTelethon import download_file as downloadable
+from .FastTelethon import upload_file as uploadable
 
 OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
@@ -100,6 +101,7 @@ base_url = "https://randomuser.me/api/"
 
 
 # ~~~~~~~~~~~~~~~~~~~~OFOX API~~~~~~~~~~~~~~~~~~~~
+# @buddhhu
 async def get_ofox(codename):
     ofox_baseurl = "https://api.orangefox.download/v3/"
     releases_url = ofox_baseurl + "releases?codename="
@@ -110,6 +112,7 @@ async def get_ofox(codename):
 
 
 # ~~~~~~~~~~~~~~~Async Searcher~~~~~~~~~~~~~~~
+# @buddhhu
 async def async_searcher(url, headers=None, params=None):
     async with aiohttp.ClientSession(headers=headers) as session:
         async with session.get(url, params=params) as resp:
@@ -117,6 +120,7 @@ async def async_searcher(url, headers=None, params=None):
 
 
 # ~~~~~~~~~~~~~~~JSON Parser~~~~~~~~~~~~~~~
+# @buddhhu
 def json_parser(data, indent=None):
     if isinstance(data, str):
         parsed = json.loads(str(data))
@@ -132,27 +136,29 @@ def json_parser(data, indent=None):
 
 
 # ~~~~~~~~~~~~~~~Saavn Downloader~~~~~~~~~~~~~~~
+# @techierror
 async def saavn_dl(query):
     query = query.replace(" ", "%20")
-    url = f"https://jostapi.herokuapp.com/saavn?query={query}"
     try:
-        k = (requests.get(url)).json()[0]
+        data = (json_parser(await async_searcher(url=f"https://jostapi.herokuapp.com/saavn?query={query}"))[0]
     except BaseException:
         return None, None, None, None
     try:
-        title = k["song"]
-        urrl = k["media_url"]
-        img = k["image"]
-        duration = k["duration"]
-        performer = k["primary_artists"]
+        title = data["song"]
+        url = data["media_url"]
+        img = data["image"]
+        duration = data["duration"]
+        performer = data["primary_artists"]
     except BaseException:
         return None, None, None, None
-    song = await fast_download(urrl, filename=title + ".mp3")
+    song = await fast_download(url, filename=title + ".mp3")
     thumb = await fast_download(img, filename=title + ".jpg")
     return song, duration, performer, thumb
 
 
-# ---------------YouTube Downloader---------------
+# ---------------YouTube Downloader Inline---------------
+# @New-Dev0 @buddhhu @1danish-00
+
 def get_data(types, data):
     audio = []
     video = []
@@ -199,13 +205,12 @@ def get_buttons(typee, listt):
     return buttons
 
 
-async def dler(ev, url, opts=None, download=False):
+async def dler(event, url, opts=None, download=False):
     try:
-        await ev.edit("`Getting Data from YouTube..`")
+        await event.edit("`Getting Data from YouTube..`")
         return YoutubeDL(opts).extract_info(url=url, download=download)
     except Exception as e:
-        await ev.edit(f"{type(e)}: {e}")
-        return
+        return await event.edit(f"{type(e)}: {e}")
 
 
 async def get_videos_link(url):
@@ -225,22 +230,16 @@ async def get_videos_link(url):
 
 
 # ---------------Updater---------------
-
+# Will add in class
 
 async def updateme_requirements():
     """To Update requirements"""
     try:
-        process = await asyncio.create_subprocess_shell(
-            " ".join(
-                [sys.executable, "-m", "pip", "install", "--no-cache-dir", "-r", reqs]
+        _, __ = await bash(sys.executable, "-m", "pip", "install", "--no-cache-dir", "-r", reqs]
             ),
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
         )
-        await process.communicate()
-        return process.returncode
-    except Exception as e:
-        return repr(e)
+    except Exception:
+        return format_exc()
 
 
 def gen_chlog(repo, diff):
@@ -289,6 +288,8 @@ def updater():
 
 
 # ----------------Fast Upload/Download----------------
+# @1danish_00 @new-dev0 @buddhhu
+
 async def uploader(file, name, taime, event, msg):
     with open(file, "rb") as f:
         result = await uploadable(
@@ -328,7 +329,7 @@ async def downloader(filename, file, event, taime, msg):
 
 
 # ~~~~~~~~~~~~~~~~~~~~DDL Downloader~~~~~~~~~~~~~~~~~~~~
-
+# @buddhhu @new-dev0
 
 async def download_file(link, name):
     """for files, without progress callback with aiohttp"""
@@ -359,6 +360,8 @@ async def fast_download(download_url, filename=None, progress_callback=None):
             return filename
 
 
+# Need to remove
+
 async def dloader(e, host, file):
     selected = CMD_WEB[host].format(file)
     process = await asyncio.create_subprocess_shell(
@@ -370,7 +373,7 @@ async def dloader(e, host, file):
 
 
 # ------------------Logo Gen Helpers----------------
-
+# Add ur usernames who created
 
 def get_text_size(text, image, font):
     im = Image.new("RGB", (image.width, image.height))
@@ -415,6 +418,8 @@ def make_logo(imgpath, text, funt, **args):
 
 
 # ------------------Lock Unlock----------------
+# needs optimisation
+
 def unlucks(unluck):
     """Used in locks.py file"""
     if unluck == "msgs":
@@ -680,31 +685,30 @@ async def allcmds(event):
 
 
 def time_formatter(milliseconds):
-    tmp = ""
+    to_return = ""
     minutes, seconds = divmod(int(milliseconds / 1000), 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
     weeks, days = divmod(days, 7)
-    tmp = (
+    to_return = (
         ((str(weeks) + "w:") if weeks else "")
         + ((str(days) + "d:") if days else "")
         + ((str(hours) + "h:") if hours else "")
         + ((str(minutes) + "m:") if minutes else "")
         + ((str(seconds) + "s") if seconds else "")
     )
-    if tmp == "":
-        return "0 s"
-
-    if tmp.endswith(":"):
-        return tmp[:-1]
+    if to_return == "":
+        "0 s"
+    elif tmp.endswith(":"):
+        to_return[:-1]
     else:
-        return tmp
+        to_return
 
 
 def humanbytes(size):
     if size in [None, ""]:
         return "0 B"
-    for unit in ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]:
+    for unit in ["B", "KB", "MB", "GB"]:
         if size < 1024:
             break
         size /= 1024
@@ -712,8 +716,7 @@ def humanbytes(size):
 
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
-    now = time.time()
-    diff = now - start
+    diff = time.time() - start
     if round(diff % 10.00) == 0 or current == total:
         percentage = current * 100 / total
         speed = current / diff
@@ -733,16 +736,12 @@ async def progress(current, total, event, start, type_of_ps, file_name=None):
                 time_formatter(time_to_completion),
             )
         )
-        try:
-            if file_name:
+        if file_name:
                 await event.edit(
                     "`✦ {}`\n\n`File Name: {}`\n\n{}".format(type_of_ps, file_name, tmp)
                 )
-            else:
+        else:
                 await event.edit("`✦ {}`\n\n{}".format(type_of_ps, tmp))
-        except BaseException:
-            pass
-
 
 def dani_ck(filroid):
     if os.path.exists(filroid):
@@ -768,6 +767,7 @@ def ReTrieveFile(input_file_name):
         stream=True,
     )
 
+# @New-Dev0
 
 async def get_paste(data, extension="txt"):
     ssl_context = ssl.create_default_context(cafile=certifi.where())
@@ -859,7 +859,7 @@ def text_set(text):
 
 
 # ------------------System\\Heroku stuff----------------
-
+# @xditya @sppidy @techierror
 
 async def restart(ult):
     if Var.HEROKU_APP_NAME and Var.HEROKU_API:
@@ -930,7 +930,7 @@ async def def_logs(ult):
 
 
 # ---------------- Calculator Fucn---------------
-
+# @1danish-00
 
 async def calcc(cmd, event):
     wtf = f"print({cmd})"
@@ -964,7 +964,7 @@ async def aexecc(code, event):
 
 
 # ---------------- Random User Gen ----------------
-
+# @xditya
 
 def get_random_user_data():
     from faker import Faker
@@ -1410,7 +1410,7 @@ def get_anime_src_res(search_str):
 
 
 # -----------------Random Stuff--------------
-
+# @buddhhu
 
 async def get_user_id(ids, client=ultroid_bot):
     """Get User Id from text"""
@@ -1425,6 +1425,7 @@ async def get_user_id(ids, client=ultroid_bot):
         userid = (await client.get_entity(ids)).id
     return userid
 
+# Random stuffs dk who added
 
 async def get_user_info(event):
     args = event.pattern_match.group(1).split(" ", 1)
