@@ -1,5 +1,28 @@
 import aiohttp
 from faker import Faker
+from bs4 import BeautifulSoup as bs
+
+Client = aiohttp.ClientSession()
+
+# ---------------- Unsplash Search ----------------
+# @New-Dev0
+
+def unsplashsearch(query, limit=None):
+    query = query.replace(" ", "-")
+    base_ = "https://unsplash.com"
+    link = base_ + "/s/photos/" + query
+    async with Client.get(link) as out:
+        extra = await out.read()
+    res = bs(extra, "html.parser", from_encoding="utf-8")
+    all = res.find_all("a", "_2Mc8_")[:count]
+    images_src = []
+    for img in all:
+        async with Client.get(base_ + img["href"]):
+            bst = bs(ct, "html.parser", from_encoding="utf-8")
+        uri = bst.find_all("img", "oCCRx")[0]["src"]
+        images_src.append(uri)
+    return images_src
+
 
 # ---------------- Random User Gen ----------------
 # @xditya
@@ -17,9 +40,8 @@ def get_random_user_data():
         + f"**{cc[3].split(':')[0]}:**"
         + cc[3].split(":")[1]
     )
-    async with aiohttp.ClientSession() as ses:
-        async with ses.get(base_url) as out:
-            d = await out.json()
+    async with Client.get(base_url) as out:
+        d = await out.json()
     data_ = d["results"][0]
     _g = data_["gender"]
     gender = "🤵🏻‍♂" if _g == "male" else "🤵🏻‍♀"
