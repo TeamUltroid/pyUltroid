@@ -11,7 +11,7 @@ import time
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtubesearchpython import VideosSearch
 
-from .all import dler, uploader, download_file
+from .all import dler, download_file, uploader
 
 
 def get_yt_link(query):
