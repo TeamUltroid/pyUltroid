@@ -32,7 +32,7 @@ class UltroidClient(TelegramClient):
                     logger.error(
                         f"Error Installing {files.split('/')[-1]}\n{format_exc()}"
                     )
-            logger.info("~"*20 + " Installed all plugins " + "~"*20)
+            logger.info("~" * 20 + " Installed all plugins " + "~" * 20)
 
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
