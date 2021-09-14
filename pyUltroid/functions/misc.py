@@ -1,7 +1,6 @@
 import aiohttp
 from faker import Faker
 
-
 # ---------------- Random User Gen ----------------
 # @xditya
 
