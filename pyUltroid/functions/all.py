@@ -140,7 +140,7 @@ def json_parser(data, indent=None):
 async def saavn_dl(query):
     query = query.replace(" ", "%20")
     try:
-        data = (json_parser(await async_searcher(url=f"https://jostapi.herokuapp.com/saavn?query={query}"))[0]
+        data = (json_parser(await async_searcher(url=f"https://jostapi.herokuapp.com/saavn?query={query}")))[0]
     except BaseException:
         return None, None, None, None
     try:
