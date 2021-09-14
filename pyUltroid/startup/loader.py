@@ -19,11 +19,14 @@ class Loader:
         self.path = path
         self.key = key
 
-    def load(self, log=True):
+    def load(self, log=True, func=None):
         files = sorted(glob.glob(path + "/*.py"))
         for plugin in files:
+            if not func:
+                plugin = plugin[:-3].replace("/", ".")
+                func = import_module
             try:
-                import_module(plugin[:-3].replace("/", "."))
+                func(plugin)
                 if log:
                     LOGS.info(f"Ultroid - {self.key} -  Installed - {plugin}")
             except Exception as exc:
@@ -52,16 +55,16 @@ def plugin_loader(addons=None, pmbot=None, manager=None, vcbot=None):
         if os.path.exists("addons/addons.txt"):
             # generally addons req already there so it won't take much time
             os.system("pip3 install --no-cache-dir -r addons/addons.txt")
-        Loader(path="addons", key="Addons", func=load_addons).load()
+        Loader(path="addons", key="Addons").load(func=load_addons)
 
     # group manager
     if manager == "True":
-        Loader(path="assistant/manager", key="Group Manager", func=load_manager).load()
+        Loader(path="assistant/manager", key="Group Manager").load()
 
     # chat via assistant
     if pmbot == "True":
-        Loader(path="assistant/pmbot", key="PM Bot", func=load_pmbot).load(log=False)
+        Loader(path="assistant/pmbot", key="PM Bot").load(log=False)
 
     # vc bot
     if vcbot == "True":
-        Loader(path="vcbot", key="VCBot", func=load_vc).load()
+        Loader(path="vcbot", key="VCBot").load()
