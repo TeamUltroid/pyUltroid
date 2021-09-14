@@ -859,64 +859,6 @@ async def aexecc(code, event):
     return await locals()["__aexecc"](event)
 
 
-# ---------------- Random User Gen ----------------
-# @xditya
-
-
-def get_random_user_data():
-    from faker import Faker
-
-    cc = Faker().credit_card_full().split("\n")
-    card = (
-        cc[0]
-        + "\n"
-        + "**CARD_ID:** "
-        + cc[2]
-        + "\n"
-        + f"**{cc[3].split(':')[0]}:**"
-        + cc[3].split(":")[1]
-    )
-    d = requests.get(base_url).json()
-    data_ = d["results"][0]
-    _g = data_["gender"]
-    gender = "🤵🏻‍♂" if _g == "male" else "🤵🏻‍♀"
-    name = data_["name"]
-    loc = data_["location"]
-    dob = data_["dob"]
-    msg = """
-{} **Name:** {}.{} {}
-
-**Street:** {} {}
-**City:** {}
-**State:** {}
-**Country:** {}
-**Postal Code:** {}
-
-**Email:** {}
-**Phone:** {}
-**Card:** {}
-
-**Birthday:** {}
-""".format(
-        gender,
-        name["title"],
-        name["first"],
-        name["last"],
-        loc["street"]["number"],
-        loc["street"]["name"],
-        loc["city"],
-        loc["state"],
-        loc["country"],
-        loc["postcode"],
-        data_["email"],
-        data_["phone"],
-        card,
-        dob["date"][:10],
-    )
-    pic = data_["picture"]["large"]
-    return msg, pic
-
-
 # ------------------Media Funcns----------------
 
 
@@ -930,24 +872,6 @@ def make_html_telegraph(title, author, text):
         text=text,
     )
     return page["url"]
-
-
-def local_mediainfo(file):
-    try:
-        file = file.split(".")[-1].lower()
-    except IndexError:
-        pass
-    if file in ["jpg", "png", "tgs", "webp"]:
-        return "stream"
-    elif file in ["mp3", "flac"]:
-        return "audio"
-    elif file in ["txt", "docx"]:
-        return "doc"
-    else:
-        try:
-            return resolve_bot_file_id(file)
-        except ValueError:
-            return "doc"
 
 
 def mediainfo(media):
