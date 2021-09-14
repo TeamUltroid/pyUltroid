@@ -705,14 +705,6 @@ def get_chatbot_reply(event, message):
         LOGS.info("**ERROR:**`{str(e)}`")
 
 
-def autopicsearch(query):
-    query = query.replace(" ", "-")
-    link = f"https://unsplash.com/s/photos/{query}"
-    extra = requests.get(link)
-    res = bs(extra.content, "html.parser", from_encoding="utf-8")
-    return res.find_all("a", "_2Mc8_")
-
-
 async def randomchannel(tochat, channel, range1, range2, caption=None):
     do = random.randrange(range1, range2)
     async for x in ultroid_bot.iter_messages(channel, add_offset=do, limit=1):
