@@ -22,8 +22,8 @@ from math import sqrt
 from mimetypes import guess_type
 from os import execl
 from pathlib import Path
-from traceback import format_exc
 from sys import executable
+from traceback import format_exc
 
 import aiofiles
 import aiohttp
@@ -140,7 +140,13 @@ def json_parser(data, indent=None):
 async def saavn_dl(query):
     query = query.replace(" ", "%20")
     try:
-        data = (json_parser(await async_searcher(url=f"https://jostapi.herokuapp.com/saavn?query={query}")))[0]
+        data = (
+            json_parser(
+                await async_searcher(
+                    url=f"https://jostapi.herokuapp.com/saavn?query={query}"
+                )
+            )
+        )[0]
     except BaseException:
         return None, None, None, None
     try:
@@ -158,6 +164,7 @@ async def saavn_dl(query):
 
 # ---------------YouTube Downloader Inline---------------
 # @New-Dev0 @buddhhu @1danish-00
+
 
 def get_data(types, data):
     audio = []
@@ -232,6 +239,7 @@ async def get_videos_link(url):
 # ---------------Updater---------------
 # Will add in class
 
+
 async def updateme_requirements():
     """To Update requirements"""
     try:
@@ -288,6 +296,7 @@ def updater():
 # ----------------Fast Upload/Download----------------
 # @1danish_00 @new-dev0 @buddhhu
 
+
 async def uploader(file, name, taime, event, msg):
     with open(file, "rb") as f:
         result = await uploadable(
@@ -329,6 +338,7 @@ async def downloader(filename, file, event, taime, msg):
 # ~~~~~~~~~~~~~~~~~~~~DDL Downloader~~~~~~~~~~~~~~~~~~~~
 # @buddhhu @new-dev0
 
+
 async def download_file(link, name):
     """for files, without progress callback with aiohttp"""
     async with aiohttp.ClientSession() as ses:
@@ -360,6 +370,7 @@ async def fast_download(download_url, filename=None, progress_callback=None):
 
 # Need to remove
 
+
 async def dloader(e, host, file):
     selected = CMD_WEB[host].format(file)
     process = await asyncio.create_subprocess_shell(
@@ -372,6 +383,7 @@ async def dloader(e, host, file):
 
 # ------------------Logo Gen Helpers----------------
 # Add ur usernames who created
+
 
 def get_text_size(text, image, font):
     im = Image.new("RGB", (image.width, image.height))
@@ -417,6 +429,7 @@ def make_logo(imgpath, text, funt, **args):
 
 # ------------------Lock Unlock----------------
 # needs optimisation
+
 
 def unlucks(unluck):
     """Used in locks.py file"""
@@ -735,11 +748,12 @@ async def progress(current, total, event, start, type_of_ps, file_name=None):
             )
         )
         if file_name:
-                await event.edit(
-                    "`✦ {}`\n\n`File Name: {}`\n\n{}".format(type_of_ps, file_name, tmp)
-                )
+            await event.edit(
+                "`✦ {}`\n\n`File Name: {}`\n\n{}".format(type_of_ps, file_name, tmp)
+            )
         else:
-                await event.edit("`✦ {}`\n\n{}".format(type_of_ps, tmp))
+            await event.edit("`✦ {}`\n\n{}".format(type_of_ps, tmp))
+
 
 def dani_ck(filroid):
     if os.path.exists(filroid):
@@ -765,7 +779,9 @@ def ReTrieveFile(input_file_name):
         stream=True,
     )
 
+
 # @New-Dev0
+
 
 async def get_paste(data, extension="txt"):
     ssl_context = ssl.create_default_context(cafile=certifi.where())
@@ -859,6 +875,7 @@ def text_set(text):
 # ------------------System\\Heroku stuff----------------
 # @xditya @sppidy @techierror
 
+
 async def restart(ult):
     if Var.HEROKU_APP_NAME and Var.HEROKU_API:
         try:
@@ -930,6 +947,7 @@ async def def_logs(ult):
 # ---------------- Calculator Fucn---------------
 # @1danish-00
 
+
 async def calcc(cmd, event):
     wtf = f"print({cmd})"
     old_stderr = sys.stderr
@@ -963,6 +981,7 @@ async def aexecc(code, event):
 
 # ---------------- Random User Gen ----------------
 # @xditya
+
 
 def get_random_user_data():
     from faker import Faker
@@ -1410,6 +1429,7 @@ def get_anime_src_res(search_str):
 # -----------------Random Stuff--------------
 # @buddhhu
 
+
 async def get_user_id(ids, client=ultroid_bot):
     """Get User Id from text"""
     if str(ids).isdigit() or str(ids).startswith("-"):
@@ -1423,7 +1443,9 @@ async def get_user_id(ids, client=ultroid_bot):
         userid = (await client.get_entity(ids)).id
     return userid
 
+
 # Random stuffs dk who added
+
 
 async def get_user_info(event):
     args = event.pattern_match.group(1).split(" ", 1)
