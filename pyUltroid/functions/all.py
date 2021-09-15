@@ -296,18 +296,6 @@ async def safeinstall(event):
         await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
 
 
-def dani_ck(filroid):
-    if os.path.exists(filroid):
-        no = 1
-        while True:
-            ult = "{0}_{2}{1}".format(*os.path.splitext(filroid) + (no,))
-            if os.path.exists(ult):
-                no += 1
-            else:
-                return ult
-    return filroid
-
-
 def get_all_files(path):
     filelist = []
     for root, dirs, files in os.walk(path):
@@ -632,30 +620,6 @@ async def get_user_info(event):
         except (TypeError, ValueError):
             return None, None
     return user_obj, extra
-
-
-async def resize_photo(photo):
-    """Resize the given photo to 512x512"""
-    image = Image.open(photo)
-    if (image.width and image.height) < 512:
-        size1 = image.width
-        size2 = image.height
-        if image.width > image.height:
-            scale = 512 / size1
-            size1new = 512
-            size2new = size2 * scale
-        else:
-            scale = 512 / size2
-            size1new = size1 * scale
-            size2new = 512
-        size1new = math.floor(size1new)
-        size2new = math.floor(size2new)
-        sizenew = (size1new, size2new)
-        image = image.resize(sizenew)
-    else:
-        maxsize = (512, 512)
-        image.thumbnail(maxsize)
-    return image
 
 
 async def get_full_user(event):
