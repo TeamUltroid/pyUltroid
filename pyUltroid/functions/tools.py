@@ -1,4 +1,5 @@
-import io os
+import io
+import os
 import ssl
 import sys
 import traceback
@@ -215,6 +216,7 @@ async def resize_photo(photo):
         maxsize = (512, 512)
         image.thumbnail(maxsize)
     return image
+
 
 def check_filename(filroid):
     if os.path.exists(filroid):
