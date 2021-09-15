@@ -517,43 +517,6 @@ def inline_mention(user):
 user_full_name = get_display_name
 
 
-async def get_chatinfo(event):
-    chat = event.pattern_match.group(1)
-    chat_info = None
-    if chat:
-        try:
-            chat = int(chat)
-        except ValueError:
-            pass
-    if not chat:
-        if event.reply_to_msg_id:
-            replied_msg = await event.get_reply_message()
-            if replied_msg.fwd_from and replied_msg.fwd_from.channel_id is not None:
-                chat = replied_msg.fwd_from.channel_id
-        else:
-            chat = event.chat_id
-    try:
-        chat_info = await event.client(GetFullChatRequest(chat))
-    except BaseException:
-        try:
-            chat_info = await event.client(GetFullChannelRequest(chat))
-        except ChannelInvalidError:
-            await eor(event, "`Invalid channel/group`")
-            return None
-        except ChannelPrivateError:
-            await eor(
-                event, "`This is a private channel/group or I am banned from there`"
-            )
-            return None
-        except ChannelPublicGroupNaError:
-            await eor(event, "`Channel or supergroup doesn't exist`")
-            return None
-        except (TypeError, ValueError) as err:
-            await eor(event, str(err))
-            return None
-    return chat_info
-
-
 async def fetch_info(chat, event):
     chat_obj_info = await event.client.get_entity(chat.full_chat.id)
     broadcast = (
