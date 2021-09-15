@@ -1,14 +1,14 @@
 import asyncio
+from os import execl
+from sys import executable
+from traceback import format_exc
 
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from telethon.helpers import _maybe_await
-from sys import executable
-from traceback import format_exc
-from os import execl
+
 from ..dB._database import Var
 from ..version import ultroid_version
-
 from . import LOGS
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
