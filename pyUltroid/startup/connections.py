@@ -65,7 +65,6 @@ class RedisConnection(Redis):
             "local",
             "termux",
             "windows",
-            "local",
         ]:
             return self.connect_redis(host=self.host, port=port, password=self.password)
 
