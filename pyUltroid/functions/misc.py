@@ -7,6 +7,20 @@ from faker import Faker
 
 Client = aiohttp.ClientSession()
 
+# --------------------------------------------------
+
+def ReTrieveFile(input_file_name):
+    RMBG_API = udB.get("RMBG_API")
+    headers = {"X-API-Key": RMBG_API}
+    files = {"image_file": (input_file_name, open(input_file_name, "rb"))}
+    return requests.post(
+        "https://api.remove.bg/v1.0/removebg",
+        headers=headers,
+        files=files,
+        allow_redirects=True,
+        stream=True,
+    )
+
 # ---------------- Unsplash Search ----------------
 # @New-Dev0
 
