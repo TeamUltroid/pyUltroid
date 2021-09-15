@@ -5,14 +5,16 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import os, re
+import os
+import re
 import time
-from youtube_dl import YoutubeDL
 
-from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
-from youtubesearchpython import VideosSearch
 from telethon import Button
-from .helper import dler, download_file, uploader, humanbytes
+from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
+from youtube_dl import YoutubeDL
+from youtubesearchpython import VideosSearch
+
+from .helper import dler, download_file, humanbytes, uploader
 
 
 def get_yt_link(query):
