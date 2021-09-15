@@ -3,7 +3,8 @@ import ssl
 import sys
 import traceback
 
-import aiohttp, requests
+import aiohttp
+import requests
 from PIL import Image, ImageDraw, ImageFont
 
 from .helper import fast_download
@@ -188,5 +189,5 @@ def get_chatbot_reply(event, message):
             return (data.json())["message"]
         else:
             LOGS.info("**ERROR:**\n`API down, report this to `@UltroidSupport.")
-    except Exception as e:
+    except Exception:
         LOGS.info("**ERROR:**`{str(e)}`")
