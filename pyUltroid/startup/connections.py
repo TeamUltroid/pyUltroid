@@ -52,7 +52,7 @@ class RedisConnection(Redis):
         password: str,
         platform: str,
     ):
-        if platform.lower() in ["heroku", "github actions"]:
+        if platform.lower() in ["heroku", "github actions", "local", "termux"]:
             if port:
                 port = self.port
             elif ":" in host and not port:
