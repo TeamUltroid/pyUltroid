@@ -7,7 +7,6 @@
 
 
 import asyncio
-import io
 import json
 import math
 import os
@@ -15,9 +14,7 @@ import random
 import re
 import ssl
 import subprocess
-import sys
 import time
-import traceback
 from math import sqrt
 from mimetypes import guess_type
 from pathlib import Path
@@ -34,7 +31,7 @@ from googleapiclient.discovery import build
 from html_telegraph_poster import TelegraphPoster
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 from telegraph import Telegraph
 from telethon import Button, events
 from telethon.errors import (
@@ -86,7 +83,6 @@ UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "
 width_ratio = 0.7
 reqs = "resources/extras/local-requirements.txt"
 base_url = "https://randomuser.me/api/"
-
 
 
 # ---------------YouTube Downloader Inline---------------
