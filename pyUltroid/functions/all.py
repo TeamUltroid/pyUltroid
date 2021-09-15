@@ -279,50 +279,6 @@ def text_set(text):
     return lines[:25]
 
 
-# ------ Audio \\ Video tools funcn --------#
-
-
-# https://github.com/1Danish-00/CompressorBot/blob/main/helper/funcn.py#L104
-
-
-def genss(file):
-    process = subprocess.Popen(
-        ["mediainfo", file, "--Output=JSON"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-    )
-    stdout, stderr = process.communicate()
-    out = stdout.decode().strip()
-    z = json.loads(out)
-    p = z["media"]["track"][0]["Duration"]
-    return int(p.split(".")[-2])
-
-
-def duration_s(file, stime):
-    tsec = genss(file)
-    x = round(tsec / 5)
-    y = round(tsec / 5 + int(stime))
-    pin = stdr(x)
-    pon = stdr(y) if y < tsec else stdr(tsec)
-    return pin, pon
-
-
-def stdr(seconds):
-    minutes, seconds = divmod(seconds, 60)
-    hours, minutes = divmod(minutes, 60)
-    if len(str(minutes)) == 1:
-        minutes = "0" + str(minutes)
-    if len(str(hours)) == 1:
-        hours = "0" + str(hours)
-    if len(str(seconds)) == 1:
-        seconds = "0" + str(seconds)
-    return (
-        ((str(hours) + ":") if hours else "00:")
-        + ((str(minutes) + ":") if minutes else "00:")
-        + ((str(seconds)) if seconds else "")
-    )
-
-
 # ------------------Gdrive Helpers----------------
 
 # From Uniborg.
