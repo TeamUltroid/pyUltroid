@@ -94,58 +94,6 @@ class RedisConnection(Redis):
             self.connect_redis(**kwargs)
 
 
-def def_redis_connection():
-    redis_info = Var.REDIS_URI
-    redis_pass = Var.REDIS_PASSWORD
-    err = ""
-    if ":" not in redis_info:
-        err += "\nWrong REDIS_URI. Quitting...\n"
-    if "/" in redis_info:
-        err += "Your REDIS_URI should start with redis.xyz. Quitting...\n"
-    redis_info = redis_info.replace("\n", "").replace(" ", "")
-    redis_pass = redis_pass.replace("\n", "").replace(" ", "")
-    if err:
-        LOGS.info(err)
-        exit(1)
-    redis_info = redis_info.split(":")
-    LOGS.info("Getting Connection With Redis Database")
-    time.sleep(3.5)
-    return redis.Redis(
-        host=redis_info[0],
-        port=redis_info[1],
-        password=redis_pass,
-        decode_responses=True,
-    )
-
-
-def redis_connection():
-    our_db = connect_redis()
-    time.sleep(5)
-    try:
-        our_db.ping()
-    except BaseException:
-        connected = []
-        LOGS.info("Can't connect to Redis Database.... Restarting....")
-        for x in range(1, 6):
-            try:
-                our_db = connect_redis()
-                time.sleep(3)
-                if our_db.ping():
-                    connected.append(1)
-                    break
-            except BaseException as conn:
-                LOGS.info(
-                    f"{(conn)}\nConnection Failed ...  Trying To Reconnect {x}/5 .."
-                )
-        if not connected:
-            LOGS.info("Redis Connection Failed.....")
-            exit(1)
-        else:
-            LOGS.info("Reconnected To Redis Server Succesfully")
-    LOGS.info("Succesfully Established Connection With Redis DataBase.")
-    return our_db
-
-
 def session_file():
     if os.path.exists("client-session.session"):
         _session = "client-session"
@@ -183,39 +131,6 @@ def vc_connection(udB, ultroid_bot):
         except Exception as er:
             LOGS.info("VC_SESSION: {}".format(str(er)))
     return ultroid_bot
-
-
-def connect_qovery_redis():
-    uri = Var.REDIS_URI
-    passw = Var.REDIS_PASSWORD
-    if not uri and not passw:
-        var = ""
-        for i in os.environ:
-            if i.startswith("QOVERY_REDIS_") and i.endswith("_PORT"):
-                var = i
-        if var:
-            try:
-                hash = var.split("QOVERY_REDIS_")[1].split("_")[0]
-                # or config(f"QOVERY_REDIS_{hash}_HOST")
-                endpoint = os.environ[f"QOVERY_REDIS_{hash}_HOST"]
-                # or config(f"QOVERY_REDIS_{hash}_PORT")
-                port = os.environ[f"QOVERY_REDIS_{hash}_PORT"]
-                # or config(f"QOVERY_REDIS_{hash}_PASSWORD")
-                passw = os.environ[f"QOVERY_REDIS_{hash}_PASSWORD"]
-            except KeyError:
-                LOGS.info("Redis Vars are missing. Quitting.")
-                exit(1)
-            except Exception as er:
-                LOGS.info(er)
-                exit(1)
-            # uri = endpoint + ":" + str(port)
-    return redis.Redis(
-        host=endpoint,
-        port=str(port),
-        password=passw,
-        decode_responses=True,
-    )
-    # return uri, passw
 
 
 def where_hosted():
