@@ -1,6 +1,6 @@
+import io
 import ssl
 import sys
-import io
 import traceback
 
 import aiohttp
