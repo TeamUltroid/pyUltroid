@@ -5,13 +5,14 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import os
+import os, re
 import time
+from youtube_dl import YoutubeDL
 
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtubesearchpython import VideosSearch
-
-from .all import dler, download_file, uploader
+from telethon import Button
+from .helper import dler, download_file, uploader, humanbytes
 
 
 def get_yt_link(query):
@@ -75,3 +76,76 @@ async def download_yt(event, link, ytd):
     os.remove(file)
     os.remove(thumb)
     await event.delete()
+
+
+# ---------------YouTube Downloader Inline---------------
+# @New-Dev0 @buddhhu @1danish-00
+
+
+def get_data(types, data):
+    audio = []
+    video = []
+    try:
+        for m in data["formats"]:
+            id = m["format_id"]
+            note = m["format_note"]
+            size = m["filesize"]
+            j = f"{id} {note} {humanbytes(size)}"
+            if id == "251":
+                a_size = m["filesize"]
+            if note == "tiny":
+                audio.append(j)
+            else:
+                if m["acodec"] == "none":
+                    id = str(m["format_id"]) + "+" + str(audio[-1].split()[0])
+                    j = f"{id} {note} {humanbytes(size+a_size)}"
+                video.append(j)
+    except BaseException:
+        pass
+    if types == "audio":
+        return audio
+    elif types == "video":
+        return video
+    return []
+
+
+def get_buttons(typee, listt):
+    butts = [
+        Button.inline(
+            str(x.split(" ", maxsplit=2)[1:])
+            .replace("'", "")
+            .replace("[", "")
+            .replace("]", "")
+            .replace(",", ""),
+            data=typee + x.split(" ", maxsplit=2)[0],
+        )
+        for x in listt
+    ]
+    buttons = list(zip(butts[::2], butts[1::2]))
+    if len(butts) % 2 == 1:
+        buttons.append((butts[-1],))
+    return buttons
+
+
+async def dler(event, url, opts=None, download=False):
+    try:
+        await event.edit("`Getting Data from YouTube..`")
+        return YoutubeDL(opts).extract_info(url=url, download=download)
+    except Exception as e:
+        return await event.edit(f"{type(e)}: {e}")
+
+
+async def get_videos_link(url):
+    id = url[url.index("=") + 1 :]
+    try:
+        html = await async_searcher(url)
+    except BaseException:
+        return []
+    pattern = re.compile(r"watch\?v=\S+?list=" + id)
+    v_ids = re.findall(pattern, html)
+    links = []
+    if v_ids:
+        for z in v_ids:
+            idd = re.search(r"=(.*)\\", str(z)).group(1)
+            links.append(f"https://www.youtube.com/watch?v={idd}")
+    return links
