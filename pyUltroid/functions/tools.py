@@ -1,6 +1,11 @@
-import aiohttp, asyncio, traceback, sys, ssl
-from .helper import fast_download
+import ssl
+import sys
+import traceback
+
+import aiohttp
 from PIL import Image, ImageDraw, ImageFont
+
+from .helper import fast_download
 
 
 # ~~~~~~~~~~~~~~~~~~~~OFOX API~~~~~~~~~~~~~~~~~~~~
@@ -41,6 +46,7 @@ def json_parser(data, indent=None):
 # ~~~~~~~~~~~~~~~Saavn Downloader~~~~~~~~~~~~~~~
 # @techierror
 
+
 async def saavn_dl(query):
     query = query.replace(" ", "%20")
     try:
@@ -68,6 +74,7 @@ async def saavn_dl(query):
 
 # ---------------- Calculator Fucn---------------
 # @1danish-00
+
 
 async def calcc(cmd, event):
     wt = f"print({cmd})"
@@ -97,6 +104,7 @@ async def aexecc(code, event):
     exec("async def __aexecc(event): " + "".join(f"\n {l}" for l in code.split("\n")))
 
     return await locals()["__aexecc"](event)
+
 
 # ------------------Logo Gen Helpers----------------
 # Add ur usernames who created
