@@ -6,7 +6,7 @@ from traceback import format_exc
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from telethon.helpers import _maybe_await
-
+from html_telegraph_poster import TelegraphPoster
 from ..dB._database import Var
 from ..version import ultroid_version
 from . import LOGS
@@ -158,6 +158,55 @@ async def fast_download(download_url, filename=None, progress_callback=None):
                         )
             return filename
 
+
+# ------------------Media Funcns----------------
+
+
+def make_html_telegraph(title, author, text):
+    client = TelegraphPoster(use_api=True)
+    client.create_api_token(title)
+    page = client.post(
+        title=title,
+        author=author,
+        author_url="https://t.me/TeamUltroid",
+        text=text,
+    )
+    return page["url"]
+
+
+def mediainfo(media):
+    xx = str((str(media)).split("(", maxsplit=1)[0])
+    m = ""
+    if xx == "MessageMediaDocument":
+        mim = media.document.mime_type
+        if mim == "application/x-tgsticker":
+            m = "sticker animated"
+        elif "image" in mim:
+            if mim == "image/webp":
+                m = "sticker"
+            elif mim == "image/gif":
+                m = "gif as doc"
+            else:
+                m = "pic as doc"
+        elif "video" in mim:
+            if "DocumentAttributeAnimated" in str(media):
+                m = "gif"
+            elif "DocumentAttributeVideo" in str(media):
+                i = str(media.document.attributes[0])
+                if "supports_streaming=True" in i:
+                    m = "video"
+                m = "video as doc"
+            else:
+                m = "video"
+        elif "audio" in mim:
+            m = "audio"
+        else:
+            m = "document"
+    elif xx == "MessageMediaPhoto":
+        m = "pic"
+    elif xx == "MessageMediaWebPage":
+        m = "web"
+    return m
 
 # ------------------Some Small Funcs----------------
 
