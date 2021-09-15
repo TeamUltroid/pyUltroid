@@ -11,9 +11,9 @@ from PIL import Image, ImageDraw, ImageFont
 from . import LOGS, ultroid_bot
 from .helper import fast_download, json_parser
 
-
 # ~~~~~~~~~~~~~~~~~~~~OFOX API~~~~~~~~~~~~~~~~~~~~
 # @buddhhu
+
 
 async def get_ofox(codename):
     ofox_baseurl = "https://api.orangefox.download/v3/"
@@ -27,6 +27,7 @@ async def get_ofox(codename):
 # ~~~~~~~~~~~~~~~Async Searcher~~~~~~~~~~~~~~~
 # @buddhhu
 
+
 async def async_searcher(url, headers=None, params=None):
     async with aiohttp.ClientSession(headers=headers) as session:
         async with session.get(url, params=params) as resp:
@@ -35,6 +36,7 @@ async def async_searcher(url, headers=None, params=None):
 
 # ~~~~~~~~~~~~~~~JSON Parser~~~~~~~~~~~~~~~
 # @buddhhu
+
 
 def json_parser(data, indent=None):
     if isinstance(data, str):
@@ -52,6 +54,7 @@ def json_parser(data, indent=None):
 
 # ~~~~~~~~~~~~~~~Saavn Downloader~~~~~~~~~~~~~~~
 # @techierror
+
 
 async def saavn_dl(query):
     query = query.replace(" ", "%20")
@@ -77,6 +80,7 @@ async def saavn_dl(query):
     thumb = await fast_download(img, filename=title + ".jpg")
     return song, duration, performer, thumb
 
+
 # --- webupload ------#
 # @buddhhu
 
@@ -88,6 +92,7 @@ CMD_WEB = {
     "file.io": 'curl -F "file=@{}" https://file.io',
     "siasky": 'curl -X POST "https://siasky.net/skynet/skyfile" -F "file=@{}"',
 }
+
 
 async def dloader(e, host, file):
     selected = CMD_WEB[host].format(file)
