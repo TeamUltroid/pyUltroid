@@ -313,49 +313,12 @@ def dani_ck(filroid):
     return filroid
 
 
-# @New-Dev0
-
-
-async def get_paste(data, extension="txt"):
-    ssl_context = ssl.create_default_context(cafile=certifi.where())
-    json = {"content": data, "extension": extension}
-    async with aiohttp.ClientSession() as ses:
-        async with ses.post(
-            "https://spaceb.in/api/v1/documents/", json=json, ssl=ssl_context
-        ) as out:
-            key = await out.json()
-    try:
-        return True, key["payload"]["id"]
-    except KeyError:
-        if "the length must be between 2 and 400000." in key["error"]:
-            return await get_paste(data[-400000:], extension=extension)
-        return False, key["error"]
-    except Exception as e:
-        LOGS.info(e)
-        return None, str(e)
-
-
 def get_all_files(path):
     filelist = []
     for root, dirs, files in os.walk(path):
         for file in files:
             filelist.append(os.path.join(root, file))
     return sorted(filelist)
-
-
-def get_chatbot_reply(event, message):
-    req_link = chatbot_base.format(
-        message=message,
-        owner=(ultroid_bot.me.first_name or "ultroid user"),
-    )
-    try:
-        data = requests.get(req_link)
-        if data.status_code == 200:
-            return (data.json())["message"]
-        else:
-            LOGS.info("**ERROR:**\n`API down, report this to `@UltroidSupport.")
-    except Exception as e:
-        LOGS.info("**ERROR:**`{str(e)}`")
 
 
 async def randomchannel(tochat, channel, range1, range2, caption=None):
@@ -383,57 +346,6 @@ def text_set(text):
                 for z in range(1, k + 2):
                     lines.append(line[((z - 1) * 55) : (z * 55)])
     return lines[:25]
-
-
-# ------------------Media Funcns----------------
-
-
-def make_html_telegraph(title, author, text):
-    client = TelegraphPoster(use_api=True)
-    client.create_api_token(title)
-    page = client.post(
-        title=title,
-        author=author,
-        author_url="https://t.me/TeamUltroid",
-        text=text,
-    )
-    return page["url"]
-
-
-def mediainfo(media):
-    xx = str((str(media)).split("(", maxsplit=1)[0])
-    m = ""
-    if xx == "MessageMediaDocument":
-        mim = media.document.mime_type
-        if mim == "application/x-tgsticker":
-            m = "sticker animated"
-        elif "image" in mim:
-            if mim == "image/webp":
-                m = "sticker"
-            elif mim == "image/gif":
-                m = "gif as doc"
-            else:
-                m = "pic as doc"
-        elif "video" in mim:
-            if "DocumentAttributeAnimated" in str(media):
-                m = "gif"
-            elif "DocumentAttributeVideo" in str(media):
-                i = str(media.document.attributes[0])
-                if "supports_streaming=True" in i:
-                    m = "video"
-                m = "video as doc"
-            else:
-                m = "video"
-        elif "audio" in mim:
-            m = "audio"
-        else:
-            m = "document"
-    elif xx == "MessageMediaPhoto":
-        m = "pic"
-    elif xx == "MessageMediaWebPage":
-        m = "web"
-    return m
-
 
 # ------ Audio \\ Video tools funcn --------#
 
