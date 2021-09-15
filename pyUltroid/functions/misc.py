@@ -4,10 +4,28 @@ import aiohttp
 import requests
 from bs4 import BeautifulSoup as bs
 from faker import Faker
+from telegraph import Telegraph
 
+# -------------
+
+telegraph = Telegraph()
+telegraph.create_account(short_name="Ultroid Cmds List")
 Client = aiohttp.ClientSession()
 
 # --------------------------------------------------
+async def allcmds(event):
+    x = str(LIST)
+    xx = (
+        x.replace(",", "\n")
+        .replace("[", """\n """)
+        .replace("]", "\n\n")
+        .replace("':", """ Plugin\n ✘ Commands Available-""")
+        .replace("'", "")
+        .replace("{", "")
+        .replace("}", "")
+    )
+    t = telegraph.create_page(title="Ultroid All Cmds", content=[f"{xx}"])
+    await eod(event, f"All Ultroid Cmds : [Click Here]({t['url']})", link_preview=False)
 
 
 def ReTrieveFile(input_file_name):
