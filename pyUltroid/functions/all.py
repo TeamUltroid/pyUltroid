@@ -412,22 +412,6 @@ async def safeinstall(event):
         await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
 
 
-async def allcmds(event):
-    x = str(LIST)
-    xx = (
-        x.replace(",", "\n")
-        .replace("[", """\n """)
-        .replace("]", "\n\n")
-        .replace("':", """ Plugin\n ✘ Commands Available-""")
-        .replace("'", "")
-        .replace("{", "")
-        .replace("}", "")
-    )
-    t = telegraph.create_page(title="Ultroid All Cmds", content=[f"{xx}"])
-    w = t["url"]
-    await eod(event, f"All Ultroid Cmds : [Click Here]({w})", link_preview=False)
-
-
 def dani_ck(filroid):
     if os.path.exists(filroid):
         no = 1
@@ -438,19 +422,6 @@ def dani_ck(filroid):
             else:
                 return ult
     return filroid
-
-
-def ReTrieveFile(input_file_name):
-    RMBG_API = udB.get("RMBG_API")
-    headers = {"X-API-Key": RMBG_API}
-    files = {"image_file": (input_file_name, open(input_file_name, "rb"))}
-    return requests.post(
-        "https://api.remove.bg/v1.0/removebg",
-        headers=headers,
-        files=files,
-        allow_redirects=True,
-        stream=True,
-    )
 
 
 # @New-Dev0
