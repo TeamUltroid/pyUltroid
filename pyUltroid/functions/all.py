@@ -63,15 +63,6 @@ telegraph.create_account(short_name="Ultroid Cmds List")
 
 request = cloudscraper.create_scraper()
 
-CMD_WEB = {
-    "anonfiles": 'curl -F "file=@{}" https://api.anonfiles.com/upload',
-    "transfer": 'curl --upload-file "{}" https://transfer.sh/',
-    "bayfiles": 'curl -F "file=@{}" https://api.bayfiles.com/upload',
-    "x0": 'curl -F "file=@{}" https://x0.at/',
-    "file.io": 'curl -F "file=@{}" https://file.io',
-    "siasky": 'curl -X POST "https://siasky.net/skynet/skyfile" -F "file=@{}"',
-}
-
 UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
 
 width_ratio = 0.7
@@ -151,47 +142,6 @@ async def get_videos_link(url):
             idd = re.search(r"=(.*)\\", str(z)).group(1)
             links.append(f"https://www.youtube.com/watch?v={idd}")
     return links
-
-
-# Need to remove
-
-
-async def dloader(e, host, file):
-    selected = CMD_WEB[host].format(file)
-    process = await asyncio.create_subprocess_shell(
-        selected, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-    )
-    stdout, stderr = await process.communicate()
-    os.remove(file)
-    return await e.edit(f"`{stdout.decode()}`")
-
-
-# --------------------------------------
-
-
-async def ban_time(event, time_str):
-    """Simplify ban time from text"""
-    if not any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
-        return await event.edit(
-            "Invalid time type specified. Expected s, m,h, or d, got: {}".format(
-                time_str[-1]
-            )
-        )
-    unit = time_str[-1]
-    time_int = time_str[:-1]
-    if not time_int.isdigit():
-        return await event.edit("Invalid time amount specified.")
-    if unit == "s":
-        bantime = int(time.time() + int(time_int))
-    elif unit == "m":
-        bantime = int(time.time() + int(time_int) * 60)
-    elif unit == "h":
-        bantime = int(time.time() + int(time_int) * 60 * 60)
-    elif unit == "d":
-        bantime = int(time.time() + int(time_int) * 24 * 60 * 60)
-    else:
-        return ""
-    return bantime
 
 
 # ----------------- Load \\ Unloader ----------------
