@@ -59,7 +59,7 @@ class RedisConnection(Redis):
         else:
             raise RedisError("Port Number not found")
 
-        if platform.lower() in ["heroku", "github actions", "local", "termux"]:
+        if platform.lower() in ["heroku", "github actions", "local", "termux", "windows", "local"]:
             return self.connect_redis(host=self.host, port=port, password=self.password)
 
         elif platform.lower() == "qovery":
@@ -224,5 +224,5 @@ def where_hosted():
     elif os.getenv("ANDROID_ROOT"):
         return "termux"
     elif os.getenv("WINDOW"):
-        return "win"
+        return "windows"
     return "local"
