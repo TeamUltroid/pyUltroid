@@ -20,22 +20,16 @@ import time
 import traceback
 from math import sqrt
 from mimetypes import guess_type
-from os import execl
 from pathlib import Path
-from sys import executable
-from traceback import format_exc
 
-import aiofiles
 import aiohttp
 import certifi
 import cloudscraper
-import heroku3
 import httplib2
 import requests
 from apiclient.http import MediaFileUpload
 from emoji import emojize
 from git import Repo
-from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from googleapiclient.discovery import build
 from html_telegraph_poster import TelegraphPoster
 from oauth2client.client import OAuth2WebServerFlow
@@ -48,7 +42,6 @@ from telethon.errors import (
     ChannelPrivateError,
     ChannelPublicGroupNaError,
 )
-from telethon.helpers import _maybe_await
 from telethon.tl import types
 from telethon.tl.functions.channels import GetFullChannelRequest, GetParticipantsRequest
 from telethon.tl.functions.messages import GetFullChatRequest, GetHistoryRequest
@@ -63,14 +56,10 @@ from youtube_dl import YoutubeDL
 
 from .. import *
 from ..dB._core import *
-from ..dB._database import Var
 from ..misc import *
 from ..misc._wrappers import *
 from ..startup.utils import *
-from ..version import ultroid_version
 from . import DANGER
-from .FastTelethon import download_file as downloadable
-from .FastTelethon import upload_file as uploadable
 
 OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
@@ -233,8 +222,6 @@ async def get_videos_link(url):
             idd = re.search(r"=(.*)\\", str(z)).group(1)
             links.append(f"https://www.youtube.com/watch?v={idd}")
     return links
-
-
 
 
 # Need to remove
@@ -521,6 +508,7 @@ async def randomchannel(tochat, channel, range1, range2, caption=None):
         except BaseException:
             pass
 
+
 def text_set(text):
     lines = []
     if len(text) <= 55:
@@ -535,6 +523,7 @@ def text_set(text):
                 for z in range(1, k + 2):
                     lines.append(line[((z - 1) * 55) : (z * 55)])
     return lines[:25]
+
 
 # ---------------- Calculator Fucn---------------
 # @1danish-00
