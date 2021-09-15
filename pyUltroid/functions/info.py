@@ -1,9 +1,12 @@
 # -----------------Random Stuff--------------
 
-import emoji, math
+import math
+
+import emoji
 from telethon.tl import functions, types
 from telethon.utils import get_input_location
-from . import ultroid_bot, eor
+
+from . import eor, ultroid_bot
 
 # -----------
 # @buddhhu
@@ -81,20 +84,26 @@ async def get_full_user(event):
             probable_user_mention_entity = mention_entity[0]
             if isinstance(probable_user_mention_entity, types.MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
-                replied_user = await event.client(functions.users.GetFullUserRequest(user_id))
+                replied_user = await event.client(
+                    functions.users.GetFullUserRequest(user_id)
+                )
                 return replied_user, None
             else:
                 try:
                     user_object = await event.client.get_entity(int(input_str))
                     user_id = user_object.id
-                    replied_user = await event.client(functions.users.GetFullUserRequest(user_id))
+                    replied_user = await event.client(
+                        functions.users.GetFullUserRequest(user_id)
+                    )
                     return replied_user, None
                 except Exception as e:
                     return None, e
         elif event.is_private:
             try:
                 user_id = event.chat_id
-                replied_user = await event.client(functions.users.GetFullUserRequest(user_id))
+                replied_user = await event.client(
+                    functions.users.GetFullUserRequest(user_id)
+                )
                 return replied_user, None
             except Exception as e:
                 return None, e
@@ -102,7 +111,9 @@ async def get_full_user(event):
             try:
                 user_object = await event.client.get_entity(int(input_str))
                 user_id = user_object.id
-                replied_user = await event.client(functions.users.GetFullUserRequest(user_id))
+                replied_user = await event.client(
+                    functions.users.GetFullUserRequest(user_id)
+                )
                 return replied_user, None
             except Exception as e:
                 return None, e
@@ -181,7 +192,9 @@ async def fetch_info(chat, event):
     former_title = (
         msg_info.messages[0].action.title
         if first_msg_valid
-        and isinstance(msg_info.messages[0].action, types.MessageActionChannelMigrateFrom)
+        and isinstance(
+            msg_info.messages[0].action, types.MessageActionChannelMigrateFrom
+        )
         and msg_info.messages[0].action.title != chat_title
         else None
     )

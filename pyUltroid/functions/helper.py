@@ -1,8 +1,12 @@
 import asyncio
-import os, time, math
+import math
+import os
 import sys
+import time
 from traceback import format_exc
-import aiohttp, aiofiles
+
+import aiofiles
+import aiohttp
 import heroku3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
@@ -11,7 +15,7 @@ from telethon.helpers import _maybe_await
 
 from ..dB._database import Var
 from ..version import ultroid_version
-from . import LOGS, eor, eod
+from . import LOGS, eor
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
 

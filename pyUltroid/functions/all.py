@@ -11,14 +11,12 @@ import os
 import random
 import re
 import time
-from math import sqrt
 from mimetypes import guess_type
 from pathlib import Path
 
 import cloudscraper
 import httplib2
 from apiclient.http import MediaFileUpload
-from emoji import emojize
 from git import Repo
 from googleapiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
@@ -26,23 +24,15 @@ from oauth2client.file import Storage
 from telegraph import Telegraph
 from telethon import events
 from telethon.tl import types
-from telethon.tl.functions.channels import GetParticipantsRequest
-from telethon.tl.functions.messages import GetHistoryRequest
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import (
-    ChannelParticipantsAdmins,
-    MessageActionChannelMigrateFrom,
-    MessageEntityMentionName,
-)
-from telethon.utils import get_display_name, get_input_location
+from telethon.utils import get_display_name
 
-from .helper import time_formatter,humanbytes
 from .. import *
 from ..dB._core import *
 from ..misc import *
 from ..misc._wrappers import *
 from ..startup.utils import *
 from . import DANGER
+from .helper import humanbytes, time_formatter
 
 OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
@@ -407,8 +397,6 @@ def inline_mention(user):
 
 
 user_full_name = get_display_name
-
-
 
 
 # ---------------- End ------------------#
