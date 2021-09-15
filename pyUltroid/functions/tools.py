@@ -3,7 +3,7 @@ import ssl
 import sys
 import traceback
 
-import aiohttp
+import aiohttp, requests
 from PIL import Image, ImageDraw, ImageFont
 
 from .helper import fast_download
@@ -174,3 +174,19 @@ async def get_paste(data, extension="txt"):
     except Exception as e:
         LOGS.info(e)
         return None, str(e)
+
+
+def get_chatbot_reply(event, message):
+    chatbot_base = "https://api.affiliateplus.xyz/api/chatbot?message={message}&botname=Ultroid&ownername={owner}&user=20"
+    req_link = chatbot_base.format(
+        message=message,
+        owner=(ultroid_bot.me.first_name or "ultroid user"),
+    )
+    try:
+        data = requests.get(req_link)
+        if data.status_code == 200:
+            return (data.json())["message"]
+        else:
+            LOGS.info("**ERROR:**\n`API down, report this to `@UltroidSupport.")
+    except Exception as e:
+        LOGS.info("**ERROR:**`{str(e)}`")
