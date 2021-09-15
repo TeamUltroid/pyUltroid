@@ -1,10 +1,12 @@
 # -----------------Random Stuff--------------
 
-from . import ultroid_bot
-from telethon.tl import types, functions
+from telethon.tl import functions, types
 
-#-----------
+from . import ultroid_bot
+
+# -----------
 # @buddhhu
+
 
 async def get_user_id(ids, client=ultroid_bot):
     """Get User Id from text"""
