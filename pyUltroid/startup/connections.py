@@ -47,19 +47,36 @@ LOGS.info(f"Ultroid Version - {ultroid_version}")
 class RedisConnection(Redis):
     def __init__(
         self,
-        host: str,
+        host: str = None,
         port: int = None,
-        password: str,
+        password: str = None,
         platform: str,
     ):
-        if platform.lower() in ["heroku", "github actions", "local", "termux"]:
-            if port:
+        if port:
                 port = self.port
-            elif ":" in host and not port:
+        elif ":" in host and not port:
                 port = int(self.host.split(":")[1])
-            else:
+        else:
                 raise RedisError("Port Number not found")
+
+        if platform.lower() in ["heroku", "github actions", "local", "termux"]:
             return self.connect_redis(host=self.host, port=port, password=self.password)
+
+        elif platform.lower() == "qovery":
+            if not host:
+                vars, hash, host, port, password = "", "", "", 0, ""
+                for vars in os.environ:
+                    if vars.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
+                        var = vars
+                if var != "":
+                    hash = var.split("_", maxsplit=2)[1].split("_")[0]
+                if hash != "":
+                    host = os.environ(f"QOVERY_REDIS_{hash}_HOST")
+                    port = os.environ(f"QOVERY_REDIS_{hash}_PORT")
+                    password = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
+                    return self.connect_redis(host=host, port=port, password=password)
+            return self.connect_redis(host=self.host, port=port, password=self.password)
+
 
     def connect_redis(self, **kwargs):
         database = Redis(**kwargs, decode_responses=True)
