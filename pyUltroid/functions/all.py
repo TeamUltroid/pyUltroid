@@ -88,67 +88,6 @@ reqs = "resources/extras/local-requirements.txt"
 base_url = "https://randomuser.me/api/"
 
 
-# ~~~~~~~~~~~~~~~~~~~~OFOX API~~~~~~~~~~~~~~~~~~~~
-# @buddhhu
-async def get_ofox(codename):
-    ofox_baseurl = "https://api.orangefox.download/v3/"
-    releases_url = ofox_baseurl + "releases?codename="
-    device_url = ofox_baseurl + "devices/get?codename="
-    releases = await async_searcher(releases_url + codename)
-    device = await async_searcher(device_url + codename)
-    return json_parser(device), json_parser(releases)
-
-
-# ~~~~~~~~~~~~~~~Async Searcher~~~~~~~~~~~~~~~
-# @buddhhu
-async def async_searcher(url, headers=None, params=None):
-    async with aiohttp.ClientSession(headers=headers) as session:
-        async with session.get(url, params=params) as resp:
-            return await resp.text()
-
-
-# ~~~~~~~~~~~~~~~JSON Parser~~~~~~~~~~~~~~~
-# @buddhhu
-def json_parser(data, indent=None):
-    if isinstance(data, str):
-        parsed = json.loads(str(data))
-        if indent:
-            parsed = json.dumps(json.loads(str(data)), indent=indent)
-    elif isinstance(data, dict):
-        parsed = data
-        if indent:
-            parsed = json.dumps(data, indent=indent)
-    else:
-        parsed = {}
-    return parsed
-
-
-# ~~~~~~~~~~~~~~~Saavn Downloader~~~~~~~~~~~~~~~
-# @techierror
-async def saavn_dl(query):
-    query = query.replace(" ", "%20")
-    try:
-        data = (
-            json_parser(
-                await async_searcher(
-                    url=f"https://jostapi.herokuapp.com/saavn?query={query}"
-                )
-            )
-        )[0]
-    except BaseException:
-        return None, None, None, None
-    try:
-        title = data["song"]
-        url = data["media_url"]
-        img = data["image"]
-        duration = data["duration"]
-        performer = data["primary_artists"]
-    except BaseException:
-        return None, None, None, None
-    song = await fast_download(url, filename=title + ".mp3")
-    thumb = await fast_download(img, filename=title + ".jpg")
-    return song, duration, performer, thumb
-
 
 # ---------------YouTube Downloader Inline---------------
 # @New-Dev0 @buddhhu @1danish-00
@@ -235,52 +174,6 @@ async def dloader(e, host, file):
     stdout, stderr = await process.communicate()
     os.remove(file)
     return await e.edit(f"`{stdout.decode()}`")
-
-
-# ------------------Logo Gen Helpers----------------
-# Add ur usernames who created
-
-
-def get_text_size(text, image, font):
-    im = Image.new("RGB", (image.width, image.height))
-    draw = ImageDraw.Draw(im)
-    return draw.textsize(text, font)
-
-
-def find_font_size(text, font, image, target_width_ratio):
-    tested_font_size = 100
-    tested_font = ImageFont.truetype(font, tested_font_size)
-    observed_width, observed_height = get_text_size(text, image, tested_font)
-    estimated_font_size = (
-        tested_font_size / (observed_width / image.width) * target_width_ratio
-    )
-    return round(estimated_font_size)
-
-
-def make_logo(imgpath, text, funt, **args):
-    fill = args.get("fill")
-    width_ratio = args.get("width_ratio") or width_ratio
-    stroke_width = int(args.get("stroke_width"))
-    stroke_fill = args.get("stroke_fill")
-
-    img = Image.open(imgpath)
-    width, height = img.size
-    draw = ImageDraw.Draw(img)
-    font_size = find_font_size(text, funt, img, width_ratio)
-    font = ImageFont.truetype(funt, font_size)
-    w, h = draw.textsize(text, font=font)
-    draw.text(
-        ((width - w) / 2, (height - h) / 2),
-        text,
-        font=font,
-        fill=fill,
-        stroke_width=stroke_width,
-        stroke_fill=stroke_fill,
-    )
-    file_name = "Logo.png"
-    img.save(f"./{file_name}", "PNG")
-    img.show()
-    return f"{file_name} Generated Successfully!"
 
 
 # --------------------------------------
@@ -494,41 +387,6 @@ def text_set(text):
                 for z in range(1, k + 2):
                     lines.append(line[((z - 1) * 55) : (z * 55)])
     return lines[:25]
-
-
-# ---------------- Calculator Fucn---------------
-# @1danish-00
-
-
-async def calcc(cmd, event):
-    wtf = f"print({cmd})"
-    old_stderr = sys.stderr
-    old_stdout = sys.stdout
-    redirected_output = sys.stdout = io.StringIO()
-    redirected_error = sys.stderr = io.StringIO()
-    stdout, stderr, exc = None, None, None
-    try:
-        await aexecc(wtf, event)
-    except Exception:
-        exc = traceback.format_exc()
-    stdout = redirected_output.getvalue()
-    stderr = redirected_error.getvalue()
-    sys.stdout = old_stdout
-    sys.stderr = old_stderr
-    if exc:
-        return exc
-    elif stderr:
-        return stderr
-    elif stdout:
-        return stdout
-    else:
-        return "Success"
-
-
-async def aexecc(code, event):
-    exec("async def __aexecc(event): " + "".join(f"\n {l}" for l in code.split("\n")))
-
-    return await locals()["__aexecc"](event)
 
 
 # ------------------Media Funcns----------------
