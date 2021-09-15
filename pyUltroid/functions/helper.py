@@ -5,8 +5,9 @@ from traceback import format_exc
 
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
-from telethon.helpers import _maybe_await
 from html_telegraph_poster import TelegraphPoster
+from telethon.helpers import _maybe_await
+
 from ..dB._database import Var
 from ..version import ultroid_version
 from . import LOGS
@@ -207,6 +208,7 @@ def mediainfo(media):
     elif xx == "MessageMediaWebPage":
         m = "web"
     return m
+
 
 # ------------------Some Small Funcs----------------
 
