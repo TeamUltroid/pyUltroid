@@ -1,12 +1,12 @@
 import asyncio
-from git import Repo
-from . import LOGS
-from ..dB._database import Var
-from .FastTelethon import download_file as downloadable
-from .FastTelethon import upload_file as uploadable
 
+from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
+from ..dB._database import Var
+from . import LOGS
+from .FastTelethon import download_file as downloadable
+from .FastTelethon import upload_file as uploadable
 
 UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
 
@@ -21,6 +21,7 @@ async def bash(cmd):
     err = stderr.decode().strip()
     out = stdout.decode().strip()
     return out, err
+
 
 # ---------------Updater---------------
 # Will add in class
@@ -152,6 +153,7 @@ async def fast_download(download_url, filename=None, progress_callback=None):
                         )
             return filename
 
+
 # ------------------Some Small Funcs----------------
 
 
@@ -184,6 +186,7 @@ def humanbytes(size):
             break
         size /= 1024
     return f"{size:.2f} {unit}"
+
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
     diff = time.time() - start
@@ -284,4 +287,3 @@ async def def_logs(ult):
         thumb="resources/extras/ultroid.jpg",
         caption="**Ultroid Logs.**",
     )
-
