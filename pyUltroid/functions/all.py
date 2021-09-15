@@ -24,7 +24,7 @@ from googleapiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 from telegraph import Telegraph
-from telethon import Button, events
+from telethon import events
 from telethon.errors import (
     ChannelInvalidError,
     ChannelPrivateError,
@@ -40,7 +40,6 @@ from telethon.tl.types import (
     MessageEntityMentionName,
 )
 from telethon.utils import get_display_name, get_input_location
-from youtube_dl import YoutubeDL
 
 from .. import *
 from ..dB._core import *
