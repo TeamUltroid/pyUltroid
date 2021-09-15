@@ -53,11 +53,11 @@ class RedisConnection(Redis):
         platform: str,
     ):
         if port:
-                port = self.port
+            port = self.port
         elif ":" in host and not port:
-                port = int(self.host.split(":")[1])
+            port = int(self.host.split(":")[1])
         else:
-                raise RedisError("Port Number not found")
+            raise RedisError("Port Number not found")
 
         if platform.lower() in ["heroku", "github actions", "local", "termux"]:
             return self.connect_redis(host=self.host, port=port, password=self.password)
@@ -76,7 +76,6 @@ class RedisConnection(Redis):
                     password = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
                     return self.connect_redis(host=host, port=port, password=password)
             return self.connect_redis(host=self.host, port=port, password=self.password)
-
 
     def connect_redis(self, **kwargs):
         database = Redis(**kwargs, decode_responses=True)
