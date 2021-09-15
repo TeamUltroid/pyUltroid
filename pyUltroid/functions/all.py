@@ -12,23 +12,18 @@ import math
 import os
 import random
 import re
-import ssl
 import subprocess
 import time
 from math import sqrt
 from mimetypes import guess_type
 from pathlib import Path
 
-import aiohttp
-import certifi
 import cloudscraper
 import httplib2
-import requests
 from apiclient.http import MediaFileUpload
 from emoji import emojize
 from git import Repo
 from googleapiclient.discovery import build
-from html_telegraph_poster import TelegraphPoster
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 from PIL import Image
@@ -346,6 +341,7 @@ def text_set(text):
                 for z in range(1, k + 2):
                     lines.append(line[((z - 1) * 55) : (z * 55)])
     return lines[:25]
+
 
 # ------ Audio \\ Video tools funcn --------#
 
