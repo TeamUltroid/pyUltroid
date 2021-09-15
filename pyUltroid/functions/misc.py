@@ -9,6 +9,7 @@ Client = aiohttp.ClientSession()
 
 # --------------------------------------------------
 
+
 def ReTrieveFile(input_file_name):
     RMBG_API = udB.get("RMBG_API")
     headers = {"X-API-Key": RMBG_API}
@@ -20,6 +21,7 @@ def ReTrieveFile(input_file_name):
         allow_redirects=True,
         stream=True,
     )
+
 
 # ---------------- Unsplash Search ----------------
 # @New-Dev0
