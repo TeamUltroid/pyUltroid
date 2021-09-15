@@ -26,7 +26,6 @@ from git import Repo
 from googleapiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-from PIL import Image
 from telegraph import Telegraph
 from telethon import Button, events
 from telethon.errors import (
