@@ -205,8 +205,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                         int(udB.get("LOG_CHANNEL")),
                         "Session String expired, create new session from 👇",
                         buttons=[
-                            Button.url(
-                                "Bot", "t.me/SessionGeneratorBot?start="),
+                            Button.url("Bot", "t.me/SessionGeneratorBot?start="),
                             Button.url(
                                 "Repl",
                                 "https://replit.com/@TeamUltroid/UltroidStringSession",
@@ -225,12 +224,10 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                     ftext = "**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n"
                     ftext += "**Py-Ultroid Version:** `" + str(pyver)
                     ftext += "`\n**Ultroid Version:** `" + str(ult_ver)
-                    ftext += "`\n**Telethon Version:** `" + \
-                        str(telever) + "`\n\n"
+                    ftext += "`\n**Telethon Version:** `" + str(telever) + "`\n\n"
                     ftext += "--------START ULTROID CRASH LOG--------"
                     ftext += "\n**Date:** `" + date
-                    ftext += "`\n**Group:** `" + \
-                        str(ult.chat_id) + "` " + str(naam)
+                    ftext += "`\n**Group:** `" + str(ult.chat_id) + "` " + str(naam)
                     ftext += "\n**Sender ID:** `" + str(ult.sender_id)
                     ftext += "`\n**Replied:** `" + str(ult.is_reply)
                     ftext += "`\n\n**Event Trigger:**`\n"
@@ -266,8 +263,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
 
         if "official" in type:
             args["outgoing"] = True
-            ultroid_bot.add_event_handler(
-                doit("official"), events.NewMessage(**args))
+            ultroid_bot.add_event_handler(doit("official"), events.NewMessage(**args))
             if udB.get("TAKE_EDITS"):
                 args["func"] = lambda x: not (
                     isinstance(x.chat, types.Channel) and x.chat.broadcast
@@ -282,13 +278,11 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
             if allow_sudo:
                 args["outgoing"] = False
                 args["pattern"] = compile_pattern(pattern, "\\" + SUDO_HNDLR)
-                ultroid_bot.add_event_handler(
-                    doit("sudo"), events.NewMessage(**args))
+                ultroid_bot.add_event_handler(doit("sudo"), events.NewMessage(**args))
                 del args["outgoing"]
         if "assistant" in type:
             args["pattern"] = compile_pattern(pattern, "/")
-            asst.add_event_handler(
-                doit("assistant"), events.NewMessage(**args))
+            asst.add_event_handler(doit("assistant"), events.NewMessage(**args))
         if manager and "manager" in type:
             args["pattern"] = compile_pattern(pattern, "/")
             asst.add_event_handler(doit("manager"), events.NewMessage(**args))
@@ -296,8 +290,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
         if "dualmode" in type:
             if not (("manager" in type) and (DH == "/")):
                 args["pattern"] = compile_pattern(pattern, "\\" + DH)
-                asst.add_event_handler(
-                    doit("dualmode"), events.NewMessage(**args))
+                asst.add_event_handler(doit("dualmode"), events.NewMessage(**args))
         # Collecting all Handlers as one..
         wrapper = doit("official")
         try:
