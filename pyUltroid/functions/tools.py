@@ -6,7 +6,7 @@ import traceback
 import aiohttp
 import requests
 from PIL import Image, ImageDraw, ImageFont
-
+from . import LOGS
 from .helper import fast_download
 
 
@@ -187,7 +187,6 @@ def get_chatbot_reply(event, message):
         data = requests.get(req_link)
         if data.status_code == 200:
             return (data.json())["message"]
-        else:
-            LOGS.info("**ERROR:**\n`API down, report this to `@UltroidSupport.")
-    except Exception:
-        LOGS.info("**ERROR:**`{str(e)}`")
+        LOGS.info("**ERROR:**\n`API down, report this to `@UltroidSupport.")
+    except Exception as e:
+        LOGS.info(f"**ERROR:**`{str(e)}`")
