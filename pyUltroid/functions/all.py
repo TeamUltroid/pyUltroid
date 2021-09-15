@@ -6,12 +6,10 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
-import json
 import math
 import os
 import random
 import re
-import subprocess
 import time
 from math import sqrt
 from mimetypes import guess_type
