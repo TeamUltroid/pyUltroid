@@ -82,4 +82,3 @@ if not udB.get("BLACKLIST_CHATS"):
 HNDLR = udB.get("HNDLR") or "."
 DUAL_HNDLR = udB.set("DUAL_HNDLR") or "/"
 SUDO_HNDLR = udB.get("SUDO_HNDLR") or HNDLR
-
