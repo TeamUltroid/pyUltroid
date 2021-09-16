@@ -1,10 +1,10 @@
 import asyncio
 import math
-import os
+import os, re
 import sys
 import time
 from traceback import format_exc
-
+from . import DANGER
 import aiofiles
 import aiohttp
 import heroku3
@@ -141,7 +141,7 @@ async def bash(cmd):
 
 async def updateme_requirements():
     """To Update requirements"""
-    reqs = "resources/extras/local-requirements.txt"
+    reqs = "resources/startup/requirements.txt"
     try:
         _, __ = await bash(f"{sys.executable} -m pip install --no-cache-dir -r {reqs}")
     except Exception:
