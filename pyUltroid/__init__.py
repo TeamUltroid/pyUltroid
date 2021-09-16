@@ -5,9 +5,6 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from .startup.connections import RedisConnection, session_file, where_hosted
-from .startup.BaseClient import UltroidClient
-from .dB._database import Var
 from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
 
 from telethon import __version__
@@ -41,6 +38,9 @@ LOGS.info(f"py-Ultroid Version - {__pyUltroid__}")
 LOGS.info(f"Telethon Version - {__version__}")
 LOGS.info(f"Ultroid Version - {ultroid_version}")
 
+from .dB._database import Var
+from .startup.BaseClient import UltroidClient
+from .startup.connections import RedisConnection, session_file, where_hosted
 
 udB = RedisConnection(host="", port=None, password="", platform=where_hosted())
 
