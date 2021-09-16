@@ -7,6 +7,7 @@
 
 import os
 from .startup.connections import RedisConnection, session_file, where_hosted
+from .startup.funcs import autobot
 from .startup.BaseClient import UltroidClient
 from .dB._database import Var
 from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
@@ -16,11 +17,11 @@ from telethon import __version__
 from .version import __version__ as __pyUltroid__
 from .version import ultroid_version
 
+if os.path.exists("ultroid.log"):
+    os.remove("ultroid.log")
 
 LOGS = getLogger(__name__)
 
-if os.path.exists("ultroid.log"):
-    os.remove("ultroid.log")
 
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] - %(message)s",
@@ -52,20 +53,21 @@ ultroid_bot = UltroidClient(
     plugins_path="plugins",
     logger=LOGS,
 )
+
+if not udB.get("BOT_TOKEN"):
+    ultroid_bot.run_in_loop(autobot())
+
 asst = UltroidClient(
     None,
     api_id=Var.API_ID,
     api_hash=Var.API_HASH,
-    bot_token=Var.BOT_TOKEN or udB.get("BOT_TOKEN"),
+    bot_token=udB.get("BOT_TOKEN"),
 )
 
 asst.me = ultroid_bot.run_in_loop(asst.get_me())
 ultroid_bot.me = ultroid_bot.run_in_loop(ultroid_bot.get_me())
 
 """
-udB = redis_connection()
-
-ultroid_bot, asst = client_connection()
 
 vcClient = vc_connection(udB, ultroid_bot)
 
