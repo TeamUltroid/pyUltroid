@@ -8,7 +8,6 @@
 
 import math
 import os
-import random
 import re
 import time
 from mimetypes import guess_type
@@ -149,7 +148,6 @@ async def safeinstall(event):
             os.remove(downloaded_file_name)
     else:
         await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
-
 
 
 def text_set(text):
