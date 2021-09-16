@@ -5,6 +5,8 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+from . import udB
+
 DEVLIST = [
     719195224,  # @xditya
     1322549723,  # @danish_00

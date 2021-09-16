@@ -1,16 +1,18 @@
-# Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
-#
-# This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
-# PLease read the GNU Affero General Public License in
-# <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
+# ------------------Gdrive Helpers----------------
+
+# From Uniborg.
+# https://github.com/SpEcHiDe/UniBorg/blob/adb3bd311f642b2719606c384c43afd89029e4f3/stdplugins/gDrive.py
+
 
 
 import math
 import os
 import time
 from mimetypes import guess_type
-
+from telethon import events
+from telethon.tl import types
+from . import udB, ultroid_bot
+from .. import asst
 import httplib2
 from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
@@ -24,12 +26,6 @@ OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 parent_id = udB.get("GDRIVE_FOLDER_ID")
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
-
-
-# ------------------Gdrive Helpers----------------
-
-# From Uniborg.
-# https://github.com/SpEcHiDe/UniBorg/blob/adb3bd311f642b2719606c384c43afd89029e4f3/stdplugins/gDrive.py
 
 
 def list_files(http):
@@ -221,22 +217,6 @@ async def upload_file(http, file_path, file_name, mime_type, event, parent_id):
     drive_service.permissions().insert(fileId=file_id, body=permissions).execute()
     file = drive_service.files().get(fileId=file_id).execute()
     return file.get("webContentLink")
-
-
-def make_mention(user):
-    if user.username:
-        return f"@{user.username}"
-    return inline_mention(user)
-
-
-def inline_mention(user):
-    full_name = user_full_name(user)
-    if not isinstance(user, types.User):
-        return full_name
-    return f"[{full_name}](tg://user?id={user.id})"
-
-
-user_full_name = get_display_name
 
 
 # ---------------- End ------------------#

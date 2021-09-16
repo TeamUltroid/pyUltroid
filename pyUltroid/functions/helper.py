@@ -1,3 +1,10 @@
+# Ultroid - UserBot
+# Copyright (C) 2021 TeamUltroid
+#
+# This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
+# PLease read the GNU Affero General Public License in
+# <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
+
 import asyncio
 import math
 import os
@@ -5,16 +12,21 @@ import re
 import sys
 import time
 from traceback import format_exc
-
+from .. import HNDLR
 import aiofiles
+from pathlib import Path
+from .. import asst
+from ..startup.utils import load_addons
 import aiohttp
 import heroku3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from html_telegraph_poster import TelegraphPoster
 from telethon.helpers import _maybe_await
+from telethon.utils import get_display_name
+from telethon.tl import types
 
-from ..dB._core import ADDONS, CMD_HELP, LIST, LOADED
+from ..dB._core import ADDONS, CMD_HELP, LIST, LOADED, HELP, VC_HELP
 from ..dB._database import Var
 from ..version import ultroid_version
 from . import DANGER, LOGS, eod, eor, ultroid_bot
@@ -24,7 +36,24 @@ from .FastTelethon import upload_file as uploadable
 UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
 
 
-# ----------------- Load \\ Unloader ----------------
+# ~~~~~~~~~~~~~~~~~~~~ small funcs ~~~~~~~~~~~~~~~~~~~~ #
+
+def make_mention(user):
+    if user.username:
+        return f"@{user.username}"
+    return inline_mention(user)
+
+
+def inline_mention(user):
+    full_name = user_full_name(user)
+    if not isinstance(user, types.User):
+        return full_name
+    return f"[{full_name}](tg://user?id={user.id})"
+
+
+user_full_name = get_display_name
+
+# ----------------- Load \\ Unloader ---------------- #
 
 
 def un_plug(shortname):
@@ -121,7 +150,7 @@ async def safeinstall(event):
         await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
 
 
-# ---------------------------------------------
+# --------------------------------------------------------------------- #
 
 
 async def bash(cmd):
@@ -136,7 +165,7 @@ async def bash(cmd):
     return out, err
 
 
-# ---------------Updater---------------
+# ---------------------------UPDATER-------------------------------- #
 # Will add in class
 
 
@@ -268,7 +297,7 @@ async def fast_download(download_url, filename=None, progress_callback=None):
             return filename
 
 
-# ------------------Media Funcns----------------
+# --------------------------Media Funcs-------------------------------- #
 
 
 def make_html_telegraph(title, author, text):
