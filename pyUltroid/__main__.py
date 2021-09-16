@@ -37,18 +37,13 @@ if udB.get("UPDATE_ON_RESTART") and updater() and os.path.exists(".git"):
 
 startup_stuff()
 
-if not udB.get("BOT_TOKEN"):
-    ultroid_bot.loop.run_until_complete(autobot())
 
+ultroid_bot.me.phone = None
+ultroid_bot.uid = ultroid_bot.me.id
+ultroid_bot.first_name = ultroid_bot.me.first_name
 
-async def istart():
-    ultroid_bot.me = await ultroid_bot.get_me()
-    ultroid_bot.me.phone = None
-    ultroid_bot.uid = ultroid_bot.me.id
-    ultroid_bot.first_name = ultroid_bot.me.first_name
-    ultroid_bot.dc_id = ultroid_bot.session.dc_id
-    if not ultroid_bot.me.bot:
-        udB.set("OWNER_ID", ultroid_bot.uid)
+if not ultroid_bot.me.bot:
+    udB.set("OWNER_ID", ultroid_bot.uid)
 
 
 LOGS.info("Initialising...")
