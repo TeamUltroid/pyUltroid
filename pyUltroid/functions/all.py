@@ -11,10 +11,8 @@ import os
 import time
 from mimetypes import guess_type
 
-import cloudscraper
 import httplib2
 from apiclient.http import MediaFileUpload
-from git import Repo
 from googleapiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
