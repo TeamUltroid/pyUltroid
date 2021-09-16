@@ -8,10 +8,8 @@
 
 import math
 import os
-import re
 import time
 from mimetypes import guess_type
-from pathlib import Path
 
 import cloudscraper
 import httplib2
@@ -30,7 +28,6 @@ from ..dB._core import *
 from ..misc import *
 from ..misc._wrappers import *
 from ..startup.utils import *
-from . import DANGER
 from .helper import humanbytes, time_formatter
 
 OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
@@ -45,8 +42,6 @@ telegraph.create_account(short_name="Ultroid Cmds List")
 request = cloudscraper.create_scraper()
 
 UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
-
-
 
 
 # ------------------Gdrive Helpers----------------
