@@ -4,13 +4,13 @@ import ssl
 import subprocess
 import sys
 import traceback
-
+import json, certifi, math
 import aiohttp
 import requests
 from PIL import Image, ImageDraw, ImageFont
 
 from . import LOGS, ultroid_bot
-from .helper import fast_download, json_parser
+from .helper import fast_download, json_parser, bash
 
 try:
     import cv2
@@ -173,7 +173,7 @@ def find_font_size(text, font, image, target_width_ratio):
 
 def make_logo(imgpath, text, funt, **args):
     fill = args.get("fill")
-    width_ratio = args.get("width_ratio") or width_ratio
+    width_ratio = args.get("width_ratio") or 0.7
     stroke_width = int(args.get("stroke_width"))
     stroke_fill = args.get("stroke_fill")
 

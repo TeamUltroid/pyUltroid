@@ -1,11 +1,12 @@
 import json
-
+import re
 import aiohttp
 import requests
 from bs4 import BeautifulSoup as bs
 from faker import Faker
 from telegraph import Telegraph
-
+from ..dB._core import LIST
+from . import eod, udB
 # -------------
 
 telegraph = Telegraph()
@@ -47,17 +48,18 @@ def ReTrieveFile(input_file_name):
 # @New-Dev0
 
 
-def unsplashsearch(query, limit=None):
+async def unsplashsearch(query, limit=None):
     query = query.replace(" ", "-")
     base_ = "https://unsplash.com"
     link = base_ + "/s/photos/" + query
     async with Client.get(link) as out:
         extra = await out.read()
     res = bs(extra, "html.parser", from_encoding="utf-8")
-    all = res.find_all("a", "_2Mc8_")[:count]
+    all = res.find_all("a", "_2Mc8_")[:limit]
     images_src = []
     for img in all:
-        async with Client.get(base_ + img["href"]):
+        async with Client.get(base_ + img["href"]) as out:
+            ct = await out.read()
             bst = bs(ct, "html.parser", from_encoding="utf-8")
         uri = bst.find_all("img", "oCCRx")[0]["src"]
         images_src.append(uri)
@@ -68,7 +70,7 @@ def unsplashsearch(query, limit=None):
 # Base Credits - TG@Madepranav
 
 
-def airing_eps():
+async def airing_eps():
     async with Client.get("https://gogoanime.ai/") as out:
         resp = await out.read()
     soup = bs(resp, "html.parser")
@@ -148,7 +150,7 @@ def get_anime_src_res(search_str):
 # @xditya
 
 
-def get_random_user_data():
+async def get_random_user_data():
     base_url = "https://randomuser.me/api/"
     cc = Faker().credit_card_full().split("\n")
     card = (

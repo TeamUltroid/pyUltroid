@@ -39,23 +39,23 @@ def lock_unlock(query, lock=True):
     if query == "msgs":
         for i in ["send_messages", "invite_users", "pin_messages" "change_info"]:
             setattr(rights, i, _do)
-    elif unluck == "media":
+    elif query == "media":
         setattr(rights, "send_media", _do)
-    elif unluck == "sticker":
+    elif query == "sticker":
         setattr(rights, "send_stickers", _do)
-    elif unluck == "gif":
+    elif query == "gif":
         setattr(rights, "send_gifs", _do)
-    elif unluck == "games":
+    elif query == "games":
         setattr(rights, "send_games", _do)
-    elif unluck == "inline":
+    elif query == "inline":
         setattr(rights, "send_inline", _do)
-    elif unluck == "polls":
+    elif query == "polls":
         setattr(rights, "send_polls", _do)
-    elif unluck == "invites":
+    elif query == "invites":
         setattr(rights, "invite_users", _do)
-    elif unluck == "pin":
+    elif query == "pin":
         setattr(rights, "pin_messages", _do)
-    elif unluck == "changeinfo":
+    elif query == "changeinfo":
         setattr(rights, "change_info", _do)
     else:
         return None

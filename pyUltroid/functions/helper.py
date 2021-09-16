@@ -1,8 +1,9 @@
 import asyncio
-from os import execl
-from sys import executable
+import os, time, math
+import sys
 from traceback import format_exc
-
+import aiohttp, aiofiles
+import heroku3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from html_telegraph_poster import TelegraphPoster
@@ -10,7 +11,7 @@ from telethon.helpers import _maybe_await
 
 from ..dB._database import Var
 from ..version import ultroid_version
-from . import LOGS
+from . import LOGS, eor, eod
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
 
@@ -35,6 +36,7 @@ async def bash(cmd):
 
 async def updateme_requirements():
     """To Update requirements"""
+    reqs = "resources/extras/local-requirements.txt"
     try:
         _, __ = await bash(f"{sys.executable} -m pip install --no-cache-dir -r {reqs}")
     except Exception:
@@ -61,11 +63,11 @@ def updater(check_updates=False):
         repo = Repo()
     except NoSuchPathError as error:
         LOGS.info(f"`directory {error} is not found`")
-        repo.__del__()
+        Repo().__del__()
         return
     except GitCommandError as error:
         LOGS.info(f"`Early failure! {error}`")
-        repo.__del__()
+        Repo().__del__()
         return
     except InvalidGitRepositoryError:
         repo = Repo.init()
@@ -228,7 +230,7 @@ def time_formatter(milliseconds):
     )
     if to_return == "":
         "0 s"
-    elif tmp.endswith(":"):
+    elif to_return.endswith(":"):
         to_return[:-1]
     else:
         to_return
@@ -290,7 +292,7 @@ async def restart(ult):
                 "`HEROKU_API` or `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars.",
             )
     else:
-        execl(executable, executable, "-m", "pyUltroid")
+        os.execl(sys.executable, sys.executable, "-m", "pyUltroid")
 
 
 async def shutdown(ult, dynotype="ultroid"):
