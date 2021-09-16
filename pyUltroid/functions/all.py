@@ -151,24 +151,6 @@ async def safeinstall(event):
         await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
 
 
-def get_all_files(path):
-    filelist = []
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            filelist.append(os.path.join(root, file))
-    return sorted(filelist)
-
-
-async def randomchannel(tochat, channel, range1, range2, caption=None):
-    do = random.randrange(range1, range2)
-    async for x in ultroid_bot.iter_messages(channel, add_offset=do, limit=1):
-        try:
-            if not caption:
-                caption = x.text
-            await ultroid_bot.send_message(tochat, caption, file=x.media)
-        except BaseException:
-            pass
-
 
 def text_set(text):
     lines = []
