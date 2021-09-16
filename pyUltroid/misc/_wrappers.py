@@ -6,10 +6,8 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import asyncio
-import functools
 
-from . import sudoers, udB
-
+from . import udB
 
 # edit or reply
 
