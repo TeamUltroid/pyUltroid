@@ -14,8 +14,7 @@ class UltroidClient(TelegramClient):
         *args,
         plugins_path=None,
         bot_token=None,
-        logger=None
-        **kwargs,
+        logger=None ** kwargs,
     ):
         if logger:
             self.logger = logger
