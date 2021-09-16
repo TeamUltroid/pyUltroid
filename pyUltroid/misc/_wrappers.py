@@ -10,20 +10,6 @@ import functools
 
 from . import sudoers, udB
 
-# sudo
-
-
-def sudo():
-    def decorator(function):
-        @functools.wraps(function)
-        async def wrapper(event):
-            if event.out or str(event.sender_id) in sudoers():
-                await function(event)
-
-        return wrapper
-
-    return decorator
-
 
 # edit or reply
 
