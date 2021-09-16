@@ -8,7 +8,7 @@
 
 from .startup.BaseClient import UltroidClient
 from .startup.connections import RedisConnection, session_file
-from .dB._database import Var
+
 udB = RedisConnection(host="", port=None, password="", platform=where_hosted())
 
 ultroid_bot = UltroidClient(
