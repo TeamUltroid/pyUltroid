@@ -40,7 +40,7 @@ async def eor(event, text, **args):
         ok = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
     ut = udB.get("DEL_DELAY_TIME")
     if time and ut != "None":
-        time = time or ut
+        time = ut or time
         await asyncio.sleep(int(time))
         return await ok.delete()
     return ok
