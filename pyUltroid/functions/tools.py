@@ -154,6 +154,17 @@ async def aexecc(code, event):
     return await locals()["__aexecc"](event)
 
 
+# -------------------------------------------------
+
+
+def get_all_files(path):
+    filelist = []
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            filelist.append(os.path.join(root, file))
+    return sorted(filelist)
+
+
 # ------------------Logo Gen Helpers----------------
 # Add ur usernames who created
 

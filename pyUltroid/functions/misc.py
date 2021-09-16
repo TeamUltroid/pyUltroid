@@ -1,4 +1,5 @@
 import json
+import random
 import re
 
 import aiohttp
@@ -8,7 +9,7 @@ from faker import Faker
 from telegraph import Telegraph
 
 from ..dB._core import LIST
-from . import eod, udB
+from . import eod, udB, ultroid_bot
 
 # -------------
 
@@ -17,6 +18,21 @@ telegraph.create_account(short_name="Ultroid Cmds List")
 Client = aiohttp.ClientSession()
 
 # --------------------------------------------------
+
+
+async def randomchannel(
+    tochat, channel, range1, range2, caption=None, client=ultroid_bot
+):
+    do = random.randrange(range1, range2)
+    async for x in ultroid_bot.iter_messages(channel, add_offset=do, limit=1):
+        caption = caption or x.text
+        try:
+            await client.send_message(tochat, caption, file=x.media)
+        except BaseException:
+            pass
+
+
+# ----------------------------------------------------
 
 
 async def allcmds(event):

@@ -8,182 +8,22 @@
 
 import math
 import os
-import random
-import re
 import time
 from mimetypes import guess_type
-from pathlib import Path
 
-import cloudscraper
 import httplib2
 from apiclient.http import MediaFileUpload
-from git import Repo
 from googleapiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-from telegraph import Telegraph
-from telethon import events
-from telethon.tl import types
 from telethon.utils import get_display_name
 
-from .. import *
-from ..dB._core import *
-from ..misc import *
-from ..misc._wrappers import *
-from ..startup.utils import *
-from . import DANGER
 from .helper import humanbytes, time_formatter
 
 OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 parent_id = udB.get("GDRIVE_FOLDER_ID")
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
-chatbot_base = "https://api.affiliateplus.xyz/api/chatbot?message={message}&botname=Ultroid&ownername={owner}&user=20"
-
-telegraph = Telegraph()
-telegraph.create_account(short_name="Ultroid Cmds List")
-
-request = cloudscraper.create_scraper()
-
-UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
-
-width_ratio = 0.7
-base_url = "https://randomuser.me/api/"
-
-# ----------------- Load \\ Unloader ----------------
-
-
-def un_plug(shortname):
-    try:
-        try:
-            for client in [ultroid_bot, asst]:
-                for i in LOADED[shortname]:
-                    client.remove_event_handler(i)
-            try:
-                del LOADED[shortname]
-                del LIST[shortname]
-                ADDONS.remove(shortname)
-            except BaseException:
-                pass
-
-        except BaseException:
-            name = f"addons.{shortname}"
-
-            for i in reversed(range(len(ultroid_bot._event_builders))):
-                ev, cb = ultroid_bot._event_builders[i]
-                if cb.__module__ == name:
-                    del ultroid_bot._event_builders[i]
-                    try:
-                        del LOADED[shortname]
-                        del LIST[shortname]
-                        ADDONS.remove(shortname)
-                    except KeyError:
-                        pass
-    except Exception as er:
-        LOGS.info(er)
-
-
-async def safeinstall(event):
-    ok = await eor(event, "`Installing...`")
-    if event.reply_to_msg_id:
-        try:
-            downloaded_file_name = await ok.client.download_media(
-                await event.get_reply_message(), "addons/"
-            )
-            n = event.text
-            q = n[9:]
-            if q != "f":
-                with open(downloaded_file_name, "r") as xx:
-                    yy = xx.read()
-                try:
-                    for dan in DANGER:
-                        if re.search(dan, yy):
-                            os.remove(downloaded_file_name)
-                            return await ok.edit(
-                                f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{downloaded_file_name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
-                            )
-                except BaseException:
-                    pass
-            if "(" not in downloaded_file_name:
-                path1 = Path(downloaded_file_name)
-                shortname = path1.stem
-                load_addons(shortname.replace(".py", ""))
-                try:
-                    plug = shortname.replace(".py", "")
-                    if plug in HELP:
-                        output = "**Plugin** - `{}`\n".format(plug)
-                        for i in HELP[plug]:
-                            output += i
-                        output += "\n© @TheUltroid"
-                        await eod(
-                            ok,
-                            f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}",
-                            time=10,
-                        )
-                    elif plug in CMD_HELP:
-                        kk = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
-                        kk += str(CMD_HELP[plug])
-                        await eod(
-                            ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{kk}", time=10
-                        )
-                    else:
-                        try:
-                            x = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
-                            for d in LIST[plug]:
-                                x += HNDLR + d
-                                x += "\n"
-                            await eod(
-                                ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n`{x}`"
-                            )
-                        except BaseException:
-                            await eod(
-                                ok, f"✓ `Ultroid - Installed`: `{plug}` ✓", time=3
-                            )
-                except Exception as e:
-                    await ok.edit(str(e))
-            else:
-                os.remove(downloaded_file_name)
-                await eod(ok, "**ERROR**\nPlugin might have been pre-installed.")
-        except Exception as e:
-            await eod(ok, "**ERROR\n**" + str(e))
-            os.remove(downloaded_file_name)
-    else:
-        await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
-
-
-def get_all_files(path):
-    filelist = []
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            filelist.append(os.path.join(root, file))
-    return sorted(filelist)
-
-
-async def randomchannel(tochat, channel, range1, range2, caption=None):
-    do = random.randrange(range1, range2)
-    async for x in ultroid_bot.iter_messages(channel, add_offset=do, limit=1):
-        try:
-            if not caption:
-                caption = x.text
-            await ultroid_bot.send_message(tochat, caption, file=x.media)
-        except BaseException:
-            pass
-
-
-def text_set(text):
-    lines = []
-    if len(text) <= 55:
-        lines.append(text)
-    else:
-        all_lines = text.split("\n")
-        for line in all_lines:
-            if len(line) <= 55:
-                lines.append(line)
-            else:
-                k = int(len(line) / 55)
-                for z in range(1, k + 2):
-                    lines.append(line[((z - 1) * 55) : (z * 55)])
-    return lines[:25]
 
 
 # ------------------Gdrive Helpers----------------
