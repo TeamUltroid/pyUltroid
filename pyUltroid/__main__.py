@@ -19,15 +19,7 @@ from telethon.errors.rpcerrorlist import (
 
 from . import ultroid_bot
 from .dB._database import Var
-from .startup.funcs import (
-    autobot,
-    autopilot,
-    customize,
-    plug,
-    ready,
-    startup_stuff,
-    updater,
-)
+from .startup.funcs import autopilot, customize, plug, ready, startup_stuff, updater
 from .startup.loader import load_other_plugins
 
 # Option to Auto Update On Restarts..
