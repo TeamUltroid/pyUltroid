@@ -38,9 +38,21 @@ LOGS.info(f"py-Ultroid Version - {__pyUltroid__}")
 LOGS.info(f"Telethon Version - {__version__}")
 LOGS.info(f"Ultroid Version - {ultroid_version}")
 
-# Edit from Here
+from .dB._database import Var
+from .startup.BaseClient import UltroidClient
+from .startup.connections import RedisConnection, session_file, where_hosted
 
+udB = RedisConnection(host="", port=None, password="", platform=where_hosted())
 
+ultroid_bot = UltroidClient(
+    session_file(), api_id=Var.API_ID, api_hash=Var.API_HASH, plugins_path="plugins"
+)
+asst = UltroidClient(None, api_id=Var.API_ID, api_hash=Var.API_HASH, bot_token=Var.BOT_TOKEN or udB.get("BOT_TOKEN"))
+
+asst.me = ultroid_bot.run_in_loop(asst.get_me())
+ultroid.me = ultroid_bot.run_in_loop(ultroid_bot.get_me())
+
+"""
 udB = redis_connection()
 
 ultroid_bot, asst = client_connection()
@@ -67,3 +79,4 @@ if not udB.get("DUAL_HNDLR"):
 SUDO_HNDLR = udB.get("SUDO_HNDLR") or HNDLR
 
 Hosted_On = where_hosted()
+"""
