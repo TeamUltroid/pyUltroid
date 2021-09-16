@@ -14,9 +14,13 @@ class UltroidClient(TelegramClient):
         *args,
         plugins_path=None,
         bot_token=None,
+        logger=None
         **kwargs,
     ):
-        self.logger = getLogger("pyUltroid")
+        if logger:
+            self.logger = logger
+        else:
+            self.logger = getLogger("pyUltroid")
 
         super().__init__(session, **kwargs)
 
@@ -37,6 +41,9 @@ class UltroidClient(TelegramClient):
             self.logger.info(f"Logged in as @{self.me.username}")
         else:
             self.logger.info(f"Logged in as {get_display_name(self.me)}")
+
+    def run_in_loop(self, function):
+        return self.loop.run_until_complete(function)
 
     def run(self):
         self.run_until_disconnected()
