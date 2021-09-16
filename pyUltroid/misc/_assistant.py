@@ -52,7 +52,8 @@ def inline_owner():
                         url="https://t.me/TheUltroid",
                         description="(c) TeamUltroid",
                         text=MSG,
-                        thumb=InputWebDocument(ULTROID_PIC, 0, "image/jpeg", []),
+                        thumb=InputWebDocument(
+                            ULTROID_PIC, 0, "image/jpeg", []),
                         buttons=[
                             [
                                 Button.url(
@@ -82,7 +83,8 @@ def asst_cmd(dec, from_users=None):
     def ult(func):
         pattern = "^/" + dec  # todo - handlers for assistant?
         asst.add_event_handler(
-            func, NewMessage(incoming=True, pattern=pattern, from_users=from_users)
+            func, NewMessage(incoming=True, pattern=pattern,
+                             from_users=from_users)
         )
 
     return ult
