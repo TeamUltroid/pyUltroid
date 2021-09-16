@@ -18,30 +18,14 @@ from git import Repo
 from googleapiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-from telegraph import Telegraph
-from telethon import events
-from telethon.tl import types
 from telethon.utils import get_display_name
 
-from .. import *
-from ..dB._core import *
-from ..misc import *
-from ..misc._wrappers import *
-from ..startup.utils import *
 from .helper import humanbytes, time_formatter
 
 OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 parent_id = udB.get("GDRIVE_FOLDER_ID")
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
-chatbot_base = "https://api.affiliateplus.xyz/api/chatbot?message={message}&botname=Ultroid&ownername={owner}&user=20"
-
-telegraph = Telegraph()
-telegraph.create_account(short_name="Ultroid Cmds List")
-
-request = cloudscraper.create_scraper()
-
-UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
 
 
 # ------------------Gdrive Helpers----------------
