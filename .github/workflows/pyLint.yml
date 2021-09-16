@@ -23,7 +23,7 @@ jobs:
         run: autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables .
       - name: lint with isort and black
         run: |
-          isort .
+          isort . -s pyUltroid/__init__.py
           black --fast .
       # commit changes
       - uses: stefanzweifel/git-auto-commit-action@v4
