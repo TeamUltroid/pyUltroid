@@ -22,6 +22,7 @@ from telethon import events, types
 from pyUltroid.misc._decorators import *
 from pyUltroid.misc._wrappers import eod, eor
 
+from . import sudoers
 from .. import udB, ultroid_bot
 from ..dB._core import LIST
 from ..dB._database import Var
@@ -168,7 +169,7 @@ if ENV:
         )
         EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", "🔰")
         HANDLR = hndlr
-        SUDO_USERS = sudos
+        SUDO_USERS = sudoers()
         GROUP_REG_SED_EX_BOT_S = os.environ.get(
             "GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot"
         )

@@ -6,11 +6,13 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
+from pyUltroid.functions.tools import async_searcher
 import re
 import time
 
 from telethon import Button
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
+from .helper import async_searcher
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
