@@ -17,7 +17,7 @@ from telethon.errors.rpcerrorlist import (
     PhoneNumberInvalidError,
 )
 
-from . import *
+from . import ultroid_bot
 from .dB._database import Var
 from .startup.funcs import (
     autobot,
@@ -49,11 +49,6 @@ async def istart():
     ultroid_bot.dc_id = ultroid_bot.session.dc_id
     if not ultroid_bot.me.bot:
         udB.set("OWNER_ID", ultroid_bot.uid)
-
-
-async def bot_info():
-    asst.me = await asst.get_me()
-    return asst.me
 
 
 LOGS.info("Initialising...")
