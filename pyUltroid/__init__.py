@@ -45,7 +45,11 @@ LOGS.info(f"Ultroid Version - {ultroid_version}")
 udB = RedisConnection(host="", port=None, password="", platform=where_hosted())
 
 ultroid_bot = UltroidClient(
-    session_file(), api_id=Var.API_ID, api_hash=Var.API_HASH, plugins_path="plugins"
+    session_file(),
+    api_id=Var.API_ID,
+    api_hash=Var.API_HASH,
+    plugins_path="plugins"
+    logger=LOGS,
 )
 asst = UltroidClient(
     None,
