@@ -1,8 +1,8 @@
 import json
+import random
 import re
 
 import aiohttp
-import random
 import requests
 from bs4 import BeautifulSoup as bs
 from faker import Faker
@@ -19,7 +19,10 @@ Client = aiohttp.ClientSession()
 
 # --------------------------------------------------
 
-async def randomchannel(tochat, channel, range1, range2, caption=None, client=ultroid_bot):
+
+async def randomchannel(
+    tochat, channel, range1, range2, caption=None, client=ultroid_bot
+):
     do = random.randrange(range1, range2)
     async for x in ultroid_bot.iter_messages(channel, add_offset=do, limit=1):
         caption = caption or x.text
@@ -28,7 +31,9 @@ async def randomchannel(tochat, channel, range1, range2, caption=None, client=ul
         except BaseException:
             pass
 
+
 # ----------------------------------------------------
+
 
 async def allcmds(event):
     x = str(LIST)
