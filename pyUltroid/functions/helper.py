@@ -14,6 +14,7 @@ from html_telegraph_poster import TelegraphPoster
 from telethon.helpers import _maybe_await
 
 from ..dB._database import Var
+from ..dB._core import LOADED, LIST, ADDONS, CMD_HELP
 from ..version import ultroid_version
 from . import LOGS, eod, eor, ultroid_bot
 from .FastTelethon import download_file as downloadable
