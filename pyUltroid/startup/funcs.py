@@ -72,8 +72,6 @@ async def autobot():
     if Var.BOT_TOKEN:
         udB.set("BOT_TOKEN", str(Var.BOT_TOKEN))
         return
-    if udB.get("BOT_TOKEN"):
-        return
     LOGS.info("MAKING A TELEGRAM BOT FOR YOU AT @BotFather, Kindly Wait")
     who = await ultroid_bot.get_me()
     name = who.first_name + "'s Assistant Bot"
