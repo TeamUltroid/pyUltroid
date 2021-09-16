@@ -7,6 +7,12 @@
 
 from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
 
+from telethon import __version__
+
+from ..version import __version__ as __pyUltroid__
+from ..version import ultroid_version
+from .startup.connections import *
+
 LOGS = getLogger(__name__)
 
 if os.path.exists("ultroid.log"):
@@ -28,17 +34,12 @@ LOGS.info(
 )
 
 
-from telethon import __version__
-from ..version import __version__ as __pyUltroid__, ultroid_version
-
-
 LOGS.info(f"py-Ultroid Version - {__pyUltroid__}")
 LOGS.info(f"Telethon Version - {__version__}")
 LOGS.info(f"Ultroid Version - {ultroid_version}")
 
 # Edit from Here
 
-from .startup.connections import *
 
 udB = redis_connection()
 
