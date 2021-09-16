@@ -15,13 +15,110 @@ from telethon.helpers import _maybe_await
 
 from ..dB._database import Var
 from ..version import ultroid_version
-from . import LOGS, eor
+from . import LOGS, eor, eod, ultroid_bot
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
 
 UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
 
 
+# ----------------- Load \\ Unloader ----------------
+
+
+def un_plug(shortname):
+    try:
+        for client in [ultroid_bot, asst]:
+            for i in LOADED[shortname]:
+                client.remove_event_handler(i)
+            try:
+                del LOADED[shortname]
+                del LIST[shortname]
+                ADDONS.remove(shortname)
+            except BaseException as er:
+                LOGS.info(er)
+    except BaseException as er:
+        LOGS.info(er)
+        name = f"addons.{shortname}"
+        for i in reversed(range(len(ultroid_bot._event_builders))):
+            ev, cb = ultroid_bot._event_builders[i]
+            if cb.__module__ == name:
+                del ultroid_bot._event_builders[i]
+                try:
+                    del LOADED[shortname]
+                    del LIST[shortname]
+                    ADDONS.remove(shortname)
+                except KeyError:
+                    pass
+
+
+async def safeinstall(event):
+    ok = await eor(event, "`Installing...`")
+    if event.reply_to_msg_id:
+        try:
+            downloaded_file_name = await ok.client.download_media(
+                await event.get_reply_message(), "addons/"
+            )
+            n = event.text
+            q = n[9:]
+            if q != "f":
+                with open(downloaded_file_name, "r") as xx:
+                    yy = xx.read()
+                try:
+                    for dan in DANGER:
+                        if re.search(dan, yy):
+                            os.remove(downloaded_file_name)
+                            return await ok.edit(
+                                f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{downloaded_file_name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
+                            )
+                except BaseException:
+                    pass
+            if "(" not in downloaded_file_name:
+                path1 = Path(downloaded_file_name)
+                shortname = path1.stem
+                load_addons(shortname.replace(".py", ""))
+                try:
+                    plug = shortname.replace(".py", "")
+                    if plug in HELP:
+                        output = "**Plugin** - `{}`\n".format(plug)
+                        for i in HELP[plug]:
+                            output += i
+                        output += "\n© @TheUltroid"
+                        await eod(
+                            ok,
+                            f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}",
+                            time=10,
+                        )
+                    elif plug in CMD_HELP:
+                        kk = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
+                        kk += str(CMD_HELP[plug])
+                        await eod(
+                            ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{kk}", time=10
+                        )
+                    else:
+                        try:
+                            x = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
+                            for d in LIST[plug]:
+                                x += HNDLR + d
+                                x += "\n"
+                            await eod(
+                                ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n`{x}`"
+                            )
+                        except BaseException:
+                            await eod(
+                                ok, f"✓ `Ultroid - Installed`: `{plug}` ✓", time=3
+                            )
+                except Exception as e:
+                    await ok.edit(str(e))
+            else:
+                os.remove(downloaded_file_name)
+                await eod(ok, "**ERROR**\nPlugin might have been pre-installed.")
+        except Exception as e:
+            await eod(ok, "**ERROR\n**" + str(e))
+            os.remove(downloaded_file_name)
+    else:
+        await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
+
+# ---------------------------------------------
 async def bash(cmd):
     process = await asyncio.create_subprocess_shell(
         cmd,
