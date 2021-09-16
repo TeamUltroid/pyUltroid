@@ -15,7 +15,7 @@ from telethon.helpers import _maybe_await
 
 from ..dB._database import Var
 from ..version import ultroid_version
-from . import LOGS, eor, eod, ultroid_bot
+from . import LOGS, eod, eor, ultroid_bot
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
 
@@ -118,7 +118,10 @@ async def safeinstall(event):
     else:
         await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
 
+
 # ---------------------------------------------
+
+
 async def bash(cmd):
     process = await asyncio.create_subprocess_shell(
         cmd,
