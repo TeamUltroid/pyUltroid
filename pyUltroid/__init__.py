@@ -70,14 +70,11 @@ ultroid_bot.me = ultroid_bot.run_in_loop(ultroid_bot.get_me())
 
 vcClient = vc_connection(udB, ultroid_bot)
 
-# if not udB.get("HNDLR"):
-#    udB.set("HNDLR", ".")
-
 if not udB.get("SUDO"):
     udB.set("SUDO", "False")
 
 if not udB.get("SUDOS"):
-    udB.set("SUDOS", "777000")
+    udB.set("SUDOS", "")
 
 if not udB.get("BLACKLIST_CHATS"):
     udB.set("BLACKLIST_CHATS", "[]")
@@ -86,6 +83,3 @@ HNDLR = udB.get("HNDLR") or "."
 DUAL_HNDLR = udB.set("DUAL_HNDLR") or "/"
 SUDO_HNDLR = udB.get("SUDO_HNDLR") or HNDLR
 
-"""
-Hosted_On = where_hosted()
-"""
