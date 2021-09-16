@@ -11,10 +11,7 @@ from telethon import __version__
 
 from ..version import __version__ as __pyUltroid__
 from ..version import ultroid_version
-from .dB._database import Var
-from .startup.BaseClient import UltroidClient
-# from .startup.connections import *
-from .startup.connections import RedisConnection, session_file, where_hosted
+
 
 LOGS = getLogger(__name__)
 
@@ -41,6 +38,9 @@ LOGS.info(f"py-Ultroid Version - {__pyUltroid__}")
 LOGS.info(f"Telethon Version - {__version__}")
 LOGS.info(f"Ultroid Version - {ultroid_version}")
 
+from .dB._database import Var
+from .startup.BaseClient import UltroidClient
+from .startup.connections import RedisConnection, session_file, where_hosted
 
 udB = RedisConnection(host="", port=None, password="", platform=where_hosted())
 
@@ -48,7 +48,7 @@ ultroid_bot = UltroidClient(
     session_file(),
     api_id=Var.API_ID,
     api_hash=Var.API_HASH,
-    plugins_path="plugins"
+    plugins_path="plugins",
     logger=LOGS,
 )
 asst = UltroidClient(
