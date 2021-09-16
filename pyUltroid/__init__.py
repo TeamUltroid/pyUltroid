@@ -13,7 +13,7 @@ from ..version import __version__ as __pyUltroid__
 from ..version import ultroid_version
 from .dB._database import Var
 from .startup.BaseClient import UltroidClient
-from .startup.connections import *
+# from .startup.connections import *
 from .startup.connections import RedisConnection, session_file, where_hosted
 
 LOGS = getLogger(__name__)
