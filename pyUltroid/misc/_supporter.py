@@ -22,10 +22,10 @@ from telethon import events, types
 from pyUltroid.misc._decorators import *
 from pyUltroid.misc._wrappers import eod, eor
 
-from . import sudoers
 from .. import udB, ultroid_bot
 from ..dB._core import LIST
 from ..dB._database import Var
+from . import sudoers
 
 ALIVE_NAME = ultroid_bot.me.first_name
 BOTLOG = int(udB.get("LOG_CHANNEL"))

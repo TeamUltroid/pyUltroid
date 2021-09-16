@@ -11,23 +11,23 @@ import os
 import re
 import sys
 import time
-from traceback import format_exc
-from .. import HNDLR
-import aiofiles
 from pathlib import Path
-from .. import asst
-from ..startup.utils import load_addons
+from traceback import format_exc
+
+import aiofiles
 import aiohttp
 import heroku3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from html_telegraph_poster import TelegraphPoster
 from telethon.helpers import _maybe_await
-from telethon.utils import get_display_name
 from telethon.tl import types
+from telethon.utils import get_display_name
 
-from ..dB._core import ADDONS, CMD_HELP, LIST, LOADED, HELP, VC_HELP
+from .. import HNDLR, asst
+from ..dB._core import ADDONS, CMD_HELP, HELP, LIST, LOADED
 from ..dB._database import Var
+from ..startup.utils import load_addons
 from ..version import ultroid_version
 from . import DANGER, LOGS, eod, eor, ultroid_bot
 from .FastTelethon import download_file as downloadable
@@ -37,6 +37,7 @@ UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "
 
 
 # ~~~~~~~~~~~~~~~~~~~~ small funcs ~~~~~~~~~~~~~~~~~~~~ #
+
 
 def make_mention(user):
     if user.username:

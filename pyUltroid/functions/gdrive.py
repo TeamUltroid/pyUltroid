@@ -4,22 +4,20 @@
 # https://github.com/SpEcHiDe/UniBorg/blob/adb3bd311f642b2719606c384c43afd89029e4f3/stdplugins/gDrive.py
 
 
-
 import math
 import os
 import time
 from mimetypes import guess_type
-from telethon import events
-from telethon.tl import types
-from . import udB, ultroid_bot
-from .. import asst
+
 import httplib2
 from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-from telethon.utils import get_display_name
+from telethon import events
 
+from .. import asst
+from . import udB, ultroid_bot
 from .helper import humanbytes, time_formatter
 
 OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
