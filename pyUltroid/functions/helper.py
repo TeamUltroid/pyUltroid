@@ -1,10 +1,11 @@
 import asyncio
 import math
-import os, re
+import os
+import re
 import sys
 import time
 from traceback import format_exc
-from . import DANGER
+
 import aiofiles
 import aiohttp
 import heroku3
@@ -16,7 +17,7 @@ from telethon.helpers import _maybe_await
 from ..dB._core import ADDONS, CMD_HELP, LIST, LOADED
 from ..dB._database import Var
 from ..version import ultroid_version
-from . import LOGS, eod, eor, ultroid_bot
+from . import DANGER, LOGS, eod, eor, ultroid_bot
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
 
