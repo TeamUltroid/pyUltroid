@@ -12,11 +12,10 @@
 #
 
 import inspect
-import os
+import os, time
 import re
 from pathlib import Path
 
-from plugins import *
 from telethon import events, types
 
 from pyUltroid.misc._decorators import *
@@ -28,8 +27,7 @@ from ..dB._database import Var
 from . import sudoers
 
 ALIVE_NAME = ultroid_bot.me.first_name
-BOTLOG = int(udB.get("LOG_CHANNEL"))
-BOTLOG_CHATID = int(udB.get("LOG_CHANNEL"))
+BOTLOG_CHATID = BOTLOG = int(udB.get("LOG_CHANNEL"))
 
 
 bot = ultroid_bot
@@ -49,10 +47,7 @@ def admin_cmd(pattern=None, command=None, **args):
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     if pattern is not None:
-        if pattern.startswith(r"\#"):
-            args["pattern"] = re.compile(pattern)
-        else:
-            args["pattern"] = re.compile(hndlr + pattern)
+        args["pattern"] = re.compile(SUDO_HNDLR + pattern)
         reg = re.compile("(.*)")
         try:
             cmd = re.search(reg, pattern)
@@ -99,10 +94,7 @@ def sudo_cmd(allow_sudo=True, pattern=None, command=None, **args):
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     if pattern is not None:
-        if pattern.startswith(r"\#"):
-            args["pattern"] = re.compile(pattern)
-        else:
-            args["pattern"] = re.compile(hndlr + pattern)
+        args["pattern"] = re.compile(SUDO_HNDLR + pattern)
     if allow_sudo:
         args["from_users"] = [int(user) for user in sudoers()]
         args["incoming"] = True
