@@ -12,7 +12,7 @@
 #
 
 import inspect
-import os, time
+import os
 import re
 from pathlib import Path
 
