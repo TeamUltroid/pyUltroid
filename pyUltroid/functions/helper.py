@@ -278,7 +278,8 @@ async def downloader(filename, file, event, taime, msg):
 async def download_file(link, name):
     """for files, without progress callback with aiohttp"""
     if not aiohttp:
-        return urllib.request.urlretrieve(link, name)
+        urllib.request.urlretrieve(link, name)
+        return name
     async with aiohttp.ClientSession() as ses:
         async with ses.get(link) as re_ses:
             file = await aiofiles.open(name, "wb")
