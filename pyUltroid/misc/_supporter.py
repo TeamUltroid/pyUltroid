@@ -18,13 +18,13 @@ from pathlib import Path
 
 from telethon import events, types
 
-from pyUltroid.misc._decorators import *
+from pyUltroid.misc._decorators import ultroid_cmd
 from pyUltroid.misc._wrappers import eod, eor
 
 from .. import udB, ultroid_bot
 from ..dB._core import LIST
-from ..dB._database import Var
-from . import sudoers
+from ..configs import Var
+from . import sudoers, ultroid_bot, udB
 
 ALIVE_NAME = ultroid_bot.me.first_name
 BOTLOG_CHATID = BOTLOG = int(udB.get("LOG_CHANNEL"))
@@ -109,8 +109,6 @@ edit_delete = eod
 
 ENV = bool(os.environ.get("ENV", False))
 if ENV:
-    import os
-
     class Config(object):
         LOGGER = True
         LOCATION = os.environ.get("LOCATION", None)
