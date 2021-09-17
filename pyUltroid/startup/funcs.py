@@ -8,11 +8,10 @@
 import asyncio
 import os
 import time
-import urllib
 from pathlib import Path
 from random import randint
 from urllib.request import urlretrieve
-from ..functions.helper import download_file
+
 from pytz import timezone
 from telethon.errors.rpcerrorlist import ChannelsTooMuchError
 from telethon.tl.custom import Button
@@ -32,6 +31,7 @@ from telethon.tl.types import (
 from .. import *
 from ..dB._database import Var
 from ..functions.all import updater
+from ..functions.helper import download_file
 from .utils import load_addons
 
 
