@@ -19,6 +19,7 @@ try:
     import aiohttp
 except ImportError:
     import urllib
+
     aiohttp = None
 
 import heroku3
