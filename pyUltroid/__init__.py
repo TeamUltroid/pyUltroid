@@ -54,8 +54,7 @@ ultroid_bot = UltroidClient(
     logger=LOGS,
 )
 
-if not udB.get("BOT_TOKEN"):
-    ultroid_bot.run_in_loop(autobot())
+ultroid_bot.run_in_loop(autobot())
 
 asst = UltroidClient(
     None,
