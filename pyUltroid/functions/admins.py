@@ -9,7 +9,9 @@ import time
 
 from telethon.errors.rpcerrorlist import UserNotParticipantError
 from telethon.tl import types
+
 from ..misc import owner_and_sudos
+
 
 async def ban_time(event, time_str):
     """Simplify ban time from text"""
