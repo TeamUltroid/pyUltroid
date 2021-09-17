@@ -12,12 +12,11 @@ import os
 import ssl
 import subprocess
 import sys
-import traceback
+from traceback import format_exc
 from json.decoder import JSONDecodeError
 
 import aiohttp
 import certifi
-import requests
 from PIL import Image, ImageDraw, ImageFont
 
 from . import LOGS, ultroid_bot
@@ -37,11 +36,9 @@ except ImportError:
 
 async def get_ofox(codename):
     ofox_baseurl = "https://api.orangefox.download/v3/"
-    releases_url = ofox_baseurl + "releases?codename="
-    device_url = ofox_baseurl + "devices/get?codename="
-    releases = await async_searcher(releases_url + codename)
-    device = await async_searcher(device_url + codename)
-    return json_parser(device), json_parser(releases)
+    releases = json_parser(await async_searcher(ofox_baseurl + "releases?codename=" + codename))
+    device = json_parser(await async_searcher(ofox_baseurl + "devices/get?codename=" + codename))
+    return device, releases
 
 
 # ~~~~~~~~~~~~~~~Async Searcher~~~~~~~~~~~~~~~
@@ -148,7 +145,7 @@ async def calcc(cmd, event):
     try:
         await aexecc(wt, event)
     except Exception:
-        exc = traceback.format_exc()
+        exc = format_exc()
     stdout = redirected_output.getvalue()
     stderr = redirected_error.getvalue()
     sys.stdout = old_stdout
@@ -255,12 +252,9 @@ def get_chatbot_reply(event, message):
         owner=(ultroid_bot.me.first_name or "ultroid user"),
     )
     try:
-        data = requests.get(req_link)
-        if data.status_code == 200:
-            return (data.json())["message"]
-        LOGS.info("**ERROR:**\n`API down, report this to `@UltroidSupport.")
-    except Exception as e:
-        LOGS.info(f"**ERROR:**`{str(e)}`")
+        return json_parser(async_searcher(req_link))["message"]
+    except Exception:
+        LOGS.info(f"**ERROR:**`{format_exc()}`")
 
 
 async def resize_photo(photo):
