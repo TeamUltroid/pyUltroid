@@ -155,8 +155,10 @@ async def autopilot():
         try:
             await ultroid_bot.get_entity(int(udB.get("LOG_CHANNEL")))
             return
-        except BaseException:
+        except BaseException as er:
+            LOGS.error(er)
             udB.delete("LOG_CHANNEL")
+    LOGS.info("Creating a Log Channel for You!")
     try:
         r = await ultroid_bot(
             CreateChannelRequest(
@@ -170,7 +172,8 @@ async def autopilot():
             "You Are in Too Many Channels & Groups , Leave some And Restart The Bot"
         )
         exit(1)
-    except BaseException:
+    except BaseException as er:
+        LOGS.info(er)
         LOGS.info(
             "Something Went Wrong , Create A Group and set its id on config var LOG_CHANNEL."
         )
