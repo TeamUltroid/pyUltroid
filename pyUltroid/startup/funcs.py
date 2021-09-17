@@ -68,10 +68,11 @@ def startup_stuff():
 
 
 async def autobot():
-    await ultroid_bot.start()
     if Var.BOT_TOKEN:
-        udB.set("BOT_TOKEN", str(Var.BOT_TOKEN))
+        return udB.set("BOT_TOKEN", Var.BOT_TOKEN)
+    if udB.get("BOT_TOKEN"):
         return
+    await ultroid_bot.start()
     LOGS.info("MAKING A TELEGRAM BOT FOR YOU AT @BotFather, Kindly Wait")
     who = await ultroid_bot.get_me()
     name = who.first_name + "'s Assistant Bot"
