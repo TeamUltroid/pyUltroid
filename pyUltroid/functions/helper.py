@@ -31,8 +31,8 @@ from telethon.tl import types
 from telethon.utils import get_display_name
 
 from .. import HNDLR, asst
-from ..dB._core import ADDONS, CMD_HELP, HELP, LIST, LOADED
 from ..configs import Var
+from ..dB._core import ADDONS, CMD_HELP, HELP, LIST, LOADED
 from ..startup.utils import load_addons
 from ..version import ultroid_version
 from . import DANGER, LOGS, eod, eor, ultroid_bot

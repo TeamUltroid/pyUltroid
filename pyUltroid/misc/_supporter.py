@@ -21,7 +21,7 @@ from telethon import events, types
 from pyUltroid.misc._decorators import ultroid_cmd
 from pyUltroid.misc._wrappers import eod, eor
 
-from .. import udB, ultroid_bot, HNDLR, SUDO_HNDLR, asst
+from .. import HNDLR, SUDO_HNDLR, asst, udB, ultroid_bot
 from ..configs import Var
 from ..dB._core import LIST
 from . import sudoers
@@ -37,6 +37,7 @@ jarvis = ultroid_bot
 
 hndlr = "\\" + HNDLR
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
+
 
 def admin_cmd(pattern=None, command=None, **args):
     args["func"] = lambda e: not e.via_bot_id and not e.fwd_from

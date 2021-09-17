@@ -7,18 +7,14 @@
 
 import os
 import time
-from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
 
 from redis import Redis
-from .. import LOGS
 from telethon import TelegramClient
-from telethon import __version__ as vers
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
 
+from .. import LOGS
 from ..configs import Var
-from ..version import __version__ as ver
-from ..version import ultroid_version
 from .exceptions import RedisError
 
 

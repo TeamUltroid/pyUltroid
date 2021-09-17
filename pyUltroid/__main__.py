@@ -9,7 +9,7 @@
 import os
 import sys
 
-from . import HOSTED_ON, ultroid_bot, udB, LOGS
+from . import HOSTED_ON, LOGS, udB, ultroid_bot
 from .configs import Var
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff, updater
 from .startup.loader import load_other_plugins

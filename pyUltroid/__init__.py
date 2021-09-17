@@ -6,7 +6,12 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-from .startup.connections import RedisConnection, session_file, where_hosted, vc_connection
+from .startup.connections import (
+    RedisConnection,
+    session_file,
+    where_hosted,
+    vc_connection,
+)
 from .startup.funcs import autobot
 from .startup.BaseClient import UltroidClient
 from .configs import Var
