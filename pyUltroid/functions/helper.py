@@ -14,8 +14,13 @@ import time
 from pathlib import Path
 from traceback import format_exc
 
-import aiofiles
-import aiohttp
+try:
+    import aiofiles
+    import aiohttp
+except ImportError:
+    import urllib
+    aiohttp = None
+
 import heroku3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
@@ -271,6 +276,8 @@ async def downloader(filename, file, event, taime, msg):
 
 async def download_file(link, name):
     """for files, without progress callback with aiohttp"""
+    if not aiohttp:
+        return urllib.request.urlretrieve(link, name)
     async with aiohttp.ClientSession() as ses:
         async with ses.get(link) as re_ses:
             file = await aiofiles.open(name, "wb")
