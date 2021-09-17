@@ -7,8 +7,8 @@
 
 import time
 
-from telethon.tl.types import ChatBannedRights
-
+from telethon.tl import types
+from telethon.errors.rpcerrorlist import UserNotParticipantError
 
 async def ban_time(event, time_str):
     """Simplify ban time from text"""
@@ -32,6 +32,21 @@ async def ban_time(event, time_str):
         return int(time.time() + int(time_int) * 24 * 60 * 60)
     return ""
 
+# ------------------Admin Check--------------- #
+
+async def admin_check(event):
+    # for Anonymous Admin Support
+    if isinstance(event.sender, types.Channel) and event.sender_id == event.chat_id:
+        return True
+    if str(event.sender_id) in owner_and_sudos():
+        return True
+    try:
+        perms = await event.client.get_permissions(event.chat_id, event.sender_id)
+    except UserNotParticipantError:
+        return False
+    return isinstance(
+        perms.participant, (types.ChannelParticipantAdmin, types.ChannelParticipantCreator)
+    )
 
 # ------------------Lock Unlock----------------
 
@@ -41,7 +56,7 @@ def lock_unlock(query, lock=True):
     `Used in locks plugin`
      Is there any better way to do this?
     """
-    rights = ChatBannedRights(None)
+    rights = types.ChatBannedRights(None)
     _do = not lock
     if query == "msgs":
         for i in ["send_messages", "invite_users", "pin_messages" "change_info"]:
