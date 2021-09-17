@@ -12,10 +12,10 @@ from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
 from redis import Redis
 from telethon import TelegramClient
 from telethon import __version__ as vers
-from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError, PhoneNumberInvalidError
+from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
 
-from ..dB._database import Var
+from ..configs import Var
 from ..version import __version__ as ver
 from ..version import ultroid_version
 from .exceptions import RedisError
@@ -91,7 +91,7 @@ def vc_connection(udB, ultroid_bot):
             return TelegramClient(
                 StringSession(VC_SESSION), api_id=Var.API_ID, api_hash=Var.API_HASH
             ).start()
-        except (AuthKeyDuplicatedError, PhoneNumberInvalidError, EOFError):
+        except (AuthKeyDuplicatedError, EOFError):
             LOGS.info("Your VC_SESSION Expired. Deleting VC_SESSION from redis...")
             LOGS.info("Renew/Change it to Use Voice/Video Chat from VC Account...")
             udB.delete("VC_SESSION")
