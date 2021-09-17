@@ -82,7 +82,6 @@ def session_file():
     return _session
 
 
-
 def vc_connection(udB, ultroid_bot):
     VC_SESSION = Var.VC_SESSION or udB.get("VC_SESSION")
     if VC_SESSION:
