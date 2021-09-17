@@ -13,12 +13,13 @@ import ssl
 import subprocess
 import sys
 import traceback
+from json.decoder import JSONDecodeError
 
 import aiohttp
 import certifi
 import requests
 from PIL import Image, ImageDraw, ImageFont
-from json.decoder import JSONDecodeError
+
 from . import LOGS, ultroid_bot
 from .helper import bash, fast_download, json_parser
 
@@ -47,7 +48,9 @@ async def get_ofox(codename):
 # @buddhhu
 
 
-async def async_searcher(url, post=None, headers=None, params=None, json=None, ssl=None):
+async def async_searcher(
+    url, post=None, headers=None, params=None, json=None, ssl=None
+):
     async with aiohttp.ClientSession(headers=headers) as session:
         if not post:
             async with session.get(url, params=params, ssl=ssl) as resp:
@@ -229,7 +232,11 @@ def make_logo(imgpath, text, funt, **args):
 async def get_paste(data, extension="txt"):
     ssl_context = ssl.create_default_context(cafile=certifi.where())
     json = {"content": data, "extension": extension}
-    key = json_parser(await async_searcher("https://spaceb.in/api/v1/documents/", json=json, ssl=ssl_context, post=True))
+    key = json_parser(
+        await async_searcher(
+            "https://spaceb.in/api/v1/documents/", json=json, ssl=ssl_context, post=True
+        )
+    )
     try:
         return True, key["payload"]["id"]
     except KeyError:
