@@ -8,7 +8,7 @@ from telethon.errors import (
     AuthKeyDuplicatedError,
 )
 from telethon.utils import get_display_name
-
+from .. import udB
 from .loader import Loader
 
 
@@ -45,8 +45,11 @@ class UltroidClient(TelegramClient):
             self.logger.error("String session expired. Create new!")
             exit()
         except AccessTokenExpiredError:
+            # AccessTokenError can only occur for Bot account
+            # And at Early Process, Its saved in Redis.
+            udB.delete("BOT_TOKEN")
             self.logger.error(
-                "Bot token expired. Create new from @botfather and add in BOT_TOKEN env variable!"
+                "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
             exit()
         self.me = await self.get_me()
