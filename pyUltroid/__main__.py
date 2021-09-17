@@ -17,7 +17,7 @@ from telethon.errors.rpcerrorlist import (
     PhoneNumberInvalidError,
 )
 
-from . import ultroid_bot
+from . import ultroid_bot, asst
 from .dB._database import Var
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff, updater
 from .startup.loader import load_other_plugins
@@ -103,4 +103,4 @@ cleanup_cache()
 
 if __name__ == "__main__":
     LOGS.info(suc_msg)
-    ultroid_bot.run_until_disconnected()
+    ultroid_bot.run()
