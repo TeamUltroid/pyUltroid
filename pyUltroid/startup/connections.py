@@ -20,29 +20,6 @@ from ..version import __version__ as ver
 from ..version import ultroid_version
 from .exceptions import RedisError
 
-LOGS = getLogger("pyUltLog")
-
-if os.path.exists("ultroid.log"):
-    os.remove("ultroid.log")
-
-basicConfig(
-    format="%(asctime)s || %(name)s [%(levelname)s] - %(message)s",
-    level=INFO,
-    datefmt="%m/%d/%Y, %H:%M:%S",
-    handlers=[FileHandler("ultroid.log"), StreamHandler()],
-)
-
-LOGS.info(
-    """
-                -----------------------------------
-                        Starting Deployment
-                -----------------------------------
-"""
-)
-LOGS.info(f"py-Ultroid Version - {ver}")
-LOGS.info(f"Telethon Version - {vers}")
-LOGS.info(f"Ultroid Version - {ultroid_version}")
-
 
 class RedisConnection(Redis):
     def __init__(
@@ -105,15 +82,6 @@ def session_file():
     return _session
 
 
-def client_connection(String=None, only_user=False):
-    if not String:
-        String = session_file()
-    client = TelegramClient(String, Var.API_ID, Var.API_HASH)
-    if only_user:
-        return client
-    bot_client = TelegramClient(None, api_id=Var.API_ID, api_hash=Var.API_HASH)
-    return client, bot_client
-
 
 def vc_connection(udB, ultroid_bot):
     VC_SESSION = Var.VC_SESSION or udB.get("VC_SESSION")
@@ -129,7 +97,7 @@ def vc_connection(udB, ultroid_bot):
             LOGS.info("Renew/Change it to Use Voice/Video Chat from VC Account...")
             udB.delete("VC_SESSION")
         except Exception as er:
-            LOGS.info("VC_SESSION: {}".format(str(er)))
+            LOGS.error("VC_SESSION: {}".format(str(er)))
     return ultroid_bot
 
 
