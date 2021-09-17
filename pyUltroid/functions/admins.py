@@ -7,8 +7,9 @@
 
 import time
 
-from telethon.tl import types
 from telethon.errors.rpcerrorlist import UserNotParticipantError
+from telethon.tl import types
+
 
 async def ban_time(event, time_str):
     """Simplify ban time from text"""
@@ -32,7 +33,9 @@ async def ban_time(event, time_str):
         return int(time.time() + int(time_int) * 24 * 60 * 60)
     return ""
 
+
 # ------------------Admin Check--------------- #
+
 
 async def admin_check(event):
     # for Anonymous Admin Support
@@ -45,8 +48,10 @@ async def admin_check(event):
     except UserNotParticipantError:
         return False
     return isinstance(
-        perms.participant, (types.ChannelParticipantAdmin, types.ChannelParticipantCreator)
+        perms.participant,
+        (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
     )
+
 
 # ------------------Lock Unlock----------------
 
