@@ -18,7 +18,7 @@ import aiohttp
 import certifi
 import requests
 from PIL import Image, ImageDraw, ImageFont
-
+from json.decoder import JSONDecodeError
 from . import LOGS, ultroid_bot
 from .helper import bash, fast_download, json_parser
 
@@ -47,9 +47,12 @@ async def get_ofox(codename):
 # @buddhhu
 
 
-async def async_searcher(url, headers=None, params=None):
+async def async_searcher(url, post=None, headers=None, params=None, json=None, ssl=None):
     async with aiohttp.ClientSession(headers=headers) as session:
-        async with session.get(url, params=params) as resp:
+        if not post:
+            async with session.get(url, params=params, ssl=ssl) as resp:
+                return await resp.text()
+        async with session.post(url, json=json, ssl=ssl) as resp:
             return await resp.text()
 
 
@@ -58,16 +61,17 @@ async def async_searcher(url, headers=None, params=None):
 
 
 def json_parser(data, indent=None):
-    if isinstance(data, str):
-        parsed = json.loads(str(data))
-        if indent:
-            parsed = json.dumps(json.loads(str(data)), indent=indent)
-    elif isinstance(data, dict):
-        parsed = data
-        if indent:
-            parsed = json.dumps(data, indent=indent)
-    else:
-        parsed = {}
+    try:
+        if isinstance(data, str):
+            parsed = json.loads(str(data))
+            if indent:
+                parsed = json.dumps(json.loads(str(data)), indent=indent)
+        elif isinstance(data, dict):
+            parsed = data
+            if indent:
+                parsed = json.dumps(data, indent=indent)
+    except JSONDecodeError:
+        parsed = eval(data)
     return parsed
 
 
@@ -225,11 +229,7 @@ def make_logo(imgpath, text, funt, **args):
 async def get_paste(data, extension="txt"):
     ssl_context = ssl.create_default_context(cafile=certifi.where())
     json = {"content": data, "extension": extension}
-    async with aiohttp.ClientSession() as ses:
-        async with ses.post(
-            "https://spaceb.in/api/v1/documents/", json=json, ssl=ssl_context
-        ) as out:
-            key = await out.json()
+    key = json_parser(await async_searcher("https://spaceb.in/api/v1/documents/", json=json, ssl=ssl_context, post=True))
     try:
         return True, key["payload"]["id"]
     except KeyError:
