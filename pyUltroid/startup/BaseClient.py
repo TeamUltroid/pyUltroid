@@ -2,6 +2,12 @@ from glob import glob
 from logging import getLogger
 
 from telethon import TelegramClient
+from telethon.errors import (
+    AccessTokenExpiredError,
+    ApiIdInvalidError,
+    AuthKeyDuplicatedError,
+    PhoneNumberInvalidError,
+)
 from telethon.utils import get_display_name
 
 from .loader import Loader
@@ -34,7 +40,14 @@ class UltroidClient(TelegramClient):
 
     async def start_client(self, **kwargs):
         self.logger.info("Trying to login.")
-        await self.start(**kwargs)
+        try:
+            await self.start(**kwargs)
+        except (AuthKeyDuplicatedError, ApiIdInvalidError, EOFError):
+            self.logger.error("String session expired. Create new!")
+            exit()
+        except AccessTokenExpiredError:
+            self.logger.error("Bot token expired. Create new from @botfather and add in BOT_TOKEN env variable!")
+            exit()
         self.me = await self.get_me()
 
         if self.me.bot:
