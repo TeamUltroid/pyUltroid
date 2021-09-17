@@ -9,7 +9,7 @@
 # -----------------Random Stuff--------------
 
 import math
-
+from contextlib import suppress
 import emoji
 from telethon.tl import functions, types
 from telethon.utils import get_input_location
@@ -130,10 +130,8 @@ async def get_full_user(event):
 async def get_chatinfo(event):
     chat = event.pattern_match.group(1)
     if chat:
-        try:
+        with suppress(ValueError):
             chat = int(chat)
-        except ValueError:
-            pass
     elif event.is_reply:
         replied = await event.get_reply_message()
         if replied.fwd_from and replied.fwd_from.channel_id:
