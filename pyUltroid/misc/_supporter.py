@@ -22,9 +22,9 @@ from pyUltroid.misc._decorators import ultroid_cmd
 from pyUltroid.misc._wrappers import eod, eor
 
 from .. import udB, ultroid_bot
-from ..dB._core import LIST
 from ..configs import Var
-from . import sudoers, ultroid_bot, udB
+from ..dB._core import LIST
+from . import sudoers, udB, ultroid_bot
 
 ALIVE_NAME = ultroid_bot.me.first_name
 BOTLOG_CHATID = BOTLOG = int(udB.get("LOG_CHANNEL"))
@@ -109,6 +109,7 @@ edit_delete = eod
 
 ENV = bool(os.environ.get("ENV", False))
 if ENV:
+
     class Config(object):
         LOGGER = True
         LOCATION = os.environ.get("LOCATION", None)
