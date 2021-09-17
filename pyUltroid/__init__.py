@@ -21,7 +21,7 @@ if os.path.exists("ultroid.log"):
     os.remove("ultroid.log")
 
 LOGS = getLogger(__name__)
-
+HOSTED_ON = where_hosted()
 
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] - %(message)s",
@@ -44,7 +44,7 @@ LOGS.info(f"Telethon Version - {__version__}")
 LOGS.info(f"Ultroid Version - {ultroid_version}")
 
 
-udB = RedisConnection(host="", port=None, password="", platform=where_hosted())
+udB = RedisConnection(host="", port=None, password="", platform=HOSTED_ON)
 
 ultroid_bot = UltroidClient(
     session_file(),
