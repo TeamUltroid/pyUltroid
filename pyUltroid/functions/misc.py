@@ -10,7 +10,6 @@ import json
 import random
 import re
 
-import aiohttp
 import requests
 from bs4 import BeautifulSoup as bs
 from faker import Faker
@@ -18,12 +17,12 @@ from telegraph import Telegraph
 
 from ..dB._core import LIST
 from . import eod, udB, ultroid_bot
+from .tools import async_searcher
 
 # -------------
 
 telegraph = Telegraph()
 telegraph.create_account(short_name="Ultroid Cmds List")
-Client = aiohttp.ClientSession()
 
 # --------------------------------------------------
 
@@ -32,7 +31,7 @@ async def randomchannel(
     tochat, channel, range1, range2, caption=None, client=ultroid_bot
 ):
     do = random.randrange(range1, range2)
-    async for x in ultroid_bot.iter_messages(channel, add_offset=do, limit=1):
+    async for x in client.iter_messages(channel, add_offset=do, limit=1):
         caption = caption or x.text
         try:
             await client.send_message(tochat, caption, file=x.media)
@@ -79,15 +78,13 @@ async def unsplashsearch(query, limit=None):
     query = query.replace(" ", "-")
     base_ = "https://unsplash.com"
     link = base_ + "/s/photos/" + query
-    async with Client.get(link) as out:
-        extra = await out.read()
+    extra = await async_searcher(link)
     res = bs(extra, "html.parser", from_encoding="utf-8")
     all = res.find_all("a", "_2Mc8_")[:limit]
     images_src = []
     for img in all:
-        async with Client.get(base_ + img["href"]) as out:
-            ct = await out.read()
-            bst = bs(ct, "html.parser", from_encoding="utf-8")
+        ct = await async_searcher(base_ + img["href"])
+        bst = bs(ct, "html.parser", from_encoding="utf-8")
         uri = bst.find_all("img", "oCCRx")[0]["src"]
         images_src.append(uri)
     return images_src
@@ -98,8 +95,7 @@ async def unsplashsearch(query, limit=None):
 
 
 async def airing_eps():
-    async with Client.get("https://gogoanime.ai/") as out:
-        resp = await out.read()
+    resp = await async_searcher("https://gogoanime.ai/")
     soup = bs(resp, "html.parser")
     anime = soup.find("nav", {"class": "menu_series cron"}).find("ul")
     air = "**Currently airing anime.**\n\n"
@@ -142,13 +138,13 @@ def get_anime_src_res(search_str):
       }
     }
     """
-    response = (
-        requests.post(
+    tsjson = json_parser(
+        await async_searcher(
             "https://graphql.anilist.co",
             json={"query": query, "variables": {"search": search_str}},
-        )
-    ).text
-    tjson = json.loads(response)
+            post=True,
+        ),
+    )
     res = list(tjson.keys())
     if "errors" in res:
         return f"**Error** : `{tjson['errors'][0]['message']}`"
@@ -189,9 +185,7 @@ async def get_random_user_data():
         + f"**{cc[3].split(':')[0]}:**"
         + cc[3].split(":")[1]
     )
-    async with Client.get(base_url) as out:
-        d = await out.json()
-    data_ = d["results"][0]
+    data_ = json_parser(await async_searcher(base_url))["results"][0]
     _g = data_["gender"]
     gender = "🤵🏻‍♂" if _g == "male" else "🤵🏻‍♀"
     name = data_["name"]
