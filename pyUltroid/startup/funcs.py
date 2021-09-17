@@ -12,7 +12,7 @@ import urllib
 from pathlib import Path
 from random import randint
 from urllib.request import urlretrieve
-
+from ..functions.helper import download_file
 from pytz import timezone
 from telethon.errors.rpcerrorlist import ChannelsTooMuchError
 from telethon.tl.custom import Button
@@ -196,7 +196,7 @@ async def autopilot():
     await ultroid_bot(EditAdminRequest(chat_id, asst.me.username, rights, "Assistant"))
     pfpa = await ultroid_bot.download_profile_photo(chat_id)
     if not pfpa:
-        urllib.request.urlretrieve(
+        await download_file(
             "https://telegra.ph/file/bac3a1c21912a7b35c797.jpg", "channelphoto.jpg"
         )
         ll = await ultroid_bot.upload_file("channelphoto.jpg")
