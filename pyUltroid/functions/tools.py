@@ -12,8 +12,8 @@ import os
 import ssl
 import subprocess
 import sys
-from traceback import format_exc
 from json.decoder import JSONDecodeError
+from traceback import format_exc
 
 import aiohttp
 import certifi
@@ -36,8 +36,12 @@ except ImportError:
 
 async def get_ofox(codename):
     ofox_baseurl = "https://api.orangefox.download/v3/"
-    releases = json_parser(await async_searcher(ofox_baseurl + "releases?codename=" + codename))
-    device = json_parser(await async_searcher(ofox_baseurl + "devices/get?codename=" + codename))
+    releases = json_parser(
+        await async_searcher(ofox_baseurl + "releases?codename=" + codename)
+    )
+    device = json_parser(
+        await async_searcher(ofox_baseurl + "devices/get?codename=" + codename)
+    )
     return device, releases
 
 
