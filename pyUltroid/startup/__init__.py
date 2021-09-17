@@ -5,4 +5,4 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from .. import *  # pylint: disable
+from .. import ultroid_bot # pylint: disable
