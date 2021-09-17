@@ -10,6 +10,7 @@
 
 import math
 from contextlib import suppress
+
 import emoji
 from telethon.tl import functions, types
 from telethon.utils import get_input_location
