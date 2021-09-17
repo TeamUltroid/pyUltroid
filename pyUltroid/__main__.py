@@ -10,15 +10,9 @@ import os
 import sys
 import traceback
 
-from telethon.errors.rpcerrorlist import (
-    AccessTokenExpiredError,
-    ApiIdInvalidError,
-    AuthKeyDuplicatedError,
-    PhoneNumberInvalidError,
-)
 
 from . import asst, ultroid_bot
-from .dB._database import Var
+from .configs import Var
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff, updater
 from .startup.loader import load_other_plugins
 
@@ -39,33 +33,6 @@ if not ultroid_bot.me.bot:
 
 
 LOGS.info("Initialising...")
-
-
-# log in
-BOT_TOKEN = udB.get("BOT_TOKEN")
-LOGS.info("Starting Ultroid...")
-try:
-    asst.start(bot_token=BOT_TOKEN)
-    ultroid_bot.start()
-    ultroid_bot.loop.run_until_complete(istart())
-    ultroid_bot.loop.run_until_complete(bot_info())
-    LOGS.info("Done, startup completed")
-    LOGS.info("Assistant - Started")
-except (AuthKeyDuplicatedError, PhoneNumberInvalidError, EOFError):
-    LOGS.info("Session String expired. Please create a new one! Ultroid is stopping...")
-    exit(1)
-except ApiIdInvalidError:
-    LOGS.info("Your API ID/API HASH combination is invalid. Kindly recheck.")
-    exit(1)
-except AccessTokenExpiredError:
-    udB.delete("BOT_TOKEN")
-    LOGS.info(
-        "BOT_TOKEN expired , So Quitted The Process, Restart Again To create A new Bot. Or Set BOT_TOKEN env In Vars"
-    )
-    exit(1)
-except BaseException:
-    LOGS.info("Error: " + str(traceback.print_exc()))
-    exit(1)
 
 
 ultroid_bot.loop.run_until_complete(autopilot())
