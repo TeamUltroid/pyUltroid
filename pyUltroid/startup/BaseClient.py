@@ -22,11 +22,7 @@ class UltroidClient(TelegramClient):
         logger=None,
         **kwargs,
     ):
-        if logger:
-            self.logger = logger
-        else:
-            self.logger = getLogger("pyUltroid")
-
+        self.logger = logger or getLogger("pyUltroid")
         super().__init__(session, **kwargs)
 
         if plugins_path:

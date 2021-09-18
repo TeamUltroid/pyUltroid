@@ -108,9 +108,10 @@ edit_delete = eod
 
 
 ENV = bool(os.environ.get("ENV", False))
-if ENV:
 
-    class Config(object):
+
+class Config((object)):
+    if ENV:
         LOGGER = True
         LOCATION = os.environ.get("LOCATION", None)
         OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
@@ -185,10 +186,7 @@ if ENV:
         DEEP_AI = os.environ.get("DEEP_AI", None)
         TAG_LOG = os.environ.get("TAG_LOG", None)
 
-
-else:
-
-    class Config(object):
+    else:
         DB_URI = None
 
 
