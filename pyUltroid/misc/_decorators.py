@@ -22,8 +22,8 @@ from telethon.errors.rpcerrorlist import (
     BotMethodInvalidError,
     ChatSendInlineForbiddenError,
     ChatSendMediaForbiddenError,
-    FloodWaitError,
     ChatSendStickersForbiddenError,
+    FloodWaitError,
     MessageDeleteForbiddenError,
     MessageIdInvalidError,
     MessageNotModifiedError,
@@ -193,7 +193,9 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                 except ChatSendInlineForbiddenError:
                     return await eod(ult, "`Inline Locked In This Chat.`")
                 except (ChatSendMediaForbiddenError, ChatSendStickersForbiddenError):
-                    return await eod(ult, "`Sending media or sticker is not allowed in this chat.`")
+                    return await eod(
+                        ult, "`Sending media or sticker is not allowed in this chat.`"
+                    )
                 except (BotMethodInvalidError, UserIsBotError) as boterror:
                     return await eod(ult, str(boterror))
                 except (
