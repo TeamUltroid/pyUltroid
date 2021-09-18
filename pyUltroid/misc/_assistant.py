@@ -18,8 +18,8 @@ from telethon.tl.types import (
 )
 from telethon.utils import get_display_name
 
-from .. import asst, ultroid_bot, LOGS
-from . import  owner_and_sudos
+from .. import LOGS, asst, ultroid_bot
+from . import owner_and_sudos
 
 ULTROID_PIC = "https://telegra.ph/file/11245cacbffe92e5d5b14.jpg"
 OWNER = get_display_name(ultroid_bot.me)
