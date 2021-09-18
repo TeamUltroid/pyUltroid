@@ -12,11 +12,8 @@ from telethon import TelegramClient
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
 
-from .. import LOGS
 from ..configs import Var
-
 from .exceptions import RedisError
-
 
 # from pyUltroid import LOGS
 
@@ -24,7 +21,6 @@ from .exceptions import RedisError
 class RedisConnection(Redis):
     def __init__(
         self,
-
         host: str = None,
         port: int = None,
         password: str = None,
@@ -63,7 +59,6 @@ class RedisConnection(Redis):
                 kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash}_PORT")
                 kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
         super().__init__(**kwargs)
-
 
 
 def session_file():

@@ -21,7 +21,6 @@ from telethon import events, types
 from pyUltroid.misc._decorators import ultroid_cmd
 from pyUltroid.misc._wrappers import eod, eor
 
-
 from ..configs import Var
 from ..dB._core import LIST
 from . import sudoers
