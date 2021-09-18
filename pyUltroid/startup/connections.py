@@ -26,12 +26,6 @@ class RedisConnection(Redis):
         platform=None,
         **kwargs,
     ):
-        if port:
-            port = port
-        elif ":" in host and not port:
-            port = int(host.split(":")[1])
-        else:
-            return "Port Number not found"
 
         if platform.lower() in [
             "heroku",
@@ -40,20 +34,23 @@ class RedisConnection(Redis):
             "termux",
             "windows",
         ]:
+            kwargs["host"] = host
+            kwargs["port"] = port
+            kwargs["password"] = password
             return self.connect_redis(**kwargs)
 
         elif platform.lower() == "qovery":
             if not host:
-                vars, hash, host, port, password = "", "", "", 0, ""
+                var, hash, host, password = "", "", "", ""
                 for vars in os.environ:
                     if vars.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
                         var = vars
                 if var != "":
                     hash = var.split("_", maxsplit=2)[1].split("_")[0]
                 if hash != "":
-                    host = os.environ(f"QOVERY_REDIS_{hash}_HOST")
-                    port = os.environ(f"QOVERY_REDIS_{hash}_PORT")
-                    os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
+                    kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash}_HOST")
+                    kwargs["port"] = int(os.environ(f"QOVERY_REDIS_{hash}_PORT"))
+                    kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
                     return self.connect_redis(**kwargs)
             return self.connect_redis(**kwargs)
 
