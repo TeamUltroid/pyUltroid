@@ -15,7 +15,7 @@ from faker import Faker
 from telegraph import Telegraph
 
 from ..dB._core import LIST
-from . import eod, udB, ultroid_bot
+from . import udB, ultroid_bot
 from .tools import async_searcher
 
 # -------------
@@ -42,7 +42,7 @@ async def randomchannel(
 
 
 async def allcmds(event):
-    x = str(LIST)
+    str(LIST)
     txt = ""
     for z in LIST.keys():
         txt += f"PLUGIN NAME: {z}\n"
