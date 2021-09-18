@@ -46,16 +46,15 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for addons
     if addons == "True" or not addons:
-        try:
-            url = udB.get("ADDONS_URL")
-            if url:
-                os.system("git clone -q {} addons".format(url))
-            else:
-                os.system(
-                    f"git clone -q -b {Repo().active_branch} https://github.com/TeamUltroid/UltroidAddons.git addons"
-                )
-        except BaseException:
-            LOGS.info("Wrong ADDONS_URL given")
+        url = udB.get("ADDONS_URL")
+        if url:
+            os.system("git clone -q {} addons".format(url))
+        if not os.path.exists("addons"):
+            os.system(
+                f"git clone -q -b {Repo().active_branch} https://github.com/TeamUltroid/UltroidAddons.git addons"
+            )
+        elif os.path.exists("addons/.git"):
+            os.system("cd addons && git pull -q && cd ..")
         if os.path.exists("addons/addons.txt"):
             # generally addons req already there so it won't take much time
             os.system("pip3 install --no-cache-dir -r addons/addons.txt")
