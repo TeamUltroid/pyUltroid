@@ -41,7 +41,7 @@ def is_gbanned(user):
 
 def list_gbanned():
     return eval(udB.get("GBAN"))
-    
+
 
 def gmute(user):
     ok = list_gmuted()
