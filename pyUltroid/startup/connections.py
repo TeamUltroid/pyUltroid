@@ -15,7 +15,6 @@ from telethon.sessions import StringSession
 
 from .. import LOGS
 from ..configs import Var
-from .exceptions import RedisError
 
 
 class RedisConnection(Redis):
