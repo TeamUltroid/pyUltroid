@@ -6,10 +6,10 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-from .startup.connections import RedisConnection, session_file, where_hosted
+from .startup.connections import RedisConnection, session_file, where_hosted, vc_connection
 from .startup.funcs import autobot
 from .startup.BaseClient import UltroidClient
-from .dB._database import Var
+from .configs import Var
 from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
 
 from telethon import __version__

@@ -10,6 +10,7 @@ import time
 from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
 
 from redis import Redis
+from .. import LOGS
 from telethon import TelegramClient
 from telethon import __version__ as vers
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
@@ -27,7 +28,7 @@ class RedisConnection(Redis):
         host: str = None,
         port: int = None,
         password: str = None,
-        platform: str,
+        platform: str = None,
     ):
         if port:
             port = self.port

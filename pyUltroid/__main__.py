@@ -9,7 +9,7 @@
 import os
 import sys
 
-from . import ultroid_bot
+from . import HOSTED_ON, ultroid_bot, udB, LOGS
 from .configs import Var
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff, updater
 from .startup.loader import load_other_plugins
@@ -41,7 +41,7 @@ addons = udB.get("ADDONS") or Var.ADDONS
 vcbot = udB.get("VCBOT") or Var.VCBOT
 
 # Railway dont allow Music Bots
-if Hosted_On == "railway" and not udB.get("VCBOT"):
+if HOSTED_ON == "railway" and not udB.get("VCBOT"):
     vcbot = "False"
 
 load_other_plugins(addons=addons, pmbot=pmbot, manager=manager, vcbot=vcbot)

@@ -28,15 +28,15 @@ from telethon.errors.rpcerrorlist import (
     MessageNotModifiedError,
     UserIsBotError,
 )
+from telethon import Button
 from telethon.tl import types
 from telethon.utils import get_display_name
 
 from .. import *
 from ..dB import DEVLIST
 from ..dB._core import LIST, LOADED
-from ..functions.all import bash
-from ..functions.all import time_formatter as tf
-from ..functions.sudos import is_fullsudo
+from ..functions.helper import bash, time_formatter as tf
+from ..dB.sudos import is_fullsudo
 from ..version import __version__ as pyver
 from . import owner_and_sudos, should_allow_sudo, ultroid_bot
 from ._assistant import admin_check

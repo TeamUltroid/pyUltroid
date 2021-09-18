@@ -15,7 +15,7 @@ def load_plugins(plugin_name):
         return
     from .. import HNDLR, LOGS, asst, udB, ultroid_bot
     from ..dB._core import HELP, PLUGINS
-    from ..dB._database import Var
+    from ..configs import Var
     from ..misc import _supporter as xxx
     from ..misc._assistant import (
         asst_cmd,
@@ -78,7 +78,7 @@ def load_addons(plugin_name):
         return
     from .. import HNDLR, LOGS, asst, udB, ultroid_bot
     from ..dB._core import ADDONS, HELP
-    from ..dB._database import Var
+    from ..configs import Var
     from ..misc import _supporter as xxx
     from ..misc._assistant import (
         asst_cmd,
