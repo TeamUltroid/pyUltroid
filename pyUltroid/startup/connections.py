@@ -31,7 +31,7 @@ class RedisConnection(Redis):
         elif ":" in host and not port:
             port = int(self.host.split(":")[1])
         else:
-            raise RedisError("Port Number not found")
+            return "Port Number not found"
 
         if platform.lower() in [
             "heroku",
@@ -69,10 +69,10 @@ class RedisConnection(Redis):
 
 
 def session_file():
-    if os.path.exists("client-session.session"):
-        _session = "client-session"
-    elif Var.SESSION:
+    if Var.SESSION:
         _session = StringSession(Var.SESSION)
+    elif os.path.exists("client-session.session"):
+        _session = "client-session"
     else:
         LOGS.info("No String Session found. Quitting...")
         exit(1)
