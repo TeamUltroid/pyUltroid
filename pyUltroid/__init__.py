@@ -6,16 +6,17 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-
-from .configs import Var
-from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
 from .startup.connections import RedisConnection, session_file, where_hosted, vc_connection
 from .startup.funcs import autobot
 from .startup.BaseClient import UltroidClient
+from .configs import Var
+from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
+
 from telethon import __version__
 
 from .version import __version__ as __pyUltroid__
 from .version import ultroid_version
+
 if os.path.exists("ultroid.log"):
     os.remove("ultroid.log")
 
@@ -43,8 +44,7 @@ LOGS.info(f"Telethon Version - {__version__}")
 LOGS.info(f"Ultroid Version - {ultroid_version}")
 
 
-udB = RedisConnection(host=Var.REDIS_URI, port=None, password=Var.REDIS_PASSWORD, platform=HOSTED_ON, logger=LOGS,
-socket_timeout=5)
+udB = RedisConnection(host=Var.REDIS_URI, port=None, password=Var.REDIS_PASSWORD, platform=HOSTED_ON)
 
 ultroid_bot = UltroidClient(
     session_file(),
@@ -66,7 +66,7 @@ asst = UltroidClient(
 asst.me = ultroid_bot.run_in_loop(asst.get_me())
 ultroid_bot.me = ultroid_bot.run_in_loop(ultroid_bot.get_me())
 
-vcClient = vc_connection(udB, ultroid_bot, LOGS)
+vcClient = vc_connection(udB, ultroid_bot)
 
 if not udB.get("SUDO"):
     udB.set("SUDO", "False")
