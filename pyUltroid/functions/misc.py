@@ -43,17 +43,14 @@ async def randomchannel(
 
 async def allcmds(event):
     x = str(LIST)
-    xx = (
-        x.replace(",", "\n")
-        .replace("[", """\n """)
-        .replace("]", "\n\n")
-        .replace("':", """ Plugin\n ✘ Commands Available-""")
-        .replace("'", "")
-        .replace("{", "")
-        .replace("}", "")
-    )
+    txt = ""
+    for z in LIST.keys():
+        txt += f"PLUGIN NAME: {z}\n"
+        for zz in LIST[z]:
+            txt += HNDLR + zz + "\n"
+        txt += "\n\n"
     t = telegraph.create_page(title="Ultroid All Cmds", content=[f"{xx}"])
-    await eod(event, f"All Ultroid Cmds : [Click Here]({t['url']})", link_preview=False)
+    await eor(event, f"All Ultroid Cmds : [Click Here]({t['url']})", link_preview=False)
 
 
 def ReTrieveFile(input_file_name):
