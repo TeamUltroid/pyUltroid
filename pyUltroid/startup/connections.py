@@ -20,10 +20,11 @@ from ..configs import Var
 class RedisConnection(Redis):
     def __init__(
         self,
-        host: str = None,
-        port: int = None,
-        password: str = None,
-        platform: str = None,
+        host,
+        password,
+        *args,
+        platform=None,
+        **kwargs,
     ):
         if port:
             port = port
@@ -39,7 +40,7 @@ class RedisConnection(Redis):
             "termux",
             "windows",
         ]:
-            return self.connect_redis(host=host, port=port, password=password)
+            return self.connect_redis(**kwargs)
 
         elif platform.lower() == "qovery":
             if not host:
@@ -53,8 +54,8 @@ class RedisConnection(Redis):
                     host = os.environ(f"QOVERY_REDIS_{hash}_HOST")
                     port = os.environ(f"QOVERY_REDIS_{hash}_PORT")
                     password = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
-                    return self.connect_redis(host=host, port=port, password=password)
-            return self.connect_redis(host=host, port=port, password=password)
+                    return self.connect_redis(**kwargs)
+            return self.connect_redis(**kwargs)
 
     def connect_redis(self, **kwargs):
         database = Redis(**kwargs, decode_responses=True)
