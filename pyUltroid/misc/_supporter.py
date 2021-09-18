@@ -186,10 +186,8 @@ class Config((object)):
         DEEP_AI = os.environ.get("DEEP_AI", None)
         TAG_LOG = os.environ.get("TAG_LOG", None)
 
-
     else:
         DB_URI = None
-
 
 
 CMD_HNDLR = HNDLR
