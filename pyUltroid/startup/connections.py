@@ -35,7 +35,7 @@ class RedisConnection(Redis):
 
         if port:
             pass
-        elif ":" in host and not port:
+        elif ":" in host:
             spli_ = self.host.split(":")
             host = spli_[0]
             port = int(spli_[-1])
@@ -47,18 +47,17 @@ class RedisConnection(Redis):
         kwargs["port"] = port
         super().__init__(**kwargs)
 
-        if platform.lower() == "qovery":
-            if not host:
-                var, hash, host, password = "", "", "", ""
-                for vars in os.environ:
-                    if vars.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
-                        var = vars
-                if var != "":
-                    hash = var.split("_", maxsplit=2)[1].split("_")[0]
-                if hash != "":
-                    kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash}_HOST")
-                    kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash}_PORT")
-                    kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
+        if platform.lower() == "qovery" and not host:
+            var, hash, host, password = "", "", "", ""
+            for vars in os.environ:
+                if vars.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
+                    var = vars
+            if var != "":
+                hash = var.split("_", maxsplit=2)[1].split("_")[0]
+            if hash != "":
+                kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash}_HOST")
+                kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash}_PORT")
+                kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
         super().__init__(**kwargs)
 
 
