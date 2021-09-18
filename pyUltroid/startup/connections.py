@@ -55,7 +55,7 @@ class RedisConnection(Redis):
             return self.connect_redis(**kwargs)
 
     def connect_redis(self, **kwargs):
-        database = Redis(**kwargs, decode_responses=True)
+        database = Redis(**kwargs)
         try:
             database.ping()
             LOGS.info("Connected to Redis Database")
