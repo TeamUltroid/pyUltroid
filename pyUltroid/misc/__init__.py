@@ -5,12 +5,13 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-# from .. import LOGS, asst, udB, ultroid_bot  # pylint ignore
+#from .. import LOGS, asst, udB, ultroid_bot  # pylint ignore
 
 CMD_HELP = {}
 
 
 def sudoers():
+
     if udB.get("SUDOS"):
         return udB["SUDOS"].split()
     return []

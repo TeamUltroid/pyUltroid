@@ -34,7 +34,7 @@ class Loader:
                     self._logger.info(f"Ultroid - {self.key} -  Installed - {plugin}")
             except Exception as exc:
                 self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
-                self._logger.info(exc)
+                self._logger.exception(exc)
         self._logger.info("-" * 70)
 
 

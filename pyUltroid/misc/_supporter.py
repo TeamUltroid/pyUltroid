@@ -112,6 +112,7 @@ ENV = bool(os.environ.get("ENV", False))
 
 class Config((object)):
     if ENV:
+        from .. import udB, asst
         LOGGER = True
         LOCATION = os.environ.get("LOCATION", None)
         OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)

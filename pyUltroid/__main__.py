@@ -9,23 +9,24 @@
 import os
 import sys
 
-from . import HOSTED_ON, LOGS, Var, me, udB, ultroid_bot
+from . import HOSTED_ON, LOGS, Var, udB, ultroid_bot
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff, updater
 from .startup.loader import load_other_plugins
 
+"""
 # Option to Auto Update On Restarts..
 if udB.get("UPDATE_ON_RESTART") and os.path.exists(".git") and updater():
     os.system("git pull -f && pip3 install --no-cache-dir -r requirements.txt")
     os.execl(sys.executable, "python3", "-m", "pyUltroid")
-
+"""
 startup_stuff()
 
 
-me.phone = None
-ultroid_bot.uid = me.id
-ultroid_bot.first_name = me.first_name
+ultroid_bot.me.phone = None
+ultroid_bot.uid = ultroid_bot.me.id
+ultroid_bot.first_name = ultroid_bot.me.first_name
 
-if not me.bot:
+if not ultroid_bot.me.bot:
     udB.set("OWNER_ID", ultroid_bot.uid)
 
 

@@ -56,7 +56,6 @@ udB = RedisConnection(
     decode_responses=True,
     socket_timeout=5,
     retry_on_timeout=True,
-    retry=5,
 )
 
 ultroid_bot = UltroidClient(
@@ -79,7 +78,7 @@ asst = UltroidClient(
 asst.me = ultroid_bot.run_in_loop(asst.get_me())
 ultroid_bot.me = ultroid_bot.run_in_loop(ultroid_bot.get_me())
 
-vcClient = vc_connection(udB, ultroid_bot)
+vcClient = vc_connection(udB, ultroid_bot, LOGS)
 
 if not udB.get("SUDO"):
     udB.set("SUDO", "False")
