@@ -18,7 +18,7 @@ from traceback import format_exc
 import aiohttp
 import certifi
 from PIL import Image, ImageDraw, ImageFont
-
+from requests.exceptions import MissingSchema
 from . import LOGS, ultroid_bot
 from .helper import bash, fast_download, json_parser
 
@@ -77,6 +77,19 @@ def json_parser(data, indent=None):
     except JSONDecodeError:
         parsed = eval(data)
     return parsed
+
+# ~~~~~~~~~~~~~~~~Link Checker~~~~~~~~~~~~~~~~~
+
+
+def is_url_ok(url):
+    try:
+        r = requests.head(url)
+    except MissingSchema:
+        return None
+    except BaseException:
+        return False
+    return r.status_code == 200
+
 
 
 # ~~~~~~~~~~~~~~~Saavn Downloader~~~~~~~~~~~~~~~
