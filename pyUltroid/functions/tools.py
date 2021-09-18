@@ -5,18 +5,17 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import io
 import json
 import math
 import os
 import ssl
 import subprocess
-import sys
 from json.decoder import JSONDecodeError
 from traceback import format_exc
 
-import aiohttp, requests
+import aiohttp
 import certifi
+import requests
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
 
