@@ -6,7 +6,6 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-import time
 
 from redis import Redis
 from telethon import TelegramClient
