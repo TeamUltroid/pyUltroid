@@ -13,9 +13,9 @@ author = "TeamUltroid"
 author_email = "teamultroid@protonmail.ch"
 description = "A Secure and Powerful Python-Telethon Based Library For Ultroid Userbot."
 license = "GNU AFFERO GENERAL PUBLIC LICENSE (v3)"
-url = "https://github.com/TeamUltroid/pyUltroid"
+url = "https://github.com/TeamUltroid/Ultroid"
 project_urls = {
-    "Bug Tracker": "https://github.com/TeamUltroid/pyUltroid/issues",
+    "Bug Tracker": "https://github.com/TeamUltroid/Ultroid/issues",
     "Documentation": "https://ultroid.tech",
     "Source Code": "https://github.com/TeamUltroid/pyUltroid",
 }
@@ -28,9 +28,15 @@ classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
 ]
+requirements = [
+    "redis",
+    "python-decouple==3.3",
+    "python-dotenv==0.15.0",
+    "cloudscraper",
+    "aiofiles",
+    "aiohttp",
+]
 
-with open("requirements.txt", "r") as file:
-    requirements = file.read().split("\n")
 
 setuptools.setup(
     name=name,
