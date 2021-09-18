@@ -12,8 +12,11 @@ from telethon import TelegramClient
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
 
+from .. import LOGS
 from ..configs import Var
+
 from .exceptions import RedisError
+
 
 # from pyUltroid import LOGS
 
@@ -21,6 +24,7 @@ from .exceptions import RedisError
 class RedisConnection(Redis):
     def __init__(
         self,
+
         host: str = None,
         port: int = None,
         password: str = None,
@@ -61,11 +65,12 @@ class RedisConnection(Redis):
         super().__init__(**kwargs)
 
 
+
 def session_file():
-    if os.path.exists("client-session.session"):
-        _session = "client-session"
-    elif Var.SESSION:
+    if Var.SESSION:
         _session = StringSession(Var.SESSION)
+    elif os.path.exists("client-session.session"):
+        _session = "client-session"
     else:
         raise Exception("No String Session found. Quitting...")
     return _session
