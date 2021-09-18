@@ -26,9 +26,9 @@ class RedisConnection(Redis):
         platform: str = None,
     ):
         if port:
-            port = self.port
+            port = port
         elif ":" in host and not port:
-            port = int(self.host.split(":")[1])
+            port = int(host.split(":")[1])
         else:
             return "Port Number not found"
 
@@ -39,7 +39,7 @@ class RedisConnection(Redis):
             "termux",
             "windows",
         ]:
-            return self.connect_redis(host=self.host, port=port, password=self.password)
+            return self.connect_redis(host=host, port=port, password=password)
 
         elif platform.lower() == "qovery":
             if not host:
@@ -54,7 +54,7 @@ class RedisConnection(Redis):
                     port = os.environ(f"QOVERY_REDIS_{hash}_PORT")
                     password = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
                     return self.connect_redis(host=host, port=port, password=password)
-            return self.connect_redis(host=self.host, port=port, password=self.password)
+            return self.connect_redis(host=host, port=port, password=password)
 
     def connect_redis(self, **kwargs):
         database = Redis(**kwargs, decode_responses=True)
