@@ -50,7 +50,10 @@ LOGS.info(f"Ultroid Version - {ultroid_version}")
 
 
 udB = RedisConnection(
-    host=Var.REDIS_URI, port=None, password=Var.REDIS_PASSWORD, platform=HOSTED_ON
+    host=Var.REDIS_URI,
+    password=Var.REDIS_PASSWORD,
+    platform=HOSTED_ON,
+    decode_responses=True,
 )
 
 ultroid_bot = UltroidClient(
