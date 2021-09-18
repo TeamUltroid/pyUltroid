@@ -9,7 +9,7 @@
 import os
 import sys
 
-from . import HOSTED_ON, LOGS, Var, udB, ultroid_bot
+from . import HOSTED_ON, LOGS, Var, udB, ultroid_bot, me
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff, updater
 from .startup.loader import load_other_plugins
 
@@ -21,11 +21,11 @@ if udB.get("UPDATE_ON_RESTART") and os.path.exists(".git") and updater():
 startup_stuff()
 
 
-ultroid_bot.me.phone = None
-ultroid_bot.uid = ultroid_bot.me.id
-ultroid_bot.first_name = ultroid_bot.me.first_name
+me.phone = None
+ultroid_bot.uid = me.id
+ultroid_bot.first_name = me.first_name
 
-if not ultroid_bot.me.bot:
+if not me.bot:
     udB.set("OWNER_ID", ultroid_bot.uid)
 
 
@@ -54,13 +54,13 @@ suc_msg = """
 # for channel plugins
 plugin_channels = udB.get("PLUGIN_CHANNEL")
 
-ultroid_bot.loop.run_until_complete(customize())
+ultroid_bot.run_in_loop(customize())
 
 if plugin_channels:
-    ultroid_bot.loop.run_until_complete(plug(plugin_channels))
+    ultroid_bot.run_in_loop(plug(plugin_channels))
 
 if not udB.get("LOG_OFF"):
-    ultroid_bot.loop.run_until_complete(ready())
+    ultroid_bot.run_in_loop(ready())
 
 # cleanup_cache()
 
