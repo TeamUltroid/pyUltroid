@@ -90,73 +90,52 @@ def un_plug(shortname):
 async def safeinstall(event):
     from .. import HNDLR
     from ..misc import CMD_HELP
-
+    from ..startup.utils import load_addons
+    if not event.reply_to:
+        return await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
     ok = await eor(event, "`Installing...`")
-    if event.reply_to_msg_id:
-        try:
-            downloaded_file_name = await ok.client.download_media(
-                await event.get_reply_message(), "addons/"
-            )
-            n = event.text
-            q = n[9:]
-            if q != "f":
-                with open(downloaded_file_name, "r") as xx:
-                    yy = xx.read()
-                try:
-                    for dan in DANGER:
-                        if re.search(dan, yy):
-                            os.remove(downloaded_file_name)
-                            return await ok.edit(
-                                f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{downloaded_file_name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
-                            )
-                except BaseException:
-                    pass
-            if "(" not in downloaded_file_name:
-                path1 = Path(downloaded_file_name)
-                shortname = path1.stem
-                load_addons(shortname.replace(".py", ""))
-                try:
-                    plug = shortname.replace(".py", "")
-                    if plug in HELP:
-                        output = "**Plugin** - `{}`\n".format(plug)
-                        for i in HELP[plug]:
-                            output += i
-                        output += "\n© @TheUltroid"
-                        await eod(
-                            ok,
-                            f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}",
-                            time=10,
-                        )
-                    elif plug in CMD_HELP:
-                        kk = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
-                        kk += str(CMD_HELP[plug])
-                        await eod(
-                            ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{kk}", time=10
-                        )
-                    else:
-                        try:
-                            x = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
-                            for d in LIST[plug]:
-                                x += HNDLR + d
-                                x += "\n"
-                            await eod(
-                                ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n`{x}`"
-                            )
-                        except BaseException:
-                            await eod(
-                                ok, f"✓ `Ultroid - Installed`: `{plug}` ✓", time=3
-                            )
-                except Exception as e:
-                    await ok.edit(str(e))
-            else:
-                os.remove(downloaded_file_name)
-                await eod(ok, "**ERROR**\nPlugin might have been pre-installed.")
-        except Exception as e:
-            await eod(ok, "**ERROR\n**" + str(e))
-            os.remove(downloaded_file_name)
+    reply = await event.get_reply_message()
+    if not (
+        reply.media
+        and hasattr(reply.media, "document")
+        and reply.file.name
+        and reply.file.name.endswith(".py")
+    ):
+        return await eod(ok, "`Please reply to any python plugin`")
+    if reply.file.name in [x.split("/")[-1] for x in glob.glob("*s/*.py")]:
+        return await eod(ok, f"Plugin `{reply.file.name}` is already installed.")
+    dl = await reply.download_media(f"addons/{reply.file.name}")
+    if event.text[9:] != "f":
+        read = open(dl).read()
+        for dan in DANGER:
+            if re.search(dan, read):
+                os.remove(dl)
+                return await ok.edit(
+                    f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{reply.file.name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
+                )
+    plug = reply.file.name.replace(".py", "")
+    try:
+        load_addons(plug)
+    except BaseException:
+        return await eor(ok, f"**ERROR**\n\n`{traceback.format_exc()}`", time=10)
+    if plug in HELP:
+        output = "**Plugin** - `{}`\n".format(plug)
+        for i in HELP[plug]:
+            output += i
+        output += "\n© @TheUltroid"
+        await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}")
+    elif plug in CMD_HELP:
+        output = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
+        output += str(CMD_HELP[plug])
+        await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}")
     else:
-        await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
-
+        try:
+            x = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
+            for d in LIST[plug]:
+                x += HNDLR + d + "\n"
+            await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n`{x}`")
+        except BaseException:
+            await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓")
 
 # --------------------------------------------------------------------- #
 
