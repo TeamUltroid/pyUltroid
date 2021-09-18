@@ -11,7 +11,6 @@ import os
 import re
 import sys
 import time
-from pathlib import Path
 from traceback import format_exc
 
 try:
@@ -33,7 +32,6 @@ from telethon.utils import get_display_name
 from ..configs import Var
 from ..dB._core import ADDONS, HELP, LIST, LOADED
 from ..misc._wrappers import eod, eor
-from ..startup.utils import load_addons
 from ..version import ultroid_version
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
@@ -91,6 +89,7 @@ async def safeinstall(event):
     from .. import HNDLR
     from ..misc import CMD_HELP
     from ..startup.utils import load_addons
+
     if not event.reply_to:
         return await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
     ok = await eor(event, "`Installing...`")
@@ -136,6 +135,7 @@ async def safeinstall(event):
             await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n`{x}`")
         except BaseException:
             await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓")
+
 
 # --------------------------------------------------------------------- #
 
