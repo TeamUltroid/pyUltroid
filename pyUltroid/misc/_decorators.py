@@ -14,7 +14,6 @@ from pathlib import Path
 from time import gmtime, strftime
 from traceback import format_exc
 
-from plugins import ultroid_version as ult_ver
 from telethon import Button
 from telethon import __version__ as telever
 from telethon import events
@@ -39,6 +38,7 @@ from ..dB.sudos import is_fullsudo
 from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
 from ..version import __version__ as pyver
+from ..version import ultroid_version as ult_ver
 from . import owner_and_sudos, should_allow_sudo, ultroid_bot
 from ._assistant import admin_check
 from ._wrappers import eod

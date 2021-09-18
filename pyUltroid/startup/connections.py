@@ -12,46 +12,53 @@ from telethon import TelegramClient
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
 
-from .. import LOGS
 from ..configs import Var
+from .exceptions import RedisError
+
+# from pyUltroid import LOGS
 
 
 class RedisConnection(Redis):
     def __init__(
         self,
-        host,
-        password,
+        host: str = None,
+        port: int = None,
+        password: str = None,
+        platform: str = None,
+        logger=None,
         *args,
-        platform=None,
         **kwargs,
     ):
 
-        if platform.lower() in [
-            "heroku",
-            "github actions",
-            "local",
-            "termux",
-            "windows",
-        ]:
-            kwargs["host"] = host
-            kwargs["port"] = port
-            kwargs["password"] = password
-            super().__init__(**kwargs)
+        self.host = host
+        self.logger = logger
 
-        elif platform.lower() == "qovery":
-            if not host:
-                var, hash, host, password = "", "", "", ""
-                for vars in os.environ:
-                    if vars.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
-                        var = vars
-                if var != "":
-                    hash = var.split("_", maxsplit=2)[1].split("_")[0]
-                if hash != "":
-                    kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash}_HOST")
-                    kwargs["port"] = int(os.environ(f"QOVERY_REDIS_{hash}_PORT"))
-                    kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
-                    return super().__init__(**kwargs)
-            return super().__init__(**kwargs)
+        if port:
+            pass
+        elif ":" in host:
+            spli_ = self.host.split(":")
+            host = spli_[0]
+            port = int(spli_[-1])
+        else:
+            raise RedisError("Port Number not found")
+
+        kwargs["host"] = host
+        kwargs["password"] = password
+        kwargs["port"] = port
+        super().__init__(**kwargs)
+
+        if platform.lower() == "qovery" and not host:
+            var, hash, host, password = "", "", "", ""
+            for vars in os.environ:
+                if vars.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
+                    var = vars
+            if var != "":
+                hash = var.split("_", maxsplit=2)[1].split("_")[0]
+            if hash != "":
+                kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash}_HOST")
+                kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash}_PORT")
+                kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
+        super().__init__(**kwargs)
 
 
 def session_file():
@@ -60,12 +67,11 @@ def session_file():
     elif os.path.exists("client-session.session"):
         _session = "client-session"
     else:
-        LOGS.info("No String Session found. Quitting...")
-        exit(1)
+        raise Exception("No String Session found. Quitting...")
     return _session
 
 
-def vc_connection(udB, ultroid_bot):
+def vc_connection(udB, ultroid_bot, LOGS):
     VC_SESSION = Var.VC_SESSION or udB.get("VC_SESSION")
     if VC_SESSION:
         if VC_SESSION == Var.SESSION:
