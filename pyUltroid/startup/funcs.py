@@ -37,7 +37,7 @@ from .utils import load_addons
 def startup_stuff():
     from .. import LOGS, udB
 
-    x = ["resources/auths", "resources/downloads", "addons", "vcbot/downloads"]
+    x = ["resources/auths", "resources/downloads", "vcbot/downloads"]
     for x in x:
         if not os.path.isdir(x):
             os.mkdir(x)
