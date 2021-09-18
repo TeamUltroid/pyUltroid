@@ -37,7 +37,7 @@ class RedisConnection(Redis):
             kwargs["host"] = host
             kwargs["port"] = port
             kwargs["password"] = password
-            return self.connect_redis(**kwargs)
+            super().__init__(**kwargs)
 
         elif platform.lower() == "qovery":
             if not host:
@@ -51,18 +51,8 @@ class RedisConnection(Redis):
                     kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash}_HOST")
                     kwargs["port"] = int(os.environ(f"QOVERY_REDIS_{hash}_PORT"))
                     kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
-                    return self.connect_redis(**kwargs)
-            return self.connect_redis(**kwargs)
-
-    def connect_redis(self, **kwargs):
-        database = Redis(**kwargs)
-        try:
-            database.ping()
-            LOGS.info("Connected to Redis Database")
-        except BaseException:
-            LOGS.warning("Reconnecting to Redis Database!")
-            time.sleep(5)
-            self.connect_redis(**kwargs)
+                    return super().__init__(**kwargs)
+            return super().__init__(**kwargs)
 
 
 def session_file():
