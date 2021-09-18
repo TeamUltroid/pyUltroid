@@ -1,4 +1,3 @@
-from glob import glob
 from logging import getLogger
 
 from telethon import TelegramClient
@@ -9,7 +8,7 @@ from telethon.errors import (
 )
 from telethon.utils import get_display_name
 
-#from .. import udB
+# from .. import udB
 from .loader import Loader
 
 
@@ -39,6 +38,7 @@ class UltroidClient(TelegramClient):
 
     async def start_client(self, **kwargs):
         from .. import udB
+
         self.logger.info("Trying to login.")
         try:
             await self.start(**kwargs)

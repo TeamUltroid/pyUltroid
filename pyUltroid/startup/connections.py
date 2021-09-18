@@ -6,19 +6,16 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-#from pyUltroid import LOGS
-import time
 
 from redis import Redis
 from telethon import TelegramClient
-from telethon import __version__ as vers
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
 
-from safety.tools import *
 from ..configs import Var
-from ..version import __version__ as ver, ultroid_version
 from .exceptions import RedisError
+
+# from pyUltroid import LOGS
 
 
 class RedisConnection(Redis):
@@ -28,9 +25,9 @@ class RedisConnection(Redis):
         port: int = None,
         password: str = None,
         platform: str = None,
-        logger = None,
+        logger=None,
         *args,
-        **kwargs
+        **kwargs,
     ):
 
         self.host = host
@@ -44,12 +41,11 @@ class RedisConnection(Redis):
             port = int(spli_[-1])
         else:
             raise RedisError("Port Number not found")
-    
+
         kwargs["host"] = host
         kwargs["password"] = password
         kwargs["port"] = port
         super().__init__(**kwargs)
-
 
         if platform.lower() == "qovery":
             if not host:

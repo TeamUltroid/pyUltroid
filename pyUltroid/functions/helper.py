@@ -30,14 +30,13 @@ from telethon.helpers import _maybe_await
 from telethon.tl import types
 from telethon.utils import get_display_name
 
-from ..dB._core import ADDONS, HELP, LIST, LOADED
 from ..configs import Var
+from ..dB._core import ADDONS, HELP, LIST, LOADED
+from ..misc._wrappers import eod, eor
 from ..startup.utils import load_addons
 from ..version import ultroid_version
-from ..misc._wrappers import eod, eor
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
-
 
 # ~~~~~~~~~~~~~~~~~~~~ small funcs ~~~~~~~~~~~~~~~~~~~~ #
 
@@ -61,7 +60,8 @@ user_full_name = get_display_name
 
 
 def un_plug(shortname):
-    from .. import asst, LOGS, ultroid_bot
+    from .. import LOGS, asst, ultroid_bot
+
     try:
         for client in [ultroid_bot, asst]:
             for i in LOADED[shortname]:
@@ -90,6 +90,7 @@ def un_plug(shortname):
 async def safeinstall(event):
     from .. import HNDLR
     from ..misc import CMD_HELP
+
     ok = await eor(event, "`Installing...`")
     if event.reply_to_msg_id:
         try:
@@ -202,6 +203,7 @@ def gen_chlog(repo, diff):
 
 def updater():
     from .. import LOGS
+
     off_repo = Repo().remotes[0].config_reader.get("url").replace(".git", "")
     try:
         repo = Repo()
@@ -444,6 +446,7 @@ async def restart(ult):
 
 async def shutdown(ult, dynotype="ultroid"):
     from .. import LOGS
+
     ult = await eor(ult, "Shutting Down")
     if Var.HEROKU_APP_NAME and Var.HEROKU_API:
         try:
@@ -462,6 +465,7 @@ async def shutdown(ult, dynotype="ultroid"):
 
 async def heroku_logs(event):
     from .. import LOGS
+
     xx = await eor(event, "`Processing...`")
     if not (Var.HEROKU_API and Var.HEROKU_APP_NAME):
         return await xx.edit("Please set `HEROKU_APP_NAME` and `HEROKU_API` in vars.")

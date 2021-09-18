@@ -12,7 +12,6 @@ from pathlib import Path
 from random import randint
 from urllib.request import urlretrieve
 
-from ..configs import Var
 from pytz import timezone
 from telethon.errors.rpcerrorlist import ChannelsTooMuchError
 from telethon.tl.custom import Button
@@ -29,14 +28,15 @@ from telethon.tl.types import (
     InputMessagesFilterDocument,
 )
 
-#from .. import *
+# from .. import *
 from ..configs import Var
-from ..functions.helper import updater, download_file
+from ..functions.helper import download_file, updater
 from .utils import load_addons
 
 
 def startup_stuff():
-    from .. import udB, LOGS
+    from .. import LOGS, udB
+
     x = ["resources/auths", "resources/downloads", "addons", "vcbot/downloads"]
     for x in x:
         if not os.path.isdir(x):
@@ -69,7 +69,8 @@ def startup_stuff():
 
 
 async def autobot():
-    from .. import udB, ultroid_bot, LOGS
+    from .. import LOGS, udB, ultroid_bot
+
     if Var.BOT_TOKEN:
         return udB.set("BOT_TOKEN", Var.BOT_TOKEN)
     if udB.get("BOT_TOKEN"):
@@ -151,7 +152,8 @@ async def autobot():
 
 
 async def autopilot():
-    from .. import udB, ultroid_bot, LOGS, asst
+    from .. import LOGS, asst, udB, ultroid_bot
+
     if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
         udB.set("LOG_CHANNEL", str(Var.LOG_CHANNEL))
     if udB.get("LOG_CHANNEL"):
@@ -213,7 +215,8 @@ async def autopilot():
 
 
 async def customize():
-    from .. import udB, ultroid_bot, asst, LOGS
+    from .. import LOGS, asst, udB, ultroid_bot
+
     try:
         chat_id = int(udB.get("LOG_CHANNEL"))
         xx = await ultroid_bot.get_entity(asst.me.username)
@@ -266,7 +269,8 @@ async def customize():
 
 
 async def plug(plugin_channels):
-    from .. import ultroid_bot, LOGS
+    from .. import LOGS, ultroid_bot
+
     if not os.path.exists("addons/__init__.py"):
         with open("addons/__init__.py", "w") as f:
             f.write("from plugins import *")
@@ -303,7 +307,8 @@ async def plug(plugin_channels):
 
 # some stuffs
 async def ready():
-    from .. import ultroid_bot, udB, LOGS, asst
+    from .. import LOGS, asst, udB, ultroid_bot
+
     chat_id = int(udB.get("LOG_CHANNEL"))
     MSG = f"**Ultroid has been deployed!**\n➖➖➖➖➖➖➖➖➖\n**UserMode**: [{ultroid_bot.me.first_name}](tg://user?id={ultroid_bot.me.id})\n**Assistant**: @{asst.me.username}\n➖➖➖➖➖➖➖➖➖\n**Support**: @TeamUltroid\n➖➖➖➖➖➖➖➖➖"
     BTTS = []

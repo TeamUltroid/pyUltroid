@@ -6,7 +6,12 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-from .startup.connections import RedisConnection, session_file, where_hosted, vc_connection
+from .startup.connections import (
+    RedisConnection,
+    session_file,
+    where_hosted,
+    vc_connection,
+)
 from .startup.funcs import autobot
 from .startup.BaseClient import UltroidClient
 from .configs import Var
@@ -44,7 +49,9 @@ LOGS.info(f"Telethon Version - {__version__}")
 LOGS.info(f"Ultroid Version - {ultroid_version}")
 
 
-udB = RedisConnection(host=Var.REDIS_URI, port=None, password=Var.REDIS_PASSWORD, platform=HOSTED_ON)
+udB = RedisConnection(
+    host=Var.REDIS_URI, port=None, password=Var.REDIS_PASSWORD, platform=HOSTED_ON
+)
 
 ultroid_bot = UltroidClient(
     session_file(),

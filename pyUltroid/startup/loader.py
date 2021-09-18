@@ -38,6 +38,7 @@ class Loader:
 
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     from .. import LOGS, udB
+
     # for assistant
     Loader(path="assistant", key="Assistant", logger=LOGS).load(func=load_assistant)
 
@@ -60,11 +61,15 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # group manager
     if manager == "True":
-        Loader(path="assistant/manager", key="Group Manager", logger=LOGS).load(func=load_manager)
+        Loader(path="assistant/manager", key="Group Manager", logger=LOGS).load(
+            func=load_manager
+        )
 
     # chat via assistant
     if pmbot == "True":
-        Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(log=False, func=load_pmbot)
+        Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(
+            log=False, func=load_pmbot
+        )
 
     # vc bot
     if vcbot == "True":

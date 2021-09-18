@@ -7,12 +7,12 @@
 
 import asyncio
 
-
 # edit or reply
 
 
 async def eor(event, text, **args):
     from .. import udB
+
     link_preview = args.get("link_preview", False)
     parse_mode = args.get("parse_mode", "md")
     time = args.get("time", None)

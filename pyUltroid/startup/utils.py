@@ -14,8 +14,8 @@ def load_plugins(plugin_name):
     if plugin_name.startswith("__"):
         return
     from .. import HNDLR, LOGS, asst, udB, ultroid_bot
-    from ..dB._core import HELP, PLUGINS
     from ..configs import Var
+    from ..dB._core import HELP, PLUGINS
     from ..misc import _supporter as xxx
     from ..misc._assistant import (
         asst_cmd,
@@ -77,8 +77,8 @@ def load_addons(plugin_name):
     if plugin_name.startswith("__"):
         return
     from .. import HNDLR, LOGS, asst, udB, ultroid_bot
-    from ..dB._core import ADDONS, HELP
     from ..configs import Var
+    from ..dB._core import ADDONS, HELP
     from ..misc import _supporter as xxx
     from ..misc._assistant import (
         asst_cmd,

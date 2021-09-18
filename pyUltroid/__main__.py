@@ -9,11 +9,9 @@
 import os
 import sys
 
-from . import HOSTED_ON, udB, LOGS, Var, ultroid_bot
-from .startup.connections import cleanup_cache
+from . import HOSTED_ON, LOGS, Var, udB, ultroid_bot
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff, updater
 from .startup.loader import load_other_plugins
-
 
 # Option to Auto Update On Restarts..
 if udB.get("UPDATE_ON_RESTART") and os.path.exists(".git") and updater():
@@ -64,7 +62,7 @@ if plugin_channels:
 if not udB.get("LOG_OFF"):
     ultroid_bot.loop.run_until_complete(ready())
 
-#cleanup_cache()
+# cleanup_cache()
 
 if __name__ == "__main__":
     LOGS.info(suc_msg)

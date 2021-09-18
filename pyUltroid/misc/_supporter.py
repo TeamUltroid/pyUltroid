@@ -37,6 +37,7 @@ jarvis = ultroid_bot
 hndlr = "\\" + HNDLR
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
 
+
 def admin_cmd(pattern=None, command=None, **args):
     args["func"] = lambda e: not e.via_bot_id and not e.fwd_from
     args["chats"] = black_list_chats
