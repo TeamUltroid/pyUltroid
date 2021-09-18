@@ -9,16 +9,17 @@
 import os
 import sys
 
-from . import HOSTED_ON, ultroid_bot, udB, LOGS
-from .configs import Var
+from . import HOSTED_ON, udB, LOGS, Var, ultroid_bot
+from .startup.connections import cleanup_cache
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff, updater
 from .startup.loader import load_other_plugins
 
+"""
 # Option to Auto Update On Restarts..
-if udB.get("UPDATE_ON_RESTART") and updater() and os.path.exists(".git"):
+if udB.get("UPDATE_ON_RESTART") and os.path.exists(".git") and updater():
     os.system("git pull -f && pip3 install --no-cache-dir -r requirements.txt")
     os.execl(sys.executable, "python3", "-m", "pyUltroid")
-
+"""
 startup_stuff()
 
 
@@ -46,7 +47,6 @@ if HOSTED_ON == "railway" and not udB.get("VCBOT"):
 
 load_other_plugins(addons=addons, pmbot=pmbot, manager=manager, vcbot=vcbot)
 
-
 suc_msg = """
             ----------------------------------------------------------------------
                 Ultroid has been deployed! Visit @TheUltroid for updates!!
@@ -64,7 +64,7 @@ if plugin_channels:
 if not udB.get("LOG_OFF"):
     ultroid_bot.loop.run_until_complete(ready())
 
-cleanup_cache()
+#cleanup_cache()
 
 if __name__ == "__main__":
     LOGS.info(suc_msg)

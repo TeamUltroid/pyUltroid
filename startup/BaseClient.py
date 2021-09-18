@@ -9,7 +9,7 @@ from telethon.errors import (
 )
 from telethon.utils import get_display_name
 
-from .. import udB
+#from .. import udB
 from .loader import Loader
 
 
@@ -34,11 +34,11 @@ class UltroidClient(TelegramClient):
             if not plugins_path.endswith("/*"):
                 plugins_path = plugins_path + "/*.py"
             self.logger.info("~" * 20 + " Installing Plugins " + "~" * 20)
-            for files in sorted(glob(plugins_path)):
-                Loader(path=plugins_path, key="Official").load()
+            Loader(path=plugins_path, key="Official", logger=self.logger).load()
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
     async def start_client(self, **kwargs):
+        from .. import udB
         self.logger.info("Trying to login.")
         try:
             await self.start(**kwargs)

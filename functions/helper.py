@@ -30,16 +30,13 @@ from telethon.helpers import _maybe_await
 from telethon.tl import types
 from telethon.utils import get_display_name
 
-from .. import HNDLR, asst
-from ..dB._core import ADDONS, CMD_HELP, HELP, LIST, LOADED
+from ..dB._core import ADDONS, HELP, LIST, LOADED
 from ..configs import Var
 from ..startup.utils import load_addons
 from ..version import ultroid_version
-from . import DANGER, LOGS, eod, eor, ultroid_bot
+from ..misc._wrappers import eod, eor
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
-
-UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
 
 
 # ~~~~~~~~~~~~~~~~~~~~ small funcs ~~~~~~~~~~~~~~~~~~~~ #
@@ -64,6 +61,7 @@ user_full_name = get_display_name
 
 
 def un_plug(shortname):
+    from .. import asst, LOGS, ultroid_bot
     try:
         for client in [ultroid_bot, asst]:
             for i in LOADED[shortname]:
@@ -90,6 +88,8 @@ def un_plug(shortname):
 
 
 async def safeinstall(event):
+    from .. import HNDLR
+    from ..misc import CMD_HELP
     ok = await eor(event, "`Installing...`")
     if event.reply_to_msg_id:
         try:
@@ -186,6 +186,7 @@ async def updateme_requirements():
 
 
 def gen_chlog(repo, diff):
+    UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
     ac_br = repo.active_branch.name
     ch_log = tldr_log = ""
     ch = f"<b>Ultroid {ultroid_version} updates for <a href={UPSTREAM_REPO_URL}/tree/{ac_br}>[{ac_br}]</a>:</b>"
@@ -199,8 +200,9 @@ def gen_chlog(repo, diff):
     return ch_log, tldr_log
 
 
-def updater(check_updates=False):
-    off_repo = UPSTREAM_REPO_URL
+def updater():
+    from .. import LOGS
+    off_repo = Repo().remotes[0].config_reader.get("url").replace(".git", "")
     try:
         repo = Repo()
     except NoSuchPathError as error:
@@ -441,6 +443,7 @@ async def restart(ult):
 
 
 async def shutdown(ult, dynotype="ultroid"):
+    from .. import LOGS
     ult = await eor(ult, "Shutting Down")
     if Var.HEROKU_APP_NAME and Var.HEROKU_API:
         try:
@@ -458,6 +461,7 @@ async def shutdown(ult, dynotype="ultroid"):
 
 
 async def heroku_logs(event):
+    from .. import LOGS
     xx = await eor(event, "`Processing...`")
     if not (Var.HEROKU_API and Var.HEROKU_APP_NAME):
         return await xx.edit("Please set `HEROKU_APP_NAME` and `HEROKU_API` in vars.")

@@ -14,7 +14,7 @@ from pathlib import Path
 from time import gmtime, strftime
 from traceback import format_exc
 
-from plugins import ultroid_version as ult_ver
+from ..version import ultroid_version as ult_ver
 from telethon import __version__ as telever
 from telethon import events
 from telethon.errors.rpcerrorlist import (

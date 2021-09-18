@@ -6,19 +6,18 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
+#from pyUltroid import LOGS
 import time
-from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
 
 from redis import Redis
-from .. import LOGS
 from telethon import TelegramClient
 from telethon import __version__ as vers
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
 
+from safety.tools import *
 from ..configs import Var
-from ..version import __version__ as ver
-from ..version import ultroid_version
+from ..version import __version__ as ver, ultroid_version
 from .exceptions import RedisError
 
 
@@ -29,47 +28,42 @@ class RedisConnection(Redis):
         port: int = None,
         password: str = None,
         platform: str = None,
+        logger = None,
+        *args,
+        **kwargs
     ):
+
+        self.host = host
+        self.logger = logger
+
         if port:
-            port = self.port
+            pass
         elif ":" in host and not port:
-            port = int(self.host.split(":")[1])
+            spli_ = self.host.split(":")
+            host = spli_[0]
+            port = int(spli_[-1])
         else:
             raise RedisError("Port Number not found")
+    
+        kwargs["host"] = host
+        kwargs["password"] = password
+        kwargs["port"] = port
+        super().__init__(**kwargs)
 
-        if platform.lower() in [
-            "heroku",
-            "github actions",
-            "local",
-            "termux",
-            "windows",
-        ]:
-            return self.connect_redis(host=self.host, port=port, password=self.password)
 
-        elif platform.lower() == "qovery":
+        if platform.lower() == "qovery":
             if not host:
-                vars, hash, host, port, password = "", "", "", 0, ""
+                var, hash, host, password = "", "", "", ""
                 for vars in os.environ:
                     if vars.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
                         var = vars
                 if var != "":
                     hash = var.split("_", maxsplit=2)[1].split("_")[0]
                 if hash != "":
-                    host = os.environ(f"QOVERY_REDIS_{hash}_HOST")
-                    port = os.environ(f"QOVERY_REDIS_{hash}_PORT")
-                    password = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
-                    return self.connect_redis(host=host, port=port, password=password)
-            return self.connect_redis(host=self.host, port=port, password=self.password)
-
-    def connect_redis(self, **kwargs):
-        database = Redis(**kwargs, decode_responses=True)
-        try:
-            database.ping()
-            LOGS.info("Connected to Redis Database")
-        except BaseException:
-            LOGS.warning("Reconnecting to Redis Database!")
-            time.sleep(5)
-            self.connect_redis(**kwargs)
+                    kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash}_HOST")
+                    kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash}_PORT")
+                    kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
+        super().__init__(**kwargs)
 
 
 def session_file():
@@ -78,12 +72,11 @@ def session_file():
     elif Var.SESSION:
         _session = StringSession(Var.SESSION)
     else:
-        LOGS.info("No String Session found. Quitting...")
-        exit(1)
+        raise Exception("No String Session found. Quitting...")
     return _session
 
 
-def vc_connection(udB, ultroid_bot):
+def vc_connection(udB, ultroid_bot, LOGS):
     VC_SESSION = Var.VC_SESSION or udB.get("VC_SESSION")
     if VC_SESSION:
         if VC_SESSION == Var.SESSION:
