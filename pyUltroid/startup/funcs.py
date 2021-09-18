@@ -8,7 +8,6 @@
 import asyncio
 import os
 import time
-from pathlib import Path
 from random import randint
 from urllib.request import urlretrieve
 
@@ -31,7 +30,6 @@ from telethon.tl.types import (
 # from .. import *
 from ..configs import Var
 from ..functions.helper import download_file, updater
-from .utils import load_addons
 
 
 def startup_stuff():
@@ -269,7 +267,7 @@ async def customize():
 
 
 async def plug(plugin_channels):
-    from .. import ultroid_bot, LOGS
+    from .. import LOGS, ultroid_bot
     from ..startup.utils import load_addons
 
     if not os.path.exists("addons"):
