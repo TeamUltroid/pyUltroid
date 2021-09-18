@@ -15,7 +15,7 @@ import sys
 from json.decoder import JSONDecodeError
 from traceback import format_exc
 
-import aiohttp
+import aiohttp, requests
 import certifi
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
@@ -147,43 +147,6 @@ async def dloader(e, host, file):
             text += f"• **{i}** : `{keys[i]}`"
     os.remove(file)
     return await e.edit(text)
-
-
-# ---------------- Calculator Fucn---------------
-# @1danish-00
-
-
-async def calcc(cmd, event):
-    wt = f"print({cmd})"
-    old_stderr = sys.stderr
-    old_stdout = sys.stdout
-    redirected_output = sys.stdout = io.StringIO()
-    redirected_error = sys.stderr = io.StringIO()
-    stdout, stderr, exc = None, None, None
-    try:
-        await aexecc(wt, event)
-    except Exception:
-        exc = format_exc()
-    stdout = redirected_output.getvalue()
-    stderr = redirected_error.getvalue()
-    sys.stdout = old_stdout
-    sys.stderr = old_stderr
-    if exc:
-        return exc
-    elif stderr:
-        return stderr
-    elif stdout:
-        return stdout
-    return "Success"
-
-
-async def aexecc(code, event):
-    exec("async def __aexecc(event): " + "".join(f"\n {l}" for l in code.split("\n")))
-
-    return await locals()["__aexecc"](event)
-
-
-# -------------------------------------------------
 
 
 def get_all_files(path):
