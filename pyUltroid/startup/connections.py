@@ -53,7 +53,7 @@ class RedisConnection(Redis):
                 if hash != "":
                     host = os.environ(f"QOVERY_REDIS_{hash}_HOST")
                     port = os.environ(f"QOVERY_REDIS_{hash}_PORT")
-                    password = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
+                    os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
                     return self.connect_redis(**kwargs)
             return self.connect_redis(**kwargs)
 
