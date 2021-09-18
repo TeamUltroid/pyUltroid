@@ -49,7 +49,7 @@ LOGS.info(f"Telethon Version - {__version__}")
 LOGS.info(f"Ultroid Version - {ultroid_version}")
 
 
-udB = RedisConnection(host="", port=None, password="", platform=HOSTED_ON)
+udB = RedisConnection(host=Var.REDIS_URI, port=None, password=Var.REDIS_PASSWORD, platform=HOSTED_ON)
 
 ultroid_bot = UltroidClient(
     session_file(),
