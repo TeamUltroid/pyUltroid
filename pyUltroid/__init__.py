@@ -54,6 +54,9 @@ udB = RedisConnection(
     password=Var.REDIS_PASSWORD,
     platform=HOSTED_ON,
     decode_responses=True,
+    socket_timeout=5,
+    retry_on_timeout=True,
+    retry=5,
 )
 
 ultroid_bot = UltroidClient(
