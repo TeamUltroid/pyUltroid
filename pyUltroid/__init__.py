@@ -5,7 +5,11 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+from safety.tools import *
+
 from .startup.connections import *
+
+LOGS = LOGS
 
 udB = redis_connection()
 

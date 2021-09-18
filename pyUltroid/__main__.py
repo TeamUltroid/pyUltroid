@@ -46,6 +46,7 @@ async def istart():
     ultroid_bot.me.phone = None
     ultroid_bot.uid = ultroid_bot.me.id
     ultroid_bot.first_name = ultroid_bot.me.first_name
+    ultroid_bot.dc_id = ultroid_bot.session.dc_id
     if not ultroid_bot.me.bot:
         udB.set("OWNER_ID", ultroid_bot.uid)
 
@@ -116,7 +117,7 @@ if plugin_channels:
 if not udB.get("LOG_OFF"):
     ultroid_bot.loop.run_until_complete(ready())
 
-cleanup_cache()
+cleanup_cache(Var)
 
 if __name__ == "__main__":
     LOGS.info(suc_msg)

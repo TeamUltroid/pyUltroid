@@ -9,7 +9,6 @@ import asyncio
 import os
 import time
 import urllib
-from pathlib import Path
 from random import randint
 from urllib.request import urlretrieve
 
@@ -36,7 +35,7 @@ from .utils import load_addons
 
 
 def startup_stuff():
-    x = ["resources/auths", "resources/downloads", "addons", "vcbot/downloads"]
+    x = ["resources/auths", "resources/downloads", "vcbot/downloads"]
     for x in x:
         if not os.path.isdir(x):
             os.mkdir(x)
@@ -258,6 +257,8 @@ async def customize():
 
 
 async def plug(plugin_channels):
+    if not os.path.exists("addons"):
+        os.mkdir("addons")
     if not os.path.exists("addons/__init__.py"):
         with open("addons/__init__.py", "w") as f:
             f.write("from plugins import *")
@@ -273,23 +274,21 @@ async def plug(plugin_channels):
             async for x in ultroid_bot.iter_messages(
                 chat, search=".py", filter=InputMessagesFilterDocument, wait_time=10
             ):
+                if x.file.name in os.listdir("addons"):
+                    LOGS.info(f"Plugin {x.file.name} is Pre Installed")
+                    continue
                 await asyncio.sleep(0.6)
-                files = await ultroid_bot.download_media(x.media, "./addons/")
-                file = Path(files)
-                plugin = file.stem
-                if "(" not in files:
-                    try:
-                        load_addons(plugin.replace(".py", ""))
-                        LOGS.info(f"Ultroid - PLUGIN_CHANNEL - Installed - {plugin}")
-                    except Exception as e:
-                        LOGS.info(f"Ultroid - PLUGIN_CHANNEL - ERROR - {plugin}")
-                        LOGS.info(str(e))
-                        os.remove(files)
-                else:
-                    LOGS.info(f"Plugin {plugin} is Pre Installed")
-                    os.remove(files)
+                file = await ultroid_bot.download_media(x.media, "./addons/")
+                plugin = x.file.name
+                try:
+                    load_addons(plugin.replace(".py", ""))
+                    LOGS.info(f"Ultroid - PLUGIN_CHANNEL - Installed - {plugin}")
+                except Exception as e:
+                    LOGS.info(f"Ultroid - PLUGIN_CHANNEL - ERROR - {plugin}")
+                    LOGS.exception(e)
+                    os.remove(file)
         except Exception as e:
-            LOGS.info(str(e))
+            LOGS.exception(e)
 
 
 # some stuffs

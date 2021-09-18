@@ -8,14 +8,15 @@
 from .. import udB
 
 try:
-    eval(udB["GBAN"])
+    dict(eval(udB["GBAN"]))
 except BaseException:
     udB.set("GBAN", "{}")
 
 try:
-    eval(udB["GMUTE"])
+    if "list" not in str(type(eval(udB["GMUTE"]))):
+        udB.set("GMUTE", "[]")
 except BaseException:
-    udB.set("GMUTE", "{}")
+    udB.set("GMUTE", "[]")
 
 
 def gban(user, reason):

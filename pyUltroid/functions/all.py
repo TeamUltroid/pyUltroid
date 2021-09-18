@@ -7,7 +7,7 @@
 
 
 import asyncio
-import io
+import glob
 import json
 import math
 import os
@@ -21,7 +21,6 @@ import traceback
 from math import sqrt
 from mimetypes import guess_type
 from os import execl
-from pathlib import Path
 from sys import executable
 
 import aiofiles
@@ -41,6 +40,7 @@ from html_telegraph_poster import TelegraphPoster
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 from PIL import Image, ImageDraw, ImageFont
+from requests.exceptions import MissingSchema
 from telegraph import Telegraph
 from telethon import Button, events
 from telethon.errors import (
@@ -131,7 +131,22 @@ def json_parser(data, indent=None):
     return parsed
 
 
+# ~~~~~~~~~~~~~~~~Link Checker~~~~~~~~~~~~~~~~~
+
+
+def is_url_ok(url):
+    try:
+        r = requests.head(url)
+    except MissingSchema:
+        return None
+    except BaseException:
+        return False
+    return r.status_code == 200
+
+
 # ~~~~~~~~~~~~~~~Saavn Downloader~~~~~~~~~~~~~~~
+
+
 async def saavn_dl(query):
     query = query.replace(" ", "%20")
     url = f"https://jostapi.herokuapp.com/saavn?query={query}"
@@ -167,6 +182,7 @@ def get_data(types, data):
             if note == "tiny":
                 audio.append(j)
             else:
+                note = f"{m['width']}x{m['height']}p"
                 if m["acodec"] == "none":
                     id = str(m["format_id"]) + "+" + str(audio[-1].split()[0])
                     j = f"{id} {note} {humanbytes(size+a_size)}"
@@ -603,87 +619,62 @@ def un_plug(shortname):
 
 async def safeinstall(event):
     ok = await eor(event, "`Installing...`")
-    if event.reply_to_msg_id:
-        try:
-            downloaded_file_name = await ok.client.download_media(
-                await event.get_reply_message(), "addons/"
-            )
-            n = event.text
-            q = n[9:]
-            if q != "f":
-                xx = open(downloaded_file_name, "r")
-                yy = xx.read()
-                xx.close()
-                try:
-                    for dan in DANGER:
-                        if re.search(dan, yy):
-                            os.remove(downloaded_file_name)
-                            return await ok.edit(
-                                f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{downloaded_file_name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
-                            )
-                except BaseException:
-                    pass
-            if "(" not in downloaded_file_name:
-                path1 = Path(downloaded_file_name)
-                shortname = path1.stem
-                load_addons(shortname.replace(".py", ""))
-                try:
-                    plug = shortname.replace(".py", "")
-                    if plug in HELP:
-                        output = "**Plugin** - `{}`\n".format(plug)
-                        for i in HELP[plug]:
-                            output += i
-                        output += "\n© @TheUltroid"
-                        await eod(
-                            ok,
-                            f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}",
-                            time=10,
-                        )
-                    elif plug in CMD_HELP:
-                        kk = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
-                        kk += str(CMD_HELP[plug])
-                        await eod(
-                            ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{kk}", time=10
-                        )
-                    else:
-                        try:
-                            x = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
-                            for d in LIST[plug]:
-                                x += HNDLR + d
-                                x += "\n"
-                            await eod(
-                                ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n`{x}`"
-                            )
-                        except BaseException:
-                            await eod(
-                                ok, f"✓ `Ultroid - Installed`: `{plug}` ✓", time=3
-                            )
-                except Exception as e:
-                    await ok.edit(str(e))
-            else:
-                os.remove(downloaded_file_name)
-                await eod(ok, "**ERROR**\nPlugin might have been pre-installed.")
-        except Exception as e:
-            await eod(ok, "**ERROR\n**" + str(e))
-            os.remove(downloaded_file_name)
+    if not event.reply_to:
+        return await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
+    reply = await event.get_reply_message()
+    if not (
+        reply.media
+        and hasattr(reply.media, "document")
+        and reply.file.name
+        and reply.file.name.endswith(".py")
+    ):
+        return await eod(ok, "`Please reply to any python plugin`")
+    if reply.file.name in [x.split("/")[-1] for x in glob.glob("*s/*.py")]:
+        return await eod(ok, f"Plugin `{reply.file.name}` is already installed.")
+    dl = await reply.download_media(f"addons/{reply.file.name}")
+    if event.text[9:] != "f":
+        read = open(dl).read()
+        for dan in DANGER:
+            if re.search(dan, read):
+                os.remove(dl)
+                return await ok.edit(
+                    f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{reply.file.name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
+                )
+    plug = reply.file.name.replace(".py", "")
+    try:
+        load_addons(plug)
+    except BaseException:
+        return await eor(ok, f"**ERROR**\n\n`{traceback.format_exc()}`", time=10)
+    if plug in HELP:
+        output = "**Plugin** - `{}`\n".format(plug)
+        for i in HELP[plug]:
+            output += i
+        output += "\n© @TheUltroid"
+        await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}")
+    elif plug in CMD_HELP:
+        output = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
+        output += str(CMD_HELP[plug])
+        await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}")
     else:
-        await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
+        try:
+            x = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
+            for d in LIST[plug]:
+                x += HNDLR + d + "\n"
+            await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n`{x}`")
+        except BaseException:
+            await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓")
 
 
 async def allcmds(event):
-    x = str(LIST)
-    xx = (
-        x.replace(",", "\n")
-        .replace("[", """\n """)
-        .replace("]", "\n\n")
-        .replace("':", """ Plugin\n ✘ Commands Available-""")
-        .replace("'", "")
-        .replace("{", "")
-        .replace("}", "")
-    )
-    t = telegraph.create_page(title="Ultroid All Cmds", content=[f"{xx}"])
+    txt = ""
+    for z in LIST.keys():
+        txt += f"PLUGIN NAME: {z}\n"
+        for zz in LIST[z]:
+            txt += HNDLR + zz + "\n"
+        txt += "\n\n"
+    t = telegraph.create_page(title="Ultroid All Cmds", content=[f"{txt}"])
     w = t["url"]
-    await eod(event, f"All Ultroid Cmds : [Click Here]({w})", link_preview=False)
+    await eor(event, f"All Ultroid Cmds : [Click Here]({w})", link_preview=False)
 
 
 # ------------------Some Small Funcs----------------
@@ -937,41 +928,6 @@ async def def_logs(ult):
         thumb="resources/extras/ultroid.jpg",
         caption=f"**Ultroid Logs.**",
     )
-
-
-# ---------------- Calculator Fucn---------------
-
-
-async def calcc(cmd, event):
-    wtf = f"print({cmd})"
-    old_stderr = sys.stderr
-    old_stdout = sys.stdout
-    redirected_output = sys.stdout = io.StringIO()
-    redirected_error = sys.stderr = io.StringIO()
-    stdout, stderr, exc = None, None, None
-    try:
-        await aexecc(wtf, event)
-    except Exception:
-        exc = traceback.format_exc()
-    stdout = redirected_output.getvalue()
-    stderr = redirected_error.getvalue()
-    sys.stdout = old_stdout
-    sys.stderr = old_stderr
-    evaluation = ""
-    if exc:
-        evaluation = exc
-    elif stderr:
-        evaluation = stderr
-    elif stdout:
-        evaluation = stdout
-    else:
-        evaluation = "Success"
-    return evaluation
-
-
-async def aexecc(code, event):
-    exec(f"async def __aexecc(event): " + "".join(f"\n {l}" for l in code.split("\n")))
-    return await locals()["__aexecc"](event)
 
 
 # ---------------- Random User Gen ----------------
