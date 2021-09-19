@@ -26,7 +26,6 @@ class RedisConnection(Redis):
         password,
         *args,
         platform=None,
-        logger=None,
         **kwargs,
     ):
         if ":" in host:
@@ -36,9 +35,6 @@ class RedisConnection(Redis):
         elif port in kwargs:
             port = int(kwargs["port"])
         else:
-            if logger:
-                logger.error("Port Number not found")
-                exit()
             raise RedisError("Port Number not found")
 
         kwargs["host"] = host
@@ -66,12 +62,12 @@ class RedisConnection(Redis):
         if self.get(str(key)):
             try:
                 data = eval(self.get(str(key)))
-            except BaseException:
+            except:
                 data = self.get(str(key))
         return data
 
     def delete(self, key):
-        return True if self.delete(str(key)) == 1 else False
+        return bool(self.delete(str(key)))
 
 
 def session_file():
