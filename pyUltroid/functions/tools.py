@@ -89,7 +89,7 @@ def is_url_ok(url):
         return None
     except BaseException:
         return False
-    return r.status_code == 200
+    return r.ok
 
 
 # ~~~~~~~~~~~~~~~Saavn Downloader~~~~~~~~~~~~~~~
