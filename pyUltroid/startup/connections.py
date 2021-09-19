@@ -62,7 +62,7 @@ class RedisConnection(Redis):
         if self.get(str(key)):
             try:
                 data = eval(self.get(str(key)))
-            except:
+            except BaseException:
                 data = self.get(str(key))
         return data
 
