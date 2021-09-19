@@ -62,7 +62,13 @@ class RedisConnection(Redis):
         return self.set(str(key), str(value))
 
     def get(self, key):
-        return eval(self.get(str(key))) if self.get(str(key)) else None
+        data = None
+        if self.get(str(key)):
+            try:
+                data = eval(self.get(str(key)))
+            except:
+                data = self.get(str(key))
+        return data
 
     def delete(self, key):
         return True if self.delete(str(key)) == 1 else False
