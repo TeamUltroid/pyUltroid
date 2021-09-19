@@ -8,7 +8,7 @@
 import os
 
 from redis import Redis
-from safety.tools import *  # disable: pylint
+#from safety.tools import *  # disable: pylint
 from telethon import TelegramClient
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
@@ -54,10 +54,10 @@ class RedisConnection(Redis):
                 kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
         super().__init__(**kwargs)
 
-    def set(self, key, value):
+    def set_redis(self, key, value):
         return self.set(str(key), str(value))
 
-    def get(self, key):
+    def get_redis(self, key):
         data = None
         if self.get(str(key)):
             try:
@@ -66,7 +66,7 @@ class RedisConnection(Redis):
                 data = self.get(str(key))
         return data
 
-    def delete(self, key):
+    def del_redis(self, key):
         return bool(self.delete(str(key)))
 
 

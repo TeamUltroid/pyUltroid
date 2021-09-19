@@ -32,7 +32,7 @@ from telethon.errors.rpcerrorlist import (
 from telethon.tl import types
 from telethon.utils import get_display_name
 
-from .. import *
+from .. import ultroid_bot, asst, HNDLR, SUDO_HNDLR, udB
 from ..dB import DEVLIST
 from ..dB._core import LIST, LOADED
 from ..dB.sudos import is_fullsudo
@@ -40,7 +40,7 @@ from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
 from ..version import __version__ as pyver
 from ..version import ultroid_version as ult_ver
-from . import owner_and_sudos, should_allow_sudo, ultroid_bot
+from . import owner_and_sudos, should_allow_sudo
 from ._assistant import admin_check
 from ._wrappers import eod
 

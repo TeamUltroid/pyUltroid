@@ -7,4 +7,7 @@
 
 # from .. import LOGS, udB, ultroid_bot  # ignore: pylint
 # from ..misc._supporter import eod, eor  # ignore: pylint
-from ..startup.connections import DANGER
+
+
+
+# from ..startup.connections import DANGER

@@ -22,10 +22,17 @@ except ImportError:
 
     aiohttp = None
 
-import heroku3
+try:
+    import heroku3
+except ImportError:
+    heroku3 = None
+
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
-from html_telegraph_poster import TelegraphPoster
+try:
+    from html_telegraph_poster import TelegraphPoster
+except ImportError:
+    TelegraphPoster = None
 from telethon.helpers import _maybe_await
 from telethon.tl import types
 from telethon.utils import get_display_name
