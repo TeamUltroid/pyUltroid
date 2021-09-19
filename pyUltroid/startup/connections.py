@@ -22,31 +22,24 @@ from .exceptions import RedisError
 class RedisConnection(Redis):
     def __init__(
         self,
-        host: str = None,
-        port: int = None,
-        password: str = None,
-        platform: str = None,
-        logger=None,
+        host,
+        password,
         *args,
+        platform=None,
         **kwargs,
     ):
-
-        self.host = host
-        self.logger = logger
-
-        if port:
-            pass
-        elif ":" in host:
-            spli_ = self.host.split(":")
+        if ":" in host:
+            spli_ = host.split(":")
             host = spli_[0]
             port = int(spli_[-1])
+        elif port in kwargs:
+            port = int(kwargs["port"])
         else:
             raise RedisError("Port Number not found")
 
         kwargs["host"] = host
         kwargs["password"] = password
         kwargs["port"] = port
-        super().__init__(**kwargs)
 
         if platform.lower() == "qovery" and not host:
             var, hash, host, password = "", "", "", ""
@@ -60,6 +53,15 @@ class RedisConnection(Redis):
                 kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash}_PORT")
                 kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
         super().__init__(**kwargs)
+
+    def set(self, key, value):
+        return self.set(str(key), str(value))
+
+    def get(self, key):
+        return eval(self.get(str(key))) if self.get(str(key)) else None
+
+    def delete(self, key):
+        return True if self.delete(str(key)) == 1 else False
 
 
 def session_file():
