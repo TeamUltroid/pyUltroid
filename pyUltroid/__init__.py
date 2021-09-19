@@ -53,6 +53,7 @@ udB = RedisConnection(
     host=Var.REDIS_URI,
     password=Var.REDIS_PASSWORD,
     platform=HOSTED_ON,
+    logger=LOGS,
     decode_responses=True,
     socket_timeout=5,
     retry_on_timeout=True,
