@@ -25,7 +25,8 @@ class RedisConnection(Redis):
         host,
         password,
         *args,
-        platform=None,
+        platform = None,
+        logger = None,
         **kwargs,
     ):
         if ":" in host:
@@ -35,6 +36,9 @@ class RedisConnection(Redis):
         elif port in kwargs:
             port = int(kwargs["port"])
         else:
+            if logger:
+                logger.error("Port Number not found")
+                exit()
             raise RedisError("Port Number not found")
 
         kwargs["host"] = host
