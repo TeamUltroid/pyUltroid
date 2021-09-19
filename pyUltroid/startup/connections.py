@@ -25,8 +25,8 @@ class RedisConnection(Redis):
         host,
         password,
         *args,
-        platform = None,
-        logger = None,
+        platform=None,
+        logger=None,
         **kwargs,
     ):
         if ":" in host:
