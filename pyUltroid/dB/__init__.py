@@ -1,4 +1,3 @@
-
 DEVLIST = [
     719195224,  # @xditya
     1322549723,  # @danish_00

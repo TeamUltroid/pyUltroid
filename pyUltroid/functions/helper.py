@@ -29,6 +29,7 @@ except ImportError:
 
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+
 try:
     from html_telegraph_poster import TelegraphPoster
 except ImportError:

@@ -9,5 +9,4 @@
 # from ..misc._supporter import eod, eor  # ignore: pylint
 
 
-
 # from ..startup.connections import DANGER

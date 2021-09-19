@@ -8,7 +8,8 @@
 import os
 
 from redis import Redis
-#from safety.tools import *  # disable: pylint
+
+# from safety.tools import *  # disable: pylint
 from telethon import TelegramClient
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
