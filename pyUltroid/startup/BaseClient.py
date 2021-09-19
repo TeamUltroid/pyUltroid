@@ -26,8 +26,6 @@ class UltroidClient(TelegramClient):
         super().__init__(session, **kwargs)
 
         if plugins_path:
-            if not plugins_path.endswith("/*"):
-                plugins_path = plugins_path + "/*.py"
             self.logger.info("~" * 20 + " Installing Plugins " + "~" * 20)
             Loader(path=plugins_path, key="Official", logger=self.logger).load()
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
