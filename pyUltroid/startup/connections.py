@@ -46,9 +46,9 @@ class RedisConnection(Redis):
             for vars in os.environ:
                 if vars.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
                     var = vars
-            if var != "":
+            if var:
                 hash = var.split("_", maxsplit=2)[1].split("_")[0]
-            if hash != "":
+            if hash:
                 kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash}_HOST")
                 kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash}_PORT")
                 kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
@@ -105,10 +105,10 @@ def where_hosted():
         return "railway"
     elif os.getenv("KUBERNETES_PORT"):
         return "qovery"
+    elif os.getenv("WINDOW"):
+        return "windows"
     elif os.getenv("HOSTNAME"):
         return "github actions"
     elif os.getenv("ANDROID_ROOT"):
         return "termux"
-    elif os.getenv("WINDOW"):
-        return "windows"
     return "local"
