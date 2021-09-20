@@ -80,12 +80,12 @@ def load_addons(plugin_name):
         from ..dB._core import ADDONS, HELP
         from ..misc import _supporter as xxx
         from ..misc._assistant import (
-        asst_cmd,
-        callback,
-        in_pattern,
-        inline,
-        inline_owner,
-        owner,
+            asst_cmd,
+            callback,
+            in_pattern,
+            inline,
+            inline_owner,
+            owner,
         )
         from ..misc._decorators import ultroid_cmd
         from ..misc._supporter import Config, admin_cmd, sudo_cmd
