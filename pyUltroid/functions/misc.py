@@ -13,7 +13,7 @@ import requests
 from bs4 import BeautifulSoup as bs
 from faker import Faker
 from telegraph import Telegraph
-
+from random import shuffle
 from ..dB._core import LIST
 from . import udB, ultroid_bot
 from .tools import async_searcher
@@ -70,13 +70,16 @@ def ReTrieveFile(input_file_name):
 # @New-Dev0
 
 
-async def unsplashsearch(query, limit=None):
+async def unsplashsearch(query, limit=None, shuf=True):
     query = query.replace(" ", "-")
     base_ = "https://unsplash.com"
     link = base_ + "/s/photos/" + query
     extra = await async_searcher(link)
     res = bs(extra, "html.parser", from_encoding="utf-8")
-    all = res.find_all("a", "_2Mc8_")[:limit]
+    all = res.find_all("a", "_2Mc8_")
+    if shuf:
+        shuffle(all)
+    all = all[:limit]
     images_src = []
     for img in all:
         ct = await async_searcher(base_ + img["href"])
@@ -84,6 +87,7 @@ async def unsplashsearch(query, limit=None):
         uri = bst.find_all("img", "oCCRx")[0]["src"]
         images_src.append(uri)
     return images_src
+    
 
 
 # ------------------GoGoAnime Scrapper----------------
