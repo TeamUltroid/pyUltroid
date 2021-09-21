@@ -6,9 +6,8 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
-import random
 import re
-from random import shuffle
+from random import shuffle, choice, randrange
 
 import requests
 from bs4 import BeautifulSoup as bs
@@ -16,7 +15,7 @@ from faker import Faker
 from telegraph import Telegraph
 
 from ..dB._core import LIST
-from . import udB, ultroid_bot
+from . import udB, ultroid_bot, some_random_headers
 from .tools import async_searcher
 
 # -------------
@@ -30,13 +29,38 @@ telegraph.create_account(short_name="Ultroid Cmds List")
 async def randomchannel(
     tochat, channel, range1, range2, caption=None, client=ultroid_bot
 ):
-    do = random.randrange(range1, range2)
+    do = randrange(range1, range2)
     async for x in client.iter_messages(channel, add_offset=do, limit=1):
         caption = caption or x.text
         try:
             await client.send_message(tochat, caption, file=x.media)
         except BaseException:
             pass
+
+
+#--------------------------------------------------
+
+
+async def google_search(query):
+    query = query.replace(" ", "+")
+    headers = {
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "User-Agent": choice(some_random_headers),
+    }
+    soup = bs(await async_searcher("https://google.com/search?q="+query, headers=headers), "html.parser")
+    another_soup = soup.find_all("div", class_="ZINbbc xpd O9g5cc uUPGi")
+    results = []
+    result = []
+    for someone in another_soup:
+        results.append(someone.find_all("div", class_="kCrYT"))
+    for data in results:
+        try:
+            if len(data) > 1:
+                result.append({"title":data[0].h3.text, "link":data[0].a["href"],"description":data[1].text})
+        except:
+            pass
+    return result
 
 
 # ----------------------------------------------------
