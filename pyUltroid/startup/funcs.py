@@ -268,7 +268,7 @@ async def customize():
 
 async def plug(plugin_channels):
     from .. import LOGS, ultroid_bot
-    from ..startup.utils import load_addons
+    from .utils import load_addons
 
     if not os.path.exists("addons"):
         os.mkdir("addons")

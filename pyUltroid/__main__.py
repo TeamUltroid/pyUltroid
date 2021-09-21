@@ -6,7 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
-from . import HOSTED_ON, LOGS, Var, udB, ultroid_bot
+from . import *
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff
 from .startup.loader import load_other_plugins
 
@@ -41,7 +41,7 @@ vcbot = udB.get("VCBOT") or Var.VCBOT
 if HOSTED_ON == "railway" and not udB.get("VCBOT"):
     vcbot = "False"
 
-load_other_plugins(addons="False", pmbot=pmbot, manager=manager, vcbot=vcbot)
+load_other_plugins(addons="False", pmbot=pmbot, manager=manager, vcbot=vcbot, udB=udB)
 
 suc_msg = """
             ----------------------------------------------------------------------

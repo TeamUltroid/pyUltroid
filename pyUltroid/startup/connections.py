@@ -15,6 +15,7 @@ from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
 
 from ..configs import Var
+from . import *
 from .exceptions import RedisError
 
 # from pyUltroid import LOGS
@@ -81,7 +82,7 @@ def session_file():
     return _session
 
 
-def vc_connection(udB, ultroid_bot, LOGS):
+def vc_connection(udB, ultroid_bot):
     VC_SESSION = Var.VC_SESSION or udB.get("VC_SESSION")
     if VC_SESSION:
         if VC_SESSION == Var.SESSION:

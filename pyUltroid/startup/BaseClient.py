@@ -8,8 +8,7 @@ from telethon.errors import (
 )
 from telethon.utils import get_display_name
 
-# from .. import udB
-from .loader import Loader
+from . import *
 
 
 class UltroidClient(TelegramClient):
@@ -17,21 +16,16 @@ class UltroidClient(TelegramClient):
         self,
         session,
         *args,
-        plugins_path=None,
+        logger=LOGS,
         bot_token=None,
-        logger=None,
+        udB=None,
         **kwargs,
     ):
         self.logger = logger or getLogger("pyUltroid")
         super().__init__(session, **kwargs)
-
-        if plugins_path:
-            self.logger.info("~" * 20 + " Installing Plugins " + "~" * 20)
-            Loader(path=plugins_path, key="Official", logger=self.logger).load()
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
     async def start_client(self, **kwargs):
-        from .. import udB
 
         self.logger.info("Trying to login.")
         try:

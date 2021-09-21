@@ -11,7 +11,15 @@ from importlib import import_module
 
 from git import Repo
 
-from .utils import load_addons, load_assistant, load_manager, load_pmbot, load_vc
+from . import *
+from .utils import (
+    load_addons,
+    load_assistant,
+    load_manager,
+    load_plugins,
+    load_pmbot,
+    load_vc,
+)
 
 
 class Loader:
@@ -25,9 +33,9 @@ class Loader:
         for plugin in files:
             if not func:
                 func = import_module
-                plugin = plugin[:-3].replace("/", ".")
+                plugin = plugin.replace("/", ".").replace(".py", "")
             else:
-                plugin = plugin.split("/")[-1]
+                plugin = plugin.split("/")[-1].replace(".py", "")
             try:
                 func(plugin)
                 if log:
@@ -38,8 +46,10 @@ class Loader:
         self._logger.info("-" * 70)
 
 
-def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
-    from .. import LOGS, udB
+def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None, udB=None):
+
+    # for official
+    Loader(path="plugins", key="Official", logger=LOGS).load(func=load_plugins)
 
     # for assistant
     Loader(path="assistant", key="Assistant", logger=LOGS).load(func=load_assistant)
