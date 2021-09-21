@@ -351,3 +351,5 @@ async def ready():
         await ultroid_bot(JoinChannelRequest("@TheUltroid"))
     except ChannelsTooMuchError:
         LOGS.info("Join @TheUltroid to know about new Updates...")
+    except Exception as er:
+        LOGS.exception(er)
