@@ -7,7 +7,7 @@
 
 
 import re
-from random import shuffle, choice, randrange
+from random import choice, randrange, shuffle
 
 import requests
 from bs4 import BeautifulSoup as bs
@@ -15,7 +15,7 @@ from faker import Faker
 from telegraph import Telegraph
 
 from ..dB._core import LIST
-from . import udB, ultroid_bot, some_random_headers
+from . import some_random_headers, udB, ultroid_bot
 from .tools import async_searcher
 
 # -------------
@@ -38,17 +38,20 @@ async def randomchannel(
             pass
 
 
-#--------------------------------------------------
+# --------------------------------------------------
 
 
 async def google_search(query):
     query = query.replace(" ", "+")
     headers = {
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-            "User-Agent": choice(some_random_headers),
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "User-Agent": choice(some_random_headers),
     }
-    soup = bs(await async_searcher("https://google.com/search?q="+query, headers=headers), "html.parser")
+    soup = bs(
+        await async_searcher("https://google.com/search?q=" + query, headers=headers),
+        "html.parser",
+    )
     another_soup = soup.find_all("div", class_="ZINbbc xpd O9g5cc uUPGi")
     results = []
     result = []
@@ -57,8 +60,14 @@ async def google_search(query):
     for data in results:
         try:
             if len(data) > 1:
-                result.append({"title":data[0].h3.text, "link":data[0].a["href"],"description":data[1].text})
-        except:
+                result.append(
+                    {
+                        "title": data[0].h3.text,
+                        "link": data[0].a["href"],
+                        "description": data[1].text,
+                    }
+                )
+        except BaseException:
             pass
     return result
 

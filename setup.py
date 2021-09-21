@@ -2,7 +2,6 @@ import re
 
 import setuptools
 
-
 with open("pyUltroid/version.py", "rt", encoding="utf8") as x:
     version = re.search(r'__version__ = "(.*?)"', x.read()).group(1)
 
