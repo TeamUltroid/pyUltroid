@@ -14,9 +14,9 @@ from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
-from pyUltroid.functions.tools import async_searcher
+from .tools import async_searcher
 
-from .helper import async_searcher, dler, download_file, humanbytes, uploader
+from .helper import dler, download_file, humanbytes, uploader
 
 
 def get_yt_link(query):
