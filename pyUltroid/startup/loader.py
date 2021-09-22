@@ -12,7 +12,7 @@ from importlib import import_module
 from git import Repo
 
 from . import *
-from .utils import load_addons
+from .utils import load_addons, load_vc
 
 
 class Loader:
@@ -73,4 +73,4 @@ def load_other_plugins(addons="False", pmbot=None, manager=None, vcbot=None, udB
 
     # vc bot
     if vcbot == "True":
-        Loader(path="vcbot", key="VCBot", logger=LOGS).load()
+        Loader(path="vcbot", key="VCBot", logger=LOGS).load(func=load_vc)
