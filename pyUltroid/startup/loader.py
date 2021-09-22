@@ -27,12 +27,12 @@ class Loader:
             if not func:
                 func = import_module
                 plugin = plugin.replace("/", ".").replace(".py", "")
-            #else:
-                #plugin = plugin.split("/")[-1].replace(".py", "")
+            # else:
+            # plugin = plugin.split("/")[-1].replace(".py", "")
             try:
                 func(plugin)
                 if log:
-                    
+
                     self._logger.info(f"Ultroid - {self.key} -  Installed - {plugin}")
             except Exception as exc:
                 self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
