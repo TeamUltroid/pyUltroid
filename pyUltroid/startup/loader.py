@@ -47,7 +47,7 @@ class Loader:
 
 
 def load_other_plugins(
-    official=None, addons=None, pmbot=None, manager=None, vcbot=None, udB=None
+    official=None, addons="False", pmbot=None, manager=None, vcbot=None, udB=None
 ):
 
     # for official
