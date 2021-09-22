@@ -26,7 +26,8 @@ class Loader:
         for plugin in files:
             if not func:
                 func = import_module
-                plugin = plugin.replace("/", ".").replace(".py", "")
+                plugin = plugin.replace(".py", "")
+                plugin = plugin.replace("/", ".")
             # else:
             # plugin = plugin.split("/")[-1].replace(".py", "")
             try:
