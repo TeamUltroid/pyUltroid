@@ -6,7 +6,11 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 from decouple import config
+from decouple import config
 
+from dotenv import find_dotenv, load_dotenv
+
+load_dotenv(find_dotenv())
 
 class Var:
     # mandatory
