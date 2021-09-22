@@ -47,15 +47,14 @@ class Loader:
 
 
 def load_other_plugins(
-    official=None, addons="False", pmbot=None, manager=None, vcbot=None, udB=None
+    addons="False", pmbot=None, manager=None, vcbot=None, udB=None
 ):
 
     # for official
-    if official:
-        Loader(path="plugins", key="Official", logger=LOGS).load(func=load_plugins)
+    Loader(path="plugins", key="Official", logger=LOGS).load(func=load_plugins)
 
     # for assistant
-    Loader(path="assistant", key="Assistant", logger=LOGS).load(func=load_assistant)
+    #Loader(path="assistant", key="Assistant", logger=LOGS).load(func=load_assistant)
 
     # for addons
     if addons == "True" or not addons:
