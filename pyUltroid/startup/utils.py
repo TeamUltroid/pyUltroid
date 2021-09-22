@@ -5,7 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from importlib import util
+from importlib import util, import_module
 from pathlib import Path
 from sys import modules
 
