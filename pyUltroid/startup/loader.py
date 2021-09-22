@@ -42,10 +42,10 @@ class Loader:
 def load_other_plugins(addons="False", pmbot=None, manager=None, vcbot=None, udB=None):
 
     # for official
-    Loader(path="plugins", key="Official", logger=LOGS).load(func=load_plugins)
+    Loader(path="plugins", key="Official", logger=LOGS).load()
 
     # for assistant
-    # Loader(path="assistant", key="Assistant", logger=LOGS).load(func=load_assistant)
+    # Loader(path="assistant", key="Assistant", logger=LOGS).load()
 
     # for addons
     if addons == "True" or not addons:
@@ -66,15 +66,14 @@ def load_other_plugins(addons="False", pmbot=None, manager=None, vcbot=None, udB
     # group manager
     if manager == "True":
         Loader(path="assistant/manager", key="Group Manager", logger=LOGS).load(
-            func=load_manager
         )
 
     # chat via assistant
     if pmbot == "True":
         Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(
-            log=False, func=load_pmbot
+            log=False
         )
 
     # vc bot
     if vcbot == "True":
-        Loader(path="vcbot", key="VCBot", logger=LOGS).load(func=load_vc)
+        Loader(path="vcbot", key="VCBot", logger=LOGS).load()
