@@ -12,7 +12,7 @@ from importlib import import_module
 from git import Repo
 
 from . import *
-from .utils import load_addons, load_manager, load_plugins, load_pmbot, load_vc
+from .utils import load_addons
 
 
 class Loader:
@@ -65,14 +65,11 @@ def load_other_plugins(addons="False", pmbot=None, manager=None, vcbot=None, udB
 
     # group manager
     if manager == "True":
-        Loader(path="assistant/manager", key="Group Manager", logger=LOGS).load(
-        )
+        Loader(path="assistant/manager", key="Group Manager", logger=LOGS).load()
 
     # chat via assistant
     if pmbot == "True":
-        Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(
-            log=False
-        )
+        Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(log=False)
 
     # vc bot
     if vcbot == "True":
