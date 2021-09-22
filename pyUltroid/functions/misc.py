@@ -144,7 +144,7 @@ async def airing_eps():
     return air
 
 
-def get_anime_src_res(search_str):
+async def get_anime_src_res(search_str):
     query = """
     query ($id: Int,$search: String) {
       Media (id: $id, type: ANIME,search: $search) {
