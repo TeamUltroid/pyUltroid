@@ -15,7 +15,8 @@ import emoji
 from telethon.tl import functions, types
 from telethon.utils import get_input_location
 
-from . import eor, ultroid_bot
+from .. import ultroid_bot
+from ..misc._wrappers import eor
 
 # -----------
 # @buddhhu
