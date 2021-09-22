@@ -31,7 +31,7 @@ async def download_yt(event, link, ytd):
         return
     title = info["title"]
     id = info["id"]
-    thumb = title + ".jpg"
+    thumb = id + ".jpg"
     await download_file(f"https://i.ytimg.com/vi/{id}/hqdefault.jpg", thumb)
     duration = info["duration"]
     ext = "." + ytd["outtmpl"].split(".")[-1]
