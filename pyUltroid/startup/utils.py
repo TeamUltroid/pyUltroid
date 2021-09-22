@@ -255,27 +255,14 @@ def load_manager(plugin_name):
 def load_vc(plugin_name):
     if plugin_name.startswith("__"):
         return
-    from .. import HNDLR, LOGS, asst, udB, ultroid_bot, vcClient
+
     from ..dB._core import VC_HELP
 
-    path = Path(f"vcbot/{plugin_name}.py")
-    name = "vcbot.{}".format(plugin_name)
-    spec = util.spec_from_file_location(name, path)
-    mod = util.module_from_spec(spec)
-    mod.ultroid_bot = ultroid_bot
-    mod.ultroid = ultroid_bot
-    mod.bot = ultroid_bot
-    mod.Redis = udB.get
-    mod.udB = udB
-    mod.asst = asst
-    mod.vcClient = vcClient
-    mod.LOGS = LOGS
-    spec.loader.exec_module(mod)
-    modules["vcbot." + plugin_name] = mod
+    plugin = import_module("vcbot.{}".format(plugin_name))
     try:
         VC_HELP.update(
             {
-                plugin_name: modules[f"vcbot.{plugin_name}"].__doc__.format(
+                plugin_name: plugin.__doc__.format(
                     i=udB["VC_HNDLR"] if udB.get("VC_HNDLR") else HNDLR
                 )
                 + "\n"
