@@ -41,7 +41,7 @@ vcbot = udB.get("VCBOT") or Var.VCBOT
 if HOSTED_ON == "railway" and not udB.get("VCBOT"):
     vcbot = "False"
 
-#load_other_plugins(addons="False", pmbot=pmbot, manager=manager, vcbot=vcbot, udB=udB)
+# load_other_plugins(addons="False", pmbot=pmbot, manager=manager, vcbot=vcbot, udB=udB)
 load_other_plugins(vcbot="True")
 suc_msg = """
             ----------------------------------------------------------------------
