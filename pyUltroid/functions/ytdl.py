@@ -14,7 +14,7 @@ from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
-from .helper import dler, download_file, humanbytes, uploader
+from .helper import download_file, humanbytes, uploader
 from .tools import async_searcher
 
 
