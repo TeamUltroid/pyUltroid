@@ -20,7 +20,7 @@ from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
 
 from .. import LOGS, ultroid_bot
-from .helper import bash, fast_download, json_parser
+from .helper import bash, fast_download
 
 try:
     import cv2
