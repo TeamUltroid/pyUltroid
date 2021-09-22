@@ -28,6 +28,7 @@ class RedisConnection(Redis):
         password,
         *args,
         platform=None,
+        logger=None,
         **kwargs,
     ):
         if ":" in host:
@@ -54,6 +55,8 @@ class RedisConnection(Redis):
                 kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash}_HOST")
                 kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash}_PORT")
                 kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
+        if logger:
+            logger.info("Connecting to redis database")
         super().__init__(**kwargs)
 
     def set_redis(self, key, value):
