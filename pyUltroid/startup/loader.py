@@ -28,7 +28,7 @@ class Loader:
             if func == import_module:
                 plugin = plugin.replace("/", ".")
             else:
-                plugin = plugin.split("/")
+                plugin = plugin.split("/")[-1]
             try:
                 func(plugin)
                 if log:
