@@ -10,9 +10,10 @@ import os
 from importlib import import_module
 
 from git import Repo
+
+from .. import *
 from ..dB._core import HELP
 from . import *
-from .. import *
 from .utils import load_addons, load_vc
 
 
