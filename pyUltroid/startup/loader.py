@@ -40,7 +40,7 @@ class Loader:
         self._logger.info("-" * 70)
 
 
-def load_other_plugins(addons="False", pmbot=None, manager=None, vcbot=None, udB=None):
+def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None, udB=None):
 
     # for official
     Loader(path="plugins", key="Official", logger=LOGS).load()
