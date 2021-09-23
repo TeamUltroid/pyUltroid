@@ -16,6 +16,9 @@ from .startup.connections import (
     where_hosted,
 )
 from .startup.funcs import autobot
+import time
+
+start_time = time.time()
 
 HOSTED_ON = where_hosted()
 
