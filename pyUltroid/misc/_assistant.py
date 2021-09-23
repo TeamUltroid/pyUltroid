@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import functools
+import re
 
 from telethon import Button
 from telethon.errors.rpcerrorlist import UserNotParticipantError
@@ -83,7 +84,6 @@ def asst_cmd(**kwargs):
         if "pattern" in kwargs:
             kwargs["pattern"] = re.compile("^/", kwargs["pattern"])
         asst.add_event_handler(func, NewMessage(**kwargs))
-
     return ult
 
 
