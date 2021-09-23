@@ -282,7 +282,9 @@ async def get_random_user_data():
 async def get_synonyms_or_antonyms(word, type_of_words):
     if type_of_words not in ["synonyms", "antonyms"]:
         return "Dude! Please give a corrent type of words you want."
-    s = await async_searcher(f"https://tuna.thesaurus.com/pageData/{word}", re_json=True)
+    s = await async_searcher(
+        f"https://tuna.thesaurus.com/pageData/{word}", re_json=True
+    )
     li_1 = [
         y
         for x in [
