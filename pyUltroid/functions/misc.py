@@ -41,6 +41,21 @@ async def randomchannel(
 # --------------------------------------------------
 
 
+async def quora_scrape(query):
+    query = query.replace(" ", "%20")
+    headers = {
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "User-Agent": choice(some_random_headers),
+    }
+    parsed = await async_searcher("https://quora.com/search?q="+query, headers=headers)
+    data = re.findall(r'window\.ansFrontendGlobals\.data\.inlineQueryResults\.results\[".*?"\] = ("{.*}");', x)[-1]
+    return json_parser(data)
+
+
+# --------------------------------------------------
+
+
 async def google_search(query):
     query = query.replace(" ", "+")
     headers = {
