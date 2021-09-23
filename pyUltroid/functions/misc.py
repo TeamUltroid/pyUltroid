@@ -274,3 +274,19 @@ async def get_random_user_data():
     )
     pic = data_["picture"]["large"]
     return msg, pic
+
+# Dictionary (Synonyms and Antonyms)
+async def get_synonyms_or_antonyms(word, type_of_words):
+        if type_of_words not in ["synonyms", "antonyms"]:
+            return "Dude! Please give a corrent type of words you want."
+        s = json_parser(await async_searcher(f"https://tuna.thesaurus.com/pageData/{word}"))
+        li_1 = [
+            y
+            for x in [
+                s["data"]["definitionData"]["definitions"][0][type_of_words],
+                s["data"]["definitionData"]["definitions"][1][type_of_words],
+            ]
+            for y in x
+        ]
+        li = [y["term"] for y in li_1]
+        return li
