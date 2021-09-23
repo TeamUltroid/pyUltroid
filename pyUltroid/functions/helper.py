@@ -358,7 +358,7 @@ def time_formatter(milliseconds):
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
     weeks, days = divmod(days, 7)
-    to_return = (
+    tmp = (
         ((str(weeks) + "w:") if weeks else "")
         + ((str(days) + "d:") if days else "")
         + ((str(hours) + "h:") if hours else "")
