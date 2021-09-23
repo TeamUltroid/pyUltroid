@@ -82,9 +82,7 @@ def asst_cmd(**kwargs):
     def ult(func):
         if "pattern" in kwargs:
             kwargs["pattern"] = re.compile("^/", kwargs["pattern"])
-        asst.add_event_handler(
-            func, NewMessage(**kwargs)
-        )
+        asst.add_event_handler(func, NewMessage(**kwargs))
 
     return ult
 
@@ -92,6 +90,7 @@ def asst_cmd(**kwargs):
 def callback(**kwargs):
     def ultr(func):
         asst.add_event_handler(func, CallbackQuery(**kwargs))
+
     return ultr
 
 
