@@ -87,23 +87,16 @@ def asst_cmd(**kwargs):
     return ult
 
 
-def callback(**kwargs):
+def callback(data=None, **kwargs):
     def ultr(func):
-        asst.add_event_handler(func, CallbackQuery(**kwargs))
+        asst.add_event_handler(func, CallbackQuery(data=data, **kwargs))
 
     return ultr
 
 
-def inline():
-    def ultr(func):
-        asst.add_event_handler(func, InlineQuery)
-
-    return ultr
-
-
-def in_pattern(pat):
+def in_pattern(pattern=None, **kwargs):
     def don(func):
-        asst.add_event_handler(func, InlineQuery(pattern=pat))
+        asst.add_event_handler(func, InlineQuery(pattern=pattern, **kwargs))
 
     return don
 
