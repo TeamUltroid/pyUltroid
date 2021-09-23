@@ -21,7 +21,7 @@ class Loader:
         self.key = key
         self._logger = logger
 
-    def load(self, log=True, func=import_module):
+    def load(self, log=True, func=import_module, cmd_help=HELP):
         files = sorted(glob.glob(self.path + "/*.py"))
         for plugin in files:
             plugin = plugin.replace(".py", "")
@@ -30,7 +30,7 @@ class Loader:
             else:
                 plugin = plugin.split("/")[-1]
             try:
-                func(plugin)
+                doc = func(plugin)
                 if log:
                     if func == import_module:
                         plugin = plugin.split(".")[-1]
@@ -38,6 +38,18 @@ class Loader:
             except Exception as exc:
                 self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
                 self._logger.exception(exc)
+            if cmd_help:
+                if self.key in cmd_help.keys():
+                    update_cmd = cmd_help[self.key]
+                    try:
+                        update_cmd.append({plugin: doc.__doc__.format(i=HNDLR)})
+                    except:
+                        pass
+                else:
+                    try:
+                        cmd_help.update({self.key: [{plugin: doc.__doc__.format(i=HNDLR)}]})
+                    except:
+                        pass
         self._logger.info("-" * 70)
 
 
