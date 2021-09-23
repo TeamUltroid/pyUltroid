@@ -15,9 +15,9 @@ from faker import Faker
 from telegraph import Telegraph
 
 from ..dB._core import LIST
-from . import some_random_headers, udB, ultroid_bot
+from . import some_random_headers
 from .tools import async_searcher
-
+from .. import *
 # -------------
 
 telegraph = Telegraph()
