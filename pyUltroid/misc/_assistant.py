@@ -78,20 +78,20 @@ def inline_owner():
     return decorator
 
 
-def asst_cmd(dec, from_users=None):
+def asst_cmd(**kwargs):
     def ult(func):
-        pattern = "^/" + dec  # todo - handlers for assistant?
+        if "pattern" in kwargs:
+            kwargs["pattern"] = re.compile("^/", kwargs["pattern"])
         asst.add_event_handler(
-            func, NewMessage(incoming=True, pattern=pattern, from_users=from_users)
+            func, NewMessage(**kwargs)
         )
 
     return ult
 
 
-def callback(dat):
+def callback(**kwargs):
     def ultr(func):
-        asst.add_event_handler(func, CallbackQuery(data=dat))
-
+        asst.add_event_handler(func, CallbackQuery(**kwargs))
     return ultr
 
 
