@@ -16,7 +16,7 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 from telethon import events
 
-from .. import asst, udB, ultroid_bot
+from .. import *
 from .helper import humanbytes, time_formatter
 
 OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
