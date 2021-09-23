@@ -50,13 +50,17 @@ async def get_ofox(codename):
 
 
 async def async_searcher(
-    url, post=None, headers=None, params=None, json=None, ssl=None
+    url, post=None, headers=None, params=None, json=None, ssl=None, re_json=False
 ):
     async with aiohttp.ClientSession(headers=headers) as session:
         if not post:
             async with session.get(url, params=params, ssl=ssl) as resp:
+                if re_json:
+                    return await resp.json()
                 return await resp.text()
         async with session.post(url, json=json, ssl=ssl) as resp:
+            if re_json:
+                return await resp.json()
             return await resp.text()
 
 
