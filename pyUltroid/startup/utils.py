@@ -83,7 +83,6 @@ def load_addons(plugin_name):
             asst_cmd,
             callback,
             in_pattern,
-            inline,
             inline_owner,
             owner,
         )
@@ -107,7 +106,6 @@ def load_addons(plugin_name):
         mod.friday = ultroid_bot
         mod.owner = owner()
         mod.in_owner = inline_owner()
-        mod.inline = inline()
         mod.eod = eod
         mod.edit_delete = eod
         mod.LOGS = LOGS
