@@ -46,7 +46,7 @@ def load_other_plugins(addons="False", pmbot=None, manager=None, vcbot=None, udB
     Loader(path="plugins", key="Official", logger=LOGS).load()
 
     # for assistant
-    # Loader(path="assistant", key="Assistant", logger=LOGS).load()
+    Loader(path="assistant", key="Assistant", logger=LOGS).load()
 
     # for addons
     if addons == "True" or not addons:
