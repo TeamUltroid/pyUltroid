@@ -9,7 +9,7 @@
 import os
 import time
 from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
-
+# from safety.tools import *
 from telethon import __version__
 
 from ..version import __version__ as __pyUltroid__
