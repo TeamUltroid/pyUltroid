@@ -6,6 +6,8 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
+import time
+
 from .configs import Var
 from .startup import *
 from .startup.BaseClient import UltroidClient
@@ -16,7 +18,6 @@ from .startup.connections import (
     where_hosted,
 )
 from .startup.funcs import autobot
-import time
 
 start_time = time.time()
 
