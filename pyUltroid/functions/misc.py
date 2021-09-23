@@ -171,7 +171,7 @@ async def get_anime_src_res(search_str):
       }
     }
     """
-    tsjson = json_parser(
+    tjson = json_parser(
         await async_searcher(
             "https://graphql.anilist.co",
             json={"query": query, "variables": {"search": search_str}},
