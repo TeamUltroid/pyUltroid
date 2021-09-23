@@ -41,8 +41,8 @@ vcbot = udB.get("VCBOT") or Var.VCBOT
 if HOSTED_ON == "railway" and not udB.get("VCBOT"):
     vcbot = "False"
 
-# load_other_plugins(addons="False", pmbot=pmbot, manager=manager, vcbot=vcbot, udB=udB)
-load_other_plugins(vcbot="True")
+load_other_plugins(addons=addons, pmbot=pmbot, manager=manager, vcbot=vcbot, udB=udB)
+
 suc_msg = """
             ----------------------------------------------------------------------
                 Ultroid has been deployed! Visit @TheUltroid for updates!!
