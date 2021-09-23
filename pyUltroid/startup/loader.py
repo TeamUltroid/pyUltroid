@@ -43,12 +43,14 @@ class Loader:
                     update_cmd = cmd_help[self.key]
                     try:
                         update_cmd.append({plugin: doc.__doc__.format(i=HNDLR)})
-                    except:
+                    except BaseException:
                         pass
                 else:
                     try:
-                        cmd_help.update({self.key: [{plugin: doc.__doc__.format(i=HNDLR)}]})
-                    except:
+                        cmd_help.update(
+                            {self.key: [{plugin: doc.__doc__.format(i=HNDLR)}]}
+                        )
+                    except BaseException:
                         pass
         self._logger.info("-" * 70)
 
