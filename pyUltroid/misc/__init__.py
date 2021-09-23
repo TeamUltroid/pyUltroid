@@ -11,7 +11,7 @@ CMD_HELP = {}
 
 
 def sudoers():
-    from .. import udB
+#    from .. import udB
 
     if udB.get("SUDOS"):
         return udB["SUDOS"].split()
@@ -19,12 +19,12 @@ def sudoers():
 
 
 def should_allow_sudo():
-    from .. import udB
+#    from .. import udB
 
     return udB.get("SUDO") == "True"
 
 
 def owner_and_sudos():
-    from .. import udB, ultroid_bot
+#    from .. import udB, ultroid_bot
 
     return [str(ultroid_bot.uid), *sudoers()]
