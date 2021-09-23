@@ -37,6 +37,7 @@ class Loader:
                     if func == import_module:
                         plugin = plugin.split(".")[-1]
                     self._logger.info(f"Ultroid - {self.key} -  Installed - {plugin}")
+                self._logger.info(doc)
             except Exception as exc:
                 self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
                 self._logger.exception(exc)
@@ -45,15 +46,15 @@ class Loader:
                     update_cmd = cmd_help[self.key]
                     try:
                         update_cmd.append({plugin: doc.__doc__.format(i=HNDLR)})
-                    except BaseException:
-                        pass
+                    except BaseException as er:
+                        LOGS.exception(er)
                 else:
                     try:
                         cmd_help.update(
                             {self.key: [{plugin: doc.__doc__.format(i=HNDLR)}]}
                         )
-                    except BaseException:
-                        pass
+                    except BaseException as em:
+                        LOGS.exception(em)
         self._logger.info("-" * 70)
 
 
