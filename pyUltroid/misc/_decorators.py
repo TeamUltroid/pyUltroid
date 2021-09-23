@@ -32,7 +32,7 @@ from telethon.errors.rpcerrorlist import (
 from telethon.tl import types
 from telethon.utils import get_display_name
 
-from .. import HNDLR, SUDO_HNDLR, asst, udB, ultroid_bot
+from .. import HNDLR, SUDO_HNDLR, asst, udB, ultroid_bot, LOGS
 from ..dB import DEVLIST
 from ..dB._core import LIST, LOADED
 from ..dB.sudos import is_fullsudo
