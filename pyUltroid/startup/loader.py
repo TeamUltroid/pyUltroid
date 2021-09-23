@@ -32,7 +32,8 @@ class Loader:
             try:
                 func(plugin)
                 if log:
-
+                    if func == import_module:
+                        plugin = plugin.split(".")[-1]
                     self._logger.info(f"Ultroid - {self.key} -  Installed - {plugin}")
             except Exception as exc:
                 self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
