@@ -383,6 +383,14 @@ def humanbytes(size):
     return f"{size:.2f} {unit}"
 
 
+def numerize(number):
+    for unit in ["", "K", "M", "B", "T"]:
+        if number < 1000:
+            break
+        number /= 1000
+    return f"{number:.2f} {unit}"
+
+
 async def progress(current, total, event, start, type_of_ps, file_name=None):
     diff = time.time() - start
     if round(diff % 10.00) == 0 or current == total:
