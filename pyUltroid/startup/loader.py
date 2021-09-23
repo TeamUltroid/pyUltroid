@@ -41,7 +41,7 @@ class Loader:
             except Exception as exc:
                 self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
                 self._logger.exception(exc)
-            if cmd_help:
+            if cmd_help or cmd_help == {}:
                 if self.key in cmd_help.keys():
                     update_cmd = cmd_help[self.key]
                     try:
