@@ -5,12 +5,11 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-# from .. import ultroid_bot  # pylint: disable
 import os
 import time
 from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
 
-from safety.tools import call_back  # *
+from safety.tools import *
 from telethon import __version__
 
 from ..version import __version__ as __pyUltroid__
@@ -20,7 +19,8 @@ if os.path.exists("ultroid.log"):
     os.remove("ultroid.log")
 
 LOGS = getLogger("pyUltLogs")
-
+TeleLogger = getLogger("Telethon")
+TeleLogger.setLevel(logging.WARNING)
 
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] - %(message)s",
