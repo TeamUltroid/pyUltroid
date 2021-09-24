@@ -83,127 +83,15 @@ def load_addons(plugin_name):
         modules["userbot.uniborgConfig"] = xxx
         spec.loader.exec_module(mod)
         modules["addons." + plugin_name] = mod
-        if plugin_name not in ADDONS:
-            ADDONS.append(plugin_name)
-        try:
-            doc = modules[f"addons.{plugin_name}"].__doc__
-            HELP.update({f"{plugin_name}": doc.format(i=HNDLR)})
-        except BaseException:
-            pass
-
-
-# for assistant
-
-
-def load_assistant(plugin_name):
-    if not plugin_name.startswith("__"):
-        from .. import HNDLR, asst, udB, ultroid_bot
-        from ..misc._assistant import (
-            asst_cmd,
-            callback,
-            in_pattern,
-            inline_owner,
-            owner,
-        )
-        from ..misc._wrappers import eod, eor
-
-        path = Path(f"assistant/{plugin_name}.py")
-        name = "assistant.{}".format(plugin_name)
-        spec = util.spec_from_file_location(name, path)
-        mod = util.module_from_spec(spec)
-        mod.ultroid_bot = ultroid_bot
-        mod.ultroid = ultroid_bot
-        mod.Redis = udB.get
-        mod.udB = udB
-        mod.bot = ultroid_bot
-        mod.asst = asst
-        mod.owner = owner()
-        mod.in_pattern = in_pattern
-        mod.in_owner = inline_owner()
-        mod.eod = eod
-        mod.eor = eor
-        mod.callback = callback
-        mod.hndlr = HNDLR
-        mod.HNDLR = HNDLR
-        mod.asst_cmd = asst_cmd
-        spec.loader.exec_module(mod)
-        modules["assistant." + plugin_name] = mod
-
-
-# msg forwarder
-
-
-def load_pmbot(plugin_name):
-    if not plugin_name.startswith("__"):
-        from .. import HNDLR, asst, udB, ultroid_bot
-        from ..misc._assistant import asst_cmd, callback, owner
-        from ..misc._wrappers import eod, eor
-
-        path = Path(f"assistant/pmbot/{plugin_name}.py")
-        name = "assistant.pmbot.{}".format(plugin_name)
-        spec = util.spec_from_file_location(name, path)
-        mod = util.module_from_spec(spec)
-        mod.ultroid_bot = ultroid_bot
-        mod.ultroid = ultroid_bot
-        mod.bot = ultroid_bot
-        mod.Redis = udB.get
-        mod.udB = udB
-        mod.asst = asst
-        mod.owner = owner()
-        mod.eod = eod
-        mod.eor = eor
-        mod.callback = callback
-        mod.hndlr = HNDLR
-        mod.HNDLR = HNDLR
-        mod.asst_cmd = asst_cmd
-        spec.loader.exec_module(mod)
-        modules["assistant.pmbot." + plugin_name] = mod
-
-
-# manager
-
-
-def load_manager(plugin_name):
-    if not plugin_name.startswith("__"):
-        from .. import asst, udB, ultroid_bot
-        from ..misc._assistant import asst_cmd, callback, owner
-        from ..misc._decorators import ultroid_cmd
-        from ..misc._wrappers import eod, eor
-
-        path = Path(f"assistant/manager/{plugin_name}.py")
-        name = "assistant.manager.{}".format(plugin_name)
-        spec = util.spec_from_file_location(name, path)
-        mod = util.module_from_spec(spec)
-        mod.ultroid_cmd = ultroid_cmd
-        mod.ultroid_bot = ultroid_bot
-        mod.ultroid = ultroid_bot
-        mod.eod = eod
-        mod.eor = eor
-        mod.callback = callback
-        mod.Redis = udB.get
-        mod.udB = udB
-        mod.asst = asst
-        mod.owner = owner()
-        mod.asst_cmd = asst_cmd
-        spec.loader.exec_module(mod)
-        modules["assistant.manager." + plugin_name] = mod
-
-
-def load_vc(plugin_name):
-    if plugin_name.startswith("__"):
-        return
-
-    from ..dB._core import VC_HELP
-
-    plugin = import_module("vcbot.{}".format(plugin_name))
-    try:
-        VC_HELP.update(
-            {
-                plugin_name: plugin.__doc__.format(
-                    i=udB["VC_HNDLR"] if udB.get("VC_HNDLR") else HNDLR
-                )
-                + "\n"
-            }
-        )
-    except BaseException:
-        pass
+        doc = modules[f"addons.{plugin_name}"].__doc__ or ""
+        if "Addons" in HELP.keys():
+                    update_cmd = HELP["Addons"]
+                    try:
+                        update_cmd.update({plugin_name: doc})
+                    except BaseException:
+                        pass
+        else:
+                    try:
+                        HELP.update({"Addons": {plugin_name: doc}})
+                    except BaseException as em:
+                        pass
