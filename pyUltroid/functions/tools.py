@@ -36,8 +36,12 @@ except ImportError:
 
 async def get_ofox(codename):
     ofox_baseurl = "https://api.orangefox.download/v3/"
-    releases = await async_searcher(ofox_baseurl + "releases?codename=" + codename, re_json=True)
-    device = await async_searcher(ofox_baseurl + "devices/get?codename=" + codename, re_json=True)
+    releases = await async_searcher(
+        ofox_baseurl + "releases?codename=" + codename, re_json=True
+    )
+    device = await async_searcher(
+        ofox_baseurl + "devices/get?codename=" + codename, re_json=True
+    )
     return device, releases
 
 
@@ -106,7 +110,9 @@ def is_url_ok(url: str):
 async def saavn_dl(query: str):
     query = query.replace(" ", "%20")
     try:
-        data = await async_searcher(url=f"https://jostapi.herokuapp.com/saavn?query={query}", re_json=True)[0]
+        data = await async_searcher(
+            url=f"https://jostapi.herokuapp.com/saavn?query={query}", re_json=True
+        )[0]
     except BaseException:
         return None, None, None, None
     try:
@@ -210,7 +216,13 @@ def make_logo(imgpath, text, funt, **args):
 async def get_paste(data: str, extension: str = "txt"):
     ssl_context = ssl.create_default_context(cafile=certifi.where())
     json = {"content": data, "extension": extension}
-    key = await async_searcher(url="https://spaceb.in/api/v1/documents/", json=json, ssl=ssl_context, post=True, re_json=True)
+    key = await async_searcher(
+        url="https://spaceb.in/api/v1/documents/",
+        json=json,
+        ssl=ssl_context,
+        post=True,
+        re_json=True,
+    )
     try:
         return True, key["payload"]["id"]
     except KeyError:
