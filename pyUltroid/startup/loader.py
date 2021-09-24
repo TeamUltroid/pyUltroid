@@ -58,7 +58,6 @@ class Loader:
                         cmd_help.update({self.key: {plugin: doc}})
                     except BaseException as em:
                         self._logger.exception(em)
-        self._logger.info("-" * 70)
 
 
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None, udB=None):
@@ -100,3 +99,5 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None, udB=No
     # vc bot
     if vcbot == "True":
         Loader(path="vcbot", key="VCBot", logger=LOGS).load()
+
+    LOGS.info("-" * 70)
