@@ -82,11 +82,15 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None, udB=No
 
     # group manager
     if manager == "True":
-        Loader(path="assistant/manager", key="Group Manager", logger=LOGS).load(cmd_help=None)
+        Loader(path="assistant/manager", key="Group Manager", logger=LOGS).load(
+            cmd_help=None
+        )
 
     # chat via assistant
     if pmbot == "True":
-        Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(log=False, cmd_help=None)
+        Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(
+            log=False, cmd_help=None
+        )
 
     # vc bot
     if vcbot == "True":
