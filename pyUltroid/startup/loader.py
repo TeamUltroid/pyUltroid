@@ -81,7 +81,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None, udB=No
             os.system("cd addons && git pull -q && cd ..")
         if os.path.exists("addons/addons.txt"):
             # generally addons req already there so it won't take much time
-            os.system("pip3 install --no-cache-dir -r addons/addons.txt")
+            os.system("pip3 install --no-cache-dir -q -r ./addons/addons.txt")
         Loader(path="addons", key="Addons", logger=LOGS).load(func=load_addons)
 
     # group manager
