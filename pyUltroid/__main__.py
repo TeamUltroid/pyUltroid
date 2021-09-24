@@ -7,6 +7,7 @@
 
 
 from . import *
+from .functions.helper import updater
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff
 from .startup.loader import load_other_plugins
 
