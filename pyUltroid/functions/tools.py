@@ -50,7 +50,14 @@ async def get_ofox(codename):
 
 
 async def async_searcher(
-    url, post=None, headers=None, params=None, json=None, ssl=None, re_json:bool=False, re_content:bool=False
+    url,
+    post=None,
+    headers=None,
+    params=None,
+    json=None,
+    ssl=None,
+    re_json: bool = False,
+    re_content: bool = False,
 ):
     async with aiohttp.ClientSession(headers=headers) as session:
         if not post:
@@ -88,7 +95,7 @@ def json_parser(data, indent=None):
 # ~~~~~~~~~~~~~~~~Link Checker~~~~~~~~~~~~~~~~~
 
 
-def is_url_ok(url:str):
+def is_url_ok(url: str):
     try:
         r = requests.head(url)
     except MissingSchema:
@@ -102,7 +109,7 @@ def is_url_ok(url:str):
 # @techierror
 
 
-async def saavn_dl(query:str):
+async def saavn_dl(query: str):
     query = query.replace(" ", "%20")
     try:
         data = (
@@ -212,7 +219,7 @@ def make_logo(imgpath, text, funt, **args):
 # @New-Dev0
 
 
-async def get_paste(data:str, extension:str="txt"):
+async def get_paste(data: str, extension: str = "txt"):
     ssl_context = ssl.create_default_context(cafile=certifi.where())
     json = {"content": data, "extension": extension}
     key = json_parser(
