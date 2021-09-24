@@ -26,6 +26,7 @@ def should_allow_sudo():
 
 def owner_and_sudos(castint=False):
     from .. import udB, ultroid_bot
+
     data = [str(ultroid_bot.uid), *sudoers()]
     if castint:
         return [int(a) for a in data]
