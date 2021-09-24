@@ -5,7 +5,6 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import functools
 import re
 
 from telethon import Button
@@ -46,8 +45,10 @@ IN_BTTS = [
 
 # decorator for assistant
 
+
 def asst_cmd(pattern=None, **kwargs):
     """Decorator for assistant's command"""
+
     def ult(func):
         if pattern:
             kwargs["pattern"] = re.compile("^/" + pattern)
@@ -58,6 +59,7 @@ def asst_cmd(pattern=None, **kwargs):
 
 def callback(data=None, owner=False, **kwargs):
     """Assistant's callback decorator"""
+
     def ultr(func):
         async def wrapper(event):
             if owner and not str(event.sender_id) in owner_and_sudos():
@@ -73,7 +75,8 @@ def callback(data=None, owner=False, **kwargs):
 
 
 def in_pattern(pattern=None, owner=False, **kwargs):
-    """ Assistant's inline decorator."""
+    """Assistant's inline decorator."""
+
     def don(func):
         async def wrapper(event):
             if owner and not str(event.sender_id) in owner_and_sudos():
@@ -100,7 +103,6 @@ def in_pattern(pattern=None, owner=False, **kwargs):
         asst.add_event_handler(wrapper, InlineQuery(pattern=pattern, **kwargs))
 
     return don
-
 
 
 async def admin_check(event):
