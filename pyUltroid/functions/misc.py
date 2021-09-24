@@ -129,7 +129,7 @@ async def unsplashsearch(query, limit=None, shuf=True):
     query = query.replace(" ", "-")
     base_ = "https://unsplash.com"
     link = base_ + "/s/photos/" + query
-    extra = await async_searcher(link)
+    extra = await async_searcher(link, re_content=True)
     res = bs(extra, "html.parser", from_encoding="utf-8")
     all = res.find_all("a", "_2Mc8_")
     if shuf:
@@ -137,7 +137,7 @@ async def unsplashsearch(query, limit=None, shuf=True):
     all = all[:limit]
     images_src = []
     for img in all:
-        ct = await async_searcher(base_ + img["href"])
+        ct = await async_searcher(base_ + img["href"], re_content=True)
         bst = bs(ct, "html.parser", from_encoding="utf-8")
         uri = bst.find_all("img", "oCCRx")[0]["src"]
         images_src.append(uri)
