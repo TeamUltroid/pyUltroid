@@ -66,6 +66,6 @@ if not udB.get("LOG_OFF"):
 # cleanup_cache()
 
 if __name__ == "__main__":
-    LOGS.info(f"Took {time_formatter(time.time() - start_time)} to start •ULTROID•")
+    LOGS.info(f"Took {time_formatter((time.time() - start_time)*1000)} to start •ULTROID•")
     LOGS.info(suc_msg)
     ultroid_bot.run()
