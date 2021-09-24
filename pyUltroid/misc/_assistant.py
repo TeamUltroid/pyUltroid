@@ -47,7 +47,7 @@ IN_BTTS = [
 # decorator for assistant
 
 def asst_cmd(pattern=None, **kwargs):
-   """Decorator for assistant's command"""
+    """Decorator for assistant's command"""
     def ult(func):
         if pattern:
             kwargs["pattern"] = re.compile("^/" + pattern)
