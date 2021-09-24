@@ -38,6 +38,7 @@ ultroid_bot = UltroidClient(
     api_id=Var.API_ID,
     api_hash=Var.API_HASH,
     udB=udB,
+    base_logger=TeleLogger,
 )
 
 ultroid_bot.run_in_loop(autobot())
@@ -48,6 +49,7 @@ asst = UltroidClient(
     api_hash=Var.API_HASH,
     bot_token=udB.get("BOT_TOKEN"),
     udB=udB,
+    base_logger=TeleLogger,
 )
 
 asst.me = ultroid_bot.run_in_loop(asst.get_me())
