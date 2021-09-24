@@ -33,6 +33,18 @@ MSG = f"""
 ➖➖➖➖➖➖➖➖➖➖
 """
 
+IN_BTTS = [[
+          Button.url(
+         "Repository",
+         url="https://github.com/TeamUltroid/Ultroid",
+         ),
+         Button.url(
+         "Support", url="https://t.me/UltroidSupport"
+          ),
+          ]
+   ]
+
+
 # decorator for assistant
 
 
@@ -103,9 +115,29 @@ def callback(data=None, owner=False, **kwargs):
     return ultr
 
 
-def in_pattern(pattern=None, **kwargs):
+def in_pattern(pattern=None, owner=False, **kwargs):
     def don(func):
-        asst.add_event_handler(func, InlineQuery(pattern=pattern, **kwargs))
+        async def wrapper(event):
+            if owner and not str(event.sender_id) in owner_and_sudos():
+                res = [await event.builder.article(
+                        title="Ultroid Userbot",
+                        url="https://t.me/TheUltroid",
+                        description="(c) TeamUltroid",
+                        text=MSG,
+                        thumb=InputWebDocument(ULTROID_PIC, 0, "image/jpeg", []),
+                        buttons=IN_BTTS,
+                    )
+                return await event.answer(
+                        [res],
+                        switch_pm=f"🤖: Assistant of {OWNER}",
+                        switch_pm_param="start",
+                    )
+            try:
+                await func(event)
+            except Exception as er:
+                LOGS.exception(er)
+
+        asst.add_event_handler(wrapper, InlineQuery(pattern=pattern, **kwargs))
 
     return don
 
