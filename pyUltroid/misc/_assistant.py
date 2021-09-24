@@ -46,51 +46,8 @@ IN_BTTS = [
 
 # decorator for assistant
 
-
-def inline_owner():
-    def decorator(function):
-        @functools.wraps(function)
-        async def wrapper(event):
-            if str(event.sender_id) in owner_and_sudos():
-                try:
-                    await function(event)
-                except Exception as e:
-                    LOGS.info(e)
-            else:
-                try:
-                    builder = event.builder
-                    sur = builder.article(
-                        title="Ultroid Userbot",
-                        url="https://t.me/TheUltroid",
-                        description="(c) TeamUltroid",
-                        text=MSG,
-                        thumb=InputWebDocument(ULTROID_PIC, 0, "image/jpeg", []),
-                        buttons=[
-                            [
-                                Button.url(
-                                    "Repository",
-                                    url="https://github.com/TeamUltroid/Ultroid",
-                                ),
-                                Button.url(
-                                    "Support", url="https://t.me/UltroidSupport"
-                                ),
-                            ]
-                        ],
-                    )
-                    await event.answer(
-                        [sur],
-                        switch_pm=f"🤖: Assistant of {OWNER}",
-                        switch_pm_param="start",
-                    )
-                except Exception as E:
-                    LOGS.info(E)
-
-        return wrapper
-
-    return decorator
-
-
 def asst_cmd(pattern=None, **kwargs):
+   """Decorator for assistant's command"""
     def ult(func):
         if pattern:
             kwargs["pattern"] = re.compile("^/" + pattern)
@@ -100,6 +57,7 @@ def asst_cmd(pattern=None, **kwargs):
 
 
 def callback(data=None, owner=False, **kwargs):
+    """Assistant's callback decorator"""
     def ultr(func):
         async def wrapper(event):
             if owner and not str(event.sender_id) in owner_and_sudos():
@@ -115,6 +73,7 @@ def callback(data=None, owner=False, **kwargs):
 
 
 def in_pattern(pattern=None, owner=False, **kwargs):
+    """ Assistant's inline decorator."""
     def don(func):
         async def wrapper(event):
             if owner and not str(event.sender_id) in owner_and_sudos():
@@ -142,23 +101,6 @@ def in_pattern(pattern=None, owner=False, **kwargs):
 
     return don
 
-
-# check for owner
-def owner():
-    def decorator(function):
-        @functools.wraps(function)
-        async def wrapper(event):
-            if str(event.sender_id) in owner_and_sudos():
-                await function(event)
-            else:
-                try:
-                    await event.answer()
-                except BaseException as er:
-                    LOGS.info(er)
-
-        return wrapper
-
-    return decorator
 
 
 async def admin_check(event):
