@@ -40,4 +40,4 @@ def list_cmds():
     ok = eval(udB.get("ASST_CMDS"))
     if ok.keys():
         return ok.keys()
-    return
+    return {}
