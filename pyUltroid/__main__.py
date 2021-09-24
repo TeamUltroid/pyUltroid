@@ -10,7 +10,6 @@ from . import *
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff
 from .startup.loader import load_other_plugins
 
-
 # Option to Auto Update On Restarts..
 if udB.get("UPDATE_ON_RESTART") and os.path.exists(".git") and updater():
     os.system("git pull -f && pip3 install --no-cache-dir -r requirements.txt")
