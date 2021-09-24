@@ -25,6 +25,8 @@ class Loader:
 
     def load(self, log=True, func=import_module, cmd_help=HELP):
         files = sorted(glob.glob(self.path + "/*.py"))
+        if log:
+            self._logger.info("• Installing {self.key}'s Plugins || Count : {len(files)} •")
         for plugin in files:
             plugin = plugin.replace(".py", "")
             if func == import_module:
@@ -33,10 +35,6 @@ class Loader:
                 plugin = plugin.split("/")[-1]
             try:
                 doc = func(plugin)
-                if log:
-                    if func == import_module:
-                        plugin = plugin.split(".")[-1]
-                    self._logger.info(f"Ultroid - {self.key} -  Installed - {plugin}")
             except Exception as exc:
                 doc = None
                 self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
