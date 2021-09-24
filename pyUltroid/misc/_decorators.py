@@ -52,6 +52,8 @@ black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
 
 
 def compile_pattern(data, hndlr):
+    if HNDLR == " ": # No handler feature
+        return re.compile("^" + data.replace("^", "").replace(".", ""))
     return (
         re.compile(hndlr + data.replace("^", "").replace(".", ""))
         if data.startswith("^")
