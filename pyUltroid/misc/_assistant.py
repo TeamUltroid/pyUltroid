@@ -126,9 +126,9 @@ def in_pattern(pattern=None, owner=False, **kwargs):
                         text=MSG,
                         thumb=InputWebDocument(ULTROID_PIC, 0, "image/jpeg", []),
                         buttons=IN_BTTS,
-                    )
+                    )]
                 return await event.answer(
-                        [res],
+                        res,
                         switch_pm=f"🤖: Assistant of {OWNER}",
                         switch_pm_param="start",
                     )
