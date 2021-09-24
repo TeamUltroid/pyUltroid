@@ -27,7 +27,7 @@ class Loader:
         files = sorted(glob.glob(self.path + "/*.py"))
         if log:
             self._logger.info(
-                "• Installing {self.key}'s Plugins || Count : {len(files)} •"
+                f"• Installing {self.key}'s Plugins || Count : {len(files)} •"
             )
         for plugin in files:
             plugin = plugin.replace(".py", "")
