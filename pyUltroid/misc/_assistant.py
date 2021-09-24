@@ -82,7 +82,7 @@ def inline_owner():
 def asst_cmd(pattern=None, **kwargs):
     def ult(func):
         if pattern:
-            kwargs["pattern"] = re.compile("^/", pattern)
+            kwargs["pattern"] = re.compile("^/" + pattern)
         asst.add_event_handler(func, NewMessage(**kwargs))
 
     return ult
