@@ -45,7 +45,10 @@ from ._assistant import admin_check
 from ._wrappers import eod
 
 hndlr = "\\" + HNDLR
-
+MANAGER = udB.get("MANAGER")
+TAKE_EDITS = udB.get("TAKE_EDITS")
+DUAL_MODE = udB.get("DUAL_MODE")
+DUAL_HNDLR = udB.get("DUAL_HNDLR")
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
 
 
@@ -76,12 +79,11 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
     fullsudo = args.get("fullsudo", False)
     allow_all = args.get("allow_all", False)
     type = args.get("type", ["official"])
-    manager = udB.get("MANAGER")
     only_devs = args.get("only_devs", False)
     allow_pm = args.get("allow_pm", False)
     if isinstance(type, str):
         type = [type]
-    if "official" in type and udB.get("DUAL_MODE"):
+    if "official" in type and DUAL_MODE:
         type.append("dualmode")
 
     args["forwards"] = False
@@ -268,7 +270,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
         if "official" in type:
             args["outgoing"] = True
             ultroid_bot.add_event_handler(doit("official"), events.NewMessage(**args))
-            if udB.get("TAKE_EDITS"):
+            if TAKE_EDITS:
                 args["func"] = lambda x: not (
                     isinstance(x.chat, types.Channel) and x.chat.broadcast
                 )
@@ -287,13 +289,13 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
         if "assistant" in type:
             args["pattern"] = compile_pattern(pattern, "/")
             asst.add_event_handler(doit("assistant"), events.NewMessage(**args))
-        if manager and "manager" in type:
+        if MANAGER and "manager" in type:
             args["pattern"] = compile_pattern(pattern, "/")
             asst.add_event_handler(doit("manager"), events.NewMessage(**args))
-        DH = udB.get("DUAL_HNDLR")
+        
         if "dualmode" in type:
-            if not (("manager" in type) and (DH == "/")):
-                args["pattern"] = compile_pattern(pattern, "\\" + DH)
+            if not (("manager" in type) and (DUAL_HNDLR == "/")):
+                args["pattern"] = compile_pattern(pattern, "\\" + DUAL_HNDLR)
                 asst.add_event_handler(doit("dualmode"), events.NewMessage(**args))
         # Collecting all Handlers as one..
         wrapper = doit("official")
