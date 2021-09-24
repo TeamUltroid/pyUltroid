@@ -5,9 +5,9 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-
+import time
 from . import *
-from .functions.helper import updater
+from .functions.helper import updater, time_formatter
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff
 from .startup.loader import load_other_plugins
 
@@ -63,5 +63,6 @@ if not udB.get("LOG_OFF"):
 # cleanup_cache()
 
 if __name__ == "__main__":
+    LOGS.info(f"Took {time_formatter(time.time() - start_time)} to start •ULTROID•")
     LOGS.info(suc_msg)
     ultroid_bot.run()
