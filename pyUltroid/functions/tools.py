@@ -36,12 +36,8 @@ except ImportError:
 
 async def get_ofox(codename):
     ofox_baseurl = "https://api.orangefox.download/v3/"
-    releases = json_parser(
-        await async_searcher(ofox_baseurl + "releases?codename=" + codename)
-    )
-    device = json_parser(
-        await async_searcher(ofox_baseurl + "devices/get?codename=" + codename)
-    )
+    releases = await async_searcher(ofox_baseurl + "releases?codename=" + codename, re_json=True)
+    device = await async_searcher(ofox_baseurl + "devices/get?codename=" + codename, re_json=True)
     return device, releases
 
 
@@ -60,10 +56,10 @@ async def async_searcher(
     re_content: bool = False,
 ):
     client = aiohttp.ClientSession(headers=headers)
-    if not post:
-        data = await client.get(url, params=params, ssl=ssl)
-    else:
+    if post:
         data = await client.post(url, json=json, ssl=ssl)
+    else:
+        data = await client.get(url, params=params, ssl=ssl)
     if re_json:
         return await data.json()
     if re_content:
@@ -110,13 +106,7 @@ def is_url_ok(url: str):
 async def saavn_dl(query: str):
     query = query.replace(" ", "%20")
     try:
-        data = (
-            json_parser(
-                await async_searcher(
-                    url=f"https://jostapi.herokuapp.com/saavn?query={query}"
-                )
-            )
-        )[0]
+        data = await async_searcher(url=f"https://jostapi.herokuapp.com/saavn?query={query}", re_json=True)[0]
     except BaseException:
         return None, None, None, None
     try:
@@ -220,11 +210,7 @@ def make_logo(imgpath, text, funt, **args):
 async def get_paste(data: str, extension: str = "txt"):
     ssl_context = ssl.create_default_context(cafile=certifi.where())
     json = {"content": data, "extension": extension}
-    key = json_parser(
-        await async_searcher(
-            "https://spaceb.in/api/v1/documents/", json=json, ssl=ssl_context, post=True
-        )
-    )
+    key = await async_searcher(url="https://spaceb.in/api/v1/documents/", json=json, ssl=ssl_context, post=True, re_json=True)
     try:
         return True, key["payload"]["id"]
     except KeyError:
@@ -236,14 +222,14 @@ async def get_paste(data: str, extension: str = "txt"):
         return None, str(e)
 
 
-def get_chatbot_reply(event, message):
+async def get_chatbot_reply(event, message):
     chatbot_base = "https://api.affiliateplus.xyz/api/chatbot?message={message}&botname=Ultroid&ownername={owner}&user=20"
     req_link = chatbot_base.format(
         message=message,
         owner=(ultroid_bot.me.first_name or "ultroid user"),
     )
     try:
-        return json_parser(async_searcher(req_link))["message"]
+        return await async_searcher(req_link, re_json=True)["message"]
     except Exception:
         LOGS.info(f"**ERROR:**`{format_exc()}`")
 
