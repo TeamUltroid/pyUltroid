@@ -9,70 +9,7 @@ from importlib import import_module, util
 from pathlib import Path
 from sys import modules
 
-
-def load_plugins(plugin_name):
-    if plugin_name.startswith("__"):
-        return
-    from .. import HNDLR, LOGS, asst, udB, ultroid_bot
-    from ..configs import Var
-    from ..dB._core import HELP, PLUGINS
-    from ..misc import _supporter as xxx
-    from ..misc._assistant import (
-        asst_cmd,
-        callback,
-        in_pattern,
-        inline,
-        inline_owner,
-        owner,
-    )
-    from ..misc._decorators import ultroid_cmd
-    from ..misc._wrappers import eod, eor
-
-    path = Path(f"plugins/{plugin_name}.py")
-    name = "plugins.{}".format(plugin_name)
-    spec = util.spec_from_file_location(name, path)
-    mod = util.module_from_spec(spec)
-    mod.asst = asst
-    mod.tgbot = asst
-    mod.ultroid_bot = ultroid_bot
-    mod.bot = ultroid_bot
-    mod.ultroid = ultroid_bot
-    mod.owner = owner()
-    mod.in_owner = inline_owner()
-    mod.inline = inline()
-    mod.in_pattern = in_pattern
-    mod.eod = eod
-    mod.edit_delete = eod
-    mod.LOGS = LOGS
-    mod.hndlr = HNDLR
-    mod.HNDLR = HNDLR
-    mod.Var = Var
-    mod.eor = eor
-    mod.edit_or_reply = eor
-    mod.asst_cmd = asst_cmd
-    mod.ultroid_cmd = ultroid_cmd
-    mod.on_cmd = ultroid_cmd
-    mod.callback = callback
-    mod.Redis = udB.get
-    modules["support"] = xxx
-    modules["userbot"] = xxx
-    modules["userbot.utils"] = xxx
-    modules["userbot.config"] = xxx
-    spec.loader.exec_module(mod)
-    modules["plugins." + plugin_name] = mod
-    if not plugin_name.startswith("_"):
-        if plugin_name not in PLUGINS:
-            PLUGINS.append(plugin_name)
-        try:
-            doc = modules[f"plugins.{plugin_name}"].__doc__
-            HELP.update({f"{plugin_name}": doc.format(i=HNDLR)})
-        except BaseException:
-            pass
-
-
 # for addons
-
-
 def load_addons(plugin_name):
     if not plugin_name.startswith("__"):
         from .. import HNDLR, LOGS, asst, udB, ultroid_bot
@@ -91,8 +28,8 @@ def load_addons(plugin_name):
         from ..misc._wrappers import eod, eor
 
         path = "addons/" + plugin_name
-        name = path.replace("/", ".")[:-3]
-        spec = util.spec_from_file_location(name, path)
+        name = path.replace("/", ".")
+        spec = util.spec_from_file_location(name, path+".py")
         mod = util.module_from_spec(spec)
         mod.asst = asst
         mod.tgbot = asst
