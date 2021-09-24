@@ -41,6 +41,8 @@ class Loader:
                 doc = None
                 self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
                 self._logger.exception(exc)
+            if func == import_module:
+                plugin = plugin.split(".")[-1]
             if (
                 (cmd_help or cmd_help == {})
                 and not plugin.startswith("_")
