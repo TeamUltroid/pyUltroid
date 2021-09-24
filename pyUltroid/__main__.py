@@ -6,8 +6,9 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import time
+
 from . import *
-from .functions.helper import updater, time_formatter
+from .functions.helper import time_formatter, updater
 from .startup.funcs import autopilot, customize, plug, ready, startup_stuff
 from .startup.loader import load_other_plugins
 
