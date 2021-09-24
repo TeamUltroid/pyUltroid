@@ -5,7 +5,9 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import time, sys, os
+import os
+import sys
+import time
 
 from . import *
 from .functions.helper import time_formatter, updater
