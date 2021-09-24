@@ -5,7 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import time
+import time, sys, os
 
 from . import *
 from .functions.helper import time_formatter, updater
@@ -14,7 +14,7 @@ from .startup.loader import load_other_plugins
 
 # Option to Auto Update On Restarts..
 if udB.get("UPDATE_ON_RESTART") and os.path.exists(".git") and updater():
-    os.system("git pull -f && pip3 install --no-cache-dir -r requirements.txt")
+    os.system("git pull -f && pip3 install --no-cache-dir -q -r requirements.txt")
     os.execl(sys.executable, "python3", "-m", "pyUltroid")
 
 startup_stuff()
