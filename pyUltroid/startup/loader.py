@@ -14,7 +14,7 @@ from git import Repo
 from .. import *
 from ..dB._core import HELP
 from . import *
-from .utils import load_addons, load_vc
+from .utils import load_addons
 
 
 class Loader:
