@@ -7,7 +7,7 @@
 
 import os
 import time
-from logging import INFO, FileHandler, StreamHandler, basicConfig, getLogger
+from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
 
 from safety.tools import *
 from telethon import __version__
@@ -20,7 +20,7 @@ if os.path.exists("ultroid.log"):
 
 LOGS = getLogger("pyUltLogs")
 TeleLogger = getLogger("Telethon")
-TeleLogger.setLevel(logging.WARNING)
+TeleLogger.setLevel(WARNING)
 
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] - %(message)s",
