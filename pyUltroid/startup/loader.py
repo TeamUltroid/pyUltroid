@@ -40,17 +40,18 @@ class Loader:
             except Exception as exc:
                 self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
                 self._logger.exception(exc)
-            if (cmd_help or cmd_help == {}) and doc.__doc__:
+            if (cmd_help or cmd_help == {}):
+                doc = doc.__doc__.format(i=HNDLR) if doc.__doc__ else ""
                 if self.key in cmd_help.keys():
                     update_cmd = cmd_help[self.key]
                     try:
-                        update_cmd.update({plugin: doc.__doc__.format(i=HNDLR)})
+                        update_cmd.update({plugin: doc})
                     except BaseException as er:
                         self._logger.exception(er)
                 else:
                     try:
                         cmd_help.update(
-                            {self.key: {plugin: doc.__doc__.format(i=HNDLR)}}
+                            {self.key: {plugin: doc}}
                         )
                     except BaseException as em:
                         self._logger.exception(em)
