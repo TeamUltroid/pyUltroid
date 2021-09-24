@@ -59,18 +59,16 @@ async def async_searcher(
     re_json: bool = False,
     re_content: bool = False,
 ):
-    async with aiohttp.ClientSession(headers=headers) as session:
-        if not post:
-            async with session.get(url, params=params, ssl=ssl) as resp:
-                data = resp
-        else:
-            async with session.post(url, json=json, ssl=ssl) as resp:
-                data = resp
-        if re_json:
-            return await data.json()
-        if re_content:
-            return await data.read()
-        return await data.text()
+    client = aiohttp.ClientSession(headers=headers)
+    if not post:
+        data = await client.get(url, params=params, ssl=ssl)
+    else:
+        data = await client.post(url, json=json, ssl=ssl)
+    if re_json:
+        return await data.json()
+    if re_content:
+        return await data.read()
+    return await data.text()
 
 
 # ~~~~~~~~~~~~~~~JSON Parser~~~~~~~~~~~~~~~
