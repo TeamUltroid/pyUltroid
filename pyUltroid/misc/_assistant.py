@@ -88,10 +88,16 @@ def asst_cmd(pattern=None, **kwargs):
     return ult
 
 
-def callback(data=None, **kwargs):
+def callback(data=None, owner=False, **kwargs):
     def ultr(func):
-        asst.add_event_handler(func, CallbackQuery(data=data, **kwargs))
-
+        async def wrapper(event):
+            if owner and not str(event.sender_id) in owner_and_sudos():
+                return await event.answer(f"This is {OWNER}'s bot!!")
+            try:
+                await func(event)
+            except Exception as er:
+                LOGS.exception(er)
+        asst.add_event_handler(wrapper, CallbackQuery(data=data, **kwargs))
     return ultr
 
 
@@ -111,7 +117,7 @@ def owner():
                 await function(event)
             else:
                 try:
-                    await event.answer(f"This is {OWNER}'s bot!!")
+                    await event.answer()
                 except BaseException as er:
                     LOGS.info(er)
 
