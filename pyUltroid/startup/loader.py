@@ -26,7 +26,9 @@ class Loader:
     def load(self, log=True, func=import_module, cmd_help=HELP):
         files = sorted(glob.glob(self.path + "/*.py"))
         if log:
-            self._logger.info("• Installing {self.key}'s Plugins || Count : {len(files)} •")
+            self._logger.info(
+                "• Installing {self.key}'s Plugins || Count : {len(files)} •"
+            )
         for plugin in files:
             plugin = plugin.replace(".py", "")
             if func == import_module:
