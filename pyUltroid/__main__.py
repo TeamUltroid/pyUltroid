@@ -38,7 +38,7 @@ addons = udB.get("ADDONS") or Var.ADDONS
 vcbot = udB.get("VCBOT") or Var.VCBOT
 
 # Railway dont allow Music Bots
-if HOSTED_ON == "railway" and vcbot:
+if HOSTED_ON == "railway" and not vcbot:
     vcbot = "False"
 
 load_other_plugins(addons=addons, pmbot=pmbot, manager=manager, vcbot=vcbot, udB=udB)
