@@ -292,7 +292,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
         if MANAGER and "manager" in type:
             args["pattern"] = compile_pattern(pattern, "/")
             asst.add_event_handler(doit("manager"), events.NewMessage(**args))
-        
+
         if "dualmode" in type:
             if not (("manager" in type) and (DUAL_HNDLR == "/")):
                 args["pattern"] = compile_pattern(pattern, "\\" + DUAL_HNDLR)
