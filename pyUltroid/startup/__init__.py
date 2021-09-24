@@ -19,7 +19,7 @@ from ..version import ultroid_version
 if os.path.exists("ultroid.log"):
     os.remove("ultroid.log")
 
-LOGS = getLogger(__name__)
+LOGS = getLogger("pyUltLogs")
 
 
 basicConfig(
