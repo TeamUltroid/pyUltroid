@@ -5,8 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from importlib import import_module, util
-from pathlib import Path
+from importlib import util
 from sys import modules
 
 # for addons
@@ -16,7 +15,7 @@ def load_addons(plugin_name):
     if not plugin_name.startswith("__"):
         from .. import HNDLR, LOGS, asst, udB, ultroid_bot
         from ..configs import Var
-        from ..dB._core import ADDONS, HELP
+        from ..dB._core import HELP
         from ..misc import _supporter as xxx
         from ..misc._assistant import (
             asst_cmd,
@@ -85,13 +84,13 @@ def load_addons(plugin_name):
         modules["addons." + plugin_name] = mod
         doc = modules[f"addons.{plugin_name}"].__doc__ or ""
         if "Addons" in HELP.keys():
-                    update_cmd = HELP["Addons"]
-                    try:
-                        update_cmd.update({plugin_name: doc})
-                    except BaseException:
-                        pass
+            update_cmd = HELP["Addons"]
+            try:
+                update_cmd.update({plugin_name: doc})
+            except BaseException:
+                pass
         else:
-                    try:
-                        HELP.update({"Addons": {plugin_name: doc}})
-                    except BaseException as em:
-                        pass
+            try:
+                HELP.update({"Addons": {plugin_name: doc}})
+            except BaseException as em:
+                pass
