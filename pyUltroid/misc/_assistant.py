@@ -97,7 +97,9 @@ def callback(data=None, owner=False, **kwargs):
                 await func(event)
             except Exception as er:
                 LOGS.exception(er)
+
         asst.add_event_handler(wrapper, CallbackQuery(data=data, **kwargs))
+
     return ultr
 
 
