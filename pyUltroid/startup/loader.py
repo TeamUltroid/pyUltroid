@@ -40,12 +40,11 @@ class Loader:
             except Exception as exc:
                 self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
                 self._logger.exception(exc)
-            if cmd_help or cmd_help == {}:
-                doc = doc.__doc__.format(i=HNDLR) if doc.__doc__ else ""
+            if cmd_help or cmd_help == {} and doc.__doc__:
                 if self.key in cmd_help.keys():
                     update_cmd = cmd_help[self.key]
                     try:
-                        update_cmd.update({plugin: doc})
+                        update_cmd.update({plugin: doc.__doc__.format(i=HNDLR)})
                     except BaseException as er:
                         self._logger.exception(er)
                 else:
@@ -90,4 +89,4 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None, udB=No
 
     # vc bot
     if vcbot == "True":
-        Loader(path="vcbot", key="VCBot", logger=LOGS).load(func=load_vc)
+        Loader(path="vcbot", key="VCBot", logger=LOGS).load()
