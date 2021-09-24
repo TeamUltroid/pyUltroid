@@ -10,6 +10,8 @@ from pathlib import Path
 from sys import modules
 
 # for addons
+
+
 def load_addons(plugin_name):
     if not plugin_name.startswith("__"):
         from .. import HNDLR, LOGS, asst, udB, ultroid_bot
@@ -29,7 +31,7 @@ def load_addons(plugin_name):
 
         path = "addons/" + plugin_name
         name = path.replace("/", ".")
-        spec = util.spec_from_file_location(name, path+".py")
+        spec = util.spec_from_file_location(name, path + ".py")
         mod = util.module_from_spec(spec)
         mod.asst = asst
         mod.tgbot = asst
