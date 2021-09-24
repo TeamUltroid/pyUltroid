@@ -10,7 +10,6 @@ from sys import modules
 
 # for addons
 
-
 def load_addons(plugin_name):
     if not plugin_name.startswith("__"):
         from .. import HNDLR, LOGS, asst, udB, ultroid_bot
@@ -20,9 +19,7 @@ def load_addons(plugin_name):
         from ..misc._assistant import (
             asst_cmd,
             callback,
-            in_pattern,
-            inline_owner,
-            owner,
+            in_pattern
         )
         from ..misc._decorators import ultroid_cmd
         from ..misc._supporter import Config, admin_cmd, sudo_cmd
@@ -42,8 +39,6 @@ def load_addons(plugin_name):
         mod.telebot = ultroid_bot
         mod.jarvis = ultroid_bot
         mod.friday = ultroid_bot
-        mod.owner = owner()
-        mod.in_owner = inline_owner()
         mod.eod = eod
         mod.edit_delete = eod
         mod.LOGS = LOGS
