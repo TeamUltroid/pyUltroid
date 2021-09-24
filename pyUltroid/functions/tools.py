@@ -64,6 +64,7 @@ async def async_searcher(
         data = await client.post(url, json=json, ssl=ssl)
     else:
         data = await client.get(url, params=params, ssl=ssl)
+    await client.close()
     if re_json:
         return await data.json()
     if re_content:
