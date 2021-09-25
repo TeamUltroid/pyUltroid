@@ -403,6 +403,13 @@ class Telegraph:
         kwargs["access_token"] = self.access_token
         return await self._request("createPage", json=kwargs)
 
+    async def get_pages(self, **kwargs):
+        await self._check_or_make()
+        if not kwargs.get("limit"):
+            kwargs["limit"] = 10
+        kwargs["access_token"] = self.access_token
+        return await self._request("getPageList", json=kwargs)
+
     async def _request(self, method: str = None, json={}):
         url = self.url + method
         data = await async_searcher(url, json=json, re_json=True)
