@@ -19,6 +19,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
 from telethon.utils import get_display_name
+
 from .. import *
 from .helper import bash, fast_download
 
