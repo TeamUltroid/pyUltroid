@@ -36,7 +36,7 @@ class RedisConnection(Redis):
             host = spli_[0]
             port = int(spli_[-1])
             if host.startswith("http"):
-               raise RedisError("Your REDIS_URI should not start with http !")
+                raise RedisError("Your REDIS_URI should not start with http !")
         else:
             raise RedisError("Port Number not found")
 
