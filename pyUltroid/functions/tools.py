@@ -412,7 +412,7 @@ class Telegraph:
 
     async def _request(self, method: str = None, json={}):
         url = self.url + method
-        data = await async_searcher(url, json=json, re_json=True)
+        data = await async_searcher(url, post=True, json=json, re_json=True)
         if data["ok"]:
             return data["result"]
         raise TelegraphException(data["error"])
