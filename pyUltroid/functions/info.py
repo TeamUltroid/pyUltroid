@@ -10,8 +10,6 @@
 
 import math
 from contextlib import suppress
-
-import emoji
 from telethon.tl import functions, types
 from telethon.utils import get_input_location
 
@@ -163,7 +161,7 @@ async def fetch_info(chat, event):
     )
     chat_type = "Channel" if broadcast else "Group"
     chat_title = chat_obj_info.title
-    warn_emoji = emoji.emojize(":warning:")
+    warn_emoji = "⚠"
     try:
         msg_info = await ultroid_bot(
             functions.messages.GetHistoryRequest(
