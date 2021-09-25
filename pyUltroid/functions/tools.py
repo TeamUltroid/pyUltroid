@@ -19,7 +19,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
 
-from .. import LOGS, udB, ultroid_bot
+from .. import *
 from .helper import bash, fast_download
 
 try:
