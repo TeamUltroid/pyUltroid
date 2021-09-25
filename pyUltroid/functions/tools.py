@@ -10,9 +10,10 @@ import math
 import os
 import ssl
 import subprocess
+from glob import glob
 from json.decoder import JSONDecodeError
 from traceback import format_exc
-from glob import glob
+
 import aiohttp
 import certifi
 import requests
@@ -415,14 +416,13 @@ class Telegraph:
         if instance(path, list):
             return [await self.upload(path) for path in path]
         if os.path.isdir(path):
-            return [await self.upload(path) for path in glob(path+"/*")]
-        files = {"file":open(path, "rb")}
+            return [await self.upload(path) for path in glob(path + "/*")]
+        files = {"file": open(path, "rb")}
         data = await async_searcher("https://telegra.ph/upload", post=True, data=files)
         try:
             raise TelegraphException(data["error"])
         except KeyError:
             return "https://telegra.ph" + data[0]["src"]
-        
 
     async def _request(self, method: str = None, data=None, json={}):
         url = self.url + method
