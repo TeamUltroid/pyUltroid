@@ -11,13 +11,13 @@ import time
 from .configs import Var
 from .startup import *
 from .startup.BaseClient import UltroidClient
-from .startup.exceptions import RedisError
 from .startup.connections import (
     RedisConnection,
     session_file,
     vc_connection,
     where_hosted,
 )
+from .startup.exceptions import RedisError
 from .startup.funcs import autobot
 
 start_time = time.time()
@@ -25,15 +25,15 @@ start_time = time.time()
 HOSTED_ON = where_hosted()
 
 try:
-   udB = RedisConnection(
-    host=Var.REDIS_URI,
-    password=Var.REDIS_PASSWORD,
-    platform=HOSTED_ON,
-    logger=LOGS,
-    decode_responses=True,
-    socket_timeout=5,
-    retry_on_timeout=True,
-   )
+    udB = RedisConnection(
+        host=Var.REDIS_URI,
+        password=Var.REDIS_PASSWORD,
+        platform=HOSTED_ON,
+        logger=LOGS,
+        decode_responses=True,
+        socket_timeout=5,
+        retry_on_timeout=True,
+    )
 except RedisError as err:
     LOGS.exception(err)
     exit()
