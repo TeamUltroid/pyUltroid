@@ -19,7 +19,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
 
-from .. import LOGS, ultroid_bot
+from .. import LOGS, ultroid_bot, udB
 from .helper import bash, fast_download
 
 try:
@@ -362,7 +362,7 @@ def four_point_transform(image, pts):
 
 
 # ~~~~~~~~~~~~~~~~ Telegraph ~~~~~~~~~~~~~~~~~
-
+@New-dev0
 
 class TelegraphException(Exception):
     pass
@@ -372,20 +372,27 @@ class Telegraph:
     def __init__(self, api_url="https://api.telegra.ph/"):
         self.url = api_url
         self.access_token = udB.get("_TELEGRAPH_TOKEN")
+        self.auth_url = None
+
+    async def _check_or_make(self):
+        if self.access_token:
+            return
+        short_name = "Ultroid" if len(OWNER_NAME) > 32 else OWNER_NAME
+        author_url = f"https://t.me/{ultroid_bot.me.username}" if ultroid_bot.me.username else None
+        await self._create_account(short_name=short_name, author_name=OWNER_NAME, author_url=author_url)
 
     async def _create_account(self, **kwargs):
         data = await self._request("createAccount", json=kwargs)
         self.access_token = data["access_token"]
+        udB.set("_TELEGRAPH_TOKEN", self.access_token)
         return data
 
     async def create_page(self, **kwargs):
+        await self._check_or_make()
         kwargs["access_token"] = self.access_token
-        return await self._request("createPage", json=kwargs, token_required=True)
+        return await self._request("createPage", json=kwargs)
 
-    async def _request(self, method: str = None, json={}, token_required=False):
-        if token_required and not self.access_token:
-            raise TelegraphException("ACCESS_TOKEN_REQUIRED")
-
+    async def _request(self, method: str = None, json={}):
         url = self.url + method
         data = await async_searcher(url, json=json, re_json=True)
         if data["ok"]:
