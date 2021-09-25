@@ -363,8 +363,10 @@ def four_point_transform(image, pts):
 
 # ~~~~~~~~~~~~~~~~ Telegraph ~~~~~~~~~~~~~~~~~
 
+
 class TelegraphException(Exception):
     pass
+
 
 class Telegraph:
     def __init__(self, api_url="https://api.telegra.ph/"):
