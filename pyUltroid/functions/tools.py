@@ -363,13 +363,15 @@ def four_point_transform(image, pts):
 
 # ~~~~~~~~~~~~~~~~ Telegraph ~~~~~~~~~~~~~~~~~
 
+class TelegraphException(Exception):
+    pass
 
 class Telegraph:
     def __init__(self, api_url="https://api.telegra.ph/"):
-        self.url = self.api_url
-        self.access_token = None
+        self.url = api_url
+        self.access_token = udB.get("_TELEGRAPH_TOKEN")
 
-    async def create_account(self, **kwargs):
+    async def _create_account(self, **kwargs):
         data = await self._request("createAccount", json=kwargs)
         self.access_token = data["access_token"]
         return data
