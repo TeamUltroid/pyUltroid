@@ -29,7 +29,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
-with open("requirements.txt", "r") as file:
+with open("./requirements.txt", "r") as file:
     requirements = file.read().split("\n")
 
 setuptools.setup(
