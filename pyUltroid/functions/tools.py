@@ -10,7 +10,6 @@ import math
 import os
 import ssl
 import subprocess
-from glob import glob
 from json.decoder import JSONDecodeError
 from traceback import format_exc
 
@@ -19,7 +18,6 @@ import certifi
 import requests
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
-from telethon.utils import get_display_name
 
 from .. import *
 from .helper import bash, fast_download
@@ -362,5 +360,6 @@ def four_point_transform(image, pts):
     M = cv2.getPerspectiveTransform(rect, dst)
     warped = cv2.warpPerspective(image, M, (maxWidth, maxHeight))
     return warped
+
 
 # --------- END --------- #
