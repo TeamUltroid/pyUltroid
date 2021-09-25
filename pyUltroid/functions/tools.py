@@ -375,7 +375,7 @@ class Telegraph:
 
     async def create_page(self, **kwargs):
         kwargs["access_token"] = self.access_token
-        return await self._request("createPage", json=kwargs token_required=True)
+        return await self._request("createPage", json=kwargs, token_required=True)
         
     async def _request(self, method:str=None, json={}, token_required=False):
         if token_required and not self.access_token:
