@@ -64,11 +64,11 @@ async def async_searcher(
             data = await client.post(url, json=json, ssl=ssl)
         else:
             data = await client.get(url, params=params, ssl=ssl)
-         if re_json:
-             return await data.json()
-         if re_content:
-             return await data.read()
-         return await data.text()
+        if re_json:
+            return await data.json()
+        if re_content:
+            return await data.read()
+        return await data.text()
 
 
 # ~~~~~~~~~~~~~~~JSON Parser~~~~~~~~~~~~~~~
