@@ -371,6 +371,7 @@ class TelegraphException(Exception):
 
 class Telegraph:
     from .. import udB
+
     def __init__(self, api_url="https://api.telegra.ph/"):
         self.url = api_url
         self.access_token = udB.get("_TELEGRAPH_TOKEN")
