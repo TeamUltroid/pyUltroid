@@ -64,13 +64,14 @@ async def quora_scrape(query):
 
 async def google_search(query):
     query = query.replace(" ", "+")
+    _base = "https://google.com/search?q="
     headers = {
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
         "User-Agent": choice(some_random_headers),
     }
     soup = bs(
-        await async_searcher("https://google.com/search?q=" + query, headers=headers),
+        await async_searcher(_base + query, headers=headers),
         "html.parser",
     )
     another_soup = soup.find_all("div", class_="ZINbbc xpd O9g5cc uUPGi")
@@ -84,7 +85,7 @@ async def google_search(query):
                 result.append(
                     {
                         "title": data[0].h3.text,
-                        "link": data[0].a["href"],
+                        "link": _base+data[0].a["href"],
                         "description": data[1].text,
                     }
                 )
