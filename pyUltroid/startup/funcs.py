@@ -275,7 +275,9 @@ async def plug(plugin_channels):
     if not os.path.exists("addons/__init__.py"):
         with open("addons/__init__.py", "w") as f:
             f.write("from plugins import *")
+    LOGS.info("• Loading Plugins from Plugin Channel(s) •")
     for Plug_channel in plugin_channels.split():
+        LOGS.info(f"{'•'*4} {Plugin_channel}")
         try:
             if Plug_channel.startswith("@"):
                 chat = Plug_channel
@@ -295,7 +297,6 @@ async def plug(plugin_channels):
                 plugin = x.file.name
                 try:
                     load_addons(plugin.replace(".py", ""))
-                    LOGS.info(f"Ultroid - PLUGIN_CHANNEL - Installed - {plugin}")
                 except Exception as e:
                     LOGS.info(f"Ultroid - PLUGIN_CHANNEL - ERROR - {plugin}")
                     LOGS.exception(e)
