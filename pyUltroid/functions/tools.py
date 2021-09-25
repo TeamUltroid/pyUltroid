@@ -19,7 +19,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
 
-from .. import LOGS, ultroid_bot, udB
+from .. import LOGS, udB, ultroid_bot
 from .helper import bash, fast_download
 
 try:
@@ -362,8 +362,7 @@ def four_point_transform(image, pts):
 
 
 # ~~~~~~~~~~~~~~~~ Telegraph ~~~~~~~~~~~~~~~~~
-@New-dev0
-
+@New - dev0
 class TelegraphException(Exception):
     pass
 
@@ -378,8 +377,14 @@ class Telegraph:
         if self.access_token:
             return
         short_name = "Ultroid" if len(OWNER_NAME) > 32 else OWNER_NAME
-        author_url = f"https://t.me/{ultroid_bot.me.username}" if ultroid_bot.me.username else None
-        await self._create_account(short_name=short_name, author_name=OWNER_NAME, author_url=author_url)
+        author_url = (
+            f"https://t.me/{ultroid_bot.me.username}"
+            if ultroid_bot.me.username
+            else None
+        )
+        await self._create_account(
+            short_name=short_name, author_name=OWNER_NAME, author_url=author_url
+        )
 
     async def _create_account(self, **kwargs):
         data = await self._request("createAccount", json=kwargs)
