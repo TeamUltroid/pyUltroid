@@ -12,7 +12,7 @@ import ssl
 import subprocess
 from json.decoder import JSONDecodeError
 from traceback import format_exc
-
+from glob import glob
 import aiohttp
 import certifi
 import requests
@@ -56,13 +56,14 @@ async def async_searcher(
     headers=None,
     params=None,
     json=None,
+    data=None,
     ssl=None,
     re_json: bool = False,
     re_content: bool = False,
 ):
     async with aiohttp.ClientSession(headers=headers) as client:
         if post:
-            data = await client.post(url, json=json, ssl=ssl)
+            data = await client.post(url, json=json, data=data, ssl=ssl)
         else:
             data = await client.get(url, params=params, ssl=ssl)
         if re_json:
@@ -410,9 +411,22 @@ class Telegraph:
         kwargs["access_token"] = self.access_token
         return await self._request("getPageList", json=kwargs)
 
-    async def _request(self, method: str = None, json={}):
+    async def upload(self, path) -> str:
+        if instance(path, list):
+            return [await self.upload(path) for path in path]
+        if os.path.isdir(path):
+            return [await self.upload(path) for path in glob(path+"/*")]
+        files = {"file":open(path, "rb")}
+        data = await async_searcher("https://telegra.ph/upload", post=True, data=files)
+        try:
+            raise TelegraphException(data["error"])
+        except KeyError:
+            return "https://telegra.ph" + data[0]["src"]
+        
+
+    async def _request(self, method: str = None, data=None, json={}):
         url = self.url + method
-        data = await async_searcher(url, post=True, json=json, re_json=True)
+        data = await async_searcher(url, post=True, data=data, json=json, re_json=True)
         if data["ok"]:
             return data["result"]
         raise TelegraphException(data["error"])
