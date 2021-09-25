@@ -361,4 +361,30 @@ def four_point_transform(image, pts):
     return warped
 
 
+# ~~~~~~~~~~~~~~~~ Telegraph ~~~~~~~~~~~~~~~~~
+
+class Telegraph:
+    def __init__(self, api_url="https://api.telegra.ph/"):
+        self.url = self.api_url
+        self.access_token = None
+
+    async def create_account(self, **kwargs):
+        data = await self._request("createAccount", json=kwargs)
+        self.access_token = data["access_token"]
+        return data
+
+    async def create_page(self, **kwargs):
+        kwargs["access_token"] = self.access_token
+        return await self._request("createPage", json=kwargs token_required=True)
+        
+    async def _request(self, method:str=None, json={}, token_required=False):
+        if token_required and not self.access_token:
+            raise TelegraphException("ACCESS_TOKEN_REQUIRED")
+
+        url = self.url + method
+        data = await async_searcher(url, json=json, re_json=True)
+        if data["ok"]:
+            return data["result"]
+        raise TelegraphException(data["error"])
+
 # --------- END --------- #
