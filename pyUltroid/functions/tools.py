@@ -413,7 +413,7 @@ class Telegraph:
         return await self._request("getPageList", json=kwargs)
 
     async def upload(self, path) -> str:
-        if instance(path, list):
+        if isinstance(path, list):
             return [await self.upload(path) for path in path]
         if os.path.isdir(path):
             return [await self.upload(path) for path in glob(path + "/*")]
