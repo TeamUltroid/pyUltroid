@@ -24,8 +24,7 @@ start_time = time.time()
 
 HOSTED_ON = where_hosted()
 
-try:
-    udB = RedisConnection(
+udB = RedisConnection(
         host=Var.REDIS_URI,
         password=Var.REDIS_PASSWORD,
         platform=HOSTED_ON,
@@ -33,10 +32,9 @@ try:
         decode_responses=True,
         socket_timeout=5,
         retry_on_timeout=True,
-    )
-except RedisError as err:
-    LOGS.exception(err)
-    exit()
+)
+
+
 
 ultroid_bot = UltroidClient(
     session_file(),
