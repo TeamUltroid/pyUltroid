@@ -1,10 +1,10 @@
 import re
-
-import setuptools
 from os import path
 
-with open(path.join(__name__, 'requirements.txt'), encoding='utf-8') as f:
-    requirements = f.read().split('\n')
+import setuptools
+
+with open(path.join(__name__, "requirements.txt"), encoding="utf-8") as f:
+    requirements = f.read().split("\n")
 
 with open("pyUltroid/version.py", "rt", encoding="utf8") as x:
     version = re.search(r'__version__ = "(.*?)"', x.read()).group(1)
