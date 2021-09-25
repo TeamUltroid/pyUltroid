@@ -362,7 +362,8 @@ def four_point_transform(image, pts):
 
 
 # ~~~~~~~~~~~~~~~~ Telegraph ~~~~~~~~~~~~~~~~~
-@New - dev0
+# @New - dev0
+
 class TelegraphException(Exception):
     pass
 
