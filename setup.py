@@ -1,14 +1,15 @@
 import re
-from os import path
 
 import setuptools
 
-requirements = ["redis",
-"python-decouple==3.3",
-"python-dotenv==0.15.0",
-"cloudscraper",
-"aiofiles",
-"aiohttp"]
+requirements = [
+    "redis",
+    "python-decouple==3.3",
+    "python-dotenv==0.15.0",
+    "cloudscraper",
+    "aiofiles",
+    "aiohttp",
+]
 
 
 with open("pyUltroid/version.py", "rt", encoding="utf8") as x:
