@@ -85,7 +85,7 @@ async def google_search(query):
                 result.append(
                     {
                         "title": data[0].h3.text,
-                        "link": _base+data[0].a["href"],
+                        "link": _base + data[0].a["href"],
                         "description": data[1].text,
                     }
                 )
