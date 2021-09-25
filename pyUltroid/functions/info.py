@@ -10,6 +10,7 @@
 
 import math
 from contextlib import suppress
+
 from telethon.tl import functions, types
 from telethon.utils import get_input_location
 
