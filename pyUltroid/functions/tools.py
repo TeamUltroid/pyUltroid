@@ -18,7 +18,7 @@ import certifi
 import requests
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
-
+from telethon.utils import get_display_name
 from .. import *
 from .helper import bash, fast_download
 
@@ -380,6 +380,7 @@ class Telegraph:
     async def _check_or_make(self):
         if self.access_token:
             return
+        OWNER_NAME = get_display_name(ultroid_bot.me)
         short_name = "Ultroid" if len(OWNER_NAME) > 32 else OWNER_NAME
         author_url = (
             f"https://t.me/{ultroid_bot.me.username}"
