@@ -3,11 +3,13 @@ from os import path
 
 import setuptools
 
-dir = path.abspath(path.dirname(__file__))
+requirements = ["redis",
+"python-decouple==3.3",
+"python-dotenv==0.15.0",
+"cloudscraper",
+"aiofiles",
+"aiohttp"]
 
-
-with open(path.join(dir, "requirements.txt"), encoding="utf-8") as f:
-    requirements = f.read().split("\n")
 
 with open("pyUltroid/version.py", "rt", encoding="utf8") as x:
     version = re.search(r'__version__ = "(.*?)"', x.read()).group(1)
