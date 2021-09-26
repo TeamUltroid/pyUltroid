@@ -9,7 +9,6 @@
 import re
 from random import choice, randrange, shuffle
 
-import requests
 from bs4 import BeautifulSoup as bs
 from faker import Faker
 
