@@ -10,6 +10,8 @@ DEVLIST = [
     1152902819,  # @Anonymous_Machinee
 ]
 
+ULTROID_IMAGES = ['https://telegra.ph/file/bf59d40184b6fcaea4d04.jpg', 'https://telegra.ph/file/855a91151a7f925b3c139.jpg', 'https://telegra.ph/file/b8cdf9fcd5a82e94c2d06.jpg', 'https://telegra.ph/file/c1cc6ec98f7a2ad655b26.jpg', 'https://telegra.ph/file/3c25230ae30d246194eba.jpg', 'https://telegra.ph/file/b01715a61b9e876c0d45d.jpg', 'https://telegra.ph/file/4ceaf720a96a24527ecff.jpg', 'https://telegra.ph/file/92ac7b30769bc074dba5c.jpg']
+
 stickers = [
     "CAADAQADeAIAAm_BZBQh8owdViocCAI",
     "CAADAQADegIAAm_BZBQ6j8GpKtnrSgI",
