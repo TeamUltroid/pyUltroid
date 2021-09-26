@@ -12,19 +12,11 @@ from random import choice, randrange, shuffle
 import requests
 from bs4 import BeautifulSoup as bs
 from faker import Faker
-from telegraph import Telegraph
 
 from .. import *
 from ..dB._core import LIST
 from . import some_random_headers
 from .tools import async_searcher
-
-# -------------
-
-telegraph = Telegraph()
-telegraph.create_account(short_name="Ultroid Cmds List")
-
-# --------------------------------------------------
 
 
 async def randomchannel(
@@ -97,28 +89,26 @@ async def google_search(query):
 # ----------------------------------------------------
 
 
-async def allcmds(event):
-    str(LIST)
+async def allcmds(event, telegraph):
     txt = ""
     for z in LIST.keys():
         txt += f"PLUGIN NAME: {z}\n"
         for zz in LIST[z]:
             txt += HNDLR + zz + "\n"
         txt += "\n\n"
-    t = telegraph.create_page(title="Ultroid All Cmds", content=[f"{xx}"])
+    t = telegraph.create_page(title="Ultroid All Cmds", content=[txt])
     await eor(event, f"All Ultroid Cmds : [Click Here]({t['url']})", link_preview=False)
 
 
-def ReTrieveFile(input_file_name):
+async def ReTrieveFile(input_file_name):
     RMBG_API = udB.get("RMBG_API")
     headers = {"X-API-Key": RMBG_API}
     files = {"image_file": (input_file_name, open(input_file_name, "rb"))}
-    return requests.post(
+    return await async_searcher(
         "https://api.remove.bg/v1.0/removebg",
+        post=True,
         headers=headers,
-        files=files,
-        allow_redirects=True,
-        stream=True,
+        data=files,
     )
 
 
