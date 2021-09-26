@@ -63,7 +63,7 @@ if plugin_channels:
 if not udB.get("LOG_OFF"):
     ultroid_bot.run_in_loop(ready())
 
-# cleanup_cache()
+cleanup_cache()
 
 if __name__ == "__main__":
     LOGS.info(
