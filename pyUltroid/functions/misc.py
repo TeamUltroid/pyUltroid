@@ -24,6 +24,7 @@ except ImportError:
     instagrapi = None
     ManualInputRequired = None
 
+
 async def randomchannel(
     tochat, channel, range1, range2, caption=None, client=ultroid_bot
 ):
@@ -292,6 +293,7 @@ async def get_synonyms_or_antonyms(word, type_of_words):
     li = [y["term"] for y in li_1]
     return li
 
+
 # --------------------- Instagram Plugin ------------------------- #
 # @New-dev0
 
@@ -299,10 +301,11 @@ INSTA_CLIENT = []
 
 
 async def get_insta_code(cl, username, password):
-    from .. import ultroid_bot, asst
+    from .. import asst, ultroid_bot
+
     async with asst.conversation(ultroid_bot.uid, timeout=60 * 2) as conv:
         await conv.send_message(
-                "Enter The **Instagram Verification Code** Sent to Your Email.."
+            "Enter The **Instagram Verification Code** Sent to Your Email.."
         )
         ct = await conv.get_response()
         while not ct.text.isdigit():
@@ -327,6 +330,7 @@ async def create_instagram_client(event):
     except IndexError:
         pass
     from .. import udB
+
     username = udB.get("INSTA_USERNAME")
     password = udB.get("INSTA_PASSWORD")
     if not (username and password):
@@ -344,4 +348,3 @@ async def create_instagram_client(event):
     CLIENT.append(cl)
     udB.set("INSTA_SET", str(cl.get_settings()))
     return cl
-
