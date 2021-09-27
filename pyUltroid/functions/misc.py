@@ -17,6 +17,12 @@ from ..dB._core import LIST
 from . import some_random_headers
 from .tools import async_searcher
 
+try:
+    import instagrapi
+    from instagrapi.exceptions import ManualInputRequired
+except ImportError:
+    instagrapi = None
+    ManualInputRequired = None
 
 async def randomchannel(
     tochat, channel, range1, range2, caption=None, client=ultroid_bot
@@ -285,3 +291,57 @@ async def get_synonyms_or_antonyms(word, type_of_words):
     ]
     li = [y["term"] for y in li_1]
     return li
+
+# --------------------- Instagram Plugin ------------------------- #
+# @New-dev0
+
+INSTA_CLIENT = []
+
+
+async def get_insta_code(cl, username, password):
+    from .. import ultroid_bot, asst
+    async with asst.conversation(ultroid_bot.uid, timeout=60 * 2) as conv:
+        await conv.send_message(
+                "Enter The **Instagram Verification Code** Sent to Your Email.."
+        )
+        ct = await conv.get_response()
+        while not ct.text.isdigit():
+            if ct.message == "/cancel":
+                await conv.send_message("Canceled Verification!")
+                return
+            await conv.send_message(
+                "CODE SHOULD BE INTEGER\nSend The Code Back or\nUse /cancel to Cancel Process..."
+            )
+            ct = await conv.get_response()
+        try:
+            cl.login(username, password, verification_code=ct.text)
+        except ManualInputRequired as er:
+            LOGS.exception(er)
+            await conv.send_message("Wrong Code Entered ❌\n__Try Back!__")
+            await get_insta_code(cl, username, password)
+
+
+async def create_instagram_client(event):
+    try:
+        return INSTA_CLIENT[0]
+    except IndexError:
+        pass
+    from .. import udB
+    username = udB.get("INSTA_USERNAME")
+    password = udB.get("INSTA_PASSWORD")
+    if not (username and password):
+        return
+    settings = eval(udB.get("INSTA_SET")) if udB.get("INSTA_SET") else {}
+    cl = instagrapi.Client(settings)
+    try:
+        cl.login(username, password)
+    except ManualInputRequired:
+        await eor(event, f"Check Pm From @{asst.me.username}")
+        await get_insta_code(cl, username, password)
+    except Exception as er:
+        LOGS.exception(er)
+        return await eor(event, str(er))
+    CLIENT.append(cl)
+    udB.set("INSTA_SET", str(cl.get_settings()))
+    return cl
+
