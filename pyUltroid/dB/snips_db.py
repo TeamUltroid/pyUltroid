@@ -13,9 +13,9 @@ except BaseException:
     udB.set("SNIP", "{}")
 
 
-def add_snip(word, msg, media):
+def add_snip(word, msg, media, button):
     ok = eval(udB.get("SNIP"))
-    ok.update({word: {"msg": msg, "media": media}})
+    ok.update({word: {"msg": msg, "media": media, "button": button}})
     udB.set("SNIP", str(ok))
 
 
