@@ -23,9 +23,9 @@ except BaseException:
     udB.set("THANK_MEMBERS", "{}")
 
 
-def add_welcome(chat, msg, media):
+def add_welcome(chat, msg, media, button):
     ok = eval(udB.get("WELCOME"))
-    ok.update({chat: {"welcome": msg, "media": media}})
+    ok.update({chat: {"welcome": msg, "media": media, "button": button}})
     return udB.set("WELCOME", str(ok))
 
 
@@ -46,9 +46,9 @@ def delete_welcome(chat):
     return
 
 
-def add_goodbye(chat, msg, media):
+def add_goodbye(chat, msg, media, button):
     ok = eval(udB.get("GOODBYE"))
-    ok.update({chat: {"goodbye": msg, "media": media}})
+    ok.update({chat: {"goodbye": msg, "media": media, "button": button}})
     return udB.set("GOODBYE", str(ok))
 
 
