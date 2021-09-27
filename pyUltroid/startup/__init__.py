@@ -23,7 +23,7 @@ TeleLogger = getLogger("Telethon")
 TeleLogger.setLevel(WARNING)
 
 basicConfig(
-    format="%(asctime)s || %(name)s [%(levelname)s] - %(message)s",
+    format="%(asctime)s || %(name)s [%(levelname)s] : %(message)s",
     level=INFO,
     datefmt="%m/%d/%Y, %H:%M:%S",
     handlers=[FileHandler("ultroid.log"), StreamHandler()],
