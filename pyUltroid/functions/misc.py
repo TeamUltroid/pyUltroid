@@ -349,7 +349,8 @@ async def create_instagram_client(event):
         await get_insta_code(cl, username, password)
     except Exception as er:
         LOGS.exception(er)
-        return await eor(event, str(er))
+        await eor(event, str(er))
+        return
     CLIENT.append(cl)
     udB.set("INSTA_SET", str(cl.get_settings()))
     return cl
