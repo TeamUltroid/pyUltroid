@@ -146,8 +146,8 @@ def format_btn(buttons: list):
     for i in buttons:
         a = 0
         for i in i:
-            a += 1
             if hasattr(i.button, "url"):
+                a += 1
                 if a > 1:
                     txt += f"[{i.button.text} | {i.button.url} | same]"
                 else:
