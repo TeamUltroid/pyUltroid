@@ -14,9 +14,9 @@ except BaseException:
     udB.set("ASST_CMDS", "{}")
 
 
-def add_cmd(cmd, msg, media):
+def add_cmd(cmd, msg, media, button):
     ok = eval(udB.get("ASST_CMDS"))
-    ok.update({cmd: {"msg": msg, "media": media}})
+    ok.update({cmd: {"msg": msg, "media": media, "button": button}})
     return udB.set("ASST_CMDS", str(ok))
 
 
@@ -32,7 +32,7 @@ def cmd_reply(cmd):
     ok = eval(udB.get("ASST_CMDS"))
     if ok.get(cmd):
         okk = ok[cmd]
-        return okk["msg"], okk["media"]
+        return okk["msg"], okk["media"], okk["button"] if ok.get("button") else None
     return
 
 
