@@ -134,10 +134,23 @@ def create_tl_btn(button: list):
         kk = []
         if len(z) > 1:
             for x, y in z:
-                kk.append(Button.url(x, y))
+                kk.append(Button.url(x, y.strip()))
             btn.append(kk)
         else:
-            btn.append([Button.url(z[0][0], z[0][1])])
+            btn.append([Button.url(z[0][0], z[0][1].strip())])
+    return btn
+
+
+def format_btn(buttons: list):
+    txt = ""
+    for i in buttons:
+        a = 0
+        for i in i:
+            a += 1
+            if hasattr(i.button, "url"):
+                if a > 1: txt += f"[{i.button.text} | {i.button.url} | same]"
+                else: txt += f"[{i.button.text} | {i.button.url}]"
+    _, btn = get_msg_button(txt)
     return btn
 
 
