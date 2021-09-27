@@ -126,7 +126,7 @@ def get_msg_button(texts: str):
     for z in re.findall("\\[.+?\\|.+?\\]", texts):
         txt = txt.replace(z, "")
 
-    return txt, btn
+    return txt.strip(), btn
 
 
 def create_tl_btn(button: list):
