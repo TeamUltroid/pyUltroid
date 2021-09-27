@@ -13,12 +13,12 @@ except BaseException:
     udB.set("NOTE", "{}")
 
 
-def add_note(chat, word, msg, media):
+def add_note(chat, word, msg, media, button):
     ok = eval(udB.get("NOTE"))
     if ok.get(chat):
-        ok[chat].update({word: {"msg": msg, "media": media}})
+        ok[chat].update({word: {"msg": msg, "media": media, "button": button}})
     else:
-        ok.update({chat: {word: {"msg": msg, "media": media}}})
+        ok.update({chat: {word: {"msg": msg, "media": media, "button": button}}})
     udB.set("NOTE", str(ok))
 
 
