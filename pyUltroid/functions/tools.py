@@ -114,6 +114,8 @@ def get_msg_button(texts: str):
         text, url = z
         urls = url.split("|")
         url = urls[0]
+        if not is_url_ok(url):
+            continue
         if len(urls) > 1:
             btn[-1].append([text, url])
         else:
@@ -132,10 +134,10 @@ def create_tl_btn(button: list):
         kk = []
         if len(z) > 1:
             for x, y in z:
-                kk.append(Button.inline(x, y))
+                kk.append(Button.url(x, y))
             btn.append(kk)
         else:
-            btn.append([Button.inline(z[0][0], z[0][1])])
+            btn.append([Button.url(z[0][0], z[0][1])])
     return btn
 
 
