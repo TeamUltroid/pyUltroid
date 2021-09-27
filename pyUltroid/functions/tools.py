@@ -7,7 +7,7 @@
 
 import json
 import math
-import os
+import os, re
 import ssl
 import subprocess
 from json.decoder import JSONDecodeError
@@ -102,6 +102,37 @@ def is_url_ok(url: str):
     except BaseException:
         return False
     return r.ok
+
+# ~~~~~~~~~~~~~~~~ Button stuffs ~~~~~~~~~~~~~~~
+
+def get_msg_button(texts : str):
+    btn = []
+    for z in (re.findall("\[(.*?)\|(.*?)\]", texts)):
+        text, url = z
+        urls = url.split("|")
+        url = urls[0]
+        if len(urls) > 1:
+            btn[-1].append([text, url])
+        else:
+            btn.append([[text, url]])
+
+    txt = texts
+    for z in (re.findall("\[.+?\|.+?\]", texts)):
+        txt = txt.replace(z, "")
+
+    return txt, btn
+
+def create_tl_btn(button: list):
+    btn = []
+    for z in button:
+        kk = []
+        if len(z) > 1:
+           for x,y in z:
+               kk.append(Button.inline(x,y))
+           btn.append(kk)
+        else:
+           btn.append([Button.inline(z[0][0], z[0][1])])
+    return btn
 
 
 # ~~~~~~~~~~~~~~~Saavn Downloader~~~~~~~~~~~~~~~
