@@ -115,8 +115,8 @@ def get_msg_button(texts: str):
         text, url = z
         urls = url.split("|")
         url = urls[0]
-        if not is_url_ok(url):
-            continue
+        # if not is_url_ok(url):
+        #    continue
         if len(urls) > 1:
             btn[-1].append([text, url])
         else:
