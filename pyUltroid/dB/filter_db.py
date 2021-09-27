@@ -13,12 +13,12 @@ except BaseException:
     udB.set("FILTERS", "{}")
 
 
-def add_filter(chat, word, msg, media):
+def add_filter(chat, word, msg, media, button):
     ok = eval(udB.get("FILTERS"))
     if ok.get(chat):
-        ok[chat].update({word: {"msg": msg, "media": media}})
+        ok[chat].update({word: {"msg": msg, "media": media, "button": button}})
     else:
-        ok.update({chat: {word: {"msg": msg, "media": media}}})
+        ok.update({chat: {word: {"msg": msg, "media": media, "button": button}}})
     udB.set("FILTERS", str(ok))
 
 
