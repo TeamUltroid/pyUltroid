@@ -163,9 +163,9 @@ def format_btn(buttons: list):
 async def saavn_dl(query: str):
     query = query.replace(" ", "%20")
     try:
-        data = await async_searcher(
+        data = (await async_searcher(
             url=f"https://jostapi.herokuapp.com/saavn?query={query}", re_json=True
-        )[0]
+        ))[0]
     except BaseException:
         return None, None, None, None
     try:
