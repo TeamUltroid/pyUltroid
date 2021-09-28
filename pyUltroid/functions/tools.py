@@ -105,6 +105,23 @@ def is_url_ok(url: str):
         return False
     return r.ok
 
+# ~~~~~~~~~~~~~~~~ Metadata ~~~~~~~~~~~~~~~~~~~~
+
+def metadata (file):
+    out, _ = await bash(f"mediainfo '''{file}''' --Output=JSON")
+    data = {}
+    try:
+        info = json.loads(out)
+        info = info["media"]["track"]
+        data["title"] = info[0].get("Title") or file.split("/")[-1].split(".")[0]
+        data["duration"] = int(float(info[0]["Duration"]))
+        data["performer"] = info[0].get("Performer")
+        if len(info) > 2:
+            data["height"] = int(info[1]["Height"])
+            data["width"] = int(info[1]["Width"])
+    except BaseException:
+        pass
+    return data
 
 # ~~~~~~~~~~~~~~~~ Button stuffs ~~~~~~~~~~~~~~~
 
