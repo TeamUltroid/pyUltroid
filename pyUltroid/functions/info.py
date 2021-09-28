@@ -22,7 +22,6 @@ from ..misc._wrappers import eor
 
 
 async def get_user_id(ids, client=ultroid_bot):
-    """Get User Id from text"""
     if str(ids).isdigit() or str(ids).startswith("-"):
         if str(ids).startswith("-100"):
             userid = int(str(ids).replace("-100", ""))
@@ -35,37 +34,29 @@ async def get_user_id(ids, client=ultroid_bot):
     return userid
 
 
+async def get_uinfo(e):
+    user, data = None, None
+    if e.reply_to:
+        reply = await e.get_reply_message()
+        user = reply.sender
+        data = e.pattern_match.group(1)
+    else:
+        ok =  e.pattern_match.group(1).split(maxsplit=1)
+        if len(ok) >= 1:
+            usr = ok[0]
+            if usr.isdigit():
+                usr = int(usr)
+            try:
+                user = await e.get_entity(usr)
+            except:
+                pass
+            if len(ok) == 2:
+                data = ok[1]
+    return user, data
+
+
+
 # Random stuffs dk who added
-
-
-async def get_user_info(event):
-    args = event.pattern_match.group(1).split(" ", 1)
-    extra = None
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        user_obj = await event.client.get_entity(previous_message.sender_id)
-        extra = event.pattern_match.group(1)
-    elif args:
-        user = args[0]
-        if len(args) == 2:
-            extra = args[1]
-        if user.isnumeric():
-            user = int(user)
-        if not user:
-            await event.edit("`Reply to a user or give a user-id/name.`")
-            return None, None
-        if event.message.entities:
-            probable_user_mention_entity = event.message.entities[0]
-            if isinstance(probable_user_mention_entity, types.MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                user_obj = await event.client.get_entity(user_id)
-                return user_obj, extra
-        try:
-            user_obj = await event.client.get_entity(user)
-        except (TypeError, ValueError):
-            return None, None
-    return user_obj, extra
-
 
 async def get_full_user(event):
     if event.reply_to_msg_id:
@@ -128,7 +119,7 @@ async def get_full_user(event):
                 return None, e
 
 
-async def get_chatinfo(event):
+async def fetch_info(event):
     chat = event.pattern_match.group(1)
     if chat:
         with suppress(ValueError):
@@ -152,10 +143,7 @@ async def get_chatinfo(event):
     else:
         await eor(event, "`Use this for Group/Channel.`")
         return
-    return chat_info
-
-
-async def fetch_info(chat, event):
+    chat = chat_info
     chat_obj_info = await event.client.get_entity(chat.full_chat.id)
     broadcast = (
         chat_obj_info.broadcast if hasattr(chat_obj_info, "broadcast") else False
