@@ -1,4 +1,10 @@
-from logging import getLogger
+# Ultroid - UserBot
+# Copyright (C) 2021 TeamUltroid
+#
+# This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
+# PLease read the GNU Affero General Public License in
+# <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
+
 
 from telethon import TelegramClient
 from telethon.errors import (
@@ -15,13 +21,13 @@ class UltroidClient(TelegramClient):
     def __init__(
         self,
         session,
-        *args,
-        logger=LOGS,
         bot_token=None,
         udB=None,
+        logger=LOGS,
+        *args,
         **kwargs,
     ):
-        self.logger = logger or getLogger("pyUltroid")
+        self.logger = logger
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
