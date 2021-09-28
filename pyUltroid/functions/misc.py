@@ -13,11 +13,12 @@ from bs4 import BeautifulSoup as bs
 from faker import Faker
 
 from .. import *
+from ..configs import Var
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
 from .tools import async_searcher
-from ..configs import Var
+
 try:
     import instagrapi
     from instagrapi.exceptions import ManualInputRequired
@@ -302,6 +303,7 @@ INSTA_CLIENT = []
 SYNC_ = []
 _API_ID = Var.API_ID
 _API_HASH = Var.API_HASH
+
 
 def create_sync_client():
     if SYNC_:
