@@ -26,9 +26,9 @@ class RedisConnection(Redis):
         self,
         host,
         password,
-        *args,
         platform=None,
-        logger=None,
+        logger=LOGS,
+        *args,
         **kwargs,
     ):
         if ":" in host:
@@ -110,7 +110,7 @@ def where_hosted():
         return "railway"
     elif os.getenv("KUBERNETES_PORT"):
         return "qovery"
-    elif os.getenv("WINDOW"):
+    elif os.getenv("WINDOW") and os.getenv("WINDOW") != "0":
         return "windows"
     elif os.getenv("HOSTNAME"):
         return "github actions"
