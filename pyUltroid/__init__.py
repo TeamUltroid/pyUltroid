@@ -33,7 +33,7 @@ udB = RedisConnection(
     retry_on_timeout=True,
 )
 if udB.ping():
-    TeleLogger.info("Connected to Redis Database")
+    LOGS.info("Connected to Redis Database")
 
 
 ultroid_bot = UltroidClient(
