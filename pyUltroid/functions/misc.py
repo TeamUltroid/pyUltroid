@@ -299,30 +299,34 @@ async def get_synonyms_or_antonyms(word, type_of_words):
 # @New-dev0
 
 INSTA_CLIENT = []
+SYNC_ = []
 
+def create_sync_client():
+    if SYNC_:
+        return SYNC_[0]
+    from telethon.sync import TelegramClient
+    from .. import udB
+    client = TelegramClient(None, Var.API_ID, Var.API_HASH).start(bot_token=udB.get("BOT_TOKEN"))
+    SYNC_.append(client)
+    return client
 
-async def get_insta_code(cl, username, password):
-    from .. import asst, ultroid_bot
-
-    async with asst.conversation(ultroid_bot.uid, timeout=60 * 2) as conv:
-        await conv.send_message(
+def get_insta_code(username, choice=1):
+    from .. import ultroid_bot
+    asst = create_sync_client()
+    with asst.conversation(ultroid_bot.uid, timeout=60 * 5) as conv:
+        conv.send_message(
             "Enter The **Instagram Verification Code** Sent to Your Email.."
         )
-        ct = await conv.get_response()
+        ct = conv.get_response()
         while not ct.text.isdigit():
             if ct.message == "/cancel":
-                await conv.send_message("Canceled Verification!")
+                conv.send_message("Canceled Verification!")
                 return
-            await conv.send_message(
+            conv.send_message(
                 "CODE SHOULD BE INTEGER\nSend The Code Back or\nUse /cancel to Cancel Process..."
             )
-            ct = await conv.get_response()
-        try:
-            cl.login(username, password, verification_code=ct.text)
-        except ManualInputRequired as er:
-            LOGS.exception(er)
-            await conv.send_message("Wrong Code Entered ❌\n__Try Back!__")
-            await get_insta_code(cl, username, password)
+            ct = conv.get_response()
+    return ct.text
 
 
 async def create_instagram_client(event):
@@ -342,6 +346,7 @@ async def create_instagram_client(event):
         return
     settings = eval(udB.get("INSTA_SET")) if udB.get("INSTA_SET") else {}
     cl = instagrapi.Client(settings)
+    cl.challenge_code_handler = get_insta_code
     try:
         cl.login(username, password)
     except ManualInputRequired:
