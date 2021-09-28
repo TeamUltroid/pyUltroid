@@ -1358,7 +1358,7 @@ class googleimagesdownload:
                     arguments["format"],
                     arguments["ignore_urls"],
                 )
-                if not arguments["silent_mode"]:
+                #if not arguments["silent_mode"]:
                     #print(download_message)
                 if download_status == "success":
 
