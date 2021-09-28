@@ -41,22 +41,22 @@ async def get_uinfo(e):
         user = reply.sender
         data = e.pattern_match.group(1)
     else:
-        ok =  e.pattern_match.group(1).split(maxsplit=1)
+        ok = e.pattern_match.group(1).split(maxsplit=1)
         if len(ok) >= 1:
             usr = ok[0]
             if usr.isdigit():
                 usr = int(usr)
             try:
                 user = await e.get_entity(usr)
-            except:
+            except BaseException:
                 pass
             if len(ok) == 2:
                 data = ok[1]
     return user, data
 
 
-
 # Random stuffs dk who added
+
 
 async def get_full_user(event):
     if event.reply_to_msg_id:
