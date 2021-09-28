@@ -301,17 +301,24 @@ async def get_synonyms_or_antonyms(word, type_of_words):
 INSTA_CLIENT = []
 SYNC_ = []
 
+
 def create_sync_client():
     if SYNC_:
         return SYNC_[0]
     from telethon.sync import TelegramClient
+
     from .. import udB
-    client = TelegramClient(None, Var.API_ID, Var.API_HASH).start(bot_token=udB.get("BOT_TOKEN"))
+
+    client = TelegramClient(None, Var.API_ID, Var.API_HASH).start(
+        bot_token=udB.get("BOT_TOKEN")
+    )
     SYNC_.append(client)
     return client
 
+
 def get_insta_code(username, choice=1):
     from .. import ultroid_bot
+
     asst = create_sync_client()
     with asst.conversation(ultroid_bot.uid, timeout=60 * 5) as conv:
         conv.send_message(
