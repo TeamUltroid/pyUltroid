@@ -17,7 +17,7 @@ from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
 from .tools import async_searcher
-
+from ..configs import Var
 try:
     import instagrapi
     from instagrapi.exceptions import ManualInputRequired
@@ -300,7 +300,8 @@ async def get_synonyms_or_antonyms(word, type_of_words):
 
 INSTA_CLIENT = []
 SYNC_ = []
-
+_API_ID = Var.API_ID
+_API_HASH = Var.API_HASH
 
 def create_sync_client():
     if SYNC_:
@@ -309,7 +310,7 @@ def create_sync_client():
 
     from .. import udB
 
-    client = TelegramClient(None, Var.API_ID, Var.API_HASH).start(
+    client = TelegramClient(None, _API_ID, _API_HASH).start(
         bot_token=udB.get("BOT_TOKEN")
     )
     SYNC_.append(client)
