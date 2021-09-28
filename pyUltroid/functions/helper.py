@@ -125,7 +125,7 @@ async def safeinstall(event):
     try:
         load_addons(plug)
     except BaseException:
-        return await eor(ok, f"**ERROR**\n\n`{traceback.format_exc()}`", time=10)
+        return await eor(ok, f"**ERROR**\n\n`{format_exc()}`", time=10)
     if plug in HELP:
         output = "**Plugin** - `{}`\n".format(plug)
         for i in HELP[plug]:
