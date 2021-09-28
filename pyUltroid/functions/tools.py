@@ -105,9 +105,11 @@ def is_url_ok(url: str):
         return False
     return r.ok
 
+
 # ~~~~~~~~~~~~~~~~ Metadata ~~~~~~~~~~~~~~~~~~~~
 
-def metadata (file):
+
+def metadata(file):
     out, _ = await bash(f"mediainfo '''{file}''' --Output=JSON")
     data = {}
     try:
@@ -122,6 +124,7 @@ def metadata (file):
     except BaseException:
         pass
     return data
+
 
 # ~~~~~~~~~~~~~~~~ Button stuffs ~~~~~~~~~~~~~~~
 
