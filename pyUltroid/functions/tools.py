@@ -109,7 +109,7 @@ def is_url_ok(url: str):
 # ~~~~~~~~~~~~~~~~ Metadata ~~~~~~~~~~~~~~~~~~~~
 
 
-def metadata(file):
+async def metadata(file):
     out, _ = await bash(f"mediainfo '''{file}''' --Output=JSON")
     data = {}
     try:
