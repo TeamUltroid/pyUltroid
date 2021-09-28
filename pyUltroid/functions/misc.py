@@ -13,7 +13,6 @@ from bs4 import BeautifulSoup as bs
 from faker import Faker
 
 from .. import *
-from ..configs import Var
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
@@ -300,43 +299,25 @@ async def get_synonyms_or_antonyms(word, type_of_words):
 # @New-dev0
 
 INSTA_CLIENT = []
-SYNC_ = []
-_API_ID = Var.API_ID
-_API_HASH = Var.API_HASH
 
 
-def create_sync_client():
-    if SYNC_:
-        return SYNC_[0]
-    from telethon.sync import TelegramClient
+async def get_insta_code(username):
+    from .. import asst, ultroid_bot
 
-    from .. import udB
-
-    client = TelegramClient(None, _API_ID, _API_HASH).start(
-        bot_token=udB.get("BOT_TOKEN")
-    )
-    SYNC_.append(client)
-    return client
-
-
-def get_insta_code(username, choice=1):
-    from .. import ultroid_bot
-
-    asst = create_sync_client()
-    with asst.conversation(ultroid_bot.uid, timeout=60 * 5) as conv:
-        conv.send_message(
+    async with asst.conversation(ultroid_bot.uid, timeout=60 * 2) as conv:
+        await conv.send_message(
             "Enter The **Instagram Verification Code** Sent to Your Email.."
         )
-        ct = conv.get_response()
+        ct = await conv.get_response()
         while not ct.text.isdigit():
             if ct.message == "/cancel":
-                conv.send_message("Canceled Verification!")
+                await conv.send_message("Cancelled Verification!")
                 return
-            conv.send_message(
+            await conv.send_message(
                 "CODE SHOULD BE INTEGER\nSend The Code Back or\nUse /cancel to Cancel Process..."
             )
-            ct = conv.get_response()
-    return ct.text
+            ct = await conv.get_response()
+        return ct.text
 
 
 async def create_instagram_client(event):
@@ -356,7 +337,6 @@ async def create_instagram_client(event):
         return
     settings = eval(udB.get("INSTA_SET")) if udB.get("INSTA_SET") else {}
     cl = instagrapi.Client(settings)
-    cl.challenge_code_handler = get_insta_code
     try:
         cl.login(username, password)
     except ManualInputRequired:
