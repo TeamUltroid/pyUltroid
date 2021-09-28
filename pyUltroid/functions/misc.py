@@ -349,6 +349,6 @@ async def create_instagram_client(event):
         LOGS.exception(er)
         await eor(event, str(er))
         return False
-    CLIENT.append(cl)
     udB.set("INSTA_SET", str(cl.get_settings()))
+    INSTA_CLIENT.append(cl)
     return cl
