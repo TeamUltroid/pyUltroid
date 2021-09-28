@@ -1359,7 +1359,7 @@ class googleimagesdownload:
                     arguments["ignore_urls"],
                 )
                 if not arguments["silent_mode"]:
-                    print(download_message)
+                    #print(download_message)
                 if download_status == "success":
 
                     # download image_thumbnails
