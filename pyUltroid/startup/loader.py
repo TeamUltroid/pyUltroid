@@ -62,7 +62,7 @@ class Loader:
                         self._logger.exception(em)
 
 
-def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None, udB=None):
+def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for official
     Loader(path="plugins", key="Official", logger=LOGS).load()
