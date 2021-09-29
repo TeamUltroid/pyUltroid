@@ -122,7 +122,7 @@ async def metadata(file):
         data["performer"] = (
             info[0].get("Performer") or udB.get("artist") or ultroid_bot.me.first_name
         )
-        if len(info) > 2:
+        if len(info) >= 2:
             data["height"] = int(info[1]["Height"]) if info[1].get("Height") else 720
             data["width"] = int(info[1]["Width"]) if info[1].get("Width") else 1280
     except BaseException:
