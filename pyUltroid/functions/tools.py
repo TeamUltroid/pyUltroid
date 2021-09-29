@@ -315,7 +315,7 @@ async def get_paste(data: str, extension: str = "txt"):
 
 
 # Thanks https://t.me/KukiUpdates/23 for ChatBotApi
-async def get_chatbot_reply(event, message):
+async def get_chatbot_reply(message):
     chatbot_base = "https://kuki-api.tk/api/Ultroid/{}/message={}"
     req_link = chatbot_base.format(
         ultroid_bot.me.first_name or "ultroid user",
