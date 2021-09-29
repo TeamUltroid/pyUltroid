@@ -53,7 +53,7 @@ async def quora_scrape(query):
     )
     data = re.findall(
         r'window\.ansFrontendGlobals\.data\.inlineQueryResults\.results\[".*?"\] = ("{.*}");',
-        x,
+        parsed,
     )[-1]
     return json_parser(data)
 
