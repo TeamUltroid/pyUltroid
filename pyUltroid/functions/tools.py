@@ -322,7 +322,7 @@ async def get_chatbot_reply(event, message):
         message,
     )
     try:
-        return (await async_searcher(req_link, re_json=True))["message"]
+        return (await async_searcher(req_link, re_json=True)).get("reply")
     except Exception:
         LOGS.info(f"**ERROR:**`{format_exc()}`")
 
