@@ -242,6 +242,7 @@ def get_all_files(path):
             filelist.append(os.path.join(root, file))
     return sorted(filelist)
 
+
 def text_set(text):
     lines = []
     if len(text) <= 55:
@@ -256,6 +257,7 @@ def text_set(text):
                 for z in range(1, k + 2):
                     lines.append(line[((z - 1) * 55) : (z * 55)])
     return lines[:25]
+
 
 # ------------------Logo Gen Helpers----------------
 # Add ur usernames who created
