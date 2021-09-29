@@ -79,6 +79,7 @@ async def async_searcher(
 
 
 def json_parser(data, indent=None):
+    parsed = {}
     try:
         if isinstance(data, str):
             parsed = json.loads(str(data))
