@@ -318,10 +318,10 @@ async def get_chatbot_reply(event, message):
     chatbot_base = "https://api.affiliateplus.xyz/api/chatbot?message={message}&botname=Ultroid&ownername={owner}&user=20"
     req_link = chatbot_base.format(
         message=message,
-        owner=(ultroid_bot.me.first_name or "ultroid user"),
+        owner=ultroid_bot.me.first_name,
     )
     try:
-        return await async_searcher(req_link, re_json=True)["message"]
+        return (await async_searcher(req_link, re_json=True))["message"]
     except Exception:
         LOGS.info(f"**ERROR:**`{format_exc()}`")
 
