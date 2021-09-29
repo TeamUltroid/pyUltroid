@@ -314,11 +314,12 @@ async def get_paste(data: str, extension: str = "txt"):
         return None, str(e)
 
 
+# Thanks https://t.me/KukiUpdates/23 for ChatBotApi
 async def get_chatbot_reply(event, message):
-    chatbot_base = "https://api.affiliateplus.xyz/api/chatbot?message={message}&botname=Ultroid&ownername={owner}&user=20"
+    chatbot_base = "https://kuki-api.tk/api/Ultroid/{}/message={}"
     req_link = chatbot_base.format(
-        message=message,
-        owner=ultroid_bot.me.first_name,
+        ultroid_bot.me.first_name or "ultroid user",
+        message,
     )
     try:
         return (await async_searcher(req_link, re_json=True))["message"]
