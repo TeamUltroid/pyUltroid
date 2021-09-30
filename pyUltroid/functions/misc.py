@@ -11,7 +11,7 @@ from random import choice, randrange, shuffle
 
 from bs4 import BeautifulSoup as bs
 from faker import Faker
-
+from logging import WARNING
 from .. import *
 from ..dB._core import LIST
 from ..misc._wrappers import eor
@@ -350,5 +350,6 @@ async def create_instagram_client(event):
         await eor(event, str(er))
         return False
     udB.set("INSTA_SET", str(cl.get_settings()))
+    cl.logger.setLevel(WARNING)
     INSTA_CLIENT.append(cl)
     return cl
