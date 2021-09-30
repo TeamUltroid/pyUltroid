@@ -31,5 +31,5 @@ async def eor(event, text, **args):
 
 
 async def eod(event, text=None, **kwargs):
-    time = args.get("time", 5)
+    time = kwargs.get("time", 5)
     return await eor(event, text, time=time, **kwargs)
