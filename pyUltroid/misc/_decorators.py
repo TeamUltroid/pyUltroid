@@ -68,6 +68,9 @@ def compile_pattern(data, hndlr):
 
 
 def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
+    # With time and addition of Stuff
+    # Decorator has turned lengthy and non attractive.
+    # Todo : Make it better..
     args["func"] = lambda e: not e.fwd_from and not e.via_bot_id
     stack = inspect.stack()
     previous_stack_frame = stack[1]
