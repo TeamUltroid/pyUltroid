@@ -7,11 +7,12 @@
 
 
 import re
+from logging import WARNING
 from random import choice, randrange, shuffle
 
 from bs4 import BeautifulSoup as bs
 from faker import Faker
-from logging import WARNING
+
 from .. import *
 from ..dB._core import LIST
 from ..misc._wrappers import eor
