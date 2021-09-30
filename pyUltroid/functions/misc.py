@@ -16,7 +16,7 @@ from .. import *
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
-from .tools import async_searcher
+from .tools import async_searcher, json_parser
 
 try:
     import instagrapi
