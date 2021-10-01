@@ -17,8 +17,10 @@ async def eor(event, text, **args):
     parse_mode = args.get("parse_mode", "md")
     time = args.get("time", None)
     if not event.out:
-        event = await event.get_reply_message()
-        ok = await event.reply(text, link_preview=link_preview, parse_mode=parse_mode)
+        if event.is_reply:
+            event = await event.get_reply_message()
+        if event:
+            ok = await event.reply(text, link_preview=link_preview, parse_mode=parse_mode)
     else:
         ok = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
     if not DEL_TIME:
