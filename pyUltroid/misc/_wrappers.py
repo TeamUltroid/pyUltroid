@@ -9,20 +9,23 @@ import asyncio
 
 # edit or reply
 
+DEL_TIME = []
 
 async def eor(event, text, **args):
-    from .. import udB
-
     link_preview = args.get("link_preview", False)
     parse_mode = args.get("parse_mode", "md")
     time = args.get("time", None)
     if not event.out:
-        if event.is_reply:
-            event = await event.get_reply_message()
+        event = await event.get_reply_message()
         ok = await event.reply(text, link_preview=link_preview, parse_mode=parse_mode)
     else:
         ok = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
-    ut = udB.get("DEL_DELAY_TIME")
+    if not DEL_TIME:
+        from .. import udB
+        ut = udB.get("DEL_DELAY_TIME")
+        DEL_TIME.append(ut)
+    else:
+        ut = DEL_TIME[0]
     if time and ut != "None":
         time = ut or time
         await asyncio.sleep(int(time))
