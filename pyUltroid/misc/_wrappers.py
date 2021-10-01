@@ -11,6 +11,7 @@ import asyncio
 
 DEL_TIME = []
 
+
 async def eor(event, text, **args):
     link_preview = args.get("link_preview", False)
     parse_mode = args.get("parse_mode", "md")
@@ -22,6 +23,7 @@ async def eor(event, text, **args):
         ok = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
     if not DEL_TIME:
         from .. import udB
+
         ut = udB.get("DEL_DELAY_TIME")
         DEL_TIME.append(ut)
     else:
