@@ -20,7 +20,9 @@ async def eor(event, text, **args):
         if event.is_reply:
             event = await event.get_reply_message()
         if event:
-            ok = await event.reply(text, link_preview=link_preview, parse_mode=parse_mode)
+            ok = await event.reply(
+                text, link_preview=link_preview, parse_mode=parse_mode
+            )
     else:
         ok = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
     if not DEL_TIME:
