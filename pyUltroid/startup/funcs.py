@@ -40,23 +40,25 @@ def startup_stuff():
         if not os.path.isdir(x):
             os.mkdir(x)
 
-    if udB.get("CUSTOM_THUMBNAIL"):
-        urlretrieve(udB.get("CUSTOM_THUMBNAIL"), "resources/extras/ultroid.jpg")
+    CT = udB.get("CUSTOM_THUMBNAIL"):
+    if CT:
+        urlretrieve(CT, "resources/extras/ultroid.jpg")
 
-    if udB.get("GDRIVE_TOKEN"):
+    GT = udB.get("GDRIVE_TOKEN")
+    if GT:
         with open("resources/auths/auth_token.txt", "w") as t_file:
-            t_file.write(udB.get("GDRIVE_TOKEN"))
+            t_file.write(GT)
 
-    if udB.get("MEGA_MAIL") and udB.get("MEGA_PASS"):
+    if (MM := udB.get("MEGA_MAIL") and (MP := udB.get("MEGA_PASS")):
         with open(".megarc", "w") as mega:
             mega.write(
-                f'[Login]\nUsername = {udB.get("MEGA_MAIL")}\nPassword = {udB.get("MEGA_PASS")}'
+                f'[Login]\nUsername = {MM}\nPassword = {MP}'
             )
 
-    if udB.get("TIMEZONE"):
+    if (TZ := udB.get("TIMEZONE")):
         try:
-            timezone(udB.get("TIMEZONE"))
-            os.environ["TZ"] = udB.get("TIMEZONE")
+            timezone(TZ)
+            os.environ["TZ"] = TZ
             time.tzset()
         except BaseException:
             LOGS.info(
@@ -69,13 +71,13 @@ def startup_stuff():
 async def autobot():
     from .. import udB, ultroid_bot
 
-    if Var.BOT_TOKEN:
-        return udB.set("BOT_TOKEN", Var.BOT_TOKEN)
     if udB.get("BOT_TOKEN"):
         return
+    if Var.BOT_TOKEN:
+        return udB.set("BOT_TOKEN", Var.BOT_TOKEN)
     await ultroid_bot.start()
     LOGS.info("MAKING A TELEGRAM BOT FOR YOU AT @BotFather, Kindly Wait")
-    who = await ultroid_bot.get_me()
+    who = ultroid_bot.me
     name = who.first_name + "'s Assistant Bot"
     if who.username:
         username = who.username + "_bot"
