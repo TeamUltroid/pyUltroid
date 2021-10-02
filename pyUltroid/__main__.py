@@ -33,7 +33,7 @@ if not ultroid_bot.me.bot:
 LOGS.info("Initialising...")
 
 
-ultroid_bot.loop.run_until_complete(autopilot())
+ultroid_bot.run_in_loop(autopilot())
 
 pmbot = udB.get("PMBOT")
 manager = udB.get("MANAGER")
