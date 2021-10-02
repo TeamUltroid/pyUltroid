@@ -26,7 +26,8 @@ from telethon.tl.types import (
     InputChatUploadedPhoto,
     InputMessagesFilterDocument,
 )
-from .. import LOGS, ultroid_bot, asst
+
+from .. import LOGS, asst, ultroid_bot
 from ..configs import Var
 from ..functions.helper import download_file, updater
 
@@ -225,7 +226,7 @@ async def customize():
         else:
             sir = f"@{ultroid_bot.me.username}"
         await ultroid_bot.send_message(
-                chat_id, "Auto Customisation Started on @botfather"
+            chat_id, "Auto Customisation Started on @botfather"
         )
         await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", "/cancel")
@@ -237,28 +238,28 @@ async def customize():
         await ultroid_bot.send_message("botfather", UL)
         await asyncio.sleep(1)
         await ultroid_bot.send_file(
-                "botfather", "resources/extras/ultroid_assistant.jpg"
-            )
+            "botfather", "resources/extras/ultroid_assistant.jpg"
+        )
         await asyncio.sleep(2)
         await ultroid_bot.send_message("botfather", "/setabouttext")
         await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", UL)
         await asyncio.sleep(1)
         await ultroid_bot.send_message(
-                "botfather", f"✨ Hello ✨!! I'm Assistant Bot of {sir}"
-            )
+            "botfather", f"✨ Hello ✨!! I'm Assistant Bot of {sir}"
+        )
         await asyncio.sleep(2)
         await ultroid_bot.send_message("botfather", "/setdescription")
         await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", UL)
         await asyncio.sleep(1)
         await ultroid_bot.send_message(
-                "botfather",
-                f"✨ PowerFul Ultroid Assistant Bot ✨\n✨ Master ~ {sir} ✨\n\n✨ Powered By ~ @TeamUltroid ✨",
+            "botfather",
+            f"✨ PowerFul Ultroid Assistant Bot ✨\n✨ Master ~ {sir} ✨\n\n✨ Powered By ~ @TeamUltroid ✨",
         )
         await asyncio.sleep(2)
         await ultroid_bot.send_message(
-                chat_id, "**Auto Customisation** Done at @BotFather"
+            chat_id, "**Auto Customisation** Done at @BotFather"
         )
         LOGS.info("Customisation Done")
     except Exception as e:
