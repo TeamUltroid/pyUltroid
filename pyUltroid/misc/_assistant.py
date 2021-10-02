@@ -103,18 +103,3 @@ def in_pattern(pattern=None, owner=False, **kwargs):
         asst.add_event_handler(wrapper, InlineQuery(pattern=pattern, **kwargs))
 
     return don
-
-
-async def admin_check(event):
-    # Anonymous Admin Support
-    if isinstance(event.sender, Channel) and event.sender_id == event.chat_id:
-        return True
-    if str(event.sender_id) in owner_and_sudos():
-        return True
-    try:
-        perms = await event.client.get_permissions(event.chat_id, event.sender_id)
-    except UserNotParticipantError:
-        return False
-    return isinstance(
-        perms.participant, (ChannelParticipantAdmin, ChannelParticipantCreator)
-    )
