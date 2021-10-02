@@ -40,20 +40,18 @@ def startup_stuff():
         if not os.path.isdir(x):
             os.mkdir(x)
 
-    if (CT := udB.get("CUSTOM_THUMBNAIL")):
+    if CT := udB.get("CUSTOM_THUMBNAIL"):
         urlretrieve(CT, "resources/extras/ultroid.jpg")
 
-    if (GT := udB.get("GDRIVE_TOKEN")):
+    if GT := udB.get("GDRIVE_TOKEN"):
         with open("resources/auths/auth_token.txt", "w") as t_file:
             t_file.write(GT)
 
     if (MM := udB.get("MEGA_MAIL")) and (MP := udB.get("MEGA_PASS")):
         with open(".megarc", "w") as mega:
-            mega.write(
-                f'[Login]\nUsername = {MM}\nPassword = {MP}'
-            )
+            mega.write(f"[Login]\nUsername = {MM}\nPassword = {MP}")
 
-    if (TZ := udB.get("TIMEZONE")):
+    if TZ := udB.get("TIMEZONE"):
         try:
             timezone(TZ)
             os.environ["TZ"] = TZ
