@@ -90,7 +90,7 @@ def vc_connection(udB, ultroid_bot):
     if VC_SESSION and VC_SESSION != Var.SESSION:
         try:
             return TelegramClient(
-            StringSession(VC_SESSION), api_id=Var.API_ID, api_hash=Var.API_HASH
+                StringSession(VC_SESSION), api_id=Var.API_ID, api_hash=Var.API_HASH
             ).start()
         except (AuthKeyDuplicatedError, EOFError):
             LOGS.info("Your VC_SESSION Expired. Deleting VC_SESSION from redis...")
