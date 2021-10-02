@@ -7,10 +7,9 @@
 
 import asyncio
 import inspect
-import os
-from io import BytesIO
 import re
 import sys
+from io import BytesIO
 from pathlib import Path
 from time import gmtime, strftime
 from traceback import format_exc
@@ -259,9 +258,9 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                         with BytesIO(ftext.encode()) as file:
                             file.name = "logs.txt"
                             await asst.send_file(
-                            int(udB["LOG_CHANNEL"]),
-                            file,
-                            caption="**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n",
+                                int(udB["LOG_CHANNEL"]),
+                                file,
+                                caption="**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n",
                             )
                     else:
                         await asst.send_message(
