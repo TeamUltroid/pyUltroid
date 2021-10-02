@@ -8,6 +8,7 @@
 import asyncio
 import inspect
 import os
+from io import BytesIO
 import re
 import sys
 from pathlib import Path
@@ -209,7 +210,8 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                     MessageDeleteForbiddenError,
                 ):
                     pass
-                except AuthKeyDuplicatedError:
+                except AuthKeyDuplicatedError as er:
+                    LOGS.exception(er)
                     await asst.send_message(
                         int(udB.get("LOG_CHANNEL")),
                         "Session String expired, create new session from 👇",
@@ -254,14 +256,13 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                     ftext += result + "`"
 
                     if len(ftext) > 4096:
-                        with open("logs.txt", "w") as log:
-                            log.write(ftext)
-                        await asst.send_file(
+                        with BytesIO(ftext.encode()) as file:
+                            file.name = "logs.txt"
+                            await asst.send_file(
                             int(udB["LOG_CHANNEL"]),
-                            "logs.txt",
+                            file,
                             caption="**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n",
-                        )
-                        os.remove("logs.txt")
+                            )
                     else:
                         await asst.send_message(
                             int(udB["LOG_CHANNEL"]),
