@@ -40,8 +40,7 @@ def startup_stuff():
         if not os.path.isdir(x):
             os.mkdir(x)
 
-    CT = udB.get("CUSTOM_THUMBNAIL"):
-    if CT:
+    if (CT := udB.get("CUSTOM_THUMBNAIL")):
         urlretrieve(CT, "resources/extras/ultroid.jpg")
 
     GT = udB.get("GDRIVE_TOKEN")
