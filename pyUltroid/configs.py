@@ -12,6 +12,7 @@ from decouple import AutoConfig
 # load_dotenv(find_dotenv())
 config = AutoConfig()
 
+
 class Var:
     # mandatory
     API_ID = config("API_ID", default=6, cast=int)
