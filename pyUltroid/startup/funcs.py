@@ -212,16 +212,15 @@ async def autopilot():
 
 
 async def customize():
-    from .. import LOGS, asst, udB, ultroid_bot
+    from .. import udB
 
     try:
         chat_id = int(udB.get("LOG_CHANNEL"))
-        xx = await ultroid_bot.get_entity(asst.me.username)
-        if xx.photo:
+        if asst.me.photo:
             return
         LOGS.info("Customising Ur Assistant Bot in @BOTFATHER")
         UL = f"@{asst.me.username}"
-       if (ultroid_bot.me.username) is None:
+        if (ultroid_bot.me.username) is None:
             sir = ultroid_bot.me.first_name
         else:
             sir = f"@{ultroid_bot.me.username}"
