@@ -27,7 +27,7 @@ from telethon.tl.types import (
     InputMessagesFilterDocument,
 )
 
-from .. import LOGS, asst, ultroid_bot
+from .. import LOGS
 from ..configs import Var
 from ..functions.helper import download_file, updater
 
@@ -67,7 +67,7 @@ def startup_stuff():
 
 
 async def autobot():
-    from .. import udB
+    from .. import udB, ultroid_bot
 
     if Var.BOT_TOKEN:
         return udB.set("BOT_TOKEN", Var.BOT_TOKEN)
@@ -150,7 +150,7 @@ async def autobot():
 
 
 async def autopilot():
-    from .. import udB
+    from .. import udB, ultroid_bot
 
     if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
         udB.set("LOG_CHANNEL", str(Var.LOG_CHANNEL))
@@ -213,7 +213,7 @@ async def autopilot():
 
 
 async def customize():
-    from .. import udB
+    from .. import udB, ultroid_bot, asst
 
     try:
         chat_id = int(udB.get("LOG_CHANNEL"))
@@ -267,7 +267,7 @@ async def customize():
 
 
 async def plug(plugin_channels):
-    from .. import LOGS
+    from .. import LOGS, ultroid_bot
     from .utils import load_addons
 
     if not os.path.exists("addons"):
@@ -307,7 +307,7 @@ async def plug(plugin_channels):
 
 # some stuffs
 async def ready():
-    from .. import LOGS, asst, udB, ultroid_bot
+    from .. import asst, udB, ultroid_bot
 
     chat_id = int(udB.get("LOG_CHANNEL"))
     MSG = f"**Ultroid has been deployed!**\n➖➖➖➖➖➖➖➖➖\n**UserMode**: [{ultroid_bot.me.first_name}](tg://user?id={ultroid_bot.me.id})\n**Assistant**: @{asst.me.username}\n➖➖➖➖➖➖➖➖➖\n**Support**: @TeamUltroid\n➖➖➖➖➖➖➖➖➖"
