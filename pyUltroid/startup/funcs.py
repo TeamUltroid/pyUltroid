@@ -43,12 +43,11 @@ def startup_stuff():
     if (CT := udB.get("CUSTOM_THUMBNAIL")):
         urlretrieve(CT, "resources/extras/ultroid.jpg")
 
-    GT = udB.get("GDRIVE_TOKEN")
-    if GT:
+    if (GT := udB.get("GDRIVE_TOKEN")):
         with open("resources/auths/auth_token.txt", "w") as t_file:
             t_file.write(GT)
 
-    if (MM := udB.get("MEGA_MAIL") and (MP := udB.get("MEGA_PASS")):
+    if (MM := udB.get("MEGA_MAIL")) and (MP := udB.get("MEGA_PASS")):
         with open(".megarc", "w") as mega:
             mega.write(
                 f'[Login]\nUsername = {MM}\nPassword = {MP}'
