@@ -36,12 +36,12 @@ from .. import DUAL_HNDLR, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
 from ..dB import DEVLIST
 from ..dB._core import LIST, LOADED
 from ..dB.sudos import is_fullsudo
+from ..functions.admins import admin_check
 from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
 from ..version import __version__ as pyver
 from ..version import ultroid_version as ult_ver
 from . import owner_and_sudos, should_allow_sudo
-from ..functions.admins import admin_check
 from ._wrappers import eod
 
 hndlr = "\\" + HNDLR
