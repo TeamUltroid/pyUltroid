@@ -26,14 +26,13 @@ from telethon.tl.types import (
     InputChatUploadedPhoto,
     InputMessagesFilterDocument,
 )
-
-# from .. import *
+from .. import LOGS, ultroid_bot, asst
 from ..configs import Var
 from ..functions.helper import download_file, updater
 
 
 def startup_stuff():
-    from .. import LOGS, udB
+    from .. import udB
 
     x = ["resources/auths", "resources/downloads", "vcbot/downloads"]
     for x in x:
@@ -67,7 +66,7 @@ def startup_stuff():
 
 
 async def autobot():
-    from .. import LOGS, udB, ultroid_bot
+    from .. import udB
 
     if Var.BOT_TOKEN:
         return udB.set("BOT_TOKEN", Var.BOT_TOKEN)
@@ -150,7 +149,7 @@ async def autobot():
 
 
 async def autopilot():
-    from .. import LOGS, asst, udB, ultroid_bot
+    from .. import udB
 
     if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
         udB.set("LOG_CHANNEL", str(Var.LOG_CHANNEL))
@@ -218,56 +217,57 @@ async def customize():
     try:
         chat_id = int(udB.get("LOG_CHANNEL"))
         xx = await ultroid_bot.get_entity(asst.me.username)
-        if xx.photo is None:
-            LOGS.info("Customising Ur Assistant Bot in @BOTFATHER")
-            UL = f"@{asst.me.username}"
-            if (ultroid_bot.me.username) is None:
-                sir = ultroid_bot.me.first_name
-            else:
-                sir = f"@{ultroid_bot.me.username}"
-            await ultroid_bot.send_message(
+        if xx.photo:
+            return
+        LOGS.info("Customising Ur Assistant Bot in @BOTFATHER")
+        UL = f"@{asst.me.username}"
+       if (ultroid_bot.me.username) is None:
+            sir = ultroid_bot.me.first_name
+        else:
+            sir = f"@{ultroid_bot.me.username}"
+        await ultroid_bot.send_message(
                 chat_id, "Auto Customisation Started on @botfather"
-            )
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message("botfather", "/cancel")
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message("botfather", "/start")
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message("botfather", "/setuserpic")
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message("botfather", UL)
-            await asyncio.sleep(1)
-            await ultroid_bot.send_file(
+        )
+        await asyncio.sleep(1)
+        await ultroid_bot.send_message("botfather", "/cancel")
+        await asyncio.sleep(1)
+        await ultroid_bot.send_message("botfather", "/start")
+        await asyncio.sleep(1)
+        await ultroid_bot.send_message("botfather", "/setuserpic")
+        await asyncio.sleep(1)
+        await ultroid_bot.send_message("botfather", UL)
+        await asyncio.sleep(1)
+        await ultroid_bot.send_file(
                 "botfather", "resources/extras/ultroid_assistant.jpg"
             )
-            await asyncio.sleep(2)
-            await ultroid_bot.send_message("botfather", "/setabouttext")
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message("botfather", UL)
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message(
+       await asyncio.sleep(2)
+       await ultroid_bot.send_message("botfather", "/setabouttext")
+       await asyncio.sleep(1)
+       await ultroid_bot.send_message("botfather", UL)
+       await asyncio.sleep(1)
+       await ultroid_bot.send_message(
                 "botfather", f"✨ Hello ✨!! I'm Assistant Bot of {sir}"
             )
-            await asyncio.sleep(2)
-            await ultroid_bot.send_message("botfather", "/setdescription")
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message("botfather", UL)
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message(
+        await asyncio.sleep(2)
+        await ultroid_bot.send_message("botfather", "/setdescription")
+        await asyncio.sleep(1)
+        await ultroid_bot.send_message("botfather", UL)
+        await asyncio.sleep(1)
+        await ultroid_bot.send_message(
                 "botfather",
                 f"✨ PowerFul Ultroid Assistant Bot ✨\n✨ Master ~ {sir} ✨\n\n✨ Powered By ~ @TeamUltroid ✨",
-            )
-            await asyncio.sleep(2)
-            await ultroid_bot.send_message(
+        )
+        await asyncio.sleep(2)
+        await ultroid_bot.send_message(
                 chat_id, "**Auto Customisation** Done at @BotFather"
-            )
-            LOGS.info("Customisation Done")
+        )
+        LOGS.info("Customisation Done")
     except Exception as e:
-        LOGS.info(str(e))
+        LOGS.exception(e)
 
 
 async def plug(plugin_channels):
-    from .. import LOGS, ultroid_bot
+    from .. import LOGS
     from .utils import load_addons
 
     if not os.path.exists("addons"):
