@@ -5,12 +5,10 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from decouple import AutoConfig
+from decouple import config
 
-# from dotenv import find_dotenv, load_dotenv
-
-# load_dotenv(find_dotenv())
-config = AutoConfig()
+from dotenv import find_dotenv, load_dotenv
+load_dotenv(find_dotenv())
 
 
 class Var:
