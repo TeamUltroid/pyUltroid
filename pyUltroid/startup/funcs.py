@@ -213,7 +213,7 @@ async def autopilot():
 
 
 async def customize():
-    from .. import udB, ultroid_bot, asst
+    from .. import asst, udB, ultroid_bot
 
     try:
         chat_id = int(udB.get("LOG_CHANNEL"))
