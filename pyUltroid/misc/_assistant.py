@@ -8,14 +8,8 @@
 import re
 
 from telethon import Button
-from telethon.errors.rpcerrorlist import UserNotParticipantError
 from telethon.events import CallbackQuery, InlineQuery, NewMessage
-from telethon.tl.types import (
-    Channel,
-    ChannelParticipantAdmin,
-    ChannelParticipantCreator,
-    InputWebDocument,
-)
+from telethon.tl.types import InputWebDocument
 from telethon.utils import get_display_name
 
 from .. import LOGS, asst, ultroid_bot
