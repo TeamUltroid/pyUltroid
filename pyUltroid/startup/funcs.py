@@ -197,7 +197,7 @@ async def autopilot():
     )
     await ultroid_bot(EditAdminRequest(chat_id, asst.me.username, rights, "Assistant"))
     photo = await download_file(
-            "https://telegra.ph/file/27c6812becf6f376cbb10.jpg", "channelphoto.jpg"
+        "https://telegra.ph/file/27c6812becf6f376cbb10.jpg", "channelphoto.jpg"
     )
     ll = await ultroid_bot.upload_file(photo)
     await ultroid_bot(EditPhotoRequest(chat_id, InputChatUploadedPhoto(ll)))
