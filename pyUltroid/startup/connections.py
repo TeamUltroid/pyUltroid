@@ -96,7 +96,7 @@ def vc_connection(udB, ultroid_bot):
             LOGS.info("Your VC_SESSION Expired. Deleting VC_SESSION from redis...")
             LOGS.info("Renew/Change it to Use Voice/Video Chat from VC Account...")
             udB.delete("VC_SESSION")
-         except Exception as er:
+        except Exception as er:
             LOGS.error("VC_SESSION: {}".format(str(er)))
     return ultroid_bot
 
