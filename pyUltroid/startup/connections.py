@@ -87,19 +87,20 @@ def session_file():
 
 def vc_connection(udB, ultroid_bot):
     VC_SESSION = Var.VC_SESSION or udB.get("VC_SESSION")
-    if VC_SESSION:
-        if VC_SESSION == Var.SESSION:
-            return ultroid_bot
-        try:
-            return TelegramClient(
+    if not VC_SESSION:
+        return
+    elif VC_SESSION == Var.SESSION:
+        return ultroid_bot
+    try:
+        return TelegramClient(
                 StringSession(VC_SESSION), api_id=Var.API_ID, api_hash=Var.API_HASH
-            ).start()
-        except (AuthKeyDuplicatedError, EOFError):
-            LOGS.info("Your VC_SESSION Expired. Deleting VC_SESSION from redis...")
-            LOGS.info("Renew/Change it to Use Voice/Video Chat from VC Account...")
-            udB.delete("VC_SESSION")
-        except Exception as er:
-            LOGS.error("VC_SESSION: {}".format(str(er)))
+        ).start()
+    except (AuthKeyDuplicatedError, EOFError):
+        LOGS.info("Your VC_SESSION Expired. Deleting VC_SESSION from redis...")
+        LOGS.info("Renew/Change it to Use Voice/Video Chat from VC Account...")
+        udB.delete("VC_SESSION")
+    except Exception as er:
+        LOGS.error("VC_SESSION: {}".format(str(er)))
     return ultroid_bot
 
 
