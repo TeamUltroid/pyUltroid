@@ -79,7 +79,7 @@ async def autobot():
         username = who.username + "_bot"
     else:
         username = "ultroid_" + (str(who.id))[5:] + "_bot"
-    bf = "Botfather"
+    bf = "@BotFather"
     await ultroid_bot(UnblockRequest(bf))
     await ultroid_bot.send_message(bf, "/cancel")
     await asyncio.sleep(1)
@@ -179,7 +179,8 @@ async def autopilot():
             "Something Went Wrong , Create A Group and set its id on config var LOG_CHANNEL."
         )
         exit(1)
-    chat_id = r.chats[0].id
+    chat = r.chats[0]
+    chat_id = chat.id
     if not str(chat_id).startswith("-100"):
         udB.set("LOG_CHANNEL", "-100" + str(chat_id))
     else:
@@ -195,16 +196,12 @@ async def autopilot():
         manage_call=True,
     )
     await ultroid_bot(EditAdminRequest(chat_id, asst.me.username, rights, "Assistant"))
-    pfpa = await ultroid_bot.download_profile_photo(chat_id)
-    if not pfpa:
-        await download_file(
-            "https://telegra.ph/file/bac3a1c21912a7b35c797.jpg", "channelphoto.jpg"
-        )
-        ll = await ultroid_bot.upload_file("channelphoto.jpg")
-        await ultroid_bot(EditPhotoRequest(chat_id, InputChatUploadedPhoto(ll)))
-        os.remove("channelphoto.jpg")
-    else:
-        os.remove(pfpa)
+    photo = await download_file(
+            "https://telegra.ph/file/27c6812becf6f376cbb10.jpg", "channelphoto.jpg"
+    )
+    ll = await ultroid_bot.upload_file(photo)
+    await ultroid_bot(EditPhotoRequest(chat_id, InputChatUploadedPhoto(ll)))
+    os.remove(photo)
 
 
 # customize assistant
