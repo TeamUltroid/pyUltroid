@@ -91,7 +91,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
         type.append("dualmode")
 
     args["forwards"] = False
-    if pattern is not None:
+    if pattern:
         args["pattern"] = compile_pattern(pattern, hndlr)
         reg = re.compile("(.*)")
         try:
@@ -170,9 +170,8 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                 elif mode == "manager":
                     if not allow_pm and ult.is_private:
                         return
-                    else:
-                        if not (await admin_check(ult)):
-                            return
+                    elif not (await admin_check(ult)):
+                        return
                 else:
                     return
                 if only_devs and not udB.get("I_DEV"):
