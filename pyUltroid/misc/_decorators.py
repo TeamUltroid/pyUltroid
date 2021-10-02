@@ -41,7 +41,7 @@ from ..functions.helper import time_formatter as tf
 from ..version import __version__ as pyver
 from ..version import ultroid_version as ult_ver
 from . import owner_and_sudos, should_allow_sudo
-from ._assistant import admin_check
+from ..functions.admins import admin_check
 from ._wrappers import eod
 
 hndlr = "\\" + HNDLR
