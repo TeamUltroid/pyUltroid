@@ -55,11 +55,14 @@ suc_msg = """
 # for channel plugins
 plugin_channels = udB.get("PLUGIN_CHANNEL")
 
+# Customize Ultroid Assistant...
 ultroid_bot.run_in_loop(customize())
 
+# Load Addons from Plugin Channels.
 if plugin_channels:
     ultroid_bot.run_in_loop(plug(plugin_channels))
 
+# Send/Ignore Deploy Message..
 if not udB.get("LOG_OFF"):
     ultroid_bot.run_in_loop(ready())
 
