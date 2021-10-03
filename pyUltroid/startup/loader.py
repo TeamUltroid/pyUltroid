@@ -100,5 +100,3 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     # vc bot
     if vcbot == "True":
         Loader(path="vcbot", key="VCBot", logger=LOGS).load()
-
-    LOGS.info("-" * 70)
