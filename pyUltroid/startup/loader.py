@@ -23,7 +23,7 @@ class Loader:
         self.key = key
         self._logger = logger
 
-    def load(self, log=True, func=import_module, cmd_help=HELP):
+    def load(self, func=import_module, cmd_help=HELP):
         files = sorted(glob.glob(self.path + "/*.py"))
         if log:
             self._logger.info(
@@ -67,9 +67,6 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     # for official
     Loader(path="plugins", key="Official", logger=LOGS).load()
 
-    # for assistant
-    Loader(path="assistant", key="Assistant", logger=LOGS).load(cmd_help=None)
-
     # for addons
     if addons == "True" or not addons:
         if not os.path.exists("addons/.git"):
@@ -77,7 +74,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         url = udB.get("ADDONS_URL")
         if url:
             os.system("git clone -q {} addons".format(url))
-        if not os.path.exists("addons"):
+        elif not os.path.exists("addons"):
             os.system(
                 f"git clone -q -b {Repo().active_branch} https://github.com/TeamUltroid/UltroidAddons.git addons"
             )
@@ -97,7 +94,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     # chat via assistant
     if pmbot == "True":
         Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(
-            log=False, cmd_help=None
+            cmd_help=None
         )
 
     # vc bot
