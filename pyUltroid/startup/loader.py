@@ -23,7 +23,7 @@ class Loader:
         self.key = key
         self._logger = logger
 
-    def load(self, func=import_module, cmd_help=HELP):
+    def load(self, log=True, func=import_module, cmd_help=HELP):
         files = sorted(glob.glob(self.path + "/*.py"))
         if log:
             self._logger.info(
@@ -93,7 +93,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # chat via assistant
     if pmbot == "True":
-        Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(cmd_help=None)
+        Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(log=False, cmd_help=None)
 
     # vc bot
     if vcbot == "True":
