@@ -276,7 +276,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
             if TAKE_EDITS:
                 args["func"] = lambda x: not (
                     isinstance(x.chat, types.Channel) and x.chat.broadcast
-                )
+                ) and not x.via_bot_id
                 ultroid_bot.add_event_handler(
                     doit("official"),
                     events.MessageEdited(**args),
