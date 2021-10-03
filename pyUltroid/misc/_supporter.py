@@ -94,8 +94,8 @@ def sudo_cmd(allow_sudo=True, pattern=None, command=None, **args):
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
-    if pattern is not None:
-        args["pattern"] = re.compile("//" + SUDO_HNDLR + pattern)
+    if pattern:
+        args["pattern"] = re.compile("\\" + SUDO_HNDLR + pattern)
     if allow_sudo:
         args["from_users"] = [int(user) for user in sudoers()]
         args["incoming"] = True
