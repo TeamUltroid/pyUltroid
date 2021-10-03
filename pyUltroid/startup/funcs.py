@@ -305,27 +305,25 @@ async def ready():
     from .. import asst, udB, ultroid_bot
 
     chat_id = int(udB.get("LOG_CHANNEL"))
-    MSG = f"**Ultroid has been deployed!**\n➖➖➖➖➖➖➖➖➖\n**UserMode**: [{ultroid_bot.me.first_name}](tg://user?id={ultroid_bot.me.id})\n**Assistant**: @{asst.me.username}\n➖➖➖➖➖➖➖➖➖\n**Support**: @TeamUltroid\n➖➖➖➖➖➖➖➖➖"
-    BTTS = []
-    PHOTO, spam_sent = None, None
-    updava = updater()
-    prev_spam = udB.get("LAST_UPDATE_LOG_SPAM")
-    if prev_spam:
-        try:
-            await ultroid_bot.delete_messages(chat_id, int(prev_spam))
-        except Exception as E:
-            LOGS.info("Error while Deleting Previous Update Message :" + str(E))
-    if updava:
-        BTTS.append(Button.inline("Update Available", "updtavail"))
-
     if not udB.get("INIT_DEPLOY"):  # Detailed Message at Initial Deploy
         MSG = """🎇 **Thanks for Deploying Ultroid Userbot!**
 • Here, are the Some Basic stuff from, where you can Know, about its Usage."""
         PHOTO = "https://telegra.ph/file/54a917cc9dbb94733ea5f.jpg"
-        BTTS.append(Button.inline("• Click to Start •", "initft_2"))
+        BTTS = Button.inline("• Click to Start •", "initft_2")
         udB.set("INIT_DEPLOY", "Done")
-    if BTTS == []:
+    else:
+        MSG = f"**Ultroid has been deployed!**\n➖➖➖➖➖➖➖➖➖\n**UserMode**: [{ultroid_bot.me.first_name}](tg://user?id={ultroid_bot.me.id})\n**Assistant**: @{asst.me.username}\n➖➖➖➖➖➖➖➖➖\n**Support**: @TeamUltroid\n➖➖➖➖➖➖➖➖➖"
         BTTS = None
+        PHOTO, spam_sent = None, None
+        prev_spam = udB.get("LAST_UPDATE_LOG_SPAM")
+        if prev_spam:
+            try:
+                 await ultroid_bot.delete_messages(chat_id, int(prev_spam))
+            except Exception as E:
+                LOGS.info("Error while Deleting Previous Update Message :" + str(E))
+        if updater():
+            BTTS = Button.inline("Update Available", "updtavail")
+
     try:
         spam_sent = await asst.send_message(chat_id, MSG, file=PHOTO, buttons=BTTS)
     except ValueError as e:
