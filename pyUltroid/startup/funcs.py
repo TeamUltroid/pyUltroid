@@ -318,7 +318,7 @@ async def ready():
         prev_spam = udB.get("LAST_UPDATE_LOG_SPAM")
         if prev_spam:
             try:
-                 await ultroid_bot.delete_messages(chat_id, int(prev_spam))
+                await ultroid_bot.delete_messages(chat_id, int(prev_spam))
             except Exception as E:
                 LOGS.info("Error while Deleting Previous Update Message :" + str(E))
         if updater():
