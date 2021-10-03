@@ -55,9 +55,6 @@ asst = UltroidClient(
     base_logger=TeleLogger,
 )
 
-# asst.me = ultroid_bot.run_in_loop(asst.get_me())
-# ultroid_bot.me = ultroid_bot.run_in_loop(ultroid_bot.get_me())
-
 vcClient = vc_connection(udB, ultroid_bot)
 
 if not udB.get("SUDO"):
