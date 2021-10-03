@@ -67,6 +67,9 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     # for official
     Loader(path="plugins", key="Official", logger=LOGS).load()
 
+    # for assistant
+    Loader(path="assistant", key="Assistant", logger=LOGS).load(log=False, cmd_help=None)
+
     # for addons
     if addons == "True" or not addons:
         if not os.path.exists("addons/.git"):
