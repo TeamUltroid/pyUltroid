@@ -23,7 +23,7 @@ from pyUltroid.misc._wrappers import eod, eor
 
 from .. import *
 from ..configs import Var
-from ..dB._core import LIST, HELP
+from ..dB._core import HELP, LIST
 from . import sudoers
 
 ALIVE_NAME = ultroid_bot.me.first_name
