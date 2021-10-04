@@ -5,9 +5,6 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-PLUGINS = []
-ADDONS = []
 HELP = {}
 LOADED = {}
 LIST = {}
-VC_HELP = {}
