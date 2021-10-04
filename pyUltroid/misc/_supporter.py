@@ -23,7 +23,7 @@ from pyUltroid.misc._wrappers import eod, eor
 
 from .. import *
 from ..configs import Var
-from ..dB._core import LIST
+from ..dB._core import LIST, HELP
 from . import sudoers
 
 ALIVE_NAME = ultroid_bot.me.first_name
@@ -34,6 +34,7 @@ bot = ultroid_bot
 borg = ultroid_bot
 friday = ultroid_bot
 jarvis = ultroid_bot
+CMD_HELP = HELP
 
 hndlr = "\\" + HNDLR
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
