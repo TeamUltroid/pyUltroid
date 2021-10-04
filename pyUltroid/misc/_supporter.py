@@ -48,7 +48,7 @@ def admin_cmd(pattern=None, command=None, **args):
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     if pattern is not None:
-        args["pattern"] = re.compile(SUDO_HNDLR + pattern)
+        args["pattern"] = re.compile("\\" + HNDLR + pattern)
         reg = re.compile("(.*)")
         try:
             cmd = re.search(reg, pattern)
