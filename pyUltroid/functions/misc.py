@@ -6,7 +6,6 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
-
 import re
 from logging import WARNING
 from random import choice, randrange, shuffle
@@ -45,8 +44,22 @@ async def randomchannel(
 
 async def quora_scrape(query):
     to_return = []
-    for quora in json_parser(re.findall(r'window\.ansFrontendGlobals\.data\.inlineQueryResults\.results\[".*?"\] = ("{.*}");', await async_searcher("https://quora.com/search?q=" + query.replace(" ", "%20"), headers={"Cache-Control": "no-cache","Connection": "keep-alive","User-Agent": choice(some_random_headers)}))[-1])["data"]["searchConnection"]["edges"]:
-        question = json_parser(quora["node"]["question"]["title"])["sections"][0]["spans"][0]["text"]
+    for quora in json_parser(
+        re.findall(
+            r'window\.ansFrontendGlobals\.data\.inlineQueryResults\.results\[".*?"\] = ("{.*}");',
+            await async_searcher(
+                "https://quora.com/search?q=" + query.replace(" ", "%20"),
+                headers={
+                    "Cache-Control": "no-cache",
+                    "Connection": "keep-alive",
+                    "User-Agent": choice(some_random_headers),
+                },
+            ),
+        )[-1]
+    )["data"]["searchConnection"]["edges"]:
+        question = json_parser(quora["node"]["question"]["title"])["sections"][0][
+            "spans"
+        ][0]["text"]
         answers = ""
         for answer in json_parser(quora["node"]["question"]["title"])["sections"]:
             answers += answer["spans"][0]["text"]
