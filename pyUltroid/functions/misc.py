@@ -10,7 +10,7 @@ import re
 from logging import WARNING
 from random import choice, randrange, shuffle
 
-from bs4 import BeautifulSoup as bs
+from bs4 import BeautifulSoup
 from faker import Faker
 
 from .. import *
@@ -70,6 +70,16 @@ async def quora_scrape(query):
 # --------------------------------------------------
 
 
+async def YtDataScraper(url: str):
+    to_return = {}
+    data = json_parser(BeautifulSoup(await async_searcher("https://www.youtube.com/watch?v=TYaNfLLOLNY"), "html.parser").find_all("script")[39].text[20:-1])["contents"]
+    to_return["views"] = ["twoColumnWatchNextResults"]["results"]["results"]["contents"][0]["videoPrimaryInfoRenderer"]["viewCount"]["videoViewCountRenderer"]["shortViewCount"]["simpleText"] or ["twoColumnWatchNextResults"]["results"]["results"]["contents"][0]["videoPrimaryInfoRenderer"]["viewCount"]["videoViewCountRenderer"]["viewCount"]["simpleText"]
+    return to_return
+
+
+# --------------------------------------------------
+
+
 async def google_search(query):
     query = query.replace(" ", "+")
     _base = "https://google.com"
@@ -78,7 +88,7 @@ async def google_search(query):
         "Connection": "keep-alive",
         "User-Agent": choice(some_random_headers),
     }
-    soup = bs(
+    soup = BeautifulSoup(
         await async_searcher(_base + "/search?q=" + query, headers=headers),
         "html.parser",
     )
@@ -137,7 +147,7 @@ async def unsplashsearch(query, limit=None, shuf=True):
     base_ = "https://unsplash.com"
     link = base_ + "/s/photos/" + query
     extra = await async_searcher(link, re_content=True)
-    res = bs(extra, "html.parser", from_encoding="utf-8")
+    res = BeautifulSoup(extra, "html.parser", from_encoding="utf-8")
     all = res.find_all("a", "_2Mc8_")
     if shuf:
         shuffle(all)
@@ -145,7 +155,7 @@ async def unsplashsearch(query, limit=None, shuf=True):
     images_src = []
     for img in all:
         ct = await async_searcher(base_ + img["href"], re_content=True)
-        bst = bs(ct, "html.parser", from_encoding="utf-8")
+        bst = BeautifulSoup(ct, "html.parser", from_encoding="utf-8")
         uri = bst.find_all("img", "oCCRx")[0]["src"]
         images_src.append(uri)
     return images_src
@@ -157,7 +167,7 @@ async def unsplashsearch(query, limit=None, shuf=True):
 
 async def airing_eps():
     resp = await async_searcher("https://gogoanime.ai/")
-    soup = bs(resp, "html.parser")
+    soup = BeautifulSoup(resp, "html.parser")
     anime = soup.find("nav", {"class": "menu_series cron"}).find("ul")
     air = "**Currently airing anime.**\n\n"
     c = 1
