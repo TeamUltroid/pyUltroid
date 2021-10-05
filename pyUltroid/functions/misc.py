@@ -56,7 +56,8 @@ async def quora_scrape(query):
         re.findall(
             r'window\.ansFrontendGlobals\.data\.inlineQueryResults\.results\[".*?"\] = ("{.*}");',
             parsed,
-        )[-1])["data"]["searchConnection"]["edges"]
+        )[-1]
+    )["data"]["searchConnection"]["edges"]
     return data
 
 
