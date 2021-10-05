@@ -72,8 +72,41 @@ async def quora_scrape(query):
 
 async def YtDataScraper(url: str):
     to_return = {}
-    data = json_parser(BeautifulSoup(await async_searcher("https://www.youtube.com/watch?v=TYaNfLLOLNY"), "html.parser").find_all("script")[39].text[20:-1])["contents"]
-    to_return["views"] = ["twoColumnWatchNextResults"]["results"]["results"]["contents"][0]["videoPrimaryInfoRenderer"]["viewCount"]["videoViewCountRenderer"]["shortViewCount"]["simpleText"] or ["twoColumnWatchNextResults"]["results"]["results"]["contents"][0]["videoPrimaryInfoRenderer"]["viewCount"]["videoViewCountRenderer"]["viewCount"]["simpleText"]
+    data = json_parser(
+        BeautifulSoup(
+            await async_searcher("https://www.youtube.com/watch?v=TYaNfLLOLNY"),
+            "html.parser",
+        )
+        .find_all("script")[39]
+        .text[20:-1]
+    )["contents"]
+    to_return["views"] = ["twoColumnWatchNextResults"]["results"]["results"][
+        "contents"
+    ][0]["videoPrimaryInfoRenderer"]["viewCount"]["videoViewCountRenderer"][
+        "shortViewCount"
+    ][
+        "simpleText"
+    ] or [
+        "twoColumnWatchNextResults"
+    ][
+        "results"
+    ][
+        "results"
+    ][
+        "contents"
+    ][
+        0
+    ][
+        "videoPrimaryInfoRenderer"
+    ][
+        "viewCount"
+    ][
+        "videoViewCountRenderer"
+    ][
+        "viewCount"
+    ][
+        "simpleText"
+    ]
     return to_return
 
 
