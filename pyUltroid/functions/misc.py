@@ -80,25 +80,14 @@ async def YtDataScraper(url: str):
         .find_all("script")[39]
         .text[20:-1]
     )["contents"]
-    to_return["views"] = ["twoColumnWatchNextResults"]["results"]["results"][
-        "contents"
-    ][0]["videoPrimaryInfoRenderer"]["viewCount"]["videoViewCountRenderer"][
+    common_data = data["twoColumnWatchNextResults"]["results"]["results"]["contents"][0]["videoPrimaryInfoRenderer"]
+    like_dislike = common_data["videoActions"]["menuRenderer"]["topLevelButtons"]
+    to_return["title"] = common_data["title"]["runs"][0]["text"]
+    to_return["views"] = common_data["viewCount"]["videoViewCountRenderer"][
         "shortViewCount"
     ][
         "simpleText"
-    ] or [
-        "twoColumnWatchNextResults"
-    ][
-        "results"
-    ][
-        "results"
-    ][
-        "contents"
-    ][
-        0
-    ][
-        "videoPrimaryInfoRenderer"
-    ][
+    ] or common_data[
         "viewCount"
     ][
         "videoViewCountRenderer"
@@ -107,6 +96,9 @@ async def YtDataScraper(url: str):
     ][
         "simpleText"
     ]
+    to_return["publish_date"] = common_data["dateText"]["simpleText"]
+    to_return["likes"] = like_dislike[0]["toggleButtonRenderer"]["defaultText"]["simpleText"] or like_dislike[0]["toggleButtonRenderer"]["defaultText"]["accessibility"]["accessibilityData"]["label"]
+    to_return["dislikes"] = like_dislike[1]["toggleButtonRenderer"]["defaultText"]["simpleText"] or like_dislike[1]["toggleButtonRenderer"]["defaultText"]["accessibility"]["accessibilityData"]["label"]
     return to_return
 
 
