@@ -160,10 +160,10 @@ def create_tl_btn(button: list):
         kk = []
         if len(z) > 1:
             for x, y in z:
-                kk.append(Button.url(x, y.strip()))
+                kk.append([Button.url(x, y.strip())])
             btn.append(kk)
         else:
-            btn.append([Button.url(z[0][0], z[0][1].strip())])
+            btn.append(Button.url(z[0][0], z[0][1].strip()))
     return btn
 
 
