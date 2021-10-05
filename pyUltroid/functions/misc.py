@@ -52,11 +52,12 @@ async def quora_scrape(query):
     parsed = await async_searcher(
         "https://quora.com/search?q=" + query, headers=headers
     )
-    data = re.findall(
-        r'window\.ansFrontendGlobals\.data\.inlineQueryResults\.results\[".*?"\] = ("{.*}");',
-        parsed,
-    )[-1]
-    return json_parser(data)
+    data = json_parser(
+        re.findall(
+            r'window\.ansFrontendGlobals\.data\.inlineQueryResults\.results\[".*?"\] = ("{.*}");',
+            parsed,
+        )[-1])["data"]["searchConnection"]["edges"]
+    return data
 
 
 # --------------------------------------------------
