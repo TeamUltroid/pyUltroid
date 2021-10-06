@@ -7,14 +7,19 @@
 
 from .. import udB
 
-try:
-    eval(udB.get("MUTE"))
-except BaseException:
-    udB.set("MUTE", "{}")
+def get_stuff():
+    a = udB.get("MUTE")
+    if not a:
+        return {}
+    try:
+        return eval(a)
+    except BaseException:
+        udB.delete("MUTE")
+    return {}
 
 
 def mute(chat, id):
-    ok = eval(udB.get("MUTE"))
+    ok = get_stuff()
     if ok.get(chat):
         if id not in ok[chat]:
             ok[chat].append(id)
@@ -24,12 +29,12 @@ def mute(chat, id):
 
 
 def unmute(chat, id):
-    ok = eval(udB.get("MUTE"))
+    ok = get_stuff()
     if ok.get(chat) and id in ok[chat]:
         ok[chat].remove(id)
     udB.set("MUTE", str(ok))
 
 
 def is_muted(chat, id):
-    ok = eval(udB.get("MUTE"))
+    ok = get_stuff()
     return bool(ok.get(chat) and id in ok[chat])
