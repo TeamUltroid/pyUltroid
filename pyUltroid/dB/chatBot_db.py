@@ -7,26 +7,31 @@
 
 from .. import udB
 
-try:
-    eval(udB["CHATBOT_USERS"])
-except BaseException:
-    udB.set("CHATBOT_USERS", "{}")
+def get_stuff():
+    a = udB.get("CHATBOT_USERS")
+    if not a:
+        return {}
+    try:
+        return eval(a)
+    except BaseException:
+        udB.delete("CHATBOT_USERS")
+    return {}
 
 
 def get_all_added(chat):
-    ok = eval(udB["CHATBOT_USERS"])
+    ok = get_stuff()
     if ok.get(chat):
         return ok[chat]
     return False
 
 
 def chatbot_stats(chat, id):
-    ok = eval(udB["CHATBOT_USERS"])
+    ok = get_stuff()
     return bool(ok.get(chat) and id in ok[chat])
 
 
 def add_chatbot(chat, id):
-    ok = eval(udB["CHATBOT_USERS"])
+    ok = get_stuff()
     if not ok.get(chat):
         ok.update({chat: [id]})
     elif id not in ok[chat]:
@@ -35,7 +40,7 @@ def add_chatbot(chat, id):
 
 
 def rem_chatbot(chat, id):
-    ok = eval(udB["CHATBOT_USERS"])
+    ok = get_stuff()
     if ok.get(chat) and id in ok[chat]:
         ok[chat].remove(id)
     return udB.set("CHATBOT_USERS", str(ok))
