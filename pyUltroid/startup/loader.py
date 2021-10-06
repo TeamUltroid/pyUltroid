@@ -18,7 +18,7 @@ from .utils import load_addons
 
 
 class Loader:
-    def __init__(self, path="plugins", key="Official", logger=None):
+    def __init__(self, path="plugins", key="Official", logger=LOGS):
         self.path = path
         self.key = key
         self._logger = logger
@@ -71,17 +71,17 @@ class Loader:
         except Exception as er:
             self._logger.info(f"Error while Loading {path}")
             return self._logger.exception(er)
-        if log:
+        if log and self._logger:
             self._logger.info(f"Successfully Loaded {path}!")
 
 
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for official
-    Loader(path="plugins", key="Official", logger=LOGS).load()
+    Loader(path="plugins", key="Official").load()
 
     # for assistant
-    Loader(path="assistant", key="Assistant", logger=LOGS).load(
+    Loader(path="assistant", key="Assistant").load(
         log=False, cmd_help=None, exclude=["assistant/pmbot.py"]
     )
 
@@ -101,11 +101,11 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         if os.path.exists("addons/addons.txt"):
             # generally addons req already there so it won't take much time
             os.system("pip3 install --no-cache-dir -q -r ./addons/addons.txt")
-        Loader(path="addons", key="Addons", logger=LOGS).load(func=load_addons)
+        Loader(path="addons", key="Addons").load(func=load_addons)
 
     # group manager
     if manager == "True":
-        Loader(path="assistant/manager", key="Group Manager", logger=LOGS).load(
+        Loader(path="assistant/manager", key="Group Manager").load(
             cmd_help=None
         )
 
@@ -115,4 +115,4 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # vc bot
     if vcbot == "True":
-        Loader(path="vcbot", key="VCBot", logger=LOGS).load()
+        Loader(path="vcbot", key="VCBot").load()
