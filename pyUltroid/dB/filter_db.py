@@ -7,14 +7,19 @@
 
 from .. import udB
 
-try:
-    eval(udB["FILTERS"])
-except BaseException:
-    udB.set("FILTERS", "{}")
+def get_stuff():
+    a = udB.get("FILTERS")
+    if not a:
+        return {}
+    try:
+        return eval(a)
+    except BaseException:
+        udB.delete("FILTERS")
+    return {}
 
 
 def add_filter(chat, word, msg, media, button):
-    ok = eval(udB.get("FILTERS"))
+    ok = get_stuff()
     if ok.get(chat):
         ok[chat].update({word: {"msg": msg, "media": media, "button": button}})
     else:
@@ -23,28 +28,28 @@ def add_filter(chat, word, msg, media, button):
 
 
 def rem_filter(chat, word):
-    ok = eval(udB.get("FILTERS"))
+    ok = get_stuff()
     if ok.get(chat) and ok[chat].get(word):
         ok[chat].pop(word)
         udB.set("FILTERS", str(ok))
 
 
 def rem_all_filter(chat):
-    ok = eval(udB.get("FILTERS"))
+    ok = get_stuff()
     if ok.get(chat):
         ok.pop(chat)
         udB.set("FILTERS", str(ok))
 
 
 def get_filter(chat):
-    ok = eval(udB.get("FILTERS"))
+    ok = get_stuff()
     if ok.get(chat):
         return ok[chat]
     return False
 
 
 def list_filter(chat):
-    ok = eval(udB.get("NOTE"))
+    ok = get_stuff()
     if ok.get(chat):
         return "".join(f"👉 `{z}`\n" for z in ok[chat])
     return False
