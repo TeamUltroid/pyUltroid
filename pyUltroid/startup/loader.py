@@ -105,9 +105,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # group manager
     if manager == "True":
-        Loader(path="assistant/manager", key="Group Manager").load(
-            cmd_help=None
-        )
+        Loader(path="assistant/manager", key="Group Manager").load(cmd_help=None)
 
     # chat via assistant
     if pmbot == "True":
