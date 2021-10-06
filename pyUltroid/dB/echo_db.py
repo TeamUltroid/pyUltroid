@@ -7,14 +7,19 @@
 
 from .. import udB
 
-try:
-    eval(udB.get("ECHO"))
-except BaseException:
-    udB.set("ECHO", "{}")
+def get_stuff():
+    a = udB.get("ECHO")
+    if not a:
+        return {}
+    try:
+        return eval(a)
+    except BaseException:
+        udB.delete("ECHO")
+    return {}
 
 
 def add_echo(chat, user):
-    x = eval(udB.get("ECHO"))
+    x = get_stuff()
     try:
         k = x[chat]
         if user not in k:
@@ -26,7 +31,7 @@ def add_echo(chat, user):
 
 
 def rem_echo(chat, user):
-    x = eval(udB.get("ECHO"))
+    x = get_stuff()
     try:
         k = x[chat]
         if user in k:
@@ -38,7 +43,7 @@ def rem_echo(chat, user):
 
 
 def check_echo(chat, user):
-    x = eval(udB.get("ECHO"))
+    x = get_stuff()
     try:
         k = x[chat]
         if user in k:
@@ -49,7 +54,7 @@ def check_echo(chat, user):
 
 
 def list_echo(chat):
-    x = eval(udB.get("ECHO"))
+    x = get_stuff()
     try:
         return x[chat]
     except BaseException:
