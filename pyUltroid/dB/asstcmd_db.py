@@ -8,20 +8,25 @@
 
 from .. import udB
 
-try:
-    eval(udB.get("ASST_CMDS"))
-except BaseException:
-    udB.set("ASST_CMDS", "{}")
+def get_stuff()
+    a = udB.get("ASST_CMDS")
+    if not a:
+        return {}
+    try:
+        return eval(a)
+    except BaseException:
+        udB.delete("ASST_CMDS")
+    return {}
 
 
 def add_cmd(cmd, msg, media, button):
-    ok = eval(udB.get("ASST_CMDS"))
+    ok = get_stuff()
     ok.update({cmd: {"msg": msg, "media": media, "button": button}})
     return udB.set("ASST_CMDS", str(ok))
 
 
 def rem_cmd(cmd):
-    ok = eval(udB.get("ASST_CMDS"))
+    ok = get_stuff()
     if ok.get(cmd):
         ok.pop(cmd)
         return udB.set("ASST_CMDS", str(ok))
@@ -29,7 +34,7 @@ def rem_cmd(cmd):
 
 
 def cmd_reply(cmd):
-    ok = eval(udB.get("ASST_CMDS"))
+    ok = get_stuff()
     if ok.get(cmd):
         okk = ok[cmd]
         return okk["msg"], okk["media"], okk["button"] if ok.get("button") else None
@@ -37,7 +42,7 @@ def cmd_reply(cmd):
 
 
 def list_cmds():
-    ok = eval(udB.get("ASST_CMDS"))
+    ok = get_stuff()
     if ok.keys():
         return ok.keys()
     return {}
