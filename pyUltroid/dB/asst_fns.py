@@ -99,5 +99,4 @@ def get_all_bl_users():  # Returns List
     users = udB.get("BOT_BLS")
     if users is None or users == "":
         return [""]
-    else:
-        return str_to_list(users)
+    return str_to_list(users)
