@@ -64,7 +64,7 @@ class Loader:
                         self._logger.exception(em)
 
     def load_single(self, log=False):
-        """ To Load Single File """
+        """To Load Single File"""
         plugin = self.path.replace(".py", "").replace("/", ".")
         try:
             import_module(plugin)
@@ -73,7 +73,7 @@ class Loader:
             return self._logger.exception(er)
         if log:
             self._logger.info(f"Successfully Loaded {path}!")
-                        
+
 
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
@@ -81,9 +81,9 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     Loader(path="plugins", key="Official", logger=LOGS).load()
 
     # for assistant
-    Loader(path="assistant", key="Assistant", logger=LOGS, exclude=["assistant/pmbot.py"]).load(
-        log=False, cmd_help=None
-    )
+    Loader(
+        path="assistant", key="Assistant", logger=LOGS, exclude=["assistant/pmbot.py"]
+    ).load(log=False, cmd_help=None)
 
     # for addons
     if addons == "True" or not addons:
