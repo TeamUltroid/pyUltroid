@@ -63,7 +63,7 @@ class Loader:
                     except BaseException as em:
                         self._logger.exception(em)
 
-    def load_single_file(self, log=False):
+    def load_single(self, log=False):
         """ To Load Single File """
         plugin = self.path.replace(".py", "").replace("/", ".")
         try:
@@ -111,7 +111,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # chat via assistant
     if pmbot == "True":
-        Loader(path="assistant/pmbot.py").load_single_file(log=False)
+        Loader(path="assistant/pmbot.py").load_single(log=False)
 
     # vc bot
     if vcbot == "True":
