@@ -8,7 +8,7 @@
 
 from .. import udB
 
-def get_stuff()
+def get_stuff():
     a = udB.get("BOTCHAT")
     if a:
         try:
