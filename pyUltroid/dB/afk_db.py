@@ -9,10 +9,15 @@ from datetime import datetime as dt
 
 from .. import udB
 
-try:
-    eval(udB["AFK_DB"])
-except BaseException:
-    udB.set("AFK_DB", "[]")
+def get_stuff()
+    a = udB.get("AFK_DB")
+    if not a:
+        return []
+    try:
+        return eval(a)
+    except BaseException:
+        udB.delete("AFK_DB")
+    return []
 
 
 def add_afk(msg, media_type, media):
@@ -22,7 +27,7 @@ def add_afk(msg, media_type, media):
 
 
 def is_afk():
-    afk = eval(udB["AFK_DB"])
+    afk = get_stuff()
     if afk:
         start_time = dt.strptime(afk[3], "%b %d %Y %I:%M:%S%p")
         afk_since = str(dt.now().replace(microsecond=0) - start_time)
