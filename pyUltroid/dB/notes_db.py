@@ -7,6 +7,7 @@
 
 from .. import udB
 
+
 def get_stuff():
     a = udB.get("NOTE")
     if not a:

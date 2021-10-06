@@ -7,6 +7,7 @@
 
 from .. import udB
 
+
 def get_stuff(key=None):
     kk = udB.get(key)
     if not kk:
@@ -16,7 +17,6 @@ def get_stuff(key=None):
     except BaseException:
         udB.delete(key)
     return {}
-
 
 
 def add_welcome(chat, msg, media, button):

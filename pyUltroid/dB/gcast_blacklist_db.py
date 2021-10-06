@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 from .. import udB
 
+
 def get_stuff():
     a = udB.get("GBLACKLISTS")
     if not a:

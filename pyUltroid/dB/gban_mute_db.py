@@ -7,6 +7,7 @@
 
 from .. import udB
 
+
 def get_gban_stuff():
     a = udB.get("GBAN")
     if not a:
