@@ -9,7 +9,7 @@ from datetime import datetime as dt
 
 from .. import udB
 
-def get_stuff()
+def get_stuff():
     a = udB.get("AFK_DB")
     if not a:
         return []
