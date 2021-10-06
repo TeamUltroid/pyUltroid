@@ -8,24 +8,26 @@
 
 from .. import udB
 
-try:
-    eval(udB.get("NSFW"))
-except BaseException:
-    udB.set("NSFW", "{}")
-try:
-    eval(udB.get("PROFANITY"))
-except BaseException:
-    udB.set("PROFANITY", "{}")
+def get_stuff(key=None):
+    kk = udB.get(key)
+    if not kk:
+        return {}
+    try:
+        return eval(kk)
+    except BaseException:
+        udB.delete(key)
+    return {}
+
 
 
 def nsfw_chat(chat, action):
-    x = eval(udB.get("NSFW"))
+    x = get_stuff("NSFW")
     x.update({chat: action})
     return udB.set("NSFW", str(x))
 
 
 def rem_nsfw(chat):
-    x = eval(udB.get("NSFW"))
+    x = get_stuff("NSFW")
     if x.get(chat):
         x.pop(chat)
         return udB.set("NSFW", str(x))
@@ -33,20 +35,20 @@ def rem_nsfw(chat):
 
 
 def is_nsfw(chat):
-    x = eval(udB.get("NSFW"))
+    x = get_stuff("NSFW")
     if x.get(chat):
         return x[chat]
     return
 
 
 def profan_chat(chat, action):
-    x = eval(udB.get("PROFANITY"))
+    x = get_stuff("PROFANITY")
     x.update({chat: action})
     return udB.set("PROFANITY", str(x))
 
 
 def rem_profan(chat):
-    x = eval(udB.get("PROFANITY"))
+    x = get_stuff("PROFANITY")
     if x.get(chat):
         x.pop(chat)
         return udB.set("PROFANITY", str(x))
@@ -54,7 +56,7 @@ def rem_profan(chat):
 
 
 def is_profan(chat):
-    x = eval(udB.get("PROFANITY"))
+    x = get_stuff("PROFANITY")
     if x.get(chat):
         return x[chat]
     return
