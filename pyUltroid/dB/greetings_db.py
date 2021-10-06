@@ -7,30 +7,26 @@
 
 from .. import udB
 
-try:
-    eval(udB.get("WELCOME"))
-except BaseException:
-    udB.set("WELCOME", "{}")
+def get_stuff(key=None):
+    kk = udB.get(key)
+    if not kk:
+        return {}
+    try:
+        return eval(kk)
+    except BaseException:
+        udB.delete(key)
+    return {}
 
-try:
-    eval(udB.get("GOODBYE"))
-except BaseException:
-    udB.set("GOODBYE", "{}")
-
-try:
-    eval(udB.get("THANK_MEMBERS"))
-except BaseException:
-    udB.set("THANK_MEMBERS", "{}")
 
 
 def add_welcome(chat, msg, media, button):
-    ok = eval(udB.get("WELCOME"))
+    ok = get_stuff("WELCOME")
     ok.update({chat: {"welcome": msg, "media": media, "button": button}})
     return udB.set("WELCOME", str(ok))
 
 
 def get_welcome(chat):
-    ok = eval(udB.get("WELCOME"))
+    ok = get_stuff("WELCOME")
     wl = ok.get(chat)
     if wl:
         return wl
@@ -38,7 +34,7 @@ def get_welcome(chat):
 
 
 def delete_welcome(chat):
-    ok = eval(udB.get("WELCOME"))
+    ok = get_stuff("WELCOME")
     wl = ok.get(chat)
     if wl:
         ok.pop(chat)
@@ -47,13 +43,13 @@ def delete_welcome(chat):
 
 
 def add_goodbye(chat, msg, media, button):
-    ok = eval(udB.get("GOODBYE"))
+    ok = get_stuff("GOODBYE")
     ok.update({chat: {"goodbye": msg, "media": media, "button": button}})
     return udB.set("GOODBYE", str(ok))
 
 
 def get_goodbye(chat):
-    ok = eval(udB.get("GOODBYE"))
+    ok = get_stuff("GOODBYE")
     wl = ok.get(chat)
     if wl:
         return wl
@@ -61,7 +57,7 @@ def get_goodbye(chat):
 
 
 def delete_goodbye(chat):
-    ok = eval(udB.get("GOODBYE"))
+    ok = get_stuff("GOODBYE")
     wl = ok.get(chat)
     if wl:
         ok.pop(chat)
@@ -70,13 +66,13 @@ def delete_goodbye(chat):
 
 
 def add_thanks(chat):
-    x = eval(udB.get("THANK_MEMBERS"))
+    x = get_stuff("THANK_MEMBERS")
     x.update({chat: True})
     return udB.set("THANK_MEMBERS", str(x))
 
 
 def remove_thanks(chat):
-    x = eval(udB.get("THANK_MEMBERS"))
+    x = get_stuff("THANK_MEMBERS")
     if x.get(chat):
         x.pop(chat)
         return udB.set("THANK_MEMBERS", str(x))
@@ -84,7 +80,7 @@ def remove_thanks(chat):
 
 
 def must_thank(chat):
-    x = eval(udB.get("THANK_MEMBERS"))
+    x = get_stuff("THANK_MEMBERS")
     try:
         return x[chat]
     except KeyError:
