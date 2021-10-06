@@ -7,7 +7,7 @@
 
 from .. import udB
 
-def get_stuff()
+def get_stuff():
     a = udB.get("BLACKLIST_DB")
     if not a:
         return {}
