@@ -23,12 +23,14 @@ class Loader:
         self.key = key
         self._logger = logger
 
-    def load(self, log=True, func=import_module, cmd_help=HELP):
+    def load(self, log=True, func=import_module, cmd_help=HELP, exclude=[]):
         files = sorted(glob.glob(self.path + "/*.py"))
         if log:
             self._logger.info(
                 f"• Installing {self.key}'s Plugins || Count : {len(files)} •"
             )
+        if exclude:
+            [files.remove(path) for path in exclude]
         for plugin in files:
             plugin = plugin.replace(".py", "")
             if func == import_module:
@@ -61,6 +63,17 @@ class Loader:
                     except BaseException as em:
                         self._logger.exception(em)
 
+    def load_single_file(self, log=False):
+        """ To Load Single File """
+        plugin = self.path.replace(".py", "").replace("/", ".")
+        try:
+            import_module(plugin)
+        except Exception as er:
+            self._logger.info(f"Error while Loading {path}")
+            return self._logger.exception(er)
+        if log:
+            self._logger.info(f"Successfully Loaded {path}!")
+                        
 
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
@@ -68,7 +81,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     Loader(path="plugins", key="Official", logger=LOGS).load()
 
     # for assistant
-    Loader(path="assistant", key="Assistant", logger=LOGS).load(
+    Loader(path="assistant", key="Assistant", logger=LOGS, exclude=["assistant/pmbot.py"]).load(
         log=False, cmd_help=None
     )
 
@@ -98,9 +111,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # chat via assistant
     if pmbot == "True":
-        Loader(path="assistant/pmbot", key="PM Bot", logger=LOGS).load(
-            log=False, cmd_help=None
-        )
+        Loader(path="assistant/pmbot.py").load_single_file(log=False)
 
     # vc bot
     if vcbot == "True":
