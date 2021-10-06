@@ -7,14 +7,19 @@
 
 from .. import udB
 
-try:
-    eval(udB.get("NIGHT_CHATS"))
-except BaseException:
-    udB.set("NIGHT_CHATS", "[]")
+def get_stuff():
+    a = udB.get("NIGHT_CHATS")
+    if not a:
+        return {}
+    try:
+        return eval(a)
+    except BaseException:
+        udB.delete("NIGHT_CHATS")
+    return {}
 
 
 def add_night(chat):
-    chats = eval(udB.get("NIGHT_CHATS"))
+    chats = get_stuff()
     if chat not in chats:
         chats.append(chat)
         udB.set("NIGHT_CHATS", str(chats))
@@ -22,7 +27,7 @@ def add_night(chat):
 
 
 def rem_night(chat):
-    chats = eval(udB.get("NIGHT_CHATS"))
+    chats = get_stuff()
     if chat in chats:
         chats.remove(chat)
         udB.set("NIGHT_CHATS", str(chats))
@@ -30,4 +35,4 @@ def rem_night(chat):
 
 
 def night_grps():
-    return eval(udB.get("NIGHT_CHATS"))
+    return get_stuff()
