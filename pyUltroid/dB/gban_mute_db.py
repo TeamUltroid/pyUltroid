@@ -20,7 +20,7 @@ def get_gban_stuff():
 
 ge = udB.get("GMUTE")
 if ge:
-   try:
+    try:
         if "list" not in str(type(eval(ge))):
             udB.set("GMUTE", "[]")
     except BaseException:
