@@ -7,16 +7,24 @@
 
 from .. import udB
 
-try:
-    dict(eval(udB["GBAN"]))
-except BaseException:
-    udB.set("GBAN", "{}")
+def get_gban_stuff():
+    a = udB.get("GBAN")
+    if not a:
+        return {}
+    try:
+        return dict(eval(a))
+    except BaseException:
+        udB.delete("GBAN")
+    return {}
 
-try:
-    if "list" not in str(type(eval(udB["GMUTE"]))):
+
+ge = udB.get("GMUTE")
+if ge:
+   try:
+        if "list" not in str(type(eval(ge))):
+            udB.set("GMUTE", "[]")
+    except BaseException:
         udB.set("GMUTE", "[]")
-except BaseException:
-    udB.set("GMUTE", "[]")
 
 
 def gban(user, reason):
@@ -40,7 +48,7 @@ def is_gbanned(user):
 
 
 def list_gbanned():
-    return eval(udB.get("GBAN"))
+    return get_gban_stuff()
 
 
 def gmute(user):
@@ -62,4 +70,6 @@ def is_gmuted(user):
 
 
 def list_gmuted():
-    return eval(udB.get("GMUTE"))
+    if udB.get("GMUTE"):
+        return eval(udB.get("GMUTE"))
+    return []
