@@ -20,7 +20,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
 from telethon import Button
-
+from telethon.utils import get_display_name
 from .. import *
 from .helper import bash, fast_download
 
@@ -32,6 +32,12 @@ try:
     import numpy as np
 except ImportError:
     np = None
+    
+try:
+    from telegraph import Telegraph
+except ImportError:
+    Telegraph = None
+
 # ~~~~~~~~~~~~~~~~~~~~OFOX API~~~~~~~~~~~~~~~~~~~~
 # @buddhhu
 
@@ -458,5 +464,28 @@ def four_point_transform(image, pts):
     warped = cv2.warpPerspective(image, M, (maxWidth, maxHeight))
     return warped
 
+
+# ------------------------------------- Telegraph ---------------------------------- #
+TELEGRAPH = []
+
+def telegraph_client():
+    if TELEGRAPH:
+        return TELEGRAPH[0]
+
+    from .. import udB
+    token = udB.get("_TELEGRAPH_TOKEN")
+    Telegraph = Telegraph(token)
+    if token:
+        TELEGRAPH.append(Telegraph)
+        return Telegraph
+    gd_name = get_display_name(ultroid_bot.me)
+    name = gd_name if len(gd_name) < 32 else "Ultroid"
+    profile_url = f"https://t.me/{ultroid_bot.me.username}" if ultroid_bot.me.username else None
+    Telegraph.create_account(
+        short_name=short_name, author_name=author_name, author_url=author_url
+    )
+    udB.set("_TELEGRAPH_TOKEN", Telegraph.get_access_token())
+    TELEGRAPH.append(Telegraph)
+    return Telegraph
 
 # --------- END --------- #
