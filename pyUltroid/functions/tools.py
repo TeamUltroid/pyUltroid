@@ -477,21 +477,21 @@ def telegraph_client():
     from .. import udB
 
     token = udB.get("_TELEGRAPH_TOKEN")
-    Telegraph = Telegraph(token)
+    TelegraphClient = Telegraph(token)
     if token:
-        TELEGRAPH.append(Telegraph)
-        return Telegraph
+        TELEGRAPH.append(TelegraphClient)
+        return TelegraphClient
     gd_name = get_display_name(ultroid_bot.me)
     gd_name if len(gd_name) < 32 else "Ultroid"
     profile_url = (
         f"https://t.me/{ultroid_bot.me.username}" if ultroid_bot.me.username else None
     )
-    Telegraph.create_account(
+    TelegraphClient.create_account(
         short_name=short_name, author_name=author_name, author_url=author_url
     )
-    udB.set("_TELEGRAPH_TOKEN", Telegraph.get_access_token())
-    TELEGRAPH.append(Telegraph)
-    return Telegraph
+    udB.set("_TELEGRAPH_TOKEN", TelegraphClient.get_access_token())
+    TELEGRAPH.append(TelegraphClient)
+    return TelegraphClient
 
 
 # --------- END --------- #
