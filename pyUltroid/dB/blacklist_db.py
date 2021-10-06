@@ -7,6 +7,7 @@
 
 from .. import udB
 
+
 def get_stuff():
     a = udB.get("BLACKLIST_DB")
     if not a:
@@ -16,6 +17,7 @@ def get_stuff():
     except BaseException:
         udB.delete("BLACKLIST_DB")
     return {}
+
 
 def add_blacklist(chat, word):
     ok = get_stuff()
