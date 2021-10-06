@@ -6,14 +6,19 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 from .. import udB
 
-try:
-    eval(udB["GBLACKLISTS"])
-except BaseException:
-    udB.set("GBLACKLISTS", "[]")
+def get_stuff():
+    a = udB.get("GBLACKLISTS")
+    if not a:
+        return []
+    try:
+        return eval(a)
+    except BaseException:
+        udB.delete("GBLACKLISTS")
+    return []
 
 
 def get_gblacklists():
-    return eval(udB.get("GBLACKLISTS"))
+    return get_stuff()
 
 
 def add_gblacklist(id):
