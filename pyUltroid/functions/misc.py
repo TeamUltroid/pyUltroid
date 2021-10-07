@@ -11,7 +11,6 @@ from logging import WARNING
 from random import choice, randrange, shuffle
 
 from bs4 import BeautifulSoup
-from faker import Faker
 
 from .. import *
 from ..dB._core import LIST
@@ -275,16 +274,14 @@ async def get_anime_src_res(search_str):
 
 
 async def get_random_user_data():
+    # Todo : dont use 2 Api(s). 
     base_url = "https://randomuser.me/api/"
-    cc = Faker().credit_card_full().split("\n")
+    cc = await async_searcher("https://random-data-api.com/api/business_credit_card/random_card", re_json=True)
     card = (
-        cc[0]
-        + "\n"
         + "**CARD_ID:** "
-        + cc[2]
-        + "\n"
-        + f"**{cc[3].split(':')[0]}:**"
-        + cc[3].split(":")[1]
+        + cc["credit_card_number"]
+        + f" {cc['credit_card_expiry_date']}\n"
+        + f"**C-ID :** {cc['id']}"
     )
     data_ = json_parser(await async_searcher(base_url))["results"][0]
     _g = data_["gender"]
