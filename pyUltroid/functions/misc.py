@@ -281,7 +281,7 @@ async def get_random_user_data():
     )
     card = (
         +"**CARD_ID:** "
-        + cc["credit_card_number"]
+        + str(cc["credit_card_number"])
         + f" {cc['credit_card_expiry_date']}\n"
         + f"**C-ID :** {cc['id']}"
     )
