@@ -41,39 +41,11 @@ async def randomchannel(
 # --------------------------------------------------
 
 
-async def quora_scrape(query):
-    to_return = []
-    for quora in json_parser(
-        re.findall(
-            r'window\.ansFrontendGlobals\.data\.inlineQueryResults\.results\[".*?"\] = ("{.*}");',
-            await async_searcher(
-                "https://quora.com/search?q=" + query.replace(" ", "%20"),
-                headers={
-                    "Cache-Control": "no-cache",
-                    "Connection": "keep-alive",
-                    "User-Agent": choice(some_random_headers),
-                },
-            ),
-        )[-1]
-    )["data"]["searchConnection"]["edges"]:
-        question = json_parser(quora["node"]["question"]["title"])["sections"][0][
-            "spans"
-        ][0]["text"]
-        answers = ""
-        for answer in json_parser(quora["node"]["question"]["title"])["sections"]:
-            answers += answer["spans"][0]["text"]
-        to_return.append({"question": question, "answer": answers})
-    return to_return
-
-
-# --------------------------------------------------
-
-
 async def YtDataScraper(url: str):
     to_return = {}
     data = json_parser(
         BeautifulSoup(
-            await async_searcher("https://www.youtube.com/watch?v=TYaNfLLOLNY"),
+            await async_searcher(url),
             "html.parser",
         )
         .find_all("script")[39]
