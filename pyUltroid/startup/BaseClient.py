@@ -59,12 +59,3 @@ class UltroidClient(TelegramClient):
 
     def run(self):
         self.run_until_disconnected()
-
-    def unload(self, List):
-        for i, e in List:
-            self.remove_event_handler(i)
-
-    def load(self, List):
-        for func, handler, kwargs in List:
-            handler = handlers[handler]
-            self.add_event_handler(func, handler(**kwargs))
