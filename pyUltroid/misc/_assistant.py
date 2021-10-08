@@ -50,7 +50,7 @@ def asst_cmd(pattern=None, load=None, **kwargs):
             asst.add_event_handler(func, NewMessage(**kwargs))
 
         return wrapper
-        if load:
+        if load != None:
             append_or_update(load, wrapper)
 
     return ult
