@@ -16,7 +16,14 @@ from .. import *
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
-from .tools import async_searcher, json_parser
+from .tools import async_searcher, json_parser, check_filename
+
+try:
+    import aiohttp
+    import aiofiles
+except ImportError:
+    aiohttp = None
+    aiofiles = None
 
 try:
     import instagrapi
@@ -131,13 +138,19 @@ async def ReTrieveFile(input_file_name):
     RMBG_API = udB.get("RMBG_API")
     headers = {"X-API-Key": RMBG_API}
     files = {"image_file": (input_file_name, open(input_file_name, "rb"))}
-    return await async_searcher(
-        "https://api.remove.bg/v1.0/removebg",
-        post=True,
-        headers=headers,
-        data=files,
-        real=True,
-    )
+    async with aiohttp.ClientSession() as ses:
+        async with ses.post("https://api.remove.bg/v1.0/removebg", headers=headers,
+             data=files
+        ) as out:
+            contentType = out.headers.get("content-type")
+            if "image" in contentType:
+                name = check_filename("ult-rmbg.png")
+                file = await aiofiles.open(name, "wb")
+                await file.write(await out.read())
+                await file.close()
+                return True, name
+            else:
+                return False, (await out.json())
 
 
 # ---------------- Unsplash Search ----------------
