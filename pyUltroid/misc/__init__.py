@@ -5,8 +5,10 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from .. import *
 import inspect
+
+from .. import *
+
 CMD_HELP = {}
 
 
