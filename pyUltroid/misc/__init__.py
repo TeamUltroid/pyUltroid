@@ -32,7 +32,9 @@ def owner_and_sudos(castint=False):
         return [int(a) for a in data]
     return data
 
+
 # ------------------------------------------------ #
+
 
 def append_or_update(load, func):
     if isinstance(load, list):
@@ -40,5 +42,4 @@ def append_or_update(load, func):
     if isinstance(load, dict):
         if load.get(__name__):
             return load[__name__].append(func)
-        return load.update({__name__:[func]})
-    
+        return load.update({__name__: [func]})
