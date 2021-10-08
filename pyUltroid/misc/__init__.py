@@ -37,10 +37,10 @@ def owner_and_sudos(castint=False):
 # ------------------------------------------------ #
 
 
-def append_or_update(load, func, name):
+def append_or_update(load, func, name, arggs):
     if isinstance(load, list):
         return load.append(func)
     if isinstance(load, dict):
         if load.get(name):
-            return load[name].append(func)
-        return load.update({name: [func]})
+            return load[name].append((func, arggs))
+        return load.update({name: [(func, arggs)]})
