@@ -5,7 +5,8 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import re, inspect
+import inspect
+import re
 
 from telethon import Button
 from telethon.events import CallbackQuery, InlineQuery, NewMessage
