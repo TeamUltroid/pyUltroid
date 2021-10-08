@@ -482,7 +482,7 @@ def telegraph_client():
         TELEGRAPH.append(TelegraphClient)
         return TelegraphClient
     gd_name = get_display_name(ultroid_bot.me)
-    short_name = gd_name if len(gd_name) < 32 else "Ultroid"
+    gd_name if len(gd_name) < 32 else "Ultroid"
     profile_url = (
         f"https://t.me/{ultroid_bot.me.username}" if ultroid_bot.me.username else None
     )
