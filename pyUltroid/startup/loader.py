@@ -69,10 +69,10 @@ class Loader:
         try:
             import_module(plugin)
         except Exception as er:
-            self._logger.info(f"Error while Loading {self.path}")
+            self._logger.info(f"Error while Loading {plugin}")
             return self._logger.exception(er)
         if log and self._logger:
-            self._logger.info(f"Successfully Loaded {self.path}!")
+            self._logger.info(f"Successfully Loaded {plugin}!")
 
 
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
