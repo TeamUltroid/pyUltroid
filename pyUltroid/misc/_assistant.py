@@ -50,7 +50,7 @@ def asst_cmd(pattern=None, load=None, **kwargs):
             kwargs["pattern"] = re.compile("^/" + pattern)
         asst.add_event_handler(func, NewMessage(**kwargs))
         if load is not None:
-            append_or_update(load, func, name)
+            append_or_update(load, func, name, kwargs)
 
     return ult
 
