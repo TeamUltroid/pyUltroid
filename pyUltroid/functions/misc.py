@@ -137,7 +137,7 @@ async def allcmds(event, telegraph):
 async def ReTrieveFile(input_file_name):
     RMBG_API = udB.get("RMBG_API")
     headers = {"X-API-Key": RMBG_API}
-    files = {"image_file": (input_file_name, open(input_file_name, "rb"))}
+    files = {"image_file": open(input_file_name, "rb").read()}
     async with aiohttp.ClientSession() as ses:
         async with ses.post(
             "https://api.remove.bg/v1.0/removebg", headers=headers, data=files
