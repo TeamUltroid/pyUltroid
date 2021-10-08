@@ -5,7 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import re
+import re, inspect
 
 from telethon import Button
 from telethon.events import CallbackQuery, InlineQuery, NewMessage
@@ -42,13 +42,14 @@ IN_BTTS = [
 
 def asst_cmd(pattern=None, load=None, **kwargs):
     """Decorator for assistant's command"""
+    filename = inspect.stack()[1].filename.split("/")[-1].replace(".py", "")
 
     def ult(func):
         if pattern:
             kwargs["pattern"] = re.compile("^/" + pattern)
         asst.add_event_handler(func, NewMessage(**kwargs))
         if load is not None:
-            append_or_update(load, func)
+            append_or_update(filename, func)
 
     return ult
 
