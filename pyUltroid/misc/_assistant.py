@@ -48,6 +48,7 @@ def asst_cmd(pattern=None, load=None, **kwargs):
             if pattern:
                 kwargs["pattern"] = re.compile("^/" + pattern)
             asst.add_event_handler(func, NewMessage(**kwargs))
+
         return wrapper
         if load:
             append_or_update(load, wrapper)
