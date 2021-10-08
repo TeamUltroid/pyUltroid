@@ -13,7 +13,7 @@ from telethon.tl.types import InputWebDocument
 from telethon.utils import get_display_name
 
 from .. import LOGS, asst, ultroid_bot
-from . import owner_and_sudos
+from . import owner_and_sudos, append_or_update
 
 ULTROID_PIC = "https://telegra.ph/file/11245cacbffe92e5d5b14.jpg"
 OWNER = get_display_name(ultroid_bot.me)
@@ -40,14 +40,15 @@ IN_BTTS = [
 # decorator for assistant
 
 
-def asst_cmd(pattern=None, **kwargs):
+def asst_cmd(pattern=None, load=None, **kwargs):
     """Decorator for assistant's command"""
 
     def ult(func):
         if pattern:
             kwargs["pattern"] = re.compile("^/" + pattern)
         asst.add_event_handler(func, NewMessage(**kwargs))
-
+    if load:
+        append_or_update(load, func)
     return ult
 
 
