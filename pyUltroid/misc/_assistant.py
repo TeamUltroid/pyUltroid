@@ -44,14 +44,11 @@ def asst_cmd(pattern=None, load=None, **kwargs):
     """Decorator for assistant's command"""
 
     def ult(func):
-        def wrapper(event):
-            if pattern:
-                kwargs["pattern"] = re.compile("^/" + pattern)
-            asst.add_event_handler(func, NewMessage(**kwargs))
-
-        return wrapper
-        if load is not None:
-            append_or_update(load, wrapper)
+        if pattern:
+            kwargs["pattern"] = re.compile("^/" + pattern)
+        asst.add_event_handler(func, NewMessage(**kwargs))
+        if load != None:
+            append_or_update(load, func)
 
     return ult
 
