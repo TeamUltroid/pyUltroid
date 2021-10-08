@@ -136,6 +136,7 @@ async def ReTrieveFile(input_file_name):
         post=True,
         headers=headers,
         data=files,
+        real=True,
     )
 
 
