@@ -16,11 +16,11 @@ from .. import *
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
-from .tools import async_searcher, json_parser, check_filename
+from .tools import async_searcher, check_filename, json_parser
 
 try:
-    import aiohttp
     import aiofiles
+    import aiohttp
 except ImportError:
     aiohttp = None
     aiofiles = None
@@ -139,8 +139,8 @@ async def ReTrieveFile(input_file_name):
     headers = {"X-API-Key": RMBG_API}
     files = {"image_file": (input_file_name, open(input_file_name, "rb"))}
     async with aiohttp.ClientSession() as ses:
-        async with ses.post("https://api.remove.bg/v1.0/removebg", headers=headers,
-             data=files
+        async with ses.post(
+            "https://api.remove.bg/v1.0/removebg", headers=headers, data=files
         ) as out:
             contentType = out.headers.get("content-type")
             if "image" in contentType:
