@@ -6,7 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 from .. import *
-
+import inspect
 CMD_HELP = {}
 
 
@@ -40,6 +40,7 @@ def append_or_update(load, func):
     if isinstance(load, list):
         return load.append(func)
     if isinstance(load, dict):
-        if load.get(__name__):
-            return load[__name__].append(func)
-        return load.update({__name__: [func]})
+        name = inspect.stack()[1].filename.split("/")[-1].replace(".py", "")
+        if load.get(name):
+            return load[name].append(func)
+        return load.update({name: [func]})
