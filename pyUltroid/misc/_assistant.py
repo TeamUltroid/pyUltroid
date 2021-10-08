@@ -13,7 +13,7 @@ from telethon.tl.types import InputWebDocument
 from telethon.utils import get_display_name
 
 from .. import LOGS, asst, ultroid_bot
-from . import owner_and_sudos, append_or_update
+from . import append_or_update, owner_and_sudos
 
 ULTROID_PIC = "https://telegra.ph/file/11245cacbffe92e5d5b14.jpg"
 OWNER = get_display_name(ultroid_bot.me)
@@ -47,6 +47,7 @@ def asst_cmd(pattern=None, load=None, **kwargs):
         if pattern:
             kwargs["pattern"] = re.compile("^/" + pattern)
         asst.add_event_handler(func, NewMessage(**kwargs))
+
     if load:
         append_or_update(load, func)
     return ult
