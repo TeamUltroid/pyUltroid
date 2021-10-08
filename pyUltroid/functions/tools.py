@@ -68,6 +68,7 @@ async def async_searcher(
     ssl=None,
     re_json: bool = False,
     re_content: bool = False,
+    real: bool = False,
 ):
     async with aiohttp.ClientSession(headers=headers) as client:
         if post:
@@ -78,6 +79,8 @@ async def async_searcher(
             return await data.json()
         if re_content:
             return await data.read()
+        if real:
+            return data
         return await data.text()
 
 
