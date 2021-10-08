@@ -5,7 +5,6 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import inspect
 
 from .. import *
 
@@ -38,11 +37,10 @@ def owner_and_sudos(castint=False):
 # ------------------------------------------------ #
 
 
-def append_or_update(load, func):
+def append_or_update(load, func, name):
     if isinstance(load, list):
         return load.append(func)
     if isinstance(load, dict):
-        name = inspect.stack()[1].filename.split("/")[-1].replace(".py", "")
         if load.get(name):
             return load[name].append(func)
         return load.update({name: [func]})
