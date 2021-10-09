@@ -8,9 +8,6 @@
 
 from .. import *
 
-CMD_HELP = {}
-
-
 def sudoers():
     from .. import udB
 
