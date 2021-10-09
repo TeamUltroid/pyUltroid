@@ -23,17 +23,13 @@ from pyUltroid.misc._wrappers import eod, eor
 from .. import *
 from ..configs import Var
 from ..dB._core import LIST
-from . import sudoers
+from . import sudoers, CMD_HELP
 
 ALIVE_NAME = ultroid_bot.me.first_name
 BOTLOG_CHATID = BOTLOG = int(udB.get("LOG_CHANNEL"))
 
 
-bot = ultroid_bot
-borg = ultroid_bot
-friday = ultroid_bot
-jarvis = ultroid_bot
-CMD_HELP = {}
+bot = borg = friday = jarvis = ultroid_bot
 
 hndlr = "\\" + HNDLR
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
@@ -48,7 +44,7 @@ def admin_cmd(pattern=None, command=None, **args):
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     if pattern is not None:
-        args["pattern"] = re.compile("\\" + HNDLR + pattern)
+        args["pattern"] = re.compile(hndlr + pattern)
         reg = re.compile("(.*)")
         try:
             cmd = re.search(reg, pattern)
