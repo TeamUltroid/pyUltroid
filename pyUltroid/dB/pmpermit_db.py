@@ -7,21 +7,27 @@
 
 from .. import udB
 
-try:
-    eval(udB.get("PMPERMIT"))
-except BaseException:
+def get_stuff():
+    a = udB.get("PMPERMIT")
+    if not a:
+        return []
     try:
-        # Transferring stuff From old format to new
-        x, y = [], udB.get("PMPERMIT").split()
-        for z in y:
-            x.append(int(z))
-        udB.set("PMPERMIT", str(x))
+        return eval(a)
     except BaseException:
-        udB.set("PMPERMIT", "[]")
+        try:
+            # Transferring stuff From old format to new
+            x, y = [], udB.get("PMPERMIT").split()
+            for z in y:
+                x.append(int(z))
+            udB.set("PMPERMIT", str(x))
+            return x
+        except BaseException:
+            pass
+    return []
 
 
 def get_approved():
-    return eval(udB.get("PMPERMIT"))
+    return get_stuff()
 
 
 def approve_user(id):
