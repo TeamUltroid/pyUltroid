@@ -7,32 +7,37 @@
 
 from .. import udB
 
-try:
-    eval(udB["SNIP"])
-except BaseException:
-    udB.set("SNIP", "{}")
+def get_stuff():
+    a = udB.get("SNIP")
+    if not a:
+        return {}
+    try:
+        return eval(a)
+    except BaseException:
+        udB.delete("SNIP")
+    return {}
 
 
 def add_snip(word, msg, media, button):
-    ok = eval(udB.get("SNIP"))
+    ok = get_stuff()
     ok.update({word: {"msg": msg, "media": media, "button": button}})
     udB.set("SNIP", str(ok))
 
 
 def rem_snip(word):
-    ok = eval(udB.get("SNIP"))
+    ok = get_stuff()
     if ok.get(word):
         ok.pop(word)
         udB.set("SNIP", str(ok))
 
 
 def get_snips(word):
-    ok = eval(udB.get("SNIP"))
+    ok = get_stuff()
     if ok.get(word):
         return ok[word]
     return False
 
 
 def list_snip():
-    ok = eval(udB.get("SNIP"))
+    ok = get_stuff()
     return "".join(f"👉 ${z}\n" for z in ok)
