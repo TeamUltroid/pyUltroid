@@ -14,7 +14,7 @@ DEL_TIME = []
 
 async def eor(event, text, **kwargs):
     time = kwargs.get("time", None)
-    kwargs["text"] = text
+    kwargs["message"] = text
     if "time" in kwargs:
         del kwargs["time"]
     if not event.out:
