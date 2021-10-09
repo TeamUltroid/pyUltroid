@@ -16,13 +16,11 @@ async def eor(event, text, **args):
     link_preview = args.get("link_preview", False)
     parse_mode = args.get("parse_mode", "md")
     time = args.get("time", None)
+    reply_to = event.reply_to_msg_id or event
     if not event.out:
-        if event.is_reply:
-            event = await event.get_reply_message()
-        if event:
-            ok = await event.reply(
-                text, link_preview=link_preview, parse_mode=parse_mode
-            )
+        ok = await event.client.send_message(
+                event.chat_id, text, link_preview=link_preview, parse_mode=parse_mode, reply_to=reply_to
+        )
     else:
         ok = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
     if not DEL_TIME:
@@ -39,6 +37,6 @@ async def eor(event, text, **args):
     return ok
 
 
-async def eod(event, text=None, **kwargs):
+async def eod(event, text, **kwargs):
     kwargs["time"] = kwargs.get("time", 5)
     return await eor(event, text, **kwargs)
