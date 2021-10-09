@@ -19,7 +19,11 @@ async def eor(event, text, **args):
     reply_to = event.reply_to_msg_id or event
     if not event.out:
         ok = await event.client.send_message(
-                event.chat_id, text, link_preview=link_preview, parse_mode=parse_mode, reply_to=reply_to
+            event.chat_id,
+            text,
+            link_preview=link_preview,
+            parse_mode=parse_mode,
+            reply_to=reply_to,
         )
     else:
         ok = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
