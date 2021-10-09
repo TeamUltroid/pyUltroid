@@ -7,8 +7,7 @@
 #
 #   To Install Other USERBOTs plugin Support
 #
-#
-#   Ultroid Don't Need This Stuffs
+#   ULTROID Don't Need This Stuffs
 #
 
 import inspect
@@ -34,7 +33,7 @@ bot = ultroid_bot
 borg = ultroid_bot
 friday = ultroid_bot
 jarvis = ultroid_bot
-CMD_HELP = HELP
+CMD_HELP = {}
 
 hndlr = "\\" + HNDLR
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
