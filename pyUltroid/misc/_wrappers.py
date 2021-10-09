@@ -16,8 +16,8 @@ async def eor(event, text, **args):
     link_preview = args.get("link_preview", False)
     parse_mode = args.get("parse_mode", "md")
     time = args.get("time", None)
-    reply_to = event.reply_to_msg_id or event
     if not event.out:
+        reply_to = event.reply_to_msg_id or event
         ok = await event.client.send_message(
             event.chat_id,
             text,
