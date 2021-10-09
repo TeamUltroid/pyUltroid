@@ -30,7 +30,6 @@ except ImportError:
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from .. import asst, ultroid_bot
 from . import *
 
 try:
@@ -71,7 +70,7 @@ user_full_name = get_display_name
 
 
 def un_plug(shortname):
-
+    from .. import ultroid_bot, asst, LOGS
     try:
         for client in [ultroid_bot, asst]:
             for i in LOADED[shortname]:
