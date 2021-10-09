@@ -9,32 +9,33 @@ import asyncio
 
 # edit or reply
 
-DEL_TIME = 0
+DEL_TIME = []
 
 
-async def eor(event, text, **kwargs):
-    from .. import udB
-
-    if DEL_TIME == 0:
-        DEL_TIME += int(udB.get("DEL_DELAY_TIME")) if udB.get("DEL_DELAY_TIME") else 0
-    else:
-        DEL_TIME = None
-    kwargs["link_preview"] = kwargs.get("link_preview", False)
-    kwargs["parse_mode"] = kwargs.get("parse_mode", "md")
-    time = kwargs.get("time", DEL_TIME)
+async def eor(event, **kwargs):
+    link_preview = kwargs.get("link_preview", False)
+    parse_mode = kwargs.get("parse_mode", "md")
+    time = kwargs.get("time", None)
     if "time" in kwargs:
         del kwargs["time"]
     if not event.out:
         kwargs["reply_to"] = event.reply_to_msg_id or event
         ok = await event.client.send_message(
             event.chat_id,
-            text,
-            **kwargs,
+            **kwargs
         )
     else:
-        ok = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
-    if time:
-        await asyncio.sleep(time)
+        ok = await event.edit(**kwargs)
+    if not DEL_TIME:
+        from .. import udB
+
+        ut = udB.get("DEL_DELAY_TIME")
+        DEL_TIME.append(ut)
+    else:
+        ut = DEL_TIME[0]
+    if time and ut != "None":
+        time = ut or time
+        await asyncio.sleep(int(time))
         return await ok.delete()
     return ok
 
