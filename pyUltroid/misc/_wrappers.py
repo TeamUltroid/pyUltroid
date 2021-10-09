@@ -14,6 +14,7 @@ DEL_TIME = 0
 
 async def eor(event, text, **kwargs):
     from .. import udB
+
     if DEL_TIME == 0:
         DEL_TIME += int(udB.get("DEL_DELAY_TIME")) or 0
     kwargs["link_preview"] = kwargs.get("link_preview", False)
