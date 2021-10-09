@@ -23,7 +23,6 @@ startup_stuff()
 
 
 ultroid_bot.me.phone = None
-ultroid_bot.uid = ultroid_bot.me.id
 ultroid_bot.first_name = ultroid_bot.me.first_name
 
 if not ultroid_bot.me.bot:
