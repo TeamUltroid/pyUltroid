@@ -59,3 +59,8 @@ class UltroidClient(TelegramClient):
 
     def run(self):
         self.run_until_disconnected()
+
+    @property
+    def uid(self):
+        """Client's User Id"""
+        return self.me.id
