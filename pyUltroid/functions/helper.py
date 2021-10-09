@@ -30,8 +30,9 @@ except ImportError:
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
+from .. import asst, ultroid_bot
 from . import *
-from .. import asst, ultroid_bot, LOGS
+
 try:
     from html_telegraph_poster import TelegraphPoster
 except ImportError:
@@ -83,7 +84,7 @@ def un_plug(shortname):
                 pass
     except (ValueError, KeyError):
         name = f"addons.{shortname}"
-        for client in [ultroid_bot,asst]:
+        for client in [ultroid_bot, asst]:
             for i in reversed(range(len(client._event_builders))):
                 ev, cb = client._event_builders[i]
                 if cb.__module__ == name:
