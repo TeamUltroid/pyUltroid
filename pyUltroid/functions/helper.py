@@ -70,7 +70,8 @@ user_full_name = get_display_name
 
 
 def un_plug(shortname):
-    from .. import ultroid_bot, asst, LOGS
+    from .. import asst, ultroid_bot
+
     try:
         for client in [ultroid_bot, asst]:
             for i in LOADED[shortname]:
