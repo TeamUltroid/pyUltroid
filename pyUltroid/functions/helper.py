@@ -31,7 +31,7 @@ from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 from . import *
-
+from .. import asst, ultroid_bot, LOGS
 try:
     from html_telegraph_poster import TelegraphPoster
 except ImportError:
@@ -70,7 +70,6 @@ user_full_name = get_display_name
 
 
 def un_plug(shortname):
-    from .. import LOGS, asst, ultroid_bot
 
     try:
         for client in [ultroid_bot, asst]:
@@ -80,21 +79,21 @@ def un_plug(shortname):
                 del LOADED[shortname]
                 del LIST[shortname]
                 ADDONS.remove(shortname)
-            except BaseException as er:
-                LOGS.info(er)
-    except BaseException as er:
-        LOGS.info(er)
+            except (ValueError, KeyError):
+                pass
+    except (ValueError, KeyError):
         name = f"addons.{shortname}"
-        for i in reversed(range(len(ultroid_bot._event_builders))):
-            ev, cb = ultroid_bot._event_builders[i]
-            if cb.__module__ == name:
-                del ultroid_bot._event_builders[i]
-                try:
-                    del LOADED[shortname]
-                    del LIST[shortname]
-                    ADDONS.remove(shortname)
-                except KeyError:
-                    pass
+        for client in [ultroid_bot,asst]:
+            for i in reversed(range(len(client._event_builders))):
+                ev, cb = client._event_builders[i]
+                if cb.__module__ == name:
+                    del client._event_builders[i]
+                    try:
+                        del LOADED[shortname]
+                        del LIST[shortname]
+                        ADDONS.remove(shortname)
+                    except KeyError:
+                        pass
 
 
 async def safeinstall(event):
