@@ -13,8 +13,6 @@ DEL_TIME = []
 
 
 async def eor(event, **kwargs):
-    kwargs.get("link_preview", False)
-    kwargs.get("parse_mode", "md")
     time = kwargs.get("time", None)
     if "time" in kwargs:
         del kwargs["time"]
