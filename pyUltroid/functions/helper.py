@@ -115,7 +115,7 @@ async def safeinstall(event):
     dl = await reply.download_media(f"addons/{reply.file.name}")
     if event.text[9:] != "f":
         read = open(dl).read()
-        for dan in DANGER:
+        for dan in KEEP_SAFE().All:
             if re.search(dan, read):
                 os.remove(dl)
                 return await ok.edit(
