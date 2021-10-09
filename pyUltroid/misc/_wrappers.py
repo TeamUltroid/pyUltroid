@@ -16,7 +16,9 @@ async def eor(event, text, **kwargs):
     from .. import udB
 
     if DEL_TIME == 0:
-        DEL_TIME += int(udB.get("DEL_DELAY_TIME")) or 0
+        DEL_TIME += int(udB.get("DEL_DELAY_TIME")) if udB.get("DEL_DELAY_TIME") else 0
+    else:
+        DEL_TIME = None
     kwargs["link_preview"] = kwargs.get("link_preview", False)
     kwargs["parse_mode"] = kwargs.get("parse_mode", "md")
     time = kwargs.get("time", DEL_TIME)
@@ -31,7 +33,7 @@ async def eor(event, text, **kwargs):
         )
     else:
         ok = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
-    if time and time != 0:
+    if time:
         await asyncio.sleep(time)
         return await ok.delete()
     return ok
