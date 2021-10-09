@@ -17,6 +17,7 @@ async def eor(event, text, **kwargs):
     kwargs["message"] = text
     if "time" in kwargs:
         del kwargs["time"]
+    del kwargs["text"]
     if not event.out:
         kwargs["reply_to"] = event.reply_to_msg_id or event
         ok = await event.client.send_message(event.chat_id, **kwargs)
