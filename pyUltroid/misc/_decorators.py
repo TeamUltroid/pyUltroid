@@ -172,8 +172,6 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                         return
                     elif not (await admin_check(ult)):
                         return
-                else:
-                    return
                 if only_devs and not udB.get("I_DEV"):
                     return await eod(
                         ult,
