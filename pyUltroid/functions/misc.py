@@ -6,7 +6,6 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
-import re
 from logging import WARNING
 from random import choice, randrange, shuffle
 
