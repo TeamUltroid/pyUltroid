@@ -1,2 +1,2 @@
-__version__ = "64.4-beta"
+__version__ = "2021.10.10"
 ultroid_version = "0.2"
