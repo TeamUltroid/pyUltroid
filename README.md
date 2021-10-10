@@ -8,6 +8,9 @@ A stable userbot base library, based on Telethon.
 ## Installation
 `pip install py-Ultroid`
 
+# Documentation 
+[![Documentation](https://img.shields.io/badge/Documentation-Ultroid-blue)](http://ultroid.tech/)
+
 ## Usage
 => Create folders named `plugins`, `addons`, `assistant` and `resources`.<br/>
 => Add your plugins in the `plugins` folder and others accordingly.<br/>
