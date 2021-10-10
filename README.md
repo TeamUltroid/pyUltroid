@@ -19,7 +19,7 @@ A stable userbot base library, based on Telethon.
 => Run `python -m pyUltroid` to start the bot.<br/>
 
 ### Creating plugins
-To work everywhere
+- To work everywhere
 
 ```python
 @ultroid_cmd(
@@ -29,7 +29,7 @@ async def _(e):
     await eor(e, "Ultroid Started")   
 ```
 
-To work only in groups
+- To work only in groups
 
 ```python
 @ultroid_cmd(
@@ -40,7 +40,7 @@ async def _(e):
     await eor(e, "Ultroid Started")   
 ```
 
-Assistant Plugins 👇
+- Assistant Plugins 👇
 
 ```python
 @asst_cmd("start")   
