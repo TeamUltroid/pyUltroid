@@ -490,12 +490,12 @@ def telegraph_client():
         f"https://t.me/{ultroid_bot.me.username}" if ultroid_bot.me.username else None
     )
     try:
-       TelegraphClient.create_account(
-       short_name=short_name, author_name=gd_name, author_url=profile_url
-       )
+        TelegraphClient.create_account(
+            short_name=short_name, author_name=gd_name, author_url=profile_url
+        )
     except Exception as er:
-       LOGS.exception(er)
-       return
+        LOGS.exception(er)
+        return
     udB.set("_TELEGRAPH_TOKEN", TelegraphClient.get_access_token())
     TELEGRAPH.append(TelegraphClient)
     return TelegraphClient
