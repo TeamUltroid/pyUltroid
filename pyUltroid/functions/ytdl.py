@@ -136,7 +136,8 @@ async def dler(event, url, opts=None, download=False):
         await event.edit("`Getting Data from YouTube..`")
         return YoutubeDL(opts).extract_info(url=url, download=download)
     except Exception as e:
-        return await event.edit(f"{type(e)}: {e}")
+        await event.edit(f"{type(e)}: {e}")
+        return
 
 
 async def get_videos_link(url):
