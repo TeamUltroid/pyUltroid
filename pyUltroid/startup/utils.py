@@ -11,8 +11,8 @@ from sys import modules
 
 def import_module(plugin_name):
     if not plugin_name.startswith("__"):
-        path = plugin_name
-        spec = util.spec_from_file_location(path, path + ".py")
+        path = plugin_name.replace(".", "/")
+        spec = util.spec_from_file_location(plugin_name, path + ".py")
         mod = util.module_from_spec(spec)
         spec.loader.exec_module(mod)
 
