@@ -25,18 +25,21 @@ class RedisConnection(Redis):
     def __init__(
         self,
         host,
+        port,
         password,
         platform=None,
         logger=LOGS,
         *args,
         **kwargs,
     ):
-        if ":" in host:
+        if host and ":" in host:
             spli_ = host.split(":")
             host = spli_[0]
             port = int(spli_[-1])
             if host.startswith("http"):
                 raise RedisError("Your REDIS_URI should not start with http !")
+        elif host and port:
+            pass
         else:
             raise RedisError("Port Number not found")
 
