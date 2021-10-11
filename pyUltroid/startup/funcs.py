@@ -148,7 +148,7 @@ async def autobot():
 
 
 async def autopilot():
-    from .. import udB, ultroid_bot
+    from .. import udB, ultroid_bot, asst
 
     if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
         udB.set("LOG_CHANNEL", str(Var.LOG_CHANNEL))
@@ -262,7 +262,7 @@ async def customize():
 
 
 async def plug(plugin_channels):
-    from .. import LOGS, ultroid_bot
+    from .. import ultroid_bot
     from .utils import load_addons
 
     if not os.path.exists("addons"):
@@ -305,6 +305,7 @@ async def ready():
     from .. import asst, udB, ultroid_bot
 
     chat_id = int(udB.get("LOG_CHANNEL"))
+    spam_sent = None
     if not udB.get("INIT_DEPLOY"):  # Detailed Message at Initial Deploy
         MSG = """🎇 **Thanks for Deploying Ultroid Userbot!**
 • Here, are the Some Basic stuff from, where you can Know, about its Usage."""
@@ -313,8 +314,7 @@ async def ready():
         udB.set("INIT_DEPLOY", "Done")
     else:
         MSG = f"**Ultroid has been deployed!**\n➖➖➖➖➖➖➖➖➖\n**UserMode**: [{ultroid_bot.me.first_name}](tg://user?id={ultroid_bot.me.id})\n**Assistant**: @{asst.me.username}\n➖➖➖➖➖➖➖➖➖\n**Support**: @TeamUltroid\n➖➖➖➖➖➖➖➖➖"
-        BTTS = None
-        PHOTO, spam_sent = None, None
+        BTTS, PHOTO= None, None
         prev_spam = udB.get("LAST_UPDATE_LOG_SPAM")
         if prev_spam:
             try:
@@ -329,7 +329,7 @@ async def ready():
     except ValueError as e:
         try:
             await (await ultroid_bot.send_message(chat_id, str(e))).delete()
-            await asst.send_message(chat_id, MSG, file=PHOTO, buttons=BTTS)
+            spam_sent = await asst.send_message(chat_id, MSG, file=PHOTO, buttons=BTTS)
         except Exception as g:
             LOGS.info(g)
     except Exception as el:
