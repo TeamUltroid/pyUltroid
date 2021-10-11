@@ -13,7 +13,7 @@ from git import Repo
 from .. import *
 from ..dB._core import HELP
 from . import *
-from .utils import load_addons, import_module
+from .utils import import_module, load_addons
 
 
 class Loader:
