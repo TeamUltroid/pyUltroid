@@ -5,24 +5,16 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+from .. import *
 from importlib import util
 from sys import modules
-
-
-def import_module(plugin_name):
-    if not plugin_name.startswith("__"):
-        path = plugin_name.replace(".", "/")
-        spec = util.spec_from_file_location(plugin_name, path + ".py")
-        mod = util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-
 
 # for addons
 
 
 def load_addons(plugin_name):
     if not plugin_name.startswith("__"):
-        from .. import HNDLR, LOGS, asst, udB, ultroid_bot
+        from .. import HNDLR, asst, LOGS, udB, ultroid_bot
         from ..configs import Var
         from ..dB._core import HELP
         from ..misc import _supporter as xxx
