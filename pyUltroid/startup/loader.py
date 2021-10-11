@@ -7,14 +7,13 @@
 
 import glob
 import os
-from importlib import import_module
 
 from git import Repo
 
 from .. import *
 from ..dB._core import HELP
 from . import *
-from .utils import load_addons
+from .utils import load_addons, import_module
 
 
 class Loader:
