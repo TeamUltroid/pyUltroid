@@ -32,6 +32,8 @@ class Loader:
         if exclude:
             [files.remove(path) for path in exclude]
         for plugin in files:
+            if plugin.startswith("__"):
+                continue
             plugin = plugin.replace(".py", "")
             if func == import_module:
                 plugin = plugin.replace("/", ".")
