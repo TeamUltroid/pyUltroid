@@ -148,7 +148,7 @@ async def autobot():
 
 
 async def autopilot():
-    from .. import udB, ultroid_bot, asst
+    from .. import asst, udB, ultroid_bot
 
     if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
         udB.set("LOG_CHANNEL", str(Var.LOG_CHANNEL))
@@ -314,7 +314,7 @@ async def ready():
         udB.set("INIT_DEPLOY", "Done")
     else:
         MSG = f"**Ultroid has been deployed!**\n➖➖➖➖➖➖➖➖➖\n**UserMode**: [{ultroid_bot.me.first_name}](tg://user?id={ultroid_bot.me.id})\n**Assistant**: @{asst.me.username}\n➖➖➖➖➖➖➖➖➖\n**Support**: @TeamUltroid\n➖➖➖➖➖➖➖➖➖"
-        BTTS, PHOTO= None, None
+        BTTS, PHOTO = None, None
         prev_spam = udB.get("LAST_UPDATE_LOG_SPAM")
         if prev_spam:
             try:
