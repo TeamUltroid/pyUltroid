@@ -7,9 +7,10 @@
 
 import glob
 import os
+from importlib import import_module
 
 from git import Repo
-from importlib import import_module
+
 from .. import *
 from ..dB._core import HELP
 from . import *
