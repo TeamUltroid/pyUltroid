@@ -25,7 +25,7 @@ start_time = time.time()
 HOSTED_ON = where_hosted()
 
 udB = RedisConnection(
-    host=Var.REDIS_URI or Var.REDISUSER,
+    host=Var.REDIS_URI or Var.REDISHOST,
     password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
     port=Var.REDISPORT,
     platform=HOSTED_ON,
