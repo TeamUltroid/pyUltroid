@@ -29,6 +29,7 @@ class UltroidClient(TelegramClient):
         **kwargs,
     ):
         self.logger = logger
+        self.udB = udB
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
@@ -42,7 +43,7 @@ class UltroidClient(TelegramClient):
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
             # And at Early Process, Its saved in Redis.
-            udB.delete("BOT_TOKEN")
+            self.udB.delete("BOT_TOKEN")
             self.logger.error(
                 "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
