@@ -9,11 +9,11 @@ import glob
 import os
 
 from git import Repo
-
+from importlib import import_module
 from .. import *
 from ..dB._core import HELP
 from . import *
-from .utils import import_module, load_addons
+from .utils import load_addons
 
 
 class Loader:
