@@ -60,7 +60,7 @@ def callback(data=None, owner=False, **kwargs):
 
     def ultr(func):
         async def wrapper(event):
-            if owner and not str(event.sender_id) in owner_and_sudos():
+            if owner and str(event.sender_id) not in owner_and_sudos():
                 return await event.answer(f"This is {OWNER}'s bot!!")
             try:
                 await func(event)
@@ -77,7 +77,7 @@ def in_pattern(pattern=None, owner=False, **kwargs):
 
     def don(func):
         async def wrapper(event):
-            if owner and not str(event.sender_id) in owner_and_sudos():
+            if owner and str(event.sender_id) not in owner_and_sudos():
                 res = [
                     await event.builder.article(
                         title="Ultroid Userbot",

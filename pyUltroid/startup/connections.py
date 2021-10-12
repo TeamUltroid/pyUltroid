@@ -38,9 +38,7 @@ class RedisConnection(Redis):
             port = int(spli_[-1])
             if host.startswith("http"):
                 raise RedisError("Your REDIS_URI should not start with http !")
-        elif host and port:
-            pass
-        else:
+        elif not host or not port:
             raise RedisError("Port Number not found")
 
         kwargs["host"] = host
