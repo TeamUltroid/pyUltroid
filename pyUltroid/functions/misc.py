@@ -137,8 +137,8 @@ async def ReTrieveFile(input_file_name):
     files = {"image_file": open(input_file_name, "rb").read()}
     async with aiohttp.ClientSession() as ses:
         async with ses.post(
-                    "https://api.remove.bg/v1.0/removebg", headers=headers, data=files
-                ) as out:
+            "https://api.remove.bg/v1.0/removebg", headers=headers, data=files
+        ) as out:
             contentType = out.headers.get("content-type")
             if "image" not in contentType:
                 return False, (await out.json())
