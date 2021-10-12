@@ -371,8 +371,7 @@ def time_formatter(milliseconds):
 
     if tmp.endswith(":"):
         return tmp[:-1]
-    else:
-        return tmp
+    return tmp
 
 
 def humanbytes(size):
