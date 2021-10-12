@@ -59,9 +59,9 @@ async def get_ofox(codename):
 
 
 async def async_searcher(
-    url,
-    post=None,
-    headers=None,
+    url: str,
+    post: bool = None,
+    headers: dict = None,
     params=None,
     json=None,
     data=None,
@@ -69,8 +69,9 @@ async def async_searcher(
     re_json: bool = False,
     re_content: bool = False,
     real: bool = False,
+    timeout: int = 10,
 ):
-    async with aiohttp.ClientSession(headers=headers) as client:
+    async with aiohttp.ClientSession(headers=headers, timeout=timeout) as client:
         if post:
             data = await client.post(url, json=json, data=data, ssl=ssl)
         else:
