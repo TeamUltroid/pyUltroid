@@ -178,7 +178,6 @@ async def unsplashsearch(query, limit=None, shuf=True):
 
 
 async def get_random_user_data():
-    # Todo : dont use 2 Api(s).
     base_url = "https://randomuser.me/api/"
     cc = await async_searcher(
         "https://random-data-api.com/api/business_credit_card/random_card", re_json=True
