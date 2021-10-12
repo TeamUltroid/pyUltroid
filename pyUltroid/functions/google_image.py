@@ -16,7 +16,6 @@ import re
 import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
-from http.client import BadStatusLine
 from urllib.parse import quote
 
 http.client._MAXHEADERS = 1000
@@ -472,7 +471,15 @@ class googleimagesdownload:
     # Downloading entire Web Document (Raw Page Content)
     async def download_page(self, url):
         try:
-            return str(await async_searcher(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"}, re_content=True))
+            return str(
+                await async_searcher(
+                    url,
+                    headers={
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
+                    },
+                    re_content=True,
+                )
+            )
         except Exception:
             print(
                 "Could not open URL. Please check your internet connection and/or ssl settings \n"
@@ -613,7 +620,13 @@ class googleimagesdownload:
             if e.errno != 17:
                 raise
 
-        data = await async_searcher(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"}, re_content=True)
+        data = await async_searcher(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
+            },
+            re_content=True,
+        )
 
         image_name = str(url[(url.rfind("/")) + 1 :])
         if "?" in image_name:
@@ -644,7 +657,13 @@ class googleimagesdownload:
                 "https://www.google.com/searchbyimage?site=search&sa=X&image_url="
                 + similar_images
             )
-            content = await async_searcher(searchUrl, headers={"User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"}, re_content=True)
+            content = await async_searcher(
+                searchUrl,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
+                },
+                re_content=True,
+            )
             l1 = content.find("AMhZZ")
             l2 = content.find("&", l1)
             urll = content[l1:l2]
@@ -936,7 +955,13 @@ class googleimagesdownload:
             return "success", "Printed url without downloading"
         try:
             try:
-                data = await async_searcher(image_url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"}, re_content=True)
+                data = await async_searcher(
+                    image_url,
+                    headers={
+                        "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
+                    },
+                    re_content=True,
+                )
                 path = (
                     main_directory
                     + "/"
@@ -1038,8 +1063,14 @@ class googleimagesdownload:
             return "success", "Printed url without downloading", None, image_url
         try:
             try:
-                timeout = float(socket_timeout) if socket_timeout else 10
-                data = await async_searcher(image_url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"}, re_content=True)
+                float(socket_timeout) if socket_timeout else 10
+                data = await async_searcher(
+                    image_url,
+                    headers={
+                        "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
+                    },
+                    re_content=True,
+                )
                 extensions = [
                     ".jpg",
                     ".jpeg",
@@ -1464,7 +1495,8 @@ class googleimagesdownload:
                     )  # building main search url
 
                     if limit < 101:
-                        raw_html = await self.download_page(url)  # download page
+                        # download page
+                        raw_html = await self.download_page(url)
                     else:
                         raw_html = self.download_extended_page(
                             url, arguments["chromedriver"]
