@@ -4,6 +4,9 @@
 
 ###### Searching and Downloading Google Images to the local disk ######
 
+# This is a modified file which is edited as per our needs.
+# You can find original source here: https://github.com/hardikvasa/google-images-download
+
 import argparse
 
 # Import Libraries
@@ -17,6 +20,7 @@ import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
 from urllib.parse import quote
+from .helper import async_searcher
 
 http.client._MAXHEADERS = 1000
 
@@ -466,7 +470,9 @@ def user_input():
 
 class googleimagesdownload:
     def __init__(self):
-        pass
+        self._headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
+        }
 
     # Downloading entire Web Document (Raw Page Content)
     async def download_page(self, url):
@@ -474,9 +480,7 @@ class googleimagesdownload:
             return str(
                 await async_searcher(
                     url,
-                    headers={
-                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
-                    },
+                    headers=self._headers,
                     re_content=True,
                 )
             )
@@ -622,9 +626,7 @@ class googleimagesdownload:
 
         data = await async_searcher(
             url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
-            },
+            headers=self._headers,
             re_content=True,
         )
 
@@ -659,9 +661,7 @@ class googleimagesdownload:
             )
             content = await async_searcher(
                 searchUrl,
-                headers={
-                    "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
-                },
+                headers=self._headers,
                 re_content=True,
             )
             l1 = content.find("AMhZZ")
@@ -957,9 +957,7 @@ class googleimagesdownload:
             try:
                 data = await async_searcher(
                     image_url,
-                    headers={
-                        "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
-                    },
+                    headers=self._headers,
                     re_content=True,
                 )
                 path = (
@@ -1066,9 +1064,7 @@ class googleimagesdownload:
                 float(socket_timeout) if socket_timeout else 10
                 data = await async_searcher(
                     image_url,
-                    headers={
-                        "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
-                    },
+                    headers=self._headers,
                     re_content=True,
                 )
                 extensions = [
@@ -1558,35 +1554,3 @@ class googleimagesdownload:
                     if not arguments["silent_mode"]:
                         print("\nErrors: " + str(errorCount) + "\n")
         return paths, total_errors
-
-
-# ------------- Main Program -------------#
-
-
-def main():
-    records = user_input()
-    total_errors = 0
-    t0 = time.time()  # start the timer
-    for arguments in records:
-
-        if arguments["single_image"]:  # Download Single Image using a URL
-            response = googleimagesdownload()
-            await response.single_image(arguments["single_image"])
-        else:  # or download multiple images based on keywords/keyphrase search
-            response = googleimagesdownload()
-            # wrapping response in a variable just for consistency
-            paths, errors = response.download(arguments)
-            total_errors += errors
-
-        t1 = time.time()  # stop the timer
-        # Calculating the total time required to crawl, find and download all
-        # the links of 60,000 images
-        total_time = t1 - t0
-        if not arguments["silent_mode"]:
-            print("\nEverything downloaded!")
-            print("Total errors: " + str(total_errors))
-            print("Total time taken: " + str(total_time) + " Seconds")
-
-
-if __name__ == "__main__":
-    main()
