@@ -89,10 +89,10 @@ def get_data(types, data):
     video = []
     try:
         for m in data["formats"]:
-            id = m["format_id"]
+            id_ = m["format_id"]
             note = m["format_note"]
             size = m["filesize"]
-            j = f"{id} {note} {humanbytes(size)}"
+            j = f"{id_} {note} {humanbytes(size)}"
             if id == "251":
                 a_size = m["filesize"]
             if note == "tiny":
@@ -101,7 +101,7 @@ def get_data(types, data):
                 if m["acodec"] == "none":
                     note = f"{m['width']}x{m['height']}p"
                     id = str(m["format_id"]) + "+" + str(audio[-1].split()[0])
-                    j = f"{id} {note} {humanbytes(size+a_size)}"
+                    j = f"{id_} {note} {humanbytes(size+a_size)}"
                 video.append(j)
     except BaseException:
         pass
