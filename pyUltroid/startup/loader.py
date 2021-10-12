@@ -30,7 +30,7 @@ class Loader:
                 f"• Installing {self.key}'s Plugins || Count : {len(files)} •"
             )
         if exclude:
-            [files.remove(path) for path in exclude]
+            [files.remove(f"{self.path}/{path}.py") for path in exclude]
         for plugin in files:
             plugin = plugin.replace(".py", "")
             if func == import_module:
@@ -82,7 +82,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for assistant
     Loader(path="assistant", key="Assistant").load(
-        log=False, cmd_help=None, exclude=["assistant/pmbot.py"]
+        log=False, cmd_help=None, exclude=["pmbot"]
     )
 
     # for addons
