@@ -16,10 +16,8 @@ import re
 import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
-import urllib.request
 from http.client import BadStatusLine
 from urllib.parse import quote
-from urllib.request import HTTPError, Request, URLError, urlopen
 
 http.client._MAXHEADERS = 1000
 
@@ -472,15 +470,9 @@ class googleimagesdownload:
         pass
 
     # Downloading entire Web Document (Raw Page Content)
-    def download_page(self, url):
+    async def download_page(self, url):
         try:
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
-            }
-
-            req = urllib.request.Request(url, headers=headers)
-            resp = urllib.request.urlopen(req)
-            return str(resp.read())
+            return str(await async_searcher(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"}, re_content=True))
         except Exception:
             print(
                 "Could not open URL. Please check your internet connection and/or ssl settings \n"
@@ -611,7 +603,7 @@ class googleimagesdownload:
 
     # function to download single image
 
-    def single_image(self, image_url):
+    async def single_image(self, image_url):
         main_directory = "downloads"
         extensions = (".jpg", ".gif", ".png", ".bmp", ".svg", ".webp", ".ico")
         url = image_url
@@ -620,16 +612,8 @@ class googleimagesdownload:
         except OSError as e:
             if e.errno != 17:
                 raise
-        req = Request(
-            url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
-            },
-        )
 
-        response = urlopen(req, None, 10)
-        data = response.read()
-        response.close()
+        data = await async_searcher(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"}, re_content=True)
 
         image_name = str(url[(url.rfind("/")) + 1 :])
         if "?" in image_name:
@@ -654,28 +638,16 @@ class googleimagesdownload:
             "completed ====> " + image_name.encode("raw_unicode_escape").decode("utf-8")
         )
 
-    def similar_images(self, similar_images):
+    async def similar_images(self, similar_images):
         try:
             searchUrl = (
                 "https://www.google.com/searchbyimage?site=search&sa=X&image_url="
                 + similar_images
             )
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
-            }
-
-            req1 = urllib.request.Request(searchUrl, headers=headers)
-            resp1 = urllib.request.urlopen(req1)
-            content = str(resp1.read())
+            content = await async_searcher(searchUrl, headers={"User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"}, re_content=True)
             l1 = content.find("AMhZZ")
             l2 = content.find("&", l1)
             urll = content[l1:l2]
-
-            newurl = (
-                "https://www.google.com/search?tbs=sbi:" + urll + "&site=search&sa=X"
-            )
-            req2 = urllib.request.Request(newurl, headers=headers)
-            urllib.request.urlopen(req2)
             l3 = content.find("/search?sa=X&amp;q=")
             l4 = content.find(";", l3 + 19)
             return content[l3 + 19 : l4]
@@ -851,7 +823,7 @@ class googleimagesdownload:
 
     # building main search URL
 
-    def build_search_url(
+    async def build_search_url(
         self, search_term, params, url, similar_images, specific_site, safe_search
     ):
         # check the args and choose the URL
@@ -859,7 +831,7 @@ class googleimagesdownload:
             url = url
         elif similar_images:
             print(similar_images)
-            keywordem = self.similar_images(similar_images)
+            keywordem = await self.similar_images(similar_images)
             url = (
                 "https://www.google.com/search?q="
                 + keywordem
@@ -944,7 +916,7 @@ class googleimagesdownload:
 
     # Download Image thumbnails
 
-    def download_image_thumbnail(
+    async def download_image_thumbnail(
         self,
         image_url,
         main_directory,
@@ -963,19 +935,8 @@ class googleimagesdownload:
         if no_download:
             return "success", "Printed url without downloading"
         try:
-            req = Request(
-                image_url,
-                headers={
-                    "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
-                },
-            )
             try:
-                # timeout time to download an image
-                timeout = float(socket_timeout) if socket_timeout else 10
-                response = urlopen(req, None, timeout)
-                data = response.read()
-                response.close()
-
+                data = await async_searcher(image_url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"}, re_content=True)
                 path = (
                     main_directory
                     + "/"
@@ -1019,18 +980,6 @@ class googleimagesdownload:
                     + " Error: "
                     + str(e)
                 )
-
-        except HTTPError as e:  # If there is any HTTPError
-            download_status = "fail"
-            download_message = (
-                "HTTPError on an image...trying next one..." + " Error: " + str(e)
-            )
-
-        except URLError as e:
-            download_status = "fail"
-            download_message = (
-                "URLError on an image...trying next one..." + " Error: " + str(e)
-            )
 
         except ssl.CertificateError as e:
             download_status = "fail"
@@ -1088,19 +1037,9 @@ class googleimagesdownload:
         if no_download:
             return "success", "Printed url without downloading", None, image_url
         try:
-            req = Request(
-                image_url,
-                headers={
-                    "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
-                },
-            )
             try:
-                # timeout time to download an image
                 timeout = float(socket_timeout) if socket_timeout else 10
-                response = urlopen(req, None, timeout)
-                data = response.read()
-                response.close()
-
+                data = await async_searcher(image_url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"}, re_content=True)
                 extensions = [
                     ".jpg",
                     ".jpeg",
@@ -1201,40 +1140,6 @@ class googleimagesdownload:
                 return_image_name = ""
                 absolute_path = ""
 
-            except URLError as e:
-                download_status = "fail"
-                download_message = (
-                    "URLError on an image...trying next one..." + " Error: " + str(e)
-                )
-                return_image_name = ""
-                absolute_path = ""
-
-            except BadStatusLine as e:
-                download_status = "fail"
-                download_message = (
-                    "BadStatusLine on an image...trying next one..."
-                    + " Error: "
-                    + str(e)
-                )
-                return_image_name = ""
-                absolute_path = ""
-
-        except HTTPError as e:  # If there is any HTTPError
-            download_status = "fail"
-            download_message = (
-                "HTTPError on an image...trying next one..." + " Error: " + str(e)
-            )
-            return_image_name = ""
-            absolute_path = ""
-
-        except URLError as e:
-            download_status = "fail"
-            download_message = (
-                "URLError on an image...trying next one..." + " Error: " + str(e)
-            )
-            return_image_name = ""
-            absolute_path = ""
-
         except ssl.CertificateError as e:
             download_status = "fail"
             download_message = (
@@ -1286,7 +1191,7 @@ class googleimagesdownload:
         # LOGS.info(_format.paste_text(object_decode[:-15]))
         return json.loads(object_decode[:-15])[31][0][12][2]
 
-    def _get_all_items(self, page, main_directory, dir_name, limit, arguments):
+    async def _get_all_items(self, page, main_directory, dir_name, limit, arguments):
         items = []
         abs_path = []
         errorCount = 0
@@ -1338,7 +1243,7 @@ class googleimagesdownload:
                         (
                             download_status,
                             download_message_thumbnail,
-                        ) = self.download_image_thumbnail(
+                        ) = await self.download_image_thumbnail(
                             object["image_thumbnail_url"],
                             main_directory,
                             dir_name,
@@ -1378,7 +1283,7 @@ class googleimagesdownload:
 
     # Bulk Download
 
-    def download(self, arguments):
+    async def download(self, arguments):
         paths_agg = {}
         # for input coming from other python files
         if __name__ != "__main__":
@@ -1395,7 +1300,7 @@ class googleimagesdownload:
                     records.append(arguments)
                 total_errors = 0
                 for rec in records:
-                    paths, errors = self.download_executor(rec)
+                    paths, errors = await self.download_executor(rec)
                     for i in paths:
                         paths_agg[i] = paths[i]
                     if not arguments["silent_mode"] and arguments["print_paths"]:
@@ -1403,21 +1308,21 @@ class googleimagesdownload:
                     total_errors += errors
                 return paths_agg, total_errors
             # if the calling file contains params directly
-            paths, errors = self.download_executor(arguments)
+            paths, errors = await self.download_executor(arguments)
             for i in paths:
                 paths_agg[i] = paths[i]
             if not arguments["silent_mode"] and arguments["print_paths"]:
                 print(paths.encode("raw_unicode_escape").decode("utf-8"))
             return paths_agg, errors
         # for input coming from CLI
-        paths, errors = self.download_executor(arguments)
+        paths, errors = await self.download_executor(arguments)
         for i in paths:
             paths_agg[i] = paths[i]
         if not arguments["silent_mode"] and arguments["print_paths"]:
             print(paths.encode("raw_unicode_escape").decode("utf-8"))
         return paths_agg, errors
 
-    def download_executor(self, arguments):
+    async def download_executor(self, arguments):
         paths = {}
         errorCount = None
         for arg in args_list:
@@ -1549,7 +1454,7 @@ class googleimagesdownload:
                         arguments
                     )  # building URL with params
 
-                    url = self.build_search_url(
+                    url = await self.build_search_url(
                         search_term,
                         params,
                         arguments["url"],
@@ -1559,7 +1464,7 @@ class googleimagesdownload:
                     )  # building main search url
 
                     if limit < 101:
-                        raw_html = self.download_page(url)  # download page
+                        raw_html = await self.download_page(url)  # download page
                     else:
                         raw_html = self.download_extended_page(
                             url, arguments["chromedriver"]
@@ -1570,7 +1475,7 @@ class googleimagesdownload:
                             print("Getting URLs without downloading images...")
                         else:
                             print("Starting Download...")
-                    items, errorCount, abs_path = self._get_all_items(
+                    items, errorCount, abs_path = await self._get_all_items(
                         raw_html, main_directory, dir_name, limit, arguments
                     )  # get all image items and download images
                     paths[pky + search_keyword[i] + sky] = abs_path
@@ -1596,7 +1501,7 @@ class googleimagesdownload:
                             final_search_term = search_term + " - " + key
                             print("\nNow Downloading - " + final_search_term)
                             if limit < 101:
-                                new_raw_html = self.download_page(
+                                new_raw_html = await self.download_page(
                                     value
                                 )  # download page
                             else:
@@ -1609,7 +1514,7 @@ class googleimagesdownload:
                                 arguments["thumbnail"],
                                 arguments["thumbnail_only"],
                             )
-                            self._get_all_items(
+                            await self._get_all_items(
                                 new_raw_html,
                                 main_directory,
                                 search_term + " - " + key,
@@ -1634,7 +1539,7 @@ def main():
 
         if arguments["single_image"]:  # Download Single Image using a URL
             response = googleimagesdownload()
-            response.single_image(arguments["single_image"])
+            await response.single_image(arguments["single_image"])
         else:  # or download multiple images based on keywords/keyphrase search
             response = googleimagesdownload()
             # wrapping response in a variable just for consistency
