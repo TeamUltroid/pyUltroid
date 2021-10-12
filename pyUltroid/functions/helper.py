@@ -102,7 +102,7 @@ async def safeinstall(event):
     from ..startup.utils import load_addons
 
     if not event.reply_to:
-        return await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
+        return await eod(event, f"Please use `{HNDLR}install` as reply to a .py file.")
     ok = await eor(event, "`Installing...`")
     reply = await event.get_reply_message()
     if not (
