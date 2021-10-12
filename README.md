@@ -1,6 +1,7 @@
 # py-Ultroid Library
 A stable userbot base library, based on Telethon.
 
+[![CodeFactor](https://www.codefactor.io/repository/github/teamultroid/pyultroid/badge)](https://www.codefactor.io/repository/github/teamultroid/pyultroid) <br>
 [![PyPI - Version](https://img.shields.io/pypi/v/py-Ultroid?style=for-the-badge)](https://pypi.org/project/py-Ultroid)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/py-Ultroid?label=DOWNLOADS&style=for-the-badge)](https://pypi.org/project/py-Ultroid)
 [![The Ultroid](ultroid.svg)](https://t.me/TheUltroid)
