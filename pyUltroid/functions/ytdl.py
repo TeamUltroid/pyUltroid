@@ -100,7 +100,7 @@ def get_data(types, data):
             else:
                 if m["acodec"] == "none":
                     note = f"{m['width']}x{m['height']}p"
-                    id = str(m["format_id"]) + "+" + str(audio[-1].split()[0])
+                    str(m["format_id"]) + "+" + str(audio[-1].split()[0])
                     j = f"{id_} {note} {humanbytes(size+a_size)}"
                 video.append(j)
     except BaseException:
