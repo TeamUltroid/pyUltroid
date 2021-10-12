@@ -6,7 +6,6 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-
 from redis import Redis
 
 # from safety.tools import *  # disable: pylint
@@ -47,9 +46,9 @@ class RedisConnection(Redis):
 
         if platform.lower() == "qovery" and not host:
             var, hash_, host, password = "", "", "", ""
-            for vars in os.environ:
-                if vars.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
-                    var = vars
+            for vars_ in os.environ:
+                if vars_.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
+                    var = vars_
             if var:
                 hash_ = var.split("_", maxsplit=2)[1].split("_")[0]
             if hash:
@@ -105,14 +104,14 @@ def vc_connection(udB, ultroid_bot):
 def where_hosted():
     if os.getenv("DYNO"):
         return "heroku"
-    elif os.getenv("RAILWAY_GIT_REPO_NAME"):
+    if os.getenv("RAILWAY_GIT_REPO_NAME"):
         return "railway"
-    elif os.getenv("KUBERNETES_PORT"):
+    if os.getenv("KUBERNETES_PORT"):
         return "qovery"
-    elif os.getenv("WINDOW") and os.getenv("WINDOW") != "0":
+    if os.getenv("WINDOW") and os.getenv("WINDOW") != "0":
         return "windows"
-    elif os.getenv("HOSTNAME"):
+    if os.getenv("HOSTNAME"):
         return "github actions"
-    elif os.getenv("ANDROID_ROOT"):
+    if os.getenv("ANDROID_ROOT"):
         return "termux"
     return "local"
