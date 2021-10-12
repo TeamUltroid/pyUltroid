@@ -10,6 +10,7 @@ name: Upload Python Package
 
 on:
   workflow_dispatch:
+  branches: main
   push:
     paths:
       - "pyUltroid/version.py"
