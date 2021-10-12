@@ -605,7 +605,6 @@ class googleimagesdownload:
             "image_link": main[0],
             "image_format": main[0][-1 * (len(main[0]) - main[0].rfind(".") - 1) :],
             "image_description": info["2003"][3],
-            "image_host": info["183836587"][0],
             "image_source": info["2003"][2],
             "image_thumbnail_url": data[2][0],
         }
@@ -1359,8 +1358,8 @@ class googleimagesdownload:
                     arguments["format"],
                     arguments["ignore_urls"],
                 )
-                if not arguments["silent_mode"]:
-                    print(download_message)
+                # if not arguments["silent_mode"]:
+                # print(download_message)
                 if download_status == "success":
 
                     # download image_thumbnails
@@ -1525,11 +1524,7 @@ class googleimagesdownload:
             sys.exit()
 
         # If this argument is present, set the custom output directory
-        if arguments["output_directory"]:
-            main_directory = arguments["output_directory"]
-        else:
-            main_directory = "downloads"
-
+        main_directory = arguments["output_directory"] or "downloads"
         # Proxy settings
         if arguments["proxy"]:
             os.environ["http_proxy"] = arguments["proxy"]
@@ -1673,7 +1668,7 @@ def main():
             response = googleimagesdownload()
             # wrapping response in a variable just for consistency
             paths, errors = response.download(arguments)
-            total_errors = total_errors + errors
+            total_errors += errors
 
         t1 = time.time()  # stop the timer
         # Calculating the total time required to crawl, find and download all

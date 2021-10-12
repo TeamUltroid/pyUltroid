@@ -7,8 +7,7 @@
 #
 #   To Install Other USERBOTs plugin Support
 #
-#
-#   Ultroid Don't Need This Stuffs
+#   ULTROID Don't Need This Stuffs
 #
 
 import inspect
@@ -16,27 +15,24 @@ import os
 import re
 from pathlib import Path
 
-from plugins import *
 from telethon import events, types
 
-from pyUltroid.misc._decorators import *
+from pyUltroid.misc._decorators import ultroid_cmd
 from pyUltroid.misc._wrappers import eod, eor
 
-from .. import udB, ultroid_bot
-from ..dB.core import LIST
-from ..dB.database import Var
+from .. import *
+from ..configs import Var
+from ..dB._core import LIST
+from . import CMD_HELP, sudoers  # ignore: pylint
 
 ALIVE_NAME = ultroid_bot.me.first_name
-BOTLOG = int(udB.get("LOG_CHANNEL"))
-BOTLOG_CHATID = int(udB.get("LOG_CHANNEL"))
+BOTLOG_CHATID = BOTLOG = int(udB.get("LOG_CHANNEL"))
 
 
-bot = ultroid_bot
-borg = ultroid_bot
-friday = ultroid_bot
-jarvis = ultroid_bot
+bot = borg = friday = jarvis = ultroid_bot
 
 hndlr = "\\" + HNDLR
+black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
 
 
 def admin_cmd(pattern=None, command=None, **args):
@@ -48,10 +44,7 @@ def admin_cmd(pattern=None, command=None, **args):
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     if pattern is not None:
-        if pattern.startswith(r"\#"):
-            args["pattern"] = re.compile(pattern)
-        else:
-            args["pattern"] = re.compile(hndlr + pattern)
+        args["pattern"] = re.compile(hndlr + pattern)
         reg = re.compile("(.*)")
         try:
             cmd = re.search(reg, pattern)
@@ -97,11 +90,8 @@ def sudo_cmd(allow_sudo=True, pattern=None, command=None, **args):
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
-    if pattern is not None:
-        if pattern.startswith(r"\#"):
-            args["pattern"] = re.compile(pattern)
-        else:
-            args["pattern"] = re.compile(hndlr + pattern)
+    if pattern:
+        args["pattern"] = re.compile("\\" + SUDO_HNDLR + pattern)
     if allow_sudo:
         args["from_users"] = [int(user) for user in sudoers()]
         args["incoming"] = True
@@ -115,10 +105,12 @@ edit_delete = eod
 
 
 ENV = bool(os.environ.get("ENV", False))
-if ENV:
-    import os
 
-    class Config(object):
+
+class Config((object)):
+    if ENV:
+        from .. import asst, udB
+
         LOGGER = True
         LOCATION = os.environ.get("LOCATION", None)
         OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
@@ -168,7 +160,7 @@ if ENV:
         )
         EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", "🔰")
         HANDLR = hndlr
-        SUDO_USERS = sudos
+        SUDO_USERS = sudoers()
         GROUP_REG_SED_EX_BOT_S = os.environ.get(
             "GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot"
         )
@@ -193,10 +185,7 @@ if ENV:
         DEEP_AI = os.environ.get("DEEP_AI", None)
         TAG_LOG = os.environ.get("TAG_LOG", None)
 
-
-else:
-
-    class Config(object):
+    else:
         DB_URI = None
 
 
