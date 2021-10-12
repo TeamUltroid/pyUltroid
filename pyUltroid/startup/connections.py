@@ -46,16 +46,16 @@ class RedisConnection(Redis):
         kwargs["port"] = port
 
         if platform.lower() == "qovery" and not host:
-            var, hash, host, password = "", "", "", ""
+            var, hash_, host, password = "", "", "", ""
             for vars in os.environ:
                 if vars.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
                     var = vars
             if var:
-                hash = var.split("_", maxsplit=2)[1].split("_")[0]
+                hash_ = var.split("_", maxsplit=2)[1].split("_")[0]
             if hash:
-                kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash}_HOST")
-                kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash}_PORT")
-                kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash}_PASSWORD")
+                kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash_}_HOST")
+                kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash_}_PORT")
+                kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash_}_PASSWORD")
         if logger:
             logger.info("Connecting to redis database")
         super().__init__(**kwargs)
