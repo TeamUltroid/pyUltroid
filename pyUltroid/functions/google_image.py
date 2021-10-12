@@ -22,7 +22,7 @@ import sys
 import time  # Importing the time library to check the time of code execution
 from urllib.parse import quote
 
-from .helper import async_searcher
+from .tools import async_searcher
 
 http.client._MAXHEADERS = 1000
 
