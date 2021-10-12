@@ -20,8 +20,7 @@ from .tools import async_searcher
 
 def get_yt_link(query):
     search = VideosSearch(query, limit=1).result()
-    data = search["result"][0]
-    return data["link"]
+    return search["result"][0]["link"]
 
 
 async def download_yt(event, link, ytd):
@@ -29,13 +28,13 @@ async def download_yt(event, link, ytd):
     if not info:
         return
     title = info["title"]
-    id = info["id"]
-    thumb = id + ".jpg"
-    await download_file(f"https://i.ytimg.com/vi/{id}/hqdefault.jpg", thumb)
+    id_ = info["id"]
+    thumb = id_ + ".jpg"
+    await download_file(f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg", thumb)
     duration = info["duration"]
     ext = "." + ytd["outtmpl"].split(".")[-1]
     file = title + ext
-    os.rename(id + ext, file)
+    os.rename(id_ + ext, file)
     res = await uploader(file, file, time.time(), event, "Uploading...")
     if file.endswith(("mp4", "mkv", "webm")):
         height, width = info["height"], info["width"]
@@ -108,7 +107,7 @@ def get_data(types, data):
         pass
     if types == "audio":
         return audio
-    elif types == "video":
+    if types == "video":
         return video
     return []
 
@@ -141,12 +140,12 @@ async def dler(event, url, opts=None, download=False):
 
 
 async def get_videos_link(url):
-    id = url[url.index("=") + 1 :]
+    id_ = url[url.index("=") + 1 :]
     try:
         html = await async_searcher(url)
     except BaseException:
         return []
-    pattern = re.compile(r"watch\?v=\S+?list=" + id)
+    pattern = re.compile(r"watch\?v=\S+?list=" + id_)
     v_ids = re.findall(pattern, html)
     links = []
     if v_ids:
