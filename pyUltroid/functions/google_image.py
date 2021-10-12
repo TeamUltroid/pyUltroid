@@ -5,7 +5,8 @@
 ###### Searching and Downloading Google Images to the local disk ######
 
 # This is a modified file which is edited as per our needs.
-# You can find original source here: https://github.com/hardikvasa/google-images-download
+# You can find original source here:
+# https://github.com/hardikvasa/google-images-download
 
 import argparse
 
@@ -20,6 +21,7 @@ import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
 from urllib.parse import quote
+
 from .helper import async_searcher
 
 http.client._MAXHEADERS = 1000
