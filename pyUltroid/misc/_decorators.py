@@ -82,13 +82,13 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
     admins_only = args.get("admins_only", False)
     fullsudo = args.get("fullsudo", False)
     allow_all = args.get("allow_all", False)
-    type = args.get("type", ["official"])
+    type_ = args.get("type", ["official"])
     only_devs = args.get("only_devs", False)
     allow_pm = args.get("allow_pm", False)
-    if isinstance(type, str):
-        type = [type]
-    if "official" in type and DUAL_MODE:
-        type.append("dualmode")
+    if isinstance(type_, str):
+        type_ = [type_]
+    if "official" in type_ and DUAL_MODE:
+        type_.append("dualmode")
 
     args["forwards"] = False
     if pattern:
@@ -268,7 +268,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
 
             return wrapper
 
-        if "official" in type:
+        if "official" in type_:
             args["outgoing"] = True
             ultroid_bot.add_event_handler(doit("official"), events.NewMessage(**args))
             if TAKE_EDITS:
@@ -290,15 +290,15 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                 args["pattern"] = compile_pattern(pattern, "\\" + SUDO_HNDLR)
                 ultroid_bot.add_event_handler(doit("sudo"), events.NewMessage(**args))
                 del args["outgoing"]
-        if "assistant" in type:
+        if "assistant" in type_:
             args["pattern"] = compile_pattern(pattern, "/")
             asst.add_event_handler(doit("assistant"), events.NewMessage(**args))
-        if MANAGER and "manager" in type:
+        if MANAGER and "manager" in type_:
             args["pattern"] = compile_pattern(pattern, "/")
             asst.add_event_handler(doit("manager"), events.NewMessage(**args))
 
-        if "dualmode" in type:
-            if not (("manager" in type) and (DUAL_HNDLR == "/")):
+        if "dualmode" in type_:
+            if not (("manager" in type_) and (DUAL_HNDLR == "/")):
                 args["pattern"] = compile_pattern(pattern, "\\" + DUAL_HNDLR)
                 asst.add_event_handler(doit("dualmode"), events.NewMessage(**args))
         # Collecting all Handlers as one..
