@@ -167,10 +167,8 @@ def get_msg_button(texts: str):
 def create_tl_btn(button: list):
     btn = []
     for z in button:
-        kk = []
         if len(z) > 1:
-            for x, y in z:
-                kk.append(Button.url(x, y.strip()))
+            kk = [Button.url(x, y.strip()) for x, y in z]
             btn.append(kk)
         else:
             btn.append([Button.url(z[0][0], z[0][1].strip())])
@@ -238,10 +236,8 @@ async def dloader(e, host, file):
     if er:
         text = f"**Error :** `{er}`"
     else:
-        text = ""
         keys = json_parser(dn)
-        for i in keys.keys():
-            text += f"• **{i}** : `{keys[i]}`"
+        text = "".join(f"• **{i}** : `{keys[i]}`" for i in keys.keys())
     os.remove(file)
     return await e.edit(text)
 
@@ -465,8 +461,7 @@ def four_point_transform(image, pts):
         dtype="float32",
     )
     M = cv2.getPerspectiveTransform(rect, dst)
-    warped = cv2.warpPerspective(image, M, (maxWidth, maxHeight))
-    return warped
+    return cv2.warpPerspective(image, M, (maxWidth, maxHeight))
 
 
 # ------------------------------------- Telegraph ---------------------------------- #

@@ -100,10 +100,8 @@ async def google_search(query):
         "html.parser",
     )
     another_soup = soup.find_all("div", class_="ZINbbc xpd O9g5cc uUPGi")
-    results = []
     result = []
-    for someone in another_soup:
-        results.append(someone.find_all("div", class_="kCrYT"))
+    results = [someone.find_all("div", class_="kCrYT") for someone in another_soup]
     for data in results:
         try:
             if len(data) > 1:
@@ -142,14 +140,14 @@ async def ReTrieveFile(input_file_name):
             "https://api.remove.bg/v1.0/removebg", headers=headers, data=files
         ) as out:
             contentType = out.headers.get("content-type")
-            if "image" in contentType:
-                name = check_filename("ult-rmbg.png")
-                file = await aiofiles.open(name, "wb")
-                await file.write(await out.read())
-                await file.close()
-                return True, name
-            else:
+            if "image" not in contentType:
                 return False, (await out.json())
+
+            name = check_filename("ult-rmbg.png")
+            file = await aiofiles.open(name, "wb")
+            await file.write(await out.read())
+            await file.close()
+            return True, name
 
 
 # ---------------- Unsplash Search ----------------
@@ -245,8 +243,7 @@ async def get_synonyms_or_antonyms(word, type_of_words):
         ]
         for y in x
     ]
-    li = [y["term"] for y in li_1]
-    return li
+    return [y["term"] for y in li_1]
 
 
 # --------------------- Instagram Plugin ------------------------- #

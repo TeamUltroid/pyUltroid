@@ -366,13 +366,13 @@ def time_formatter(milliseconds):
         + ((str(minutes) + "m:") if minutes else "")
         + ((str(seconds) + "s") if seconds else "")
     )
-    if tmp != "":
-        if tmp.endswith(":"):
-            return tmp[:-1]
-        else:
-            return tmp
-    else:
+    if tmp == "":
         return "0 s"
+
+    if tmp.endswith(":"):
+        return tmp[:-1]
+    else:
+        return tmp
 
 
 def humanbytes(size):
