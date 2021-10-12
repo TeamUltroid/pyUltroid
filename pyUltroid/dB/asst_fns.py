@@ -25,7 +25,7 @@ def is_added(id_):  # Take int or str with numbers only , Returns Boolean
 
 
 def add_user(id_):  # Take int or str with numbers only , Returns Boolean
-    id = str(id_)
+    str(id_)
     if not id_.isdigit():
         return False
     try:
@@ -39,7 +39,7 @@ def add_user(id_):  # Take int or str with numbers only , Returns Boolean
 
 
 def del_user(id_):  # Take int or str with numbers only , Returns Boolean
-    id = str(id_)
+    str(id_)
     if not id_.isdigit():
         return False
     try:
@@ -67,7 +67,7 @@ def is_blacklisted(id_):  # Take int or str with numbers only , Returns Boolean
 
 
 def blacklist_user(id_):  # Take int or str with numbers only , Returns Boolean
-    id = str(id_)
+    str(id_)
     if not id_.isdigit():
         return False
     try:
@@ -81,7 +81,7 @@ def blacklist_user(id_):  # Take int or str with numbers only , Returns Boolean
 
 
 def rem_blacklist(id_):  # Take int or str with numbers only , Returns Boolean
-    id = str(id_)
+    str(id_)
     if not id_.isdigit():
         return False
     try:
