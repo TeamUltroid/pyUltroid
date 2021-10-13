@@ -8,11 +8,9 @@
 # You can find original source here:
 # https://github.com/hardikvasa/google-images-download
 
-import argparse
 
 # Import Libraries
 import codecs
-import datetime
 import http.client
 import json
 import os
@@ -744,7 +742,7 @@ class googleimagesdownload:
             else:
                 # format the item for readability
                 object = self.format_object(image_objects[i])
- 
+
                 # download the images
                 (
                     download_status,
@@ -809,13 +807,13 @@ class googleimagesdownload:
     # Bulk Download
 
     async def download(self, arguments):
-            paths_agg = {}
-            paths, errors = await self.download_executor(arguments)
-            for i in paths:
-                paths_agg[i] = paths[i]
-            if not arguments["silent_mode"] and arguments["print_paths"]:
-                print(paths.encode("raw_unicode_escape").decode("utf-8"))
-            return paths_agg, errors
+        paths_agg = {}
+        paths, errors = await self.download_executor(arguments)
+        for i in paths:
+            paths_agg[i] = paths[i]
+        if not arguments["silent_mode"] and arguments["print_paths"]:
+            print(paths.encode("raw_unicode_escape").decode("utf-8"))
+        return paths_agg, errors
 
     async def download_executor(self, arguments):
         paths = {}
@@ -842,7 +840,7 @@ class googleimagesdownload:
         # If this argument is present, set the custom output directory
         main_directory = arguments["output_directory"] or "downloads"
         # Proxy settings
-  
+
         total_errors = 0
         for pky in prefix_keywords:  # 1.for every prefix keywords
             for sky in suffix_keywords:  # 2.for every suffix keywords
