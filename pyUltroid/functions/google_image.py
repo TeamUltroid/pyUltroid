@@ -1023,7 +1023,7 @@ class googleimagesdownload:
 
     # Download Images
 
-    def download_image(
+    async def download_image(
         self,
         image_url,
         image_format,
