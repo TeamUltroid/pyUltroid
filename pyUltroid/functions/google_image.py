@@ -489,7 +489,6 @@ class googleimagesdownload:
         except Exception as exc:
             print(url)
             print(str(exc))
-            
 
     # Download Page for more than 100 images
 
