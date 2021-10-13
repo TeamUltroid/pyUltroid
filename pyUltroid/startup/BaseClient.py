@@ -36,7 +36,7 @@ class UltroidClient(TelegramClient):
     async def get_me(self):
         _me = await self.get_me()
         if _me.phone:
-            setattr(_me, 'phone', None)
+            setattr(_me, "phone", None)
         return _me
 
     async def start_client(self, **kwargs):
