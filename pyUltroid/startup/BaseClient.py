@@ -7,13 +7,13 @@
 
 
 from telethon import TelegramClient
-from telethon.tl.functions.users import GetUsersRequest
-from telethon.tl.types import InputUserSelf
 from telethon.errors import (
     AccessTokenExpiredError,
     ApiIdInvalidError,
     AuthKeyDuplicatedError,
 )
+from telethon.tl.functions.users import GetUsersRequest
+from telethon.tl.types import InputUserSelf
 from telethon.utils import get_display_name
 
 from . import *
