@@ -7,6 +7,8 @@
 
 
 from telethon import TelegramClient
+from telethon.tl.functions.users import GetUsersRequest
+from telethon.tl.types import InputUserSelf
 from telethon.errors import (
     AccessTokenExpiredError,
     ApiIdInvalidError,
@@ -33,6 +35,12 @@ class UltroidClient(TelegramClient):
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
+    async def get_me(self):
+        self.me = (await self(GetUsersRequest([InputUserSelf()])))[0]
+        if self.me.phone:
+            setattr(self.me, "phone", None)
+        return self.me
+
     async def start_client(self, **kwargs):
 
         self.logger.info("Trying to login.")
@@ -48,10 +56,6 @@ class UltroidClient(TelegramClient):
                 "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
             exit()
-        self.me = await self.get_me()
-
-        if self.me.phone:
-            setattr(self.me, "phone", None)
 
         if self.me.bot:
             self.logger.info(f"Logged in as @{self.me.username}")
