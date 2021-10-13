@@ -486,12 +486,10 @@ class googleimagesdownload:
                     re_content=True,
                 )
             )
-        except Exception:
-            print(
-                "Could not open URL. Please check your internet connection and/or ssl settings \n"
-                "If you are using proxy, make sure your proxy settings is configured correctly"
-            )
-            sys.exit()
+        except Exception as exc:
+            print(url)
+            print(str(exc))
+            
 
     # Download Page for more than 100 images
 
@@ -506,12 +504,7 @@ class googleimagesdownload:
         try:
             browser = webdriver.Chrome(chromedriver, chrome_options=options)
         except Exception as e:
-            print(
-                "Looks like we cannot locate the path the 'chromedriver' (use the '--chromedriver' "
-                "argument to specify the path to the executable.) or google chrome browser is not "
-                "installed on your machine (exception: %s)" % e
-            )
-            sys.exit()
+            print(str(e))
         browser.set_window_size(1024, 768)
 
         # Open the link
