@@ -483,8 +483,8 @@ class googleimagesdownload:
                 await async_searcher(
                     url,
                     headers=self._headers,
-                    )
                 )
+            )
         except Exception as exc:
             print(url)
             print(str(exc))
