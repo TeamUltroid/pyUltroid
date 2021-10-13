@@ -483,9 +483,8 @@ class googleimagesdownload:
                 await async_searcher(
                     url,
                     headers=self._headers,
-                    re_content=True,
+                    )
                 )
-            )
         except Exception as exc:
             print(url)
             print(str(exc))
@@ -621,7 +620,6 @@ class googleimagesdownload:
         data = await async_searcher(
             url,
             headers=self._headers,
-            re_content=True,
         )
 
         image_name = str(url[(url.rfind("/")) + 1 :])
@@ -656,7 +654,6 @@ class googleimagesdownload:
             content = await async_searcher(
                 searchUrl,
                 headers=self._headers,
-                re_content=True,
             )
             l1 = content.find("AMhZZ")
             l2 = content.find("&", l1)
@@ -952,7 +949,6 @@ class googleimagesdownload:
                 data = await async_searcher(
                     image_url,
                     headers=self._headers,
-                    re_content=True,
                 )
                 path = (
                     main_directory
@@ -1059,7 +1055,6 @@ class googleimagesdownload:
                 data = await async_searcher(
                     image_url,
                     headers=self._headers,
-                    re_content=True,
                 )
                 extensions = [
                     ".jpg",
