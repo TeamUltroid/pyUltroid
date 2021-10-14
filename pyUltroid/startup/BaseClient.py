@@ -36,11 +36,6 @@ class UltroidClient(TelegramClient):
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
-    """async def get_me(self):
-        me = (await self(GetUsersRequest([InputUserSelf()])))[0]
-        if me.phone:
-            setattr(me, "phone", None)
-        return me"""
 
     async def start_client(self, **kwargs):
 
