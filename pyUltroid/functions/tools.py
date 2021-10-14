@@ -69,7 +69,7 @@ async def async_searcher(
     re_json: bool = False,
     re_content: bool = False,
     real: bool = False,
-    timeout: float = 10.0,
+    timeout=None,
 ):
     async with aiohttp.ClientSession(headers=headers, timeout=timeout) as client:
         if post:
