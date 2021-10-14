@@ -15,7 +15,9 @@ class GDriveManager:
     def _authorise(self, token: str):
         self.GoogleAuth.Auth(token)
 
-    def _save_credentials_file(self, path_to_file: str = "./resources/auth/client_secrets.json"):
+    def _save_credentials_file(
+        self, path_to_file: str = "./resources/auth/client_secrets.json"
+    ):
         self.SaveCredentialsFile(path_to_file)
 
     def _login(self, path_to_file: str = "./resources/auth/client_secrets.json"):
