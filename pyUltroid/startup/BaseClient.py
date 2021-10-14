@@ -36,7 +36,6 @@ class UltroidClient(TelegramClient):
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
-
     async def start_client(self, **kwargs):
 
         self.logger.info("Trying to login.")
