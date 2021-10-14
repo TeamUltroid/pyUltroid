@@ -73,10 +73,10 @@ class RedisConnection(Redis):
 
 
 def session_file():
-    if Var.SESSION:
-        _session = StringSession(Var.SESSION)
-    elif os.path.exists("client-session.session"):
+    if os.path.exists("client-session.session"):
         _session = "client-session"
+    elif Var.SESSION:
+        _session = StringSession(Var.SESSION)
     else:
         raise Exception("No String Session found. Quitting...")
     return _session
