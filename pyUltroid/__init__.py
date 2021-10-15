@@ -43,8 +43,16 @@ ultroid_bot = UltroidClient(
     api_id=Var.API_ID,
     api_hash=Var.API_HASH,
     udB=udB,
-    connection=(connection.ConnectionTcpMTProxyRandomizedIntermediate if udB.get("TG_PROXY") else None),
-    proxy=(tuple(findall("\\=([^&]+)", udB.get("TG_PROXY"))) if udB.get("TG_PROXY") else None),
+    connection=(
+        connection.ConnectionTcpMTProxyRandomizedIntermediate
+        if udB.get("TG_PROXY")
+        else None
+    ),
+    proxy=(
+        tuple(findall("\\=([^&]+)", udB.get("TG_PROXY")))
+        if udB.get("TG_PROXY")
+        else None
+    ),
     base_logger=TeleLogger,
 )
 
