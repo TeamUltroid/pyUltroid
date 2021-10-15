@@ -268,15 +268,13 @@ class googleimagesdownload:
 
     # building main search URL
 
-    async def build_search_url(
-        self, search_term, params
-    ):
+    async def build_search_url(self, search_term, params):
         url = (
-                "https://www.google.com/search?q="
-                + quote(search_term.encode("utf-8"))
-                + "&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch"
-                + params
-                + "&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg"
+            "https://www.google.com/search?q="
+            + quote(search_term.encode("utf-8"))
+            + "&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch"
+            + params
+            + "&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg"
         )
 
         return url
