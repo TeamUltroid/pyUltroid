@@ -17,7 +17,6 @@ from .startup.connections import (
     vc_connection,
     where_hosted,
 )
-from .startup.exceptions import RedisError
 from .startup.funcs import autobot
 
 start_time = time.time()
