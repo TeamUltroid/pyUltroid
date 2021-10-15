@@ -37,6 +37,7 @@ udB = RedisConnection(
 if udB.ping():
     LOGS.info("Connected to Redis Database")
 
+_proxy = findall("\\=([^&]+)", udB.get("TG_PROXY"))
 if udB.get("TG_PROXY"):
     ultroid_bot = UltroidClient(
         session_file(),
@@ -44,7 +45,7 @@ if udB.get("TG_PROXY"):
         api_hash=Var.API_HASH,
         udB=udB,
         connection=connection.ConnectionTcpMTProxyRandomizedIntermediate,
-        proxy=tuple(findall("\\=([^&]+)", udB.get("TG_PROXY"))),
+        proxy=(_proxy[0], int(_proxy[1]), _proxy[2]),
         base_logger=TeleLogger,
     )
 else:
