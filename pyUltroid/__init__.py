@@ -37,24 +37,24 @@ udB = RedisConnection(
 if udB.ping():
     LOGS.info("Connected to Redis Database")
 
-
-ultroid_bot = UltroidClient(
-    session_file(),
-    api_id=Var.API_ID,
-    api_hash=Var.API_HASH,
-    udB=udB,
-    connection=(
-        connection.ConnectionTcpMTProxyRandomizedIntermediate
-        if udB.get("TG_PROXY")
-        else None
-    ),
-    proxy=(
-        tuple(findall("\\=([^&]+)", udB.get("TG_PROXY")))
-        if udB.get("TG_PROXY")
-        else None
-    ),
-    base_logger=TeleLogger,
-)
+if udB.get("TG_PROXY"):
+    ultroid_bot = UltroidClient(
+        session_file(),
+        api_id=Var.API_ID,
+        api_hash=Var.API_HASH,
+        udB=udB,
+        connection=connection.ConnectionTcpMTProxyRandomizedIntermediate,
+        proxy=tuple(findall("\\=([^&]+)", udB.get("TG_PROXY")))
+        base_logger=TeleLogger,
+    )
+else:
+    ultroid_bot = UltroidClient(
+        session_file(),
+        api_id=Var.API_ID,
+        api_hash=Var.API_HASH,
+        udB=udB,
+        base_logger=TeleLogger,
+    )
 
 ultroid_bot.run_in_loop(autobot())
 
