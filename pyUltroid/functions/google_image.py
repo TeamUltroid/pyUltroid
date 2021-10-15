@@ -26,6 +26,8 @@ http.client._MAXHEADERS = 1000
 
 args_list = [
     "keywords",
+    "prefix_keywords",
+    "suffix_keywords",
     "limit",
     "format",
     "output_directory",
@@ -839,7 +841,20 @@ class googleimagesdownload:
 
         # If this argument is present, set the custom output directory
         main_directory = arguments["output_directory"] or "downloads"
-        # Proxy settings
+        if arguments["suffix_keywords"]:
+            suffix_keywords = [
+                " " + str(sk) for sk in arguments["suffix_keywords"].split(",")
+            ]
+        else:
+            suffix_keywords = [""]
+
+        # Additional words added to keywords
+        if arguments["prefix_keywords"]:
+            prefix_keywords = [
+                str(sk) + " " for sk in arguments["prefix_keywords"].split(",")
+            ]
+        else:
+            prefix_keywords = [""]
 
         total_errors = 0
         for pky in prefix_keywords:  # 1.for every prefix keywords
