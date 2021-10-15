@@ -46,10 +46,11 @@ class GDriveManager:
     def _upload_file(self, path_to_file: str, file_name: str):
         folder_id = udB.get("GDRIVE_FOLDER_ID")
         if folder_id:
-            the_file = self.GoogleDrive.CreateFile({"title": file_name, "parents": [{"kind": "drive#fileLink", "id": folder_id}]})
-            the_file.SetContentFile(path_to_file)
-            the_file.Upload()
-            return "Uploaded Successfully"
-        except ApiRequestError as e:
-            if e.GetField("reason") == "notFound":
-                return "Gdrive folder not found"
+            try:
+                the_file = self.GoogleDrive.CreateFile({"title": file_name, "parents": [{"kind": "drive#fileLink", "id": folder_id}]})
+                the_file.SetContentFile(path_to_file)
+                the_file.Upload()
+                return "Uploaded Successfully"
+            except ApiRequestError as e:
+                if e.GetField("reason") == "notFound":
+                    return "Gdrive folder not found"
