@@ -3,28 +3,29 @@ from pydrive2.drive import GoogleDrive
 
 from .. import udB
 
+GoogleAuth = GoogleAuth()
 
 class GDriveManager:
     def __init__(self):
-        self.GoogleAuth = GoogleAuth()
-        self.GoogleDrive = GoogleDrive(self.GoogleAuth)
+        self.GoogleAuth = [GoogleAuth]
+        self.GoogleDrive = GoogleDrive(self.GoogleAuth[0])
 
     def _generate_auth_url(self):
-        return self.GoogleAuth.GetAuthUrl()
+        return self.GoogleAuth[0].GetAuthUrl()
 
     def _authorise(self, token: str):
-        self.GoogleAuth.Auth(token)
+        self.GoogleAuth[0].Auth(token)
 
     def _save_credentials_file(
         self, path_to_file: str = "resources/auths/client_secrets.json"
     ):
-        self.GoogleAuth.SaveCredentialsFile(path_to_file)
+        self.GoogleAuth[0].SaveCredentialsFile(path_to_file)
         with open(path_to_file, "r") as f:
             udB.set_redis("GDRIVE_AUTH_TOKEN", f.read())
 
     def _login(self, path_to_file: str = "resources/auths/client_secrets.json"):
         try:
-            self.GoogleAuth.LoadCredentialsFile(path_to_file)
+            self.GoogleAuth[0].LoadCredentialsFile(path_to_file)
             return "Success"
         except Exception as e:
             print(e)
