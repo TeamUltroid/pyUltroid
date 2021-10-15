@@ -1,7 +1,7 @@
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 
-from . import *
+from .. import udB
 
 
 class GDriveManager:
