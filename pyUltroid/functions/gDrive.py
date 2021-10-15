@@ -16,13 +16,13 @@ class GDriveManager:
         self.GoogleAuth.Auth(token)
 
     def _save_credentials_file(
-        self, path_to_file: str = "./resources/auth/client_secrets.json"
+        self, path_to_file: str = "resources/auths/client_secrets.json"
     ):
         self.SaveCredentialsFile(path_to_file)
         with open(path_to_file, "r") as f:
             udB.set_redis("GDRIVE_AUTH_TOKEN", f.read())
 
-    def _login(self, path_to_file: str = "./resources/auth/client_secrets.json"):
+    def _login(self, path_to_file: str = "resources/auths/client_secrets.json"):
         try:
             self.LoadCredentialsFile(path_to_file)
             return "Success"
@@ -31,7 +31,7 @@ class GDriveManager:
             return "Error"
 
     def _initialize_cs_json(
-        self, path_to_file: str = "./resources/auth/client_secrets.json"
+        self, path_to_file: str = "resources/auths/client_secrets.json"
     ):
         _json = {
             "installed": {
