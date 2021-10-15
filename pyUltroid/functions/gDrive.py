@@ -63,3 +63,15 @@ class GDriveManager:
             except ApiRequestError as e:
                 if e.GetField("reason") == "notFound":
                     return "Gdrive folder not found"
+        else:
+            try:
+                the_file = self.GoogleDrive.CreateFile(
+                    {
+                        "title": file_name,
+                    }
+                )
+                the_file.SetContentFile(path_to_file)
+                the_file.Upload()
+                return "Uploaded Successfully"
+            except ApiRequestError as e:
+                return e
