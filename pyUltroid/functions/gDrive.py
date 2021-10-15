@@ -5,6 +5,7 @@ from .. import udB
 
 GoogleAuth = GoogleAuth()
 
+
 class GDriveManager:
     def __init__(self):
         self.GoogleAuth = [GoogleAuth]
