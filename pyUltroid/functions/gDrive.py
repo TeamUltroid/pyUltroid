@@ -18,13 +18,13 @@ class GDriveManager:
     def _save_credentials_file(
         self, path_to_file: str = "resources/auths/client_secrets.json"
     ):
-        self.SaveCredentialsFile(path_to_file)
+        self.GoogleAuth.SaveCredentialsFile(path_to_file)
         with open(path_to_file, "r") as f:
             udB.set_redis("GDRIVE_AUTH_TOKEN", f.read())
 
     def _login(self, path_to_file: str = "resources/auths/client_secrets.json"):
         try:
-            self.LoadCredentialsFile(path_to_file)
+            self.GoogleAuth.LoadCredentialsFile(path_to_file)
             return "Success"
         except Exception as e:
             print(e)
