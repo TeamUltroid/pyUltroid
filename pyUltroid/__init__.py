@@ -5,11 +5,11 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-
 import time
 
 from telethon import connection
 
+from re import findall
 from .configs import Var
 from .startup import *
 from .startup.BaseClient import UltroidClient
@@ -43,8 +43,8 @@ ultroid_bot = UltroidClient(
     api_id=Var.API_ID,
     api_hash=Var.API_HASH,
     udB=udB,
-    connection=connection.ConnectionTcpMTProxyRandomizedIntermediate,
-    proxy=("proxy.mtproto.co", 443, "11112222333344445555666677778888"),
+    connection=connection.ConnectionTcpMTProxyRandomizedIntermediate if udB.get("TG_PROXY") else None,
+    proxy=tuple(findall("\=([^&]+)", udB.get("TG_PROXY")) if udB.get("TG_PROXY") else None,
     base_logger=TeleLogger,
 )
 
