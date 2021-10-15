@@ -15,7 +15,9 @@ class GDriveManager:
     def _authorise(self, token: str):
         self.GoogleAuth.Auth(token)
 
-    def _save_credentials_file(self, path_to_file: str = "./resources/auth/client_secrets.json"):
+    def _save_credentials_file(
+        self, path_to_file: str = "./resources/auth/client_secrets.json"
+    ):
         self.SaveCredentialsFile(path_to_file)
 
     def _login(self, path_to_file: str = "./resources/auth/client_secrets.json"):
@@ -42,12 +44,17 @@ class GDriveManager:
         }
         with open(path_to_file, "w") as f:
             f.write(str(_json).replace("'", '"').replace("True", "true"))
-    
+
     def _upload_file(self, path_to_file: str, file_name: str):
         folder_id = udB.get("GDRIVE_FOLDER_ID")
         if folder_id:
             try:
-                the_file = self.GoogleDrive.CreateFile({"title": file_name, "parents": [{"kind": "drive#fileLink", "id": folder_id}]})
+                the_file = self.GoogleDrive.CreateFile(
+                    {
+                        "title": file_name,
+                        "parents": [{"kind": "drive#fileLink", "id": folder_id}],
+                    }
+                )
                 the_file.SetContentFile(path_to_file)
                 the_file.Upload()
                 return "Uploaded Successfully"
