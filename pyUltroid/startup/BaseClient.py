@@ -43,6 +43,7 @@ class UltroidClient(TelegramClient):
             await self.start(**kwargs)
         except (AuthKeyDuplicatedError, ApiIdInvalidError, EOFError):
             raise SessionExpiredError("String session expired. Create new!")
+            exit()
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
             # And at Early Process, Its saved in Redis.
@@ -66,5 +67,5 @@ class UltroidClient(TelegramClient):
 
     @property
     def uid(self):
-        """Client's User Id"""
+        """client's user id"""
         return self.me.id
