@@ -43,7 +43,7 @@ def startup_stuff():
     if CT := udB.get("CUSTOM_THUMBNAIL"):
         urlretrieve(CT, "resources/extras/ultroid.jpg")
 
-    if GT := udB.get("GDRIVE_TOKEN"):
+    if GT := udB.get("GDRIVE_AUTH_TOKEN"):
         with open("resources/auths/client_secrets.json", "w") as t_file:
             t_file.write(GT)
 
