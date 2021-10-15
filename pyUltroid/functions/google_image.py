@@ -230,144 +230,15 @@ class googleimagesdownload:
 
     # Building URL parameters
     def build_url_parameters(self, arguments):
-        if arguments["language"]:
-            lang = "&lr="
-            lang_param = {
-                "Arabic": "lang_ar",
-                "Chinese (Simplified)": "lang_zh-CN",
-                "Chinese (Traditional)": "lang_zh-TW",
-                "Czech": "lang_cs",
-                "Danish": "lang_da",
-                "Dutch": "lang_nl",
-                "English": "lang_en",
-                "Estonian": "lang_et",
-                "Finnish": "lang_fi",
-                "French": "lang_fr",
-                "German": "lang_de",
-                "Greek": "lang_el",
-                "Hebrew": "lang_iw ",
-                "Hungarian": "lang_hu",
-                "Icelandic": "lang_is",
-                "Italian": "lang_it",
-                "Japanese": "lang_ja",
-                "Korean": "lang_ko",
-                "Latvian": "lang_lv",
-                "Lithuanian": "lang_lt",
-                "Norwegian": "lang_no",
-                "Portuguese": "lang_pt",
-                "Polish": "lang_pl",
-                "Romanian": "lang_ro",
-                "Russian": "lang_ru",
-                "Spanish": "lang_es",
-                "Swedish": "lang_sv",
-                "Turkish": "lang_tr",
-            }
-            lang_url = lang + lang_param[arguments["language"]]
-        else:
-            lang_url = ""
+        lang_url = ""
 
-        if arguments["time_range"]:
-            json_acceptable_string = arguments["time_range"].replace("'", '"')
-            d = json.loads(json_acceptable_string)
-            time_range = ",cdr:1,cd_min:" + d["time_min"] + ",cd_max:" + d["time_max"]
-        else:
-            time_range = ""
+        time_range = ""
 
-        if arguments["exact_size"]:
-            size_array = [x.strip() for x in arguments["exact_size"].split(",")]
-            exact_size = (
-                ",isz:ex,iszw:" + str(size_array[0]) + ",iszh:" + str(size_array[1])
-            )
-        else:
-            exact_size = ""
+        exact_size = ""
 
         built_url = "&tbs="
         counter = 0
         params = {
-            "color": [
-                arguments["color"],
-                {
-                    "red": "ic:specific,isc:red",
-                    "orange": "ic:specific,isc:orange",
-                    "yellow": "ic:specific,isc:yellow",
-                    "green": "ic:specific,isc:green",
-                    "teal": "ic:specific,isc:teel",
-                    "blue": "ic:specific,isc:blue",
-                    "purple": "ic:specific,isc:purple",
-                    "pink": "ic:specific,isc:pink",
-                    "white": "ic:specific,isc:white",
-                    "gray": "ic:specific,isc:gray",
-                    "black": "ic:specific,isc:black",
-                    "brown": "ic:specific,isc:brown",
-                },
-            ],
-            "color_type": [
-                arguments["color_type"],
-                {
-                    "full-color": "ic:color",
-                    "black-and-white": "ic:gray",
-                    "transparent": "ic:trans",
-                },
-            ],
-            "usage_rights": [
-                arguments["usage_rights"],
-                {
-                    "labeled-for-reuse-with-modifications": "sur:fmc",
-                    "labeled-for-reuse": "sur:fc",
-                    "labeled-for-noncommercial-reuse-with-modification": "sur:fm",
-                    "labeled-for-nocommercial-reuse": "sur:f",
-                },
-            ],
-            "size": [
-                arguments["size"],
-                {
-                    "large": "isz:l",
-                    "medium": "isz:m",
-                    "icon": "isz:i",
-                    ">400*300": "isz:lt,islt:qsvga",
-                    ">640*480": "isz:lt,islt:vga",
-                    ">800*600": "isz:lt,islt:svga",
-                    ">1024*768": "visz:lt,islt:xga",
-                    ">2MP": "isz:lt,islt:2mp",
-                    ">4MP": "isz:lt,islt:4mp",
-                    ">6MP": "isz:lt,islt:6mp",
-                    ">8MP": "isz:lt,islt:8mp",
-                    ">10MP": "isz:lt,islt:10mp",
-                    ">12MP": "isz:lt,islt:12mp",
-                    ">15MP": "isz:lt,islt:15mp",
-                    ">20MP": "isz:lt,islt:20mp",
-                    ">40MP": "isz:lt,islt:40mp",
-                    ">70MP": "isz:lt,islt:70mp",
-                },
-            ],
-            "type": [
-                arguments["type"],
-                {
-                    "face": "itp:face",
-                    "photo": "itp:photo",
-                    "clipart": "itp:clipart",
-                    "line-drawing": "itp:lineart",
-                    "animated": "itp:animated",
-                },
-            ],
-            "time": [
-                arguments["time"],
-                {
-                    "past-24-hours": "qdr:d",
-                    "past-7-days": "qdr:w",
-                    "past-month": "qdr:m",
-                    "past-year": "qdr:y",
-                },
-            ],
-            "aspect_ratio": [
-                arguments["aspect_ratio"],
-                {
-                    "tall": "iar:t",
-                    "square": "iar:s",
-                    "wide": "iar:w",
-                    "panoramic": "iar:xw",
-                },
-            ],
             "format": [
                 arguments["format"],
                 {
