@@ -41,6 +41,7 @@ ultroid_bot = UltroidClient(
     api_id=Var.API_ID,
     api_hash=Var.API_HASH,
     udB=udB,
+    connection=connection.ConnectionTcpMTProxyRandomizedIntermediate,
     proxy=("proxy.mtproto.co", 443, 11112222333344445555666677778888),
     base_logger=TeleLogger,
 )
