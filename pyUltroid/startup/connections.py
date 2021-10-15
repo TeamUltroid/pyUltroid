@@ -14,7 +14,6 @@ from telethon.sessions import StringSession
 
 from ..configs import Var
 from . import *
-from .exceptions import RedisError
 
 
 class RedisConnection(Redis):
@@ -33,10 +32,10 @@ class RedisConnection(Redis):
             host = spli_[0]
             port = int(spli_[-1])
             if host.startswith("http"):
-                raise RedisError("Your REDIS_URI should not start with http !")
+                logger.error("Your REDIS_URI should not start with http !")
                 exit()
         elif not host or not port:
-            raise RedisError("Port Number not found")
+            logger.error("Port Number not found")
             exit()
         kwargs["host"] = host
         kwargs["password"] = password
