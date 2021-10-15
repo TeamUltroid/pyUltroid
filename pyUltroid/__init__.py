@@ -49,14 +49,14 @@ if udB.get("TG_PROXY"):
             proxy=(_proxy[0], int(_proxy[1]), _proxy[2]),
             base_logger=TeleLogger,
         )
-    except:
+    except BaseException:
         ultroid_bot = UltroidClient(
-        session_file(),
-        api_id=Var.API_ID,
-        api_hash=Var.API_HASH,
-        udB=udB,
-        base_logger=TeleLogger,
-    )
+            session_file(),
+            api_id=Var.API_ID,
+            api_hash=Var.API_HASH,
+            udB=udB,
+            base_logger=TeleLogger,
+        )
         LOGS.warning("MTProxy not supported")
 else:
     ultroid_bot = UltroidClient(
