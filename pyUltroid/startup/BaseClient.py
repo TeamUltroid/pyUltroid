@@ -18,7 +18,6 @@ from telethon.errors import (
 from telethon.utils import get_display_name
 
 from . import *
-from .exceptions import SessionExpiredError
 
 
 class UltroidClient(TelegramClient):
@@ -42,7 +41,7 @@ class UltroidClient(TelegramClient):
         try:
             await self.start(**kwargs)
         except (AuthKeyDuplicatedError, ApiIdInvalidError, EOFError):
-            raise SessionExpiredError("String session expired. Create new!")
+            self.logger.error("String session expired. Create new!")
             exit()
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
@@ -67,5 +66,5 @@ class UltroidClient(TelegramClient):
 
     @property
     def uid(self):
-        """client's user id"""
+        """Client's user id"""
         return self.me.id
