@@ -44,7 +44,7 @@ if udB.get("TG_PROXY"):
         api_hash=Var.API_HASH,
         udB=udB,
         connection=connection.ConnectionTcpMTProxyRandomizedIntermediate,
-        proxy=tuple(findall("\\=([^&]+)", udB.get("TG_PROXY")))
+        proxy=tuple(findall("\\=([^&]+)", udB.get("TG_PROXY"))),
         base_logger=TeleLogger,
     )
 else:
