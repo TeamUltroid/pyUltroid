@@ -13,10 +13,8 @@ from telethon.errors import (
     AuthKeyDuplicatedError,
 )
 
-# from telethon.tl.functions.users import GetUsersRequest
-# from telethon.tl.types import InputUserSelf
 from telethon.utils import get_display_name
-
+from ..configs import Var
 from . import *
 
 
@@ -32,6 +30,8 @@ class UltroidClient(TelegramClient):
     ):
         self.logger = logger
         self.udB = udB
+        kwargs["api_id"] = Var.API_ID
+        kwargs["api_hash"] = Var.API_HASH
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
