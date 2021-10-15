@@ -571,9 +571,8 @@ class googleimagesdownload:
         print(object_decode)
         try:
             json.loads(object_decode[:-15])[31][0][12][2]
-        except:
+        except BaseException:
             print(object_decode)
-        
 
     async def _get_all_items(self, page, main_directory, dir_name, limit, arguments):
         items = []
