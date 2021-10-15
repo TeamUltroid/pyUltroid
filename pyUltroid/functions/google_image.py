@@ -569,7 +569,11 @@ class googleimagesdownload:
         object_decode = bytes(object_raw[:-1], "utf-8").decode("unicode_escape")
         # LOGS.info(_format.paste_text(object_decode[:-15]))
         print(object_decode)
-        return json.loads(object_decode[:-15])[31][0][12][2]
+        try:
+            json.loads(object_decode[:-15])[31][0][12][2]
+        except:
+            print(object_decode)
+        
 
     async def _get_all_items(self, page, main_directory, dir_name, limit, arguments):
         items = []
