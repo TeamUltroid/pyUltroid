@@ -56,13 +56,18 @@ class UltroidClient(TelegramClient):
         if self.me.bot:
             self.logger.info(f"Logged in as @{self.me.username}")
         else:
-            self.logger.info(f"Logged in as {get_display_name(self.me)}")
+            self.logger.info(f"Logged in as {self.full_name}")
 
     def run_in_loop(self, function):
         return self.loop.run_until_complete(function)
 
     def run(self):
         self.run_until_disconnected()
+
+    @property
+    def full_name(self):
+        """ full name of Client """
+        return get_display_name(self.me)
 
     @property
     def uid(self):
