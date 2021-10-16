@@ -9,11 +9,13 @@
 from re import findall
 
 from telethon import TelegramClient
-from telethon.network.connection import ConnectionTcpMTProxyRandomizedIntermediate as MtProxy
 from telethon.errors import (
     AccessTokenExpiredError,
     ApiIdInvalidError,
     AuthKeyDuplicatedError,
+)
+from telethon.network.connection import (
+    ConnectionTcpMTProxyRandomizedIntermediate as MtProxy,
 )
 from telethon.utils import get_display_name
 
