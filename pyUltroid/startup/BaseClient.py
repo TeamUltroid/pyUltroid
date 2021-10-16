@@ -66,7 +66,7 @@ class UltroidClient(TelegramClient):
 
     @property
     def full_name(self):
-        """ full name of Client """
+        """full name of Client"""
         return get_display_name(self.me)
 
     @property
