@@ -12,36 +12,36 @@ def str_to_list(text):  # Returns List
     return text.split(" ")
 
 
-def list_to_str(list):  # Returns String
-    str = "".join(f"{x} " for x in list)
-    return str.strip()
+def list_to_str(list_):  # Returns String
+    str_ = "".join(f"{x} " for x in list_)
+    return str_.strip()
 
 
-def are_all_nums(list):  # Takes List , Returns Boolean
-    return all(item.isdigit() for item in list)
+def are_all_nums(list_):  # Takes List , Returns Boolean
+    return all(item.isdigit() for item in list_)
 
 
 def get_sudos():  # Returns List
     sudos = udB.get("SUDOS")
-    if sudos is None or sudos == "":
+    if not sudos:
         return [""]
     return str_to_list(sudos)
 
 
-def is_sudo(id):  # Take int or str with numbers only , Returns Boolean
-    if not str(id).isdigit():
+def is_sudo(id_):  # Take int or str with numbers only , Returns Boolean
+    if not str(id_).isdigit():
         return False
     sudos = get_sudos()
-    return str(id) in sudos
+    return str(id_) in sudos
 
 
-def add_sudo(id):  # Take int or str with numbers only , Returns Boolean
-    id = str(id)
-    if not id.isdigit():
+def add_sudo(id_):  # Take int or str with numbers only , Returns Boolean
+    id_ = str(id_)
+    if not id_.isdigit():
         return False
     try:
         sudos = get_sudos()
-        sudos.append(id)
+        sudos.append(id_)
         udB.set("SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
@@ -49,13 +49,13 @@ def add_sudo(id):  # Take int or str with numbers only , Returns Boolean
         return False
 
 
-def del_sudo(id):  # Take int or str with numbers only , Returns Boolean
-    id = str(id)
-    if not id.isdigit():
+def del_sudo(id_):  # Take int or str with numbers only , Returns Boolean
+    id_ = str(id_)
+    if not id_.isdigit():
         return False
     try:
         sudos = get_sudos()
-        sudos.remove(id)
+        sudos.remove(id_)
         udB.set("SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
@@ -63,13 +63,11 @@ def del_sudo(id):  # Take int or str with numbers only , Returns Boolean
         return False
 
 
-def is_fullsudo(id):
-    if id == ultroid_bot.uid:
+def is_fullsudo(id_):
+    if id_ == ultroid_bot.uid:
         return True
-    id = str(id)
+    id_ = str(id_)
     x = udB.get("FULLSUDO")
-    if x:
-        if id in x:
-            return True
-        return
+    if x and id_ in x:
+        return True
     return
