@@ -60,11 +60,7 @@ else:
 
 ultroid_bot.run_in_loop(autobot())
 
-asst = UltroidClient(
-    None,
-    bot_token=udB.get("BOT_TOKEN"),
-    udB=udB
-)
+asst = UltroidClient(None, bot_token=udB.get("BOT_TOKEN"), udB=udB)
 
 vcClient = vc_connection(udB, ultroid_bot)
 
