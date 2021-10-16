@@ -19,7 +19,7 @@ import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
 from urllib.parse import quote
-
+from .. import LOGS
 from .tools import async_searcher
 
 http.client._MAXHEADERS = 1000
@@ -583,7 +583,7 @@ class googleimagesdownload:
         # LOGS.info(f"page : {_format.paste_text(page)}")
         image_objects = self._get_image_objects(page)
         while count < limit + 1:
-            if len(image_objects) == 0:
+            if not image_objects:
                 print("no_links")
                 break
             else:
