@@ -83,9 +83,11 @@ class UltroidClient(TelegramClient):
             self.logger.info(f"Logged in as {self.full_name}")
 
     def run_in_loop(self, function):
+        """run inside asyncio loop"""
         return self.loop.run_until_complete(function)
 
     def run(self):
+        """run asyncio loop"""
         self.run_until_disconnected()
 
     @property
