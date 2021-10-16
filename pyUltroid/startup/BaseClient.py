@@ -13,7 +13,8 @@ from telethon.errors import (
     AuthKeyDuplicatedError,
 )
 from telethon.utils import get_display_name
-
+from re import findall
+from telethon.connection import ConnectionTcpMTProxyRandomizedIntermediate as MtProxy
 from ..configs import Var
 from . import *
 
@@ -22,6 +23,7 @@ class UltroidClient(TelegramClient):
     def __init__(
         self,
         session,
+        proxy=None,
         bot_token=None,
         udB=None,
         logger=LOGS,
@@ -30,9 +32,14 @@ class UltroidClient(TelegramClient):
     ):
         self.logger = logger
         self.udB = udB
+        self.proxy = proxy
         kwargs["api_id"] = Var.API_ID
         kwargs["api_hash"] = Var.API_HASH
         kwargs["base_logger"] = TelethonLogger
+        if proxy:
+            _proxy = findall("\\=([^&]+)", proxy)
+            kwargs["connection"] = MtProxy
+            kwargs["proxy"] = (_proxy[0], int(_proxy[1]), _proxy[2]),
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
@@ -52,7 +59,16 @@ class UltroidClient(TelegramClient):
                 "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
             exit()
-
+        except BaseException as er:
+            if self.proxy:
+                self.logger.info("Proxy : Used")
+                self.logger.info(er)
+                del kwargs["connection"]
+                del kwargs["proxy"]
+                self.proxy = None
+                return await self.start_client(**kwargs))
+            self.logger.exception(er)
+            exit()
         self.me = await self.get_me()
         if self.me.bot:
             self.logger.info(f"Logged in as @{self.me.username}")
