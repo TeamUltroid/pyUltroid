@@ -29,8 +29,7 @@ def get_flood_limit(chat_id):
     omk = get_flood()
     if int(chat_id) in omk.keys():
         return omk[int(chat_id)]
-    else:
-        return None
+    return None
 
 
 def rem_flood(chat_id):
