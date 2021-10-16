@@ -658,8 +658,6 @@ class googleimagesdownload:
         paths, errors = await self.download_executor(arguments)
         for i in paths:
             paths_agg[i] = paths[i]
-        if not arguments["silent_mode"] and arguments["print_paths"]:
-            print(paths.encode("raw_unicode_escape").decode("utf-8"))
         return paths_agg, errors
 
     async def download_executor(self, arguments):
