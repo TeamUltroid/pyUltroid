@@ -139,7 +139,6 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
             del args[i]
 
     def decorator(func):
-
         def doit(mode):
             async def wrapper(ult):
                 chat = ult.chat
