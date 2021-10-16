@@ -12,33 +12,32 @@ def str_to_list(text):  # Returns List
     return text.split(" ")
 
 
-def list_to_str(list):  # Returns String
-    str = "".join(f"{x} " for x in list)
-    return str.strip()
+def list_to_str(list_):  # Returns String
+    str_ = "".join(f"{x} " for x in list_)
+    return str_.strip()
 
 
 def get_logger():  # Returns List
     pmperm = udB.get("LOGUSERS")
-    if pmperm is None or pmperm == "":
+    if not pmperm:
         return [""]
-    else:
-        return str_to_list(pmperm)
+    return str_to_list(pmperm)
 
 
-def is_logger(id):  # Take int or str with numbers only , Returns Boolean
-    if not str(id).isdigit():
+def is_logger(id_):  # Take int or str with numbers only , Returns Boolean
+    if not str(id_).isdigit():
         return False
     pmperm = get_logger()
-    return str(id) in pmperm
+    return str(id_) in pmperm
 
 
-def log_user(id):  # Take int or str with numbers only , Returns Boolean
-    id = str(id)
-    if not id.isdigit():
+def log_user(id_):  # Take int or str with numbers only , Returns Boolean
+    id_ = str(id_)
+    if not id_.isdigit():
         return False
     try:
         pmperm = get_logger()
-        pmperm.append(id)
+        pmperm.append(id_)
         udB.set("LOGUSERS", list_to_str(pmperm))
         return True
     except Exception as e:
@@ -46,13 +45,13 @@ def log_user(id):  # Take int or str with numbers only , Returns Boolean
         return False
 
 
-def nolog_user(id):  # Take int or str with numbers only , Returns Boolean
-    id = str(id)
-    if not id.isdigit():
+def nolog_user(id_):  # Take int or str with numbers only , Returns Boolean
+    id_ = str(id_)
+    if not id_.isdigit():
         return False
     try:
         pmperm = get_logger()
-        pmperm.remove(id)
+        pmperm.remove(id_)
         udB.set("LOGUSERS", list_to_str(pmperm))
         return True
     except Exception as e:
