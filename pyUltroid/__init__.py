@@ -37,11 +37,7 @@ udB = RedisConnection(
 if udB.ping():
     LOGS.info("Connected to Redis Database")
 
-ultroid_bot = UltroidClient(
-            session_file(),
-            udB=udB,
-            proxy=udB.get("TG_PROXY")
-)
+ultroid_bot = UltroidClient(session_file(), udB=udB, proxy=udB.get("TG_PROXY"))
 
 ultroid_bot.run_in_loop(autobot())
 

@@ -6,15 +6,17 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
+from re import findall
+
 from telethon import TelegramClient
+from telethon.connection import ConnectionTcpMTProxyRandomizedIntermediate as MtProxy
 from telethon.errors import (
     AccessTokenExpiredError,
     ApiIdInvalidError,
     AuthKeyDuplicatedError,
 )
 from telethon.utils import get_display_name
-from re import findall
-from telethon.connection import ConnectionTcpMTProxyRandomizedIntermediate as MtProxy
+
 from ..configs import Var
 from . import *
 
@@ -39,7 +41,7 @@ class UltroidClient(TelegramClient):
         if proxy:
             _proxy = findall("\\=([^&]+)", proxy)
             kwargs["connection"] = MtProxy
-            kwargs["proxy"] = (_proxy[0], int(_proxy[1]), _proxy[2]),
+            kwargs["proxy"] = ((_proxy[0], int(_proxy[1]), _proxy[2]),)
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
