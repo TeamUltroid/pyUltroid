@@ -6,9 +6,6 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import time
-from re import findall
-
-from telethon import connection
 
 from .configs import Var
 from .startup import *
