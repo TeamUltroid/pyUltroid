@@ -45,20 +45,17 @@ if PROXY := udB.get("TG_PROXY"):
             udB=udB,
             connection=connection.ConnectionTcpMTProxyRandomizedIntermediate,
             proxy=(_proxy[0], int(_proxy[1]), _proxy[2]),
-            base_logger=TeleLogger,
         )
     except BaseException:
         ultroid_bot = UltroidClient(
             session_file(),
             udB=udB,
-            base_logger=TeleLogger,
         )
         LOGS.warning("MTProxy not supported")
 else:
     ultroid_bot = UltroidClient(
         session_file(),
         udB=udB,
-        base_logger=TeleLogger,
     )
 
 ultroid_bot.run_in_loop(autobot())
@@ -66,8 +63,7 @@ ultroid_bot.run_in_loop(autobot())
 asst = UltroidClient(
     None,
     bot_token=udB.get("BOT_TOKEN"),
-    udB=udB,
-    base_logger=TeleLogger,
+    udB=udB
 )
 
 vcClient = vc_connection(udB, ultroid_bot)
