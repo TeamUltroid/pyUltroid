@@ -13,12 +13,12 @@ def str_to_list(text):  # Returns List
 
 
 def list_to_str(list):  # Returns String
-    str = "".join(f"{x} " for x in list)
-    return str.strip()
+    str_ = "".join(f"{x} " for x in list)
+    return str_.strip()
 
 
-def are_all_num(list):  # Takes List , Returns Boolean
-    return all(item.isdigit() for item in list)
+def are_all_num(list_):  # Takes List , Returns Boolean
+    return all(item.isdigit() for item in list_)
 
 
 def get_source_channels():  # Returns List
@@ -35,16 +35,16 @@ def get_no_source_channels():  # Returns List
     return len(channels.split(" "))
 
 
-def is_source_channel_added(id):
+def is_source_channel_added(id_):
     channels = get_source_channels()
-    return str(id) in channels
+    return str(id_) in channels
 
 
-def add_source_channel(id):  # Take int or str with numbers only , Returns Boolean
-    id = str(id)
+def add_source_channel(id_):  # Take int or str with numbers only , Returns Boolean
+    id_ = str(id_)
     try:
         channels = get_source_channels()
-        channels.append(id)
+        channels.append(id_)
         udB.set("CH_SOURCE", list_to_str(channels))
         return True
     except Exception as e:
@@ -52,10 +52,10 @@ def add_source_channel(id):  # Take int or str with numbers only , Returns Boole
         return False
 
 
-def rem_source_channel(id):
+def rem_source_channel(id_):
     try:
         channels = get_source_channels()
-        channels.remove(str(id))
+        channels.remove(str(id_))
         udB.set("CH_SOURCE", list_to_str(channels))
         return True
     except Exception:
@@ -67,10 +67,9 @@ def rem_source_channel(id):
 
 def get_destinations():  # Returns List
     channels = udB.get("CH_DESTINATION")
-    if channels is None or channels == "":
+    if not channels:
         return [""]
-    else:
-        return str_to_list(channels)
+    return str_to_list(channels)
 
 
 def get_no_destinations():  # Returns List
@@ -80,16 +79,16 @@ def get_no_destinations():  # Returns List
     return len(channels.split(" "))
 
 
-def is_destination_added(id):
+def is_destination_added(id_):
     channels = get_destinations()
-    return str(id) in channels
+    return str(id_) in channels
 
 
-def add_destination(id):  # Take int or str with numbers only , Returns Boolean
-    id = str(id)
+def add_destination(id_):  # Take int or str with numbers only , Returns Boolean
+    id_ = str(id_)
     try:
         channels = get_destinations()
-        channels.append(id)
+        channels.append(id_)
         udB.set("CH_DESTINATION", list_to_str(channels))
         return True
     except Exception as e:
@@ -97,10 +96,10 @@ def add_destination(id):  # Take int or str with numbers only , Returns Boolean
         return False
 
 
-def rem_destination(id):
+def rem_destination(id_):
     try:
         channels = get_destinations()
-        channels.remove(str(id))
+        channels.remove(str(id_))
         udB.set("CH_DESTINATION", list_to_str(channels))
         return True
     except Exception as e:
