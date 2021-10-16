@@ -10,13 +10,10 @@
 
 
 # Import Libraries
-import codecs
 import http.client
 import json
 import os
-import re
 import ssl
-import sys
 import time  # Importing the time library to check the time of code execution
 from urllib.parse import quote
 
@@ -53,7 +50,6 @@ class googleimagesdownload:
             print(url)
             print(str(exc))
 
-
     # Format the object in readable format
 
     def format_object(self, object):
@@ -70,8 +66,8 @@ class googleimagesdownload:
             "image_thumbnail_url": data[2][0],
         }
 
-
     # Building URL parameters
+
     def build_url_parameters(self, arguments):
         lang_url = ""
 
