@@ -32,6 +32,7 @@ class UltroidClient(TelegramClient):
         self.udB = udB
         kwargs["api_id"] = Var.API_ID
         kwargs["api_hash"] = Var.API_HASH
+        kwargs["base_logger"] = TelethonLogger
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
