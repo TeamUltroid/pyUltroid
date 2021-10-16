@@ -37,26 +37,11 @@ udB = RedisConnection(
 if udB.ping():
     LOGS.info("Connected to Redis Database")
 
-if PROXY := udB.get("TG_PROXY"):
-    try:
-        _proxy = findall("\\=([^&]+)", PROXY)
-        ultroid_bot = UltroidClient(
+ultroid_bot = UltroidClient(
             session_file(),
             udB=udB,
-            connection=connection.ConnectionTcpMTProxyRandomizedIntermediate,
-            proxy=(_proxy[0], int(_proxy[1]), _proxy[2]),
-        )
-    except BaseException:
-        ultroid_bot = UltroidClient(
-            session_file(),
-            udB=udB,
-        )
-        LOGS.warning("MTProxy not supported")
-else:
-    ultroid_bot = UltroidClient(
-        session_file(),
-        udB=udB,
-    )
+            proxy=udB.get("TG_PROXY")
+)
 
 ultroid_bot.run_in_loop(autobot())
 
