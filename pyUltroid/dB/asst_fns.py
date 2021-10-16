@@ -13,8 +13,8 @@ def str_to_list(text):  # Returns List
 
 
 def list_to_str(list_):  # Returns String
-    str = "".join(f"{x} " for x in list_)
-    return str.strip()
+    str_ = "".join(f"{x} " for x in list_)
+    return str_.strip()
 
 
 def is_added(id_):  # Take int or str with numbers only , Returns Boolean
@@ -25,7 +25,7 @@ def is_added(id_):  # Take int or str with numbers only , Returns Boolean
 
 
 def add_user(id_):  # Take int or str with numbers only , Returns Boolean
-    str(id_)
+    id_ = str(id_)
     if not id_.isdigit():
         return False
     try:
@@ -39,7 +39,7 @@ def add_user(id_):  # Take int or str with numbers only , Returns Boolean
 
 
 def del_user(id_):  # Take int or str with numbers only , Returns Boolean
-    str(id_)
+    id_ = str(id_)
     if not id_.isdigit():
         return False
     try:
@@ -54,7 +54,7 @@ def del_user(id_):  # Take int or str with numbers only , Returns Boolean
 
 def get_all_users():  # Returns List
     users = udB.get("BOT_USERS")
-    if users is None or users == "":
+    if not users:
         return [""]
     return str_to_list(users)
 
@@ -67,7 +67,7 @@ def is_blacklisted(id_):  # Take int or str with numbers only , Returns Boolean
 
 
 def blacklist_user(id_):  # Take int or str with numbers only , Returns Boolean
-    str(id_)
+    id_ = str(id_)
     if not id_.isdigit():
         return False
     try:
@@ -81,7 +81,7 @@ def blacklist_user(id_):  # Take int or str with numbers only , Returns Boolean
 
 
 def rem_blacklist(id_):  # Take int or str with numbers only , Returns Boolean
-    str(id_)
+    id_ = str(id_)
     if not id_.isdigit():
         return False
     try:
@@ -96,6 +96,6 @@ def rem_blacklist(id_):  # Take int or str with numbers only , Returns Boolean
 
 def get_all_bl_users():  # Returns List
     users = udB.get("BOT_BLS")
-    if users is None or users == "":
+    if not users:
         return [""]
     return str_to_list(users)
