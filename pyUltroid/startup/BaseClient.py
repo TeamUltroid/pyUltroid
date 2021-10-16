@@ -66,7 +66,7 @@ class UltroidClient(TelegramClient):
                 del kwargs["connection"]
                 del kwargs["proxy"]
                 self.proxy = None
-                return await self.start_client(**kwargs))
+                return await self.start_client(**kwargs)
             self.logger.exception(er)
             exit()
         self.me = await self.get_me()
