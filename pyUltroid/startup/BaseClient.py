@@ -41,12 +41,12 @@ class UltroidClient(TelegramClient):
         if proxy:
             _proxy = findall("\\=([^&]+)", proxy)
             kwargs["connection"] = MtProxy
-            kwargs["proxy"] = ((_proxy[0], int(_proxy[1]), _proxy[2]),)
+            kwargs["proxy"] = (_proxy[0], int(_proxy[1]), _proxy[2])
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
     async def start_client(self, **kwargs):
-
+        """function to start client"""
         self.logger.info("Trying to login.")
         try:
             await self.start(**kwargs)
@@ -63,6 +63,8 @@ class UltroidClient(TelegramClient):
             exit()
         except BaseException as er:
             if self.proxy:
+                # there maybe some issue while connecting to proxy
+                # so trying to connect after disabling them and logging error
                 self.logger.info("Proxy : Used")
                 self.logger.info(er)
                 del kwargs["connection"]
@@ -71,6 +73,7 @@ class UltroidClient(TelegramClient):
                 return await self.start_client(**kwargs)
             self.logger.exception(er)
             exit()
+        # Save some stuff for later use...
         self.me = await self.get_me()
         if self.me.bot:
             self.logger.info(f"Logged in as @{self.me.username}")
