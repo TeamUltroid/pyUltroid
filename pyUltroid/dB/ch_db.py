@@ -12,8 +12,8 @@ def str_to_list(text):  # Returns List
     return text.split(" ")
 
 
-def list_to_str(list):  # Returns String
-    str_ = "".join(f"{x} " for x in list)
+def list_to_str(list_):  # Returns String
+    str_ = "".join(f"{x} " for x in list_)
     return str_.strip()
 
 
