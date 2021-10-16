@@ -77,7 +77,7 @@ def get_no_destinations():  # Returns List
     channels = udB.get("CH_DESTINATION")
     if not channels:
         return 0
-    return a = len(channels.split(" "))
+    return len(channels.split(" "))
 
 
 def is_destination_added(id):
