@@ -19,8 +19,8 @@ if os.path.exists("ultroid.log"):
     os.remove("ultroid.log")
 
 LOGS = getLogger("pyUltLogs")
-TeleLogger = getLogger("Telethon")
-TeleLogger.setLevel(WARNING)
+TelethonLogger = getLogger("Telethon")
+TelethonLogger.setLevel(WARNING)
 
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] : %(message)s",
