@@ -19,7 +19,7 @@ import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
 from urllib.parse import quote
-from .. import LOGS
+
 from .tools import async_searcher
 
 http.client._MAXHEADERS = 1000
