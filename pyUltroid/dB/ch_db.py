@@ -23,19 +23,16 @@ def are_all_num(list):  # Takes List , Returns Boolean
 
 def get_source_channels():  # Returns List
     channels = udB.get("CH_SOURCE")
-    if channels is None or channels == "":
+    if not channels:
         return [""]
-    else:
-        return str_to_list(channels)
+    return str_to_list(channels)
 
 
 def get_no_source_channels():  # Returns List
     channels = udB.get("CH_SOURCE")
-    if channels is None or channels == "":
+    if not channels:
         return 0
-    else:
-        a = channels.split(" ")
-    return len(a)
+    return len(channels.split(" "))
 
 
 def is_source_channel_added(id):
@@ -78,11 +75,9 @@ def get_destinations():  # Returns List
 
 def get_no_destinations():  # Returns List
     channels = udB.get("CH_DESTINATION")
-    if channels is None or channels == "":
+    if not channels:
         return 0
-    else:
-        a = channels.split(" ")
-    return len(a)
+    return a = len(channels.split(" "))
 
 
 def is_destination_added(id):
