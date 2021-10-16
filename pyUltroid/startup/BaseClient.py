@@ -9,7 +9,7 @@
 from re import findall
 
 from telethon import TelegramClient
-from telethon.connection import ConnectionTcpMTProxyRandomizedIntermediate as MtProxy
+from telethon.network.connection import ConnectionTcpMTProxyRandomizedIntermediate as MtProxy
 from telethon.errors import (
     AccessTokenExpiredError,
     ApiIdInvalidError,
