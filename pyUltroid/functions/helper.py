@@ -391,9 +391,19 @@ def numerize(number):
         number /= 1000
     return f"{number:.2f} {unit}"
 
+No_Flood = {}
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
-    diff = time.time() - start
+    now = time.time()
+    if No_Flood.get(event.chat_id):
+        if No_Flood[event.chat_id].get(e.id):
+            if (now - No_Flood[event.chat_id][e.id]) < 1.1:
+                return
+        else:
+            No_Flood[event.chat_id].update({e.id: now})
+    else:
+        No_Flood.update({event.chat_id: {e.id: now}})
+    diff = now - start
     if round(diff % 10.00) == 0 or current == total:
         percentage = current * 100 / total
         speed = current / diff
