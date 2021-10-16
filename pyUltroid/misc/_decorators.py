@@ -185,7 +185,9 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                         int(udB.get("LOG_CHANNEL")),
                         f"`FloodWaitError:\n{str(fwerr)}\n\nSleeping for {tf((fwerr.seconds + 10)*1000)}`",
                     )
+                    await ult.client.disconnect()
                     await asyncio.sleep(fwerr.seconds + 10)
+                    await ult.client.connect()
                     await asst.send_message(
                         int(udB.get("LOG_CHANNEL")),
                         "`Bot is working again`",
