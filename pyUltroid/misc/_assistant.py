@@ -17,7 +17,7 @@ from .. import LOGS, asst, ultroid_bot
 from . import append_or_update, owner_and_sudos
 
 ULTROID_PIC = "https://telegra.ph/file/dde85d441fa051a0d7d1d.jpg"
-OWNER = get_display_name(ultroid_bot.me)
+OWNER = ultroid_bot.full_name
 
 MSG = f"""
 **Ultroid - UserBot**
