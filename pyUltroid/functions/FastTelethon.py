@@ -311,7 +311,7 @@ class ParallelTransferrer:
 
 
 parallel_transfer_locks: DefaultDict[int, asyncio.Lock] = defaultdict(
-    lambda: asyncio.Lock()
+    asyncio.Lock()
 )
 
 
