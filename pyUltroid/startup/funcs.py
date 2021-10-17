@@ -35,7 +35,7 @@ from ..functions.helper import download_file, updater
 def startup_stuff():
     from .. import udB
 
-    x = ["resources/auths", "resources/downloads", "vcbot/downloads"]
+    x = ["resources/auth", "resources/downloads", "vcbot/downloads"]
     for x in x:
         if not os.path.isdir(x):
             os.mkdir(x)
