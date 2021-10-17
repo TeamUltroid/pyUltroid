@@ -35,7 +35,7 @@ class GDriveManager:
         self.folder_id = udB.get("GDRIVE_FOLDER_ID")
         self.token_file = "resources/auth/gdrive_creds.json"
         self.build = build(
-            "drive", "v3", credentials=self.auth_token, cache_discovery=False
+            "drive", "v3", http=self._http(), cache_discovery=False
         )
 
     def _create_token_file(self, code: str = None):
