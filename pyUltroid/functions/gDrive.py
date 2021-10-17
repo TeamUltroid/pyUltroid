@@ -34,7 +34,9 @@ class GDriveManager:
         self.auth_token = udB.get_redis("GDRIVE_AUTH_TOKEN")
         self.folder_id = udB.get("GDRIVE_FOLDER_ID")
         self.token_file = "resources/auth/gdrive_creds.json"
-        self.build = build("drive", "v3", credentials=self.auth_token, cache_discovery=False)
+        self.build = build(
+            "drive", "v3", credentials=self.auth_token, cache_discovery=False
+        )
 
     def _create_token_file(self, code: str = None):
         global _auth_flow
