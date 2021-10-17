@@ -453,11 +453,14 @@ async def restart(ult):
         os.execl(sys.executable, sys.executable, "-m", "pyUltroid")
 
 
-async def shutdown(ult, dynotype="ultroid"):
-    from .. import LOGS
+async def shutdown(ult):
+    from .. import LOGS, HOSTED_ON
 
     ult = await eor(ult, "Shutting Down")
-    if Var.HEROKU_APP_NAME and Var.HEROKU_API:
+    if HOSTED_ON == "heroku":
+        if not (Var.HEROKU_APP_NAME and Var.HEROKU_API):
+            return await ult.edit("Please Fill `HEROKU_APP_NAME` and `HEROKU_API`")
+        dynotype = os.getenv("DYNO").split(".")[0]
         try:
             Heroku = heroku3.from_key(Var.HEROKU_API)
             app = Heroku.apps()[Var.HEROKU_APP_NAME]
