@@ -10,8 +10,8 @@ import time
 from .configs import Var
 from .startup import *
 from .startup.BaseClient import UltroidClient
+from .startup._database import UltroidDB
 from .startup.connections import (
-    RedisConnection,
     session_file,
     vc_connection,
     where_hosted,
@@ -22,17 +22,10 @@ start_time = time.time()
 
 HOSTED_ON = where_hosted()
 
-udB = RedisConnection(
-    host=Var.REDIS_URI or Var.REDISHOST,
-    password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
-    port=Var.REDISPORT,
-    platform=HOSTED_ON,
-    decode_responses=True,
-    socket_timeout=5,
-    retry_on_timeout=True,
-)
+udB = UltroidDB()
+
 if udB.ping():
-    LOGS.info("Connected to Redis Database")
+    LOGS.info("Connected to Database Successfully!")
 
 ultroid_bot = UltroidClient(session_file(), udB=udB, proxy=udB.get("TG_PROXY"))
 
