@@ -63,7 +63,7 @@ class GDriveManager:
     def _upload_file(self, path: str, filename: str = None):
         if not filename:
             filename = path.split("/")[-1]
-        mime_type = guess_type(path) or "text/plain"
+        mime_type = guess_type(path)[0] or "text/plain"
         media_body = MediaFileUpload(path, mimetype=mime_type, resumable=True)
         body = {
             "title": filename,
