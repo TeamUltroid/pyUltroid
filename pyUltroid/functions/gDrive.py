@@ -23,7 +23,6 @@ _auth_flow = None
 
 class GDriveManager:
     def __init__(self):
-        self.flow = None
         self.gdrive_creds = {
             "oauth_scope": [
                 "https://www.googleapis.com/auth/drive",
