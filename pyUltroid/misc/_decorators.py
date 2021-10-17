@@ -49,6 +49,7 @@ MANAGER = udB.get("MANAGER")
 TAKE_EDITS = udB.get("TAKE_EDITS")
 DUAL_MODE = udB.get("DUAL_MODE")
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
+owner_and_sudos = owner_and_sudos(castint=True)
 
 
 def compile_pattern(data, hndlr):
@@ -146,7 +147,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                     if not ult.out and mode in ["dualmode", "sudo"]:
                         if (
                             not allow_all
-                            and str(ult.sender_id) not in owner_and_sudos()
+                            and ult.sender_id not in owner_and_sudos
                         ):
                             return
                         if fullsudo and not is_fullsudo(ult.sender_id):
