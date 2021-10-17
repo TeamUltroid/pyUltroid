@@ -497,10 +497,12 @@ def telegraph_client():
 
 
 async def Carbon(
+    code,
     base_url="https://carbonara-42.herokuapp.com/api/cook",
     file_name="ultroid",
     **kwargs,
 ):
+    kwargs["code"] = code
     con = await async_searcher(base_url, post=True, json=kwargs, re_content=True)
     file = BytesIO(con)
     file.name = file_name + ".jpg"
