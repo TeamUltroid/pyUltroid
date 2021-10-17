@@ -5,24 +5,31 @@ since, it will be a breaking change
 """
 
 import os
-from ..configs import Var
+
 from redis import Redis
+
+from ..configs import Var
+
 try:
     from deta import Deta
 except ImportError:
     Deta = None
 
 # --------------------------------------------------------------------------------------------- #
+
+
 def get_data(self_, key):
-        data = None
-        if self_.get(str(key)):
-            try:
-                data = eval(self_.get(str(key)))
-            except BaseException:
-                data = self_.get(str(key))
-        return data
+    data = None
+    if self_.get(str(key)):
+        try:
+            data = eval(self_.get(str(key)))
+        except BaseException:
+            data = self_.get(str(key))
+    return data
+
 
 # --------------------------------------------------------------------------------------------- #
+
 
 class DetaDB:
     def __init__(self, key):
@@ -51,7 +58,9 @@ class DetaDB:
     def get_key(self, key):
         return get_data(self, key)
 
+
 # --------------------------------------------------------------------------------------------- #
+
 
 class RedisConnection(Redis):
     def __init__(
@@ -95,27 +104,31 @@ class RedisConnection(Redis):
 
     def set_key(self, key, value):
         return self.set(str(key), str(value))
-    
+
     def get_key(self, key):
         return get_data(self, key)
- 
+
     def del_key(self, key):
         return bool(self.delete(str(key)))
 
+
 # --------------------------------------------------------------------------------------------- #
+
 
 def UltroidDB():
     if Deta and Var.DETA_KEY:
         return DetaDB(Var.DETA_KEY)
     from .. import HOSTED_ON
-    return RedisConnection(host=Var.REDIS_URI or Var.REDISHOST,
-    password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
-    port=Var.REDISPORT,
-    platform=HOSTED_ON,
-    decode_responses=True,
-    socket_timeout=5,
-    retry_on_timeout=True)
 
+    return RedisConnection(
+        host=Var.REDIS_URI or Var.REDISHOST,
+        password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
+        port=Var.REDISPORT,
+        platform=HOSTED_ON,
+        decode_responses=True,
+        socket_timeout=5,
+        retry_on_timeout=True,
+    )
 
 
 # --------------------------------------------------------------------------------------------- #
