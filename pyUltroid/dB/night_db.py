@@ -11,12 +11,12 @@ from .. import udB
 def get_stuff():
     a = udB.get("NIGHT_CHATS")
     if not a:
-        return {}
+        return []
     try:
         return eval(a)
     except BaseException:
         udB.delete("NIGHT_CHATS")
-    return {}
+    return []
 
 
 def add_night(chat):
@@ -35,5 +35,4 @@ def rem_night(chat):
     return
 
 
-def night_grps():
-    return get_stuff()
+night_grps = get_stuff
