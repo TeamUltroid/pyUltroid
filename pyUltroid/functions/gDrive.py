@@ -2,9 +2,6 @@
 import math
 import os
 import time
-from mimetypes import guess_type
-
-from apiclient.http import MediaFileUpload
 from telethon import events
 
 from .helper import humanbytes, time_formatter
@@ -14,6 +11,10 @@ from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
+from mimetypes import guess_type
+
+from apiclient.http import MediaFileUpload
+
 
 from .. import udB
 
@@ -28,10 +29,11 @@ class GDriveManager:
                 "https://www.googleapis.com/auth/drive.file",
                 "https://www.googleapis.com/auth/drive.metadata",
             ],
-            "mimetype": "application/vnd.google-apps.folder",
+            "dir_mimetype": "application/vnd.google-apps.folder",
             "redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
         }
         self.auth_token = udB.get("GDRIVE_AUTH_TOKEN")
+        self.folder_id = udB.get("GDRIVE_FOLDER_ID")
         self.token_file = "resources/auth/gdrive_creds.json"
         self.build = build("drive", "v2", http=self._http(), cache_discovery=False)
 
@@ -58,3 +60,15 @@ class GDriveManager:
         http = Http()
         creds.refresh(http)
         return creds.authorize(http)
+
+    def _upload_file(self, path, filename):
+        mime_type = guess_type(path) or "text/plain"
+        media_body = MediaFileUpload(path, mimetype=mime_type, resumable=True)
+        body = {
+            "title": filename,
+            "description": "Uploaded using Ultroid Userbot",
+            "mimeType": mime_type,
+        }
+        if self.folder_id:
+            body["parents"] = [{"id": self.folder_id}]
+        self.build.files().insert(body=body, media_body=media_body, supportsTeamDrives=True)
