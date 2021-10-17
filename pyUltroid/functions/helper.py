@@ -454,7 +454,7 @@ async def restart(ult):
 
 
 async def shutdown(ult):
-    from .. import LOGS, HOSTED_ON
+    from .. import HOSTED_ON, LOGS
 
     ult = await eor(ult, "Shutting Down")
     if HOSTED_ON == "heroku":
