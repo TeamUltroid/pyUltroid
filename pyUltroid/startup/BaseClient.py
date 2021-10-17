@@ -41,9 +41,13 @@ class UltroidClient(TelegramClient):
         kwargs["api_hash"] = Var.API_HASH
         kwargs["base_logger"] = TelethonLogger
         if proxy:
-            _proxy = findall("\\=([^&]+)", proxy)
-            kwargs["connection"] = MtProxy
-            kwargs["proxy"] = (_proxy[0], int(_proxy[1]), _proxy[2])
+            try:
+                _proxy = findall("\\=([^&]+)", proxy)
+                kwargs["connection"] = MtProxy
+                kwargs["proxy"] = (_proxy[0], int(_proxy[1]), _proxy[2])
+            except ValueError:
+                kwargs["connection"] = None
+                kwargs["proxy"] = None
         super().__init__(session, **kwargs)
         self.loop.run_until_complete(self.start_client(bot_token=bot_token))
 
