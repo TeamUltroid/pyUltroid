@@ -42,7 +42,7 @@ class GDriveManager:
             credentials = _auth_flow.step2_exchange(code)
             storage = Storage(token_file)
             storage.put(credentials)
-            return storage
+            return udB.set_redis("GDRIVE_AUTH_TOKEN", open(token_file).read())
         try:
             _auth_flow = OAuth2WebServerFlow(
                 udB["GDRIVE_CLIENT_ID"],
