@@ -37,7 +37,7 @@ class GDriveManager:
         self, token_file: str = "resources/auth/gdrive_creds.json", code: str = None
     ):
         if code and self.flow:
-            self.flow.step2_exchange(code)
+            credentials = self.flow.step2_exchange(code)
             storage = Storage(token_file)
             storage.put(credentials)
             return storage
