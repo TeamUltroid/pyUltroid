@@ -42,6 +42,9 @@ class DetaDB:
     def __getitem__(self, item):
         return self.get(item)
 
+    def keys(self):
+       return [a["key"] for a in self.db.fetch().items]
+
     def set(self, key, value):
         if not self.get(str(key)):
             try:
