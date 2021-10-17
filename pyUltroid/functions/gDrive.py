@@ -6,7 +6,6 @@ from mimetypes import guess_type
 
 import httplib2
 from apiclient.http import MediaFileUpload
-from googleapiclient.discovery import build
 from telethon import events
 
 from .. import *
@@ -15,6 +14,9 @@ from .helper import humanbytes, time_formatter
 
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
+from httplib2 import Http
+from googleapiclient.discovery import build
+
 
 from .. import udB
 
@@ -33,16 +35,18 @@ class GDriveManager:
             "redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
         }
         self.auth_token = udB.get("GDRIVE_AUTH_TOKEN")
+        self.token_file = "resources/auth/gdrive_creds.json"
+        self.build = build("drive", "v2", http=self._http(), cache_discovery=False)
+
 
     def _create_token_file(
-        self, token_file: str = "resources/auth/gdrive_creds.json", code: str = None
+        self, code: str = None
     ):
         global _auth_flow
         if code and _auth_flow:
             credentials = _auth_flow.step2_exchange(code)
-            storage = Storage(token_file)
-            storage.put(credentials)
-            return udB.set_redis("GDRIVE_AUTH_TOKEN", open(token_file).read())
+            storage = Storage(self.token_file).put(credentials)
+            return udB.set_redis("GDRIVE_AUTH_TOKEN", open(self.token_file).read())
         try:
             _auth_flow = OAuth2WebServerFlow(
                 udB["GDRIVE_CLIENT_ID"],
@@ -53,3 +57,9 @@ class GDriveManager:
         except KeyError:
             return "Fill GDRIVE client credentials"
         return _auth_flow.step1_get_authorize_url()
+
+    def _http(self):
+        storage = Storage(self.token_file).get()
+        http = Http()
+        storage.refresh(http)
+        return http
