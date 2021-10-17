@@ -17,7 +17,9 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 
 from .. import udB
- _auth_flow = None
+
+_auth_flow = None
+
 
 class GDriveManager:
     def __init__(self):
