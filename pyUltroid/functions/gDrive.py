@@ -31,10 +31,10 @@ class GDriveManager:
             "dir_mimetype": "application/vnd.google-apps.folder",
             "redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
         }
-        self.auth_token = udB.get("GDRIVE_AUTH_TOKEN")
+        self.auth_token = udB.get_redis("GDRIVE_AUTH_TOKEN")
         self.folder_id = udB.get("GDRIVE_FOLDER_ID")
         self.token_file = "resources/auth/gdrive_creds.json"
-        self.build = build("drive", "v2", http=self._http(), cache_discovery=False)
+        self.build = build("drive", "v3", credentials=self.auth_token, cache_discovery=False)
 
     def _create_token_file(self, code: str = None):
         global _auth_flow
