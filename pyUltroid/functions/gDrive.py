@@ -53,7 +53,8 @@ class GDriveManager:
         return _auth_flow.step1_get_authorize_url()
 
     def _http(self):
-        storage = Storage(self.token_file).get()
+        storage = Storage(self.token_file)
+        creds = storage.get()
         http = Http()
-        storage.refresh(http)
-        return http
+        creds.refresh(http)
+        return creds.authorize(http)
