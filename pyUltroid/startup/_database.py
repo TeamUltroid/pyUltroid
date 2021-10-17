@@ -62,8 +62,15 @@ class DetaDB:
             return cast(_get["value"])
 
     def delete(self, key):
+        if not self.get(key):
+            return 0
         self.db.delete(key)
         return True
+
+    def rename(self, key1, key2):
+        get_ = self.get(key1)
+        self.delete(key1)
+        self.set(key2, get_)
 
     def ping(self):
         """Deta dont have ping endpoint, while Redis have.."""
