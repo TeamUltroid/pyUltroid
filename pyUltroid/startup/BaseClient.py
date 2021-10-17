@@ -80,6 +80,7 @@ class UltroidClient(TelegramClient):
         if self.me.bot:
             self.logger.info(f"Logged in as @{self.me.username}")
         else:
+            setattr(self.me, 'phone', None)
             self.logger.info(f"Logged in as {self.full_name}")
 
     def run_in_loop(self, function):
