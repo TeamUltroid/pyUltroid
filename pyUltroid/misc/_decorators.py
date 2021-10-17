@@ -145,10 +145,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                 chat = ult.chat
                 if mode in ["dualmode", "official", "sudo"]:
                     if not ult.out and mode in ["dualmode", "sudo"]:
-                        if (
-                            not allow_all
-                            and ult.sender_id not in owner_and_sudos
-                        ):
+                        if not allow_all and ult.sender_id not in owner_and_sudos:
                             return
                         if fullsudo and not is_fullsudo(ult.sender_id):
                             return await eod(
