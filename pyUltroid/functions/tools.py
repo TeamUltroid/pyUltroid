@@ -11,6 +11,7 @@ import os
 import re
 import ssl
 import subprocess
+from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
 
@@ -23,7 +24,7 @@ from telethon import Button
 
 from .. import *
 from .helper import bash, fast_download
-from io import BytesIO
+
 try:
     import cv2
 except ImportError:
@@ -495,12 +496,15 @@ def telegraph_client():
     return TelegraphClient
 
 
-async def Carbon(base_url="https://carbonara-42.herokuapp.com/api/cook",
-        file_name="ultroid",
-        **kwargs):
+async def Carbon(
+    base_url="https://carbonara-42.herokuapp.com/api/cook",
+    file_name="ultroid",
+    **kwargs,
+):
     con = await async_searcher(base_url, post=True, json=kwargs, re_content=True)
     file = BytesIO(con)
     file.name = file_name + ".jpg"
     return file
+
 
 # --------- END --------- #
