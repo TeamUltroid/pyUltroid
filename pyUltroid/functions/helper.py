@@ -396,15 +396,15 @@ No_Flood = {}
 
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
-    """now = time.time()
+    now = time.time()
     if No_Flood.get(event.chat_id):
-        if No_Flood[event.chat_id].get(e.id):
-            if (now - No_Flood[event.chat_id][e.id]) < 1.1:
+        if No_Flood[event.chat_id].get(event.id):
+            if (now - No_Flood[event.chat_id][event.id]) < 1.1:
                 return
         else:
-            No_Flood[event.chat_id].update({e.id: now})
+            No_Flood[event.chat_id].update({event.id: now})
     else:
-        No_Flood.update({event.chat_id: {e.id: now}})"""
+        No_Flood.update({event.chat_id: {event.id: now}})
     diff = time.time() - start
     if round(diff % 10.00) == 0 or current == total:
         percentage = current * 100 / total
