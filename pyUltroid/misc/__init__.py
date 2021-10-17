@@ -34,9 +34,8 @@ def owner_and_sudos(castint=False):
 
     data = [str(ultroid_bot.uid), *sudoers()]
     if castint:
-        a_ = [int(a) for a in data]
-        [OWNER_SUDOS.append(b) for b in a_]
-        return a_
+        [OWNER_SUDOS.append(int(b)) for b in data]
+        return OWNER_SUDOS
     return data
 
 
