@@ -60,7 +60,9 @@ class GDriveManager:
         creds.refresh(http)
         return creds.authorize(http)
 
-    def _upload_file(self, path, filename):
+    def _upload_file(self, path: str, filename: str = None):
+        if not filename:
+            filename = path.split("/")[-1]
         mime_type = guess_type(path) or "text/plain"
         media_body = MediaFileUpload(path, mimetype=mime_type, resumable=True)
         body = {
@@ -68,8 +70,24 @@ class GDriveManager:
             "description": "Uploaded using Ultroid Userbot",
             "mimeType": mime_type,
         }
+        permissions = {
+            "role": "reader",
+            "type": "anyone",
+            "value": None,
+            "withLink": True
+        }
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
-        self.build.files().insert(
+        upload = self.build.files().insert(
             body=body, media_body=media_body, supportsTeamDrives=True
         )
+        _status = None
+        while not _status:
+            _progress, _status = upload.next_chunk()
+        fileId = _status.get("id")
+        try:
+            self.build.permissions().insert(fileId=fileId, body=permissions).execute()
+        except:
+            pass
+        _url = self.build.files().get(fileId=fileId, supportsTeamDrives=True).execute()
+        return _url.get("webContentLink")
