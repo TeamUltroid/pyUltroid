@@ -44,7 +44,7 @@ def startup_stuff():
         urlretrieve(CT, "resources/extras/ultroid.jpg")
 
     if GT := udB.get("GDRIVE_AUTH_TOKEN"):
-        with open("resources/auth/client_secrets.json", "w") as t_file:
+        with open("resources/auth/gdrive_creds.json", "w") as t_file:
             t_file.write(GT)
 
     if (MM := udB.get("MEGA_MAIL")) and (MP := udB.get("MEGA_PASS")):
