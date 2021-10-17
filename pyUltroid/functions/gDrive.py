@@ -78,7 +78,7 @@ class GDriveManager:
         }
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
-        upload = self.build.files().insert(
+        upload = self.build.files().create(
             body=body, media_body=media_body, supportsTeamDrives=True
         )
         _status = None
