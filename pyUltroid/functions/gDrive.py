@@ -52,4 +52,4 @@ class GDriveManager:
             )
         except KeyError:
             return "Fill GDRIVE client credentials"
-        return self.flow.step1_get_authorize_url()
+        return _auth_flow.step1_get_authorize_url()
