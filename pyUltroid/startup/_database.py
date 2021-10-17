@@ -7,7 +7,7 @@ since, it will be a breaking change
 import os
 
 from redis import Redis
-
+from . import LOGS
 from ..configs import Var
 
 try:
@@ -33,7 +33,10 @@ def get_data(self_, key):
 
 class DetaDB:
     def __init__(self, key):
-        self.db = Deta(key).Base("Ultroid")
+        try:
+            self.db = Deta(key).Base("Ultroid")
+        except Exception as er:
+            LOGS.exception(er)
 
     def set(self, key, value):
         if not self.get(str(key)):
