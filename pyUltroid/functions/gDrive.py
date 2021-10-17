@@ -17,7 +17,7 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 
 from .. import udB
-
+ _auth_flow = None
 
 class GDriveManager:
     def __init__(self):
@@ -33,16 +33,17 @@ class GDriveManager:
         }
         self.auth_token = udB.get("GDRIVE_AUTH_TOKEN")
 
-    async def _create_token_file(
+    def _create_token_file(
         self, token_file: str = "resources/auth/gdrive_creds.json", code: str = None
     ):
-        if code and self.flow:
-            credentials = self.flow.step2_exchange(code)
+        global _auth_flow
+        if code and _auth_flow:
+            credentials = _auth_flow.step2_exchange(code)
             storage = Storage(token_file)
             storage.put(credentials)
             return storage
         try:
-            self.flow = OAuth2WebServerFlow(
+            _auth_flow = OAuth2WebServerFlow(
                 udB["GDRIVE_CLIENT_ID"],
                 udB["GDRIVE_CLIENT_SECRET"],
                 self.gdrive_creds["oauth_scope"],
