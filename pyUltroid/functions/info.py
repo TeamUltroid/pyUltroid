@@ -9,7 +9,6 @@
 # -----------------Random Stuff--------------
 
 import math
-from contextlib import suppress
 
 from telethon.tl import functions, types
 from telethon.utils import get_input_location
@@ -122,8 +121,7 @@ async def get_full_user(event):
 async def fetch_info(event):
     chat = event.pattern_match.group(1)
     if chat:
-        with suppress(ValueError):
-            chat = int(chat)
+        chat = await get_user_id(chat)
     elif event.is_reply:
         replied = await event.get_reply_message()
         if replied.fwd_from and replied.fwd_from.channel_id:
