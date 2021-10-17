@@ -9,13 +9,9 @@ import time
 
 from .configs import Var
 from .startup import *
-from .startup.BaseClient import UltroidClient
 from .startup._database import UltroidDB
-from .startup.connections import (
-    session_file,
-    vc_connection,
-    where_hosted,
-)
+from .startup.BaseClient import UltroidClient
+from .startup.connections import session_file, vc_connection, where_hosted
 from .startup.funcs import autobot
 
 start_time = time.time()
