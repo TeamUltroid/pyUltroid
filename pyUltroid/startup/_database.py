@@ -52,6 +52,8 @@ class DetaDB:
         self.db.delete(key)
         return True
 
+    ping = True
+    # Deta dont have ping endpoint, while Redis have..
     set_key = set
     del_key = delete
 
