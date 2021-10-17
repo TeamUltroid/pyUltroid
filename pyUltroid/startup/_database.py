@@ -10,7 +10,6 @@ from redis import Redis
 
 from ..configs import Var
 from . import LOGS
-
 try:
     from deta import Deta
 except ImportError:
@@ -39,10 +38,16 @@ class DetaDB:
         except Exception as er:
             LOGS.exception(er)
 
+    def __getitem__(self, item):
+        return self.get(item)
+
     def set(self, key, value):
         if not self.get(str(key)):
-            self.db.insert(str(value), str(key))
-            return True
+            try:
+                self.db.insert(str(value), str(key))
+                return True
+            except BaseException:
+                pass
         params = {"value": str(value)}
         self.db.update(params, str(key))
         return True
