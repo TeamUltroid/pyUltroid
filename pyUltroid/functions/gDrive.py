@@ -4,11 +4,9 @@ import os
 import time
 from mimetypes import guess_type
 
-import httplib2
 from apiclient.http import MediaFileUpload
 from telethon import events
 
-from .. import *
 from .helper import humanbytes, time_formatter
 """
 
