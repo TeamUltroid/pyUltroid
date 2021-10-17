@@ -31,5 +31,7 @@ class Var:
     REDISHOST = config("REDISHOST", default=None)
     REDISPORT = config("REDISPORT", default=None)
     REDISUSER = config("REDISUSER", default=None)
+    # for deta base
+    DETA_KEY = config("DETA_KEY", default=None)
     # for future
     MULTI_SESSIONS = config("MULTI_SESSIONS", default=None)
