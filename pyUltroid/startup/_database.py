@@ -7,8 +7,9 @@ since, it will be a breaking change
 import os
 
 from redis import Redis
-from . import LOGS
+
 from ..configs import Var
+from . import LOGS
 
 try:
     from deta import Deta
