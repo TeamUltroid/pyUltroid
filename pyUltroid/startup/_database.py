@@ -52,8 +52,10 @@ class DetaDB:
         self.db.delete(key)
         return True
 
-    ping = True
-    # Deta dont have ping endpoint, while Redis have..
+    def ping(self):
+        """Deta dont have ping endpoint, while Redis have.."""
+        return True
+
     set_key = set
     del_key = delete
 
