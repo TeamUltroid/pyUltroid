@@ -7,14 +7,13 @@ from telethon import events
 from .helper import humanbytes, time_formatter
 """
 
+from mimetypes import guess_type
+
+from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-from mimetypes import guess_type
-
-from apiclient.http import MediaFileUpload
-
 
 from .. import udB
 
@@ -71,4 +70,6 @@ class GDriveManager:
         }
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
-        self.build.files().insert(body=body, media_body=media_body, supportsTeamDrives=True)
+        self.build.files().insert(
+            body=body, media_body=media_body, supportsTeamDrives=True
+        )
