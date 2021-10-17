@@ -10,6 +10,7 @@ try:
 except ImportError:
     Deta = None
 
+
 class DetaDB:
     def __init__(self, key):
         self.db = Deta(key).Base("Ultroid")
@@ -18,7 +19,7 @@ class DetaDB:
         if not self.get(key):
             self.db.insert(value, key)
             return True
-        params = {"value":value}
+        params = {"value": value}
         self.db.update(params, key)
         return True
 
