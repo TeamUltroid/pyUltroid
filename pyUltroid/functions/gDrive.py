@@ -74,7 +74,7 @@ class GDriveManager:
             "role": "reader",
             "type": "anyone",
             "value": None,
-            "withLink": True
+            "withLink": True,
         }
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
@@ -87,7 +87,7 @@ class GDriveManager:
         fileId = _status.get("id")
         try:
             self.build.permissions().insert(fileId=fileId, body=permissions).execute()
-        except:
+        except BaseException:
             pass
         _url = self.build.files().get(fileId=fileId, supportsTeamDrives=True).execute()
         return _url.get("webContentLink")
