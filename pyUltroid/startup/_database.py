@@ -10,6 +10,7 @@ from redis import Redis
 
 from ..configs import Var
 from . import LOGS
+
 try:
     from deta import Deta
 except ImportError:
