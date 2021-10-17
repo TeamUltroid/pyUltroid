@@ -58,7 +58,7 @@ class DetaDB:
 
     def get(self, key, cast=str):
         _get = self.db.get(key)
-        if _get:
+        if _get is not None:
             return cast(_get["value"])
 
     def delete(self, key):
