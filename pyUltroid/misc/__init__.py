@@ -9,6 +9,7 @@
 from .. import *
 
 CMD_HELP = {}
+OWNER_SUDOS = []
 # ----------------------------------------------#
 
 
@@ -27,11 +28,15 @@ def should_allow_sudo():
 
 
 def owner_and_sudos(castint=False):
+    if OWNER_SUDOS:
+        return OWNER_SUDOS
     from .. import udB, ultroid_bot
 
     data = [str(ultroid_bot.uid), *sudoers()]
     if castint:
-        return [int(a) for a in data]
+        a_ = [int(a) for a in data]
+        [OWNER_SUDOS.append(b) for b in a_]
+        return a_
     return data
 
 
