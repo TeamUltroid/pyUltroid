@@ -34,7 +34,7 @@ class GDriveManager:
         self.auth_token = udB.get("GDRIVE_AUTH_TOKEN")
         self.folder_id = udB.get("GDRIVE_FOLDER_ID")
         self.token_file = "resources/auth/gdrive_creds.json"
-        self.build = build("drive", "v3", http=self._http(), cache_discovery=False)
+        self.build = build("drive", "v2", http=self._http(), cache_discovery=False)
 
     def _create_token_file(self, code: str = None):
         global _auth_flow
@@ -57,6 +57,7 @@ class GDriveManager:
         storage = Storage(self.token_file)
         creds = storage.get()
         http = Http()
+        http.redirect_codes = http.redirect_codes - {308}
         creds.refresh(http)
         return creds.authorize(http)
 
@@ -65,14 +66,14 @@ class GDriveManager:
             "role": "reader",
             "type": "anyone",
         }
-        self.build.permissions().create(
-            fileId=fileId, body=permissions, supportsTeamDrives=True
-        ).execute()
+        self.build.permissions().insert(
+            fileId=fileId, body=permissions, supportsAllDrives=True
+        ).execute(http=self._http())
 
     def _upload_file(self, path: str, filename: str = None):
         if not filename:
             filename = path.split("/")[-1]
-        mime_type = guess_type(path)[0] or "text/plain"
+        mime_type = guess_type(path)[0] or "application/octet-stream"
         media_body = MediaFileUpload(
             path, mimetype=mime_type, chunksize=50 * (1024 ** 2), resumable=True
         )
@@ -83,9 +84,9 @@ class GDriveManager:
         }
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
-        upload = self.build.files().create(
-            body=body, media_body=media_body, supportsTeamDrives=True
-        )
+        upload = self.build.files().insert(
+            body=body, media_body=media_body, supportsAllDrives=True
+        ).execute(http=self._http())
         _status = None
         while not _status:
             _progress, _status = upload.next_chunk(num_retries=3)
