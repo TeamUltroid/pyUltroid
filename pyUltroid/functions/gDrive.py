@@ -84,9 +84,8 @@ class GDriveManager:
         }
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
-        upload = (
-            self.build.files()
-            .insert(body=body, media_body=media_body, supportsAllDrives=True)
+        upload = self.build.files().insert(
+            body=body, media_body=media_body, supportsAllDrives=True
         )
         _status = None
         while not _status:
