@@ -70,7 +70,7 @@ class GDriveManager:
             fileId=fileId, body=permissions, supportsAllDrives=True
         ).execute(http=self._http())
 
-    def _upload_file(self, path: str, filename: str = None):
+    async def _upload_file(self, path: str, filename: str = None, progress_bar = None):
         if not filename:
             filename = path.split("/")[-1]
         mime_type = guess_type(path)[0] or "application/octet-stream"
@@ -90,6 +90,10 @@ class GDriveManager:
         _status = None
         while not _status:
             _progress, _status = upload.next_chunk(num_retries=3)
+            if progress_bar and _progress:
+                uploaded = _progress.resumable_progress
+                total_size = _progress.total_size
+                await _maybe_await(progress_bar(uploaded, total_size))
         fileId = _status.get("id")
         try:
             self._set_permissions(fileId=fileId)
