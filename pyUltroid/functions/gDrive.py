@@ -1,12 +1,3 @@
-"""
-import math
-import os
-import time
-from telethon import events
-
-from .helper import humanbytes, time_formatter
-"""
-
 from mimetypes import guess_type
 
 from apiclient.http import MediaFileUpload
@@ -100,10 +91,8 @@ class GDriveManager:
                 total_size = _progress.total_size
                 await _maybe_await(progress_bar(uploaded, total_size))
         fileId = _status.get("id")
-        try:
-            self._set_permissions(fileId=fileId)
-        except BaseException:
-            pass
+        try: self._set_permissions(fileId=fileId)
+        except BaseException: pass
         _url = (
             self._build().files().get(fileId=fileId, supportsTeamDrives=True).execute()
         )
@@ -113,5 +102,6 @@ class GDriveManager:
         _items = self._build().files().get(fileId="", supportsTeamDrives=True).execute()
         _files = {}
         for files in _items["items"]:
-            _files[files["title"]] = files["webContentLink"]
+            try: _files[files["title"]] = files["webContentLink"]
+            except KeyError: pass
         return _files
