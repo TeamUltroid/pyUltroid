@@ -31,7 +31,7 @@ class GDriveManager:
             "dir_mimetype": "application/vnd.google-apps.folder",
             "redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
         }
-        self.auth_token = udB.get_redis("GDRIVE_AUTH_TOKEN")
+        self.auth_token = udB.get("GDRIVE_AUTH_TOKEN")
         self.folder_id = udB.get("GDRIVE_FOLDER_ID")
         self.token_file = "resources/auth/gdrive_creds.json"
         self.build = build("drive", "v3", http=self._http(), cache_discovery=False)
@@ -41,7 +41,7 @@ class GDriveManager:
         if code and _auth_flow:
             credentials = _auth_flow.step2_exchange(code)
             Storage(self.token_file).put(credentials)
-            return udB.set_redis("GDRIVE_AUTH_TOKEN", open(self.token_file).read())
+            return udB.set("GDRIVE_AUTH_TOKEN", str(open(self.token_file).read()))
         try:
             _auth_flow = OAuth2WebServerFlow(
                 udB["GDRIVE_CLIENT_ID"],
