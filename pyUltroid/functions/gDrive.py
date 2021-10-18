@@ -8,7 +8,6 @@ from .helper import humanbytes, time_formatter
 """
 
 from mimetypes import guess_type
-import os
 
 from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
@@ -66,13 +65,17 @@ class GDriveManager:
             "role": "reader",
             "type": "anyone",
         }
-        self.build.permissions().create(fileId=fileId, body=permissions, supportsTeamDrives=True).execute()
+        self.build.permissions().create(
+            fileId=fileId, body=permissions, supportsTeamDrives=True
+        ).execute()
 
     def _upload_file(self, path: str, filename: str = None):
         if not filename:
             filename = path.split("/")[-1]
         mime_type = guess_type(path)[0] or "text/plain"
-        media_body = MediaFileUpload(path, mimetype=mime_type, chunksize=50*(1024**2), resumable=True)
+        media_body = MediaFileUpload(
+            path, mimetype=mime_type, chunksize=50 * (1024 ** 2), resumable=True
+        )
         body = {
             "title": filename,
             "description": "Uploaded using Ultroid Userbot",
