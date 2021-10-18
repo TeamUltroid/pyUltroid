@@ -34,7 +34,7 @@ vcClient = vc_connection(udB, ultroid_bot)
 if not udB.get("SUDO"):
     udB.set("SUDO", "False")
 
-if not udB.get("SUDOS") in [None, ""]:
+if udB.get("SUDOS") is None:
     udB.set("SUDOS", "")
 
 if not udB.get("BLACKLIST_CHATS"):
