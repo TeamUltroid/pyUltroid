@@ -32,6 +32,7 @@ def owner_and_sudos():
         return OWNER_SUDOS
 
     from .. import ultroid_bot
+
     data = [ultroid_bot.uid, *sudoers()]
     [OWNER_SUDOS.append(int(b)) for b in data]
     return OWNER_SUDOS
