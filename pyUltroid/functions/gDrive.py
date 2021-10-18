@@ -8,12 +8,13 @@ from .helper import humanbytes, time_formatter
 """
 
 from mimetypes import guess_type
-from telethon.helpers import _maybe_await
+
 from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
+from telethon.helpers import _maybe_await
 
 from .. import udB
 
