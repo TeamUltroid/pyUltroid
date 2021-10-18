@@ -87,8 +87,10 @@ class GDriveManager:
         }
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
-        upload = self._build().files().insert(
-            body=body, media_body=media_body, supportsAllDrives=True
+        upload = (
+            self._build()
+            .files()
+            .insert(body=body, media_body=media_body, supportsAllDrives=True)
         )
         _status = None
         while not _status:
@@ -102,5 +104,7 @@ class GDriveManager:
             self._set_permissions(fileId=fileId)
         except BaseException:
             pass
-        _url = self._build().files().get(fileId=fileId, supportsTeamDrives=True).execute()
+        _url = (
+            self._build().files().get(fileId=fileId, supportsTeamDrives=True).execute()
+        )
         return _url.get("webContentLink")
