@@ -105,7 +105,7 @@ class GDriveManager:
         _files = {}
         for files in _items["items"]:
             try:
-                _files[files["title"]] = files["webContentLink"]
+                _files[files["webContentLink"]] = files["title"]
             except KeyError:
                 pass
         return _files
