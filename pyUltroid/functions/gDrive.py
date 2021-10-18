@@ -8,6 +8,7 @@ from .helper import humanbytes, time_formatter
 """
 
 from mimetypes import guess_type
+import os
 
 from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
@@ -60,21 +61,22 @@ class GDriveManager:
         creds.refresh(http)
         return creds.authorize(http)
 
+    def _set_permissions(self, fileId: str):
+        _permissions = {
+            "role": "reader",
+            "type": "anyone",
+        }
+        self.build.permissions().create(fileId=fileId, body=permissions, supportsTeamDrives=True).execute()
+
     def _upload_file(self, path: str, filename: str = None):
         if not filename:
             filename = path.split("/")[-1]
         mime_type = guess_type(path)[0] or "text/plain"
-        media_body = MediaFileUpload(path, mimetype=mime_type, resumable=True)
+        media_body = MediaFileUpload(path, mimetype=mime_type, chunksize=50*(1024**2), resumable=True)
         body = {
             "title": filename,
             "description": "Uploaded using Ultroid Userbot",
             "mimeType": mime_type,
-        }
-        permissions = {
-            "role": "reader",
-            "type": "anyone",
-            "value": None,
-            "withLink": True,
         }
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
@@ -83,10 +85,10 @@ class GDriveManager:
         )
         _status = None
         while not _status:
-            _progress, _status = upload.next_chunk()
+            _progress, _status = upload.next_chunk(num_retries=3)
         fileId = _status.get("id")
         try:
-            self.build.permissions().insert(fileId=fileId, body=permissions).execute()
+            self._set_permissions(fileId=fileId)
         except BaseException:
             pass
         _url = self.build.files().get(fileId=fileId, supportsTeamDrives=True).execute()
