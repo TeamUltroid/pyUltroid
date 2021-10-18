@@ -108,3 +108,10 @@ class GDriveManager:
             self._build().files().get(fileId=fileId, supportsTeamDrives=True).execute()
         )
         return _url.get("webContentLink")
+
+    def _list_files(self):
+        _items = self._build().files().get(fileId="", supportsTeamDrives=True).execute()
+        _files = {}
+        for files in _items["items"]:
+            _files[files["title"]] = files["webContentLink"]
+        return _files
