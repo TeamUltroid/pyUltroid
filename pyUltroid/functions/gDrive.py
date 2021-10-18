@@ -35,7 +35,6 @@ class GDriveManager:
         self.auth_token = udB.get("GDRIVE_AUTH_TOKEN")
         self.folder_id = udB.get("GDRIVE_FOLDER_ID")
         self.token_file = "resources/auth/gdrive_creds.json"
-        self.build = build("drive", "v2", http=self._http(), cache_discovery=False)
 
     def _create_token_file(self, code: str = None):
         global _auth_flow
@@ -62,12 +61,15 @@ class GDriveManager:
         creds.refresh(http)
         return creds.authorize(http)
 
+    def _build(self):
+        return build("drive", "v2", http=self._http(), cache_discovery=False)
+
     def _set_permissions(self, fileId: str):
         _permissions = {
             "role": "reader",
             "type": "anyone",
         }
-        self.build.permissions().insert(
+        self._build.permissions().insert(
             fileId=fileId, body=permissions, supportsAllDrives=True
         ).execute(http=self._http())
 
@@ -85,7 +87,7 @@ class GDriveManager:
         }
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
-        upload = self.build.files().insert(
+        upload = self._build.files().insert(
             body=body, media_body=media_body, supportsAllDrives=True
         )
         _status = None
@@ -100,5 +102,5 @@ class GDriveManager:
             self._set_permissions(fileId=fileId)
         except BaseException:
             pass
-        _url = self.build.files().get(fileId=fileId, supportsTeamDrives=True).execute()
+        _url = self._build.files().get(fileId=fileId, supportsTeamDrives=True).execute()
         return _url.get("webContentLink")
