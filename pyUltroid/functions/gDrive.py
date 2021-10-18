@@ -70,7 +70,7 @@ class GDriveManager:
             fileId=fileId, body=permissions, supportsAllDrives=True
         ).execute(http=self._http())
 
-    async def _upload_file(self, path: str, filename: str = None, progress_bar = None):
+    async def _upload_file(self, path: str, filename: str = None, progress_bar=None):
         if not filename:
             filename = path.split("/")[-1]
         mime_type = guess_type(path)[0] or "application/octet-stream"
