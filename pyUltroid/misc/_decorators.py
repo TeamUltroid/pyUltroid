@@ -49,7 +49,7 @@ MANAGER = udB.get("MANAGER")
 TAKE_EDITS = udB.get("TAKE_EDITS")
 DUAL_MODE = udB.get("DUAL_MODE")
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
-owner_and_sudos = owner_and_sudos(castint=True)
+owner_and_sudos = owner_and_sudos()
 
 
 def compile_pattern(data, hndlr):
