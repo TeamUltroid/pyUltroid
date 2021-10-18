@@ -117,7 +117,7 @@ class Config((object)):
         SCREEN_SHOT_LAYER_ACCESS_KEY = os.environ.get(
             "SCREEN_SHOT_LAYER_ACCESS_KEY", None
         )
-        SUDO_COMMAND_HAND_LER = hndlr
+        SUDO_COMMAND_HAND_LER = "\\" + SUDO_HNDLR
         TMP_DOWNLOAD_DIRECTORY = os.environ.get(
             "TMP_DOWNLOAD_DIRECTORY", "resources/downloads/"
         )
