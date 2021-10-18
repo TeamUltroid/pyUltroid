@@ -8,7 +8,7 @@ from .helper import humanbytes, time_formatter
 """
 
 from mimetypes import guess_type
-
+from telethon.helpers import _maybe_await
 from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
 from httplib2 import Http
