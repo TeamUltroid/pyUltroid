@@ -6,12 +6,15 @@ since, it will be a breaking change
 
 import asyncio
 import os
+
 import nest_asyncio
-nest_asyncio.apply()
 from redis import Redis
 
 from ..configs import Var
 from . import LOGS
+
+nest_asyncio.apply()
+
 
 try:
     from deta import Deta
