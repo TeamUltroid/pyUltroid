@@ -44,6 +44,7 @@ class DetaDB:
     def __getitem__(self, item):
         return self.get(item)
 
+    @property
     def run(self):
         return self.loop.run_until_complete
 
