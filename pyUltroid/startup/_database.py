@@ -58,12 +58,12 @@ class DetaDB:
     def set(self, key, value):
         if not self.get(str(key)):
             try:
-                self.db.insert(str(value), str(key))
+                self.run(self.db.insert(str(value), str(key)))
                 return True
             except BaseException:
                 pass
         params = {"value": str(value)}
-        self.db.update(params, str(key))
+        self.run(self.db.update(params, str(key)))
         return True
 
     def get(self, key, cast=str):
