@@ -13,13 +13,6 @@ from ..configs import Var
 from . import LOGS
 
 try:
-    import nest_asyncio
-
-    nest_asyncio.apply()
-except ImportError:
-    pass
-
-try:
     from deta import Deta
 except ImportError:
     Deta = None
