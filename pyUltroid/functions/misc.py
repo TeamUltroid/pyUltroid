@@ -156,8 +156,7 @@ async def ReTrieveFile(input_file_name):
 
 async def unsplashsearch(query, limit=None, shuf=True):
     query = query.replace(" ", "-")
-    base_ = "https://unsplash.com"
-    link = base_ + "/s/photos/" + query
+    link = "https://unsplash.com/s/photos/" + query
     extra = await async_searcher(link, re_content=True)
     res = BeautifulSoup(extra, "html.parser", from_encoding="utf-8")
     all_ = res.find_all("img", "YVj9w")
@@ -177,7 +176,7 @@ async def get_random_user_data():
         "https://random-data-api.com/api/business_credit_card/random_card", re_json=True
     )
     card = (
-        +"**CARD_ID:** "
+        "**CARD_ID:** "
         + str(cc["credit_card_number"])
         + f" {cc['credit_card_expiry_date']}\n"
         + f"**C-ID :** {cc['id']}"
