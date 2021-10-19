@@ -43,8 +43,11 @@ class UltroidClient(TelegramClient):
         if proxy:
             try:
                 _proxy = findall("\\=([^&]+)", proxy)
-                kwargs["connection"] = MtProxy
-                kwargs["proxy"] = (_proxy[0], int(_proxy[1]), _proxy[2])
+                if findall("socks", proxy):
+                    kwargs["proxy"] = (_proxy[0], int(_proxy[1]))
+                else:
+                    kwargs["connection"] = MtProxy
+                    kwargs["proxy"] = (_proxy[0], int(_proxy[1]), _proxy[2])
             except ValueError:
                 kwargs["connection"] = None
                 kwargs["proxy"] = None
