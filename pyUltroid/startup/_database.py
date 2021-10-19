@@ -5,7 +5,7 @@ since, it will be a breaking change
 """
 
 import os
-
+import asyncio
 from redis import Redis
 
 from ..configs import Var
@@ -35,15 +35,19 @@ def get_data(self_, key):
 class DetaDB:
     def __init__(self, key):
         try:
-            self.db = Deta(key).Base("Ultroid")
+            self.db = Deta(key).AsyncBase("Ultroid")
+            self.loop = asyncio.get_event_loop()
         except Exception as er:
             LOGS.exception(er)
 
     def __getitem__(self, item):
         return self.get(item)
 
+    def run(self):
+        return self.loop.run_until_complete
+
     def keys(self):
-        return [a["key"] for a in self.db.fetch().items]
+        return [a["key"] for a in self.run(self.db.fetch()).items]
 
     def set(self, key, value):
         if not self.get(str(key)):
@@ -57,14 +61,14 @@ class DetaDB:
         return True
 
     def get(self, key, cast=str):
-        _get = self.db.get(key)
+        _get = self.run(self.db.get(key))
         if _get is not None:
             return cast(_get["value"])
 
     def delete(self, key):
         if not self.get(key):
             return 0
-        self.db.delete(key)
+        self.run(self.db.delete(key))
         return True
 
     def rename(self, key1, key2):
