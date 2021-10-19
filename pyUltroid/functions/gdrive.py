@@ -31,7 +31,7 @@ def list_files(http):
     files = {}
     for m in x["items"]:
         try:
-            files.update({f"{m['title']}": f"{m['webContentLink']}"})
+            files[f"{m['title']}"] = f"{m['webContentLink']}"
         except KeyError:
             pass
     lists = f"**Total files found in Gdrive:** `{len(files.keys())}`\n\n"
