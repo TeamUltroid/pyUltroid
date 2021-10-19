@@ -44,7 +44,7 @@ class UltroidClient(TelegramClient):
             try:
                 _proxy = findall("\\=([^&]+)", proxy)
                 if findall("socks", proxy):
-                    kwargs["proxy"] = (_proxy[0], int(_proxy[1]))
+                    kwargs["proxy"] = ("socks5", _proxy[0], int(_proxy[1]))
                 else:
                     kwargs["connection"] = MtProxy
                     kwargs["proxy"] = (_proxy[0], int(_proxy[1]), _proxy[2])
