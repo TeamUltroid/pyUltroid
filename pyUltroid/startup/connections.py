@@ -92,7 +92,7 @@ def vc_connection(udB, ultroid_bot):
         except (AuthKeyDuplicatedError, EOFError):
             LOGS.info(
                 "Your VC_SESSION Expired. Deleting VC_SESSION from redis..."
-                + "Renew/Change it to Use Voice/Video Chat from VC Account..."
+                + "\nRenew/Change it to Use Voice/Video Chat from VC Account..."
             )
             udB.delete("VC_SESSION")
         except Exception as er:
