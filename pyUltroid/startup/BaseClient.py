@@ -71,18 +71,6 @@ class UltroidClient(TelegramClient):
             )
             exit()
         except BaseException as er:
-            if self.proxy:
-                # there maybe some issue while connecting to proxy
-                # so trying to connect after disabling them and logging error
-                self.logger.info("Proxy : Used")
-                self.logger.info(er)
-                try:
-                    del kwargs["connection"]
-                    del kwargs["proxy"]
-                except KeyError:
-                    pass
-                self.proxy = None
-                return await self.start_client(**kwargs)
             self.logger.exception(er)
             exit()
         # Save some stuff for later use...
