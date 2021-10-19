@@ -14,6 +14,7 @@ from . import LOGS
 
 try:
     import nest_asyncio
+
     nest_asyncio.apply()
 except ImportError:
     pass
@@ -23,7 +24,7 @@ try:
 except ImportError:
     Deta = None
     if Var.DETA_KEY:
-       LOGS.error("'deta' not found!\nInstall deta to use deta base..")
+        LOGS.error("'deta' not found!\nInstall deta to use deta base..")
 
 # --------------------------------------------------------------------------------------------- #
 
