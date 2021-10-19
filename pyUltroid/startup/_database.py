@@ -4,8 +4,9 @@ redis cant be remove completely
 since, it will be a breaking change
 """
 
-import os
 import asyncio
+import os
+
 from redis import Redis
 
 from ..configs import Var
