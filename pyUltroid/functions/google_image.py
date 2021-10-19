@@ -108,15 +108,13 @@ class googleimagesdownload:
     # building main search URL
 
     async def build_search_url(self, search_term, params):
-        url = (
+        return (
             "https://www.google.com/search?q="
             + quote(search_term.encode("utf-8"))
             + "&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch"
             + params
             + "&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg"
         )
-
-        return url
 
     # Download Images
 
@@ -345,10 +343,8 @@ class googleimagesdownload:
     # Bulk Download
 
     async def download(self, arguments):
-        paths_agg = {}
         paths, errors = await self.download_executor(arguments)
-        for i in paths:
-            paths_agg[i] = paths[i]
+        paths_agg = {i: paths[i] for i in paths}
         return paths_agg, errors
 
     async def download_executor(self, arguments):
