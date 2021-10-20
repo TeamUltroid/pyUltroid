@@ -114,7 +114,7 @@ async def safeinstall(event):
         return await eod(ok, "`Please reply to any python plugin`")
     if reply.file.name in [x.split("/")[-1] for x in glob.glob("*s/*.py")]:
         return await eod(ok, f"Plugin `{reply.file.name}` is already installed.")
-    dl = await reply.download_media(f"addons/{reply.file.name}")
+    dl = await reply.download_media("addons/")
     if event.text[9:] != "f":
         read = open(dl).read()
         for dan in KEEP_SAFE().All:
@@ -127,7 +127,8 @@ async def safeinstall(event):
     try:
         load_addons(plug)
     except BaseException:
-        return await eor(ok, f"**ERROR**\n\n`{format_exc()}`", time=10)
+        os.remove(dl)
+        return await eor(ok, f"**ERROR**\n\n`{format_exc()}`", time=30)
     if plug in HELP:
         output = "**Plugin** - `{}`\n".format(plug)
         for i in HELP[plug]:
