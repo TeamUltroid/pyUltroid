@@ -36,23 +36,13 @@ class UltroidClient(TelegramClient):
     ):
         self.logger = logger
         self.udB = udB
-        self.proxy = proxy
         kwargs["api_id"] = Var.API_ID
         kwargs["api_hash"] = Var.API_HASH
         kwargs["base_logger"] = TelethonLogger
-        if proxy:
-            try:
-                _proxy = findall("\\=([^&]+)", proxy)
-                if findall("socks", proxy):
-                    kwargs["proxy"] = ("socks5", _proxy[0], int(_proxy[1]))
-                else:
-                    kwargs["connection"] = MtProxy
-                    kwargs["proxy"] = (_proxy[0], int(_proxy[1]), _proxy[2])
-            except ValueError:
-                kwargs["connection"] = None
-                kwargs["proxy"] = None
+        kwargs["connection"] = MtProxy
         super().__init__(session, **kwargs)
-        self.loop.run_until_complete(self.start_client(bot_token=bot_token))
+        self.run_in_loop(self.start_client(bot_token=bot_token))
+        self.run_in_loop(self.connect_proxy(proxy))
 
     async def start_client(self, **kwargs):
         """function to start client"""
@@ -88,6 +78,23 @@ class UltroidClient(TelegramClient):
     def run(self):
         """run asyncio loop"""
         self.run_until_disconnected()
+
+    async def connect_proxy(self, proxy):
+        if not proxy:
+            return
+        _proxy = findall("\\=([^&]+)", proxy)
+        if findall("socks", proxy):
+            proxy = ("socks5", _proxy[0], int(_proxy[1]))
+        else:
+            proxy = (_proxy[0], int(_proxy[1]), _proxy[2])
+        self.set_proxy(proxy)
+        try:
+            await self.start()
+        except ValueError as er:
+            return self.logger.info(f"{er}\nUnSupported Proxy Used..")
+        except Exception as er:
+            return self.logger.exception(er)
+        self.logger.info("Connected to Proxy!")
 
     @property
     def full_name(self):
