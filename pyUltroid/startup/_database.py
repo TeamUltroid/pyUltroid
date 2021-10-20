@@ -22,6 +22,7 @@ except ImportError:
 if Deta and Var.DETA_KEY:
     try:
         import nest_asyncio
+
         nest_asyncio.apply()
     except ImportError:
         pass
