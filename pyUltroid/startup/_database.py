@@ -48,7 +48,7 @@ class DetaDB:
 
     @property
     def run(self):
-        return self.loop.run_until_complete
+        return self.loop.create_task
 
     def keys(self):
         return [a["key"] for a in self.run(self.db.fetch()).items]
