@@ -57,6 +57,7 @@ class UltroidClient(TelegramClient):
         except ValueError as er:
             LOGS.info(er)
             if proxy:
+                udB.delete("TG_PROXY")
                 del kwargs["connection"]
                 del kwargs["proxy"]
             super().__init__(session, **kwargs)
