@@ -19,6 +19,12 @@ except ImportError:
     if Var.DETA_KEY:
         LOGS.error("'deta' not found!\nInstall deta to use deta base..")
 
+if Deta and Var.DETA_KEY:
+    try:
+        import nest_asyncio
+        nest_asyncio.apply()
+    except ImportError:
+        pass
 # --------------------------------------------------------------------------------------------- #
 
 
@@ -48,7 +54,7 @@ class DetaDB:
 
     @property
     def run(self):
-        return self.loop.create_task
+        return self.loop.run_until_complete
 
     def keys(self):
         return [a["key"] for a in self.run(self.db.fetch()).items]
