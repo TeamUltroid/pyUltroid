@@ -245,7 +245,8 @@ INSTA_CLIENT = []
 
 
 async def get_insta_code(username, choice):
-    from .. import ultroid_bot, asst, 
+    from .. import asst, ultroid_bot
+
     async with asst.conversation(ultroid_bot.uid, timeout=60 * 2) as conv:
         await conv.send_message(
             "Enter The **Instagram Verification Code** Sent to Your Email.."
