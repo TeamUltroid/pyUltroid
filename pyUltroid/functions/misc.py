@@ -244,7 +244,8 @@ async def get_synonyms_or_antonyms(word, type_of_words):
 INSTA_CLIENT = []
 
 
-async def get_insta_code(cl, username, password):
+async def get_insta_code(username, choice):
+    from .. import ultroid_bot, asst, 
     async with asst.conversation(ultroid_bot.uid, timeout=60 * 2) as conv:
         await conv.send_message(
             "Enter The **Instagram Verification Code** Sent to Your Email.."
@@ -258,12 +259,7 @@ async def get_insta_code(cl, username, password):
                 "CODE SHOULD BE INTEGER\nSend The Code Back or\nUse /cancel to Cancel Process..."
             )
             ct = await conv.get_response()
-        cl.code = ct.text
-        try:
-            cl.login(username, password)
-            return
-        except ManualInputRequired:
-            await get_insta_code(cl, username, password)
+        return ct.code
 
 
 async def create_instagram_client(event):
@@ -284,6 +280,7 @@ async def create_instagram_client(event):
         return
     settings = eval(udB.get("INSTA_SET")) if udB.get("INSTA_SET") else {}
     cl = instagrapi.Client(settings)
+    cl.challenge_code_handler = get_insta_code
     try:
         cl.login(username, password)
     except ManualInputRequired:
