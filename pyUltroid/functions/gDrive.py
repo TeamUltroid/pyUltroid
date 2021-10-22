@@ -1,5 +1,6 @@
-from mimetypes import guess_type
 import time
+from mimetypes import guess_type
+
 from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
 from httplib2 import Http
