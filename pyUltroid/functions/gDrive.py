@@ -5,9 +5,9 @@ from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-from .helper import progress
 
 from .. import udB
+from .helper import progress
 
 _auth_flow = None
 
@@ -90,7 +90,13 @@ class GDriveManager:
             if _progress:
                 uploaded = _progress.resumable_progress
                 total_size = _progress.total_size
-                await progress(uploaded, total_size, event, start, f"Uploading {filename} on GDrive...")
+                await progress(
+                    uploaded,
+                    total_size,
+                    event,
+                    start,
+                    f"Uploading {filename} on GDrive...",
+                )
         fileId = _status.get("id")
         try:
             self._set_permissions(fileId=fileId)
