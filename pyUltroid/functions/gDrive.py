@@ -5,7 +5,7 @@ from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-from telethon.helpers import _maybe_await
+from .helper import progress
 
 from .. import udB
 
@@ -64,7 +64,7 @@ class GDriveManager:
             fileId=fileId, body=permissions, supportsAllDrives=True
         ).execute(http=self._http())
 
-    async def _upload_file(self, path: str, filename: str = None, progress_bar=None):
+    async def _upload_file(self, event, path: str, filename: str = None):
         if not filename:
             filename = path.split("/")[-1]
         mime_type = guess_type(path)[0] or "application/octet-stream"
@@ -83,13 +83,14 @@ class GDriveManager:
             .files()
             .insert(body=body, media_body=media_body, supportsAllDrives=True)
         )
+        start = time.time()
         _status = None
         while not _status:
             _progress, _status = upload.next_chunk(num_retries=3)
             if progress_bar and _progress:
                 uploaded = _progress.resumable_progress
                 total_size = _progress.total_size
-                await _maybe_await(progress_bar(uploaded, total_size))
+                await progress(uploaded, total_size, event, start, f"Uploading {filename} on GDrive..."))
         fileId = _status.get("id")
         try:
             self._set_permissions(fileId=fileId)
