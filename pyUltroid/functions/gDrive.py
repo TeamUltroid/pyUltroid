@@ -87,10 +87,10 @@ class GDriveManager:
         _status = None
         while not _status:
             _progress, _status = upload.next_chunk(num_retries=3)
-            if progress_bar and _progress:
+            if _progress:
                 uploaded = _progress.resumable_progress
                 total_size = _progress.total_size
-                await progress(uploaded, total_size, event, start, f"Uploading {filename} on GDrive..."))
+                await progress(uploaded, total_size, event, start, f"Uploading {filename} on GDrive...")
         fileId = _status.get("id")
         try:
             self._set_permissions(fileId=fileId)
