@@ -27,7 +27,6 @@ class GDriveManager:
         self.auth_token = udB.get("GDRIVE_AUTH_TOKEN")
         self.folder_id = udB.get("GDRIVE_FOLDER_ID")
         self.token_file = "resources/auth/gdrive_creds.json"
-        self.chunk_size = 1024 ** 2
 
     def _create_token_file(self, code: str = None):
         global _auth_flow
@@ -71,7 +70,7 @@ class GDriveManager:
             filename = path.split("/")[-1]
         mime_type = guess_type(path)[0] or "application/octet-stream"
         media_body = MediaFileUpload(
-            path, mimetype=mime_type, chunksize=self.chunk_size, resumable=True
+            path, mimetype=mime_type, resumable=True
         )
         body = {
             "title": filename,
