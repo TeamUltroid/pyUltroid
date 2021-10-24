@@ -69,9 +69,7 @@ class GDriveManager:
         if not filename:
             filename = path.split("/")[-1]
         mime_type = guess_type(path)[0] or "application/octet-stream"
-        media_body = MediaFileUpload(
-            path, mimetype=mime_type, resumable=True
-        )
+        media_body = MediaFileUpload(path, mimetype=mime_type, resumable=True)
         body = {
             "title": filename,
             "description": "Uploaded using Ultroid Userbot",
