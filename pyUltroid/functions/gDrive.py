@@ -4,7 +4,7 @@ from mimetypes import guess_type
 from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
 from httplib2 import Http
-from oauth2client.client import OAuth2WebServerFlow
+from oauth2client.client import OAuth2WebServerFlow, OOB_CALLBACK_URN
 from oauth2client.file import Storage
 
 from .. import udB
@@ -22,7 +22,7 @@ class GDriveManager:
                 "https://www.googleapis.com/auth/drive.metadata",
             ],
             "dir_mimetype": "application/vnd.google-apps.folder",
-            "redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
+            "redirect_uri": OOB_CALLBACK_URN,
         }
         self.auth_token = udB.get("GDRIVE_AUTH_TOKEN")
         self.folder_id = udB.get("GDRIVE_FOLDER_ID")
