@@ -1,14 +1,9 @@
-import time
-from mimetypes import guess_type
-
-from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
 from httplib2 import Http
-from oauth2client.client import OAuth2WebServerFlow, OOB_CALLBACK_URN
+from oauth2client.client import OOB_CALLBACK_URN, OAuth2WebServerFlow
 from oauth2client.file import Storage
 
 from .. import udB
-from .helper import progress
 
 _auth_flow = None
 
@@ -16,7 +11,10 @@ _auth_flow = None
 class YouTubeUploader:
     def __init__(self):
         self.yt_creds = {
-            "oauth_scope": ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube"],
+            "oauth_scope": [
+                "https://www.googleapis.com/auth/youtube.upload",
+                "https://www.googleapis.com/auth/youtube",
+            ],
             "dir_mimetype": "application/vnd.google-apps.folder",
             "redirect_uri": OOB_CALLBACK_URN,
         }
