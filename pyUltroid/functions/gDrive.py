@@ -4,7 +4,7 @@ from mimetypes import guess_type
 from apiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
 from httplib2 import Http
-from oauth2client.client import OAuth2WebServerFlow, OOB_CALLBACK_URN
+from oauth2client.client import OOB_CALLBACK_URN, OAuth2WebServerFlow
 from oauth2client.file import Storage
 
 from .. import udB
