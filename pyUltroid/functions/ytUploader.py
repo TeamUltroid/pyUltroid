@@ -15,7 +15,6 @@ class YouTubeUploader:
                 "https://www.googleapis.com/auth/youtube.upload",
                 "https://www.googleapis.com/auth/youtube",
             ],
-            "dir_mimetype": "application/vnd.google-apps.folder",
             "redirect_uri": OOB_CALLBACK_URN,
         }
         self.auth_token = udB.get("YT_AUTH_TOKEN")
