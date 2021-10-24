@@ -11,7 +11,12 @@ _auth_flow = None
 class YouTubeUploader:
     def __init__(self):
         self.yt_creds = {
-            "oauth_scope": ['https://www.googleapis.com/auth/youtube.upload', 'https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/youtubepartner', 'https://www.googleapis.com/auth/youtube.force-ssl'],
+            "oauth_scope": [
+                "https://www.googleapis.com/auth/youtube.upload",
+                "https://www.googleapis.com/auth/youtube",
+                "https://www.googleapis.com/auth/youtubepartner",
+                "https://www.googleapis.com/auth/youtube.force-ssl",
+            ],
             "redirect_uri": OOB_CALLBACK_URN,
         }
         self.auth_token = udB.get("YT_AUTH_TOKEN")
