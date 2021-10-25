@@ -12,7 +12,7 @@ from random import randint
 from urllib.request import urlretrieve
 
 from pytz import timezone
-from telethon.errors.rpcerrorlist import ChannelsTooMuchError
+from telethon.errors.rpcerrorlist import ChannelsTooMuchError, ChannelPrivateError
 from telethon.tl.custom import Button
 from telethon.tl.functions.channels import (
     CreateChannelRequest,
@@ -352,5 +352,8 @@ async def ready():
         await ultroid_bot(JoinChannelRequest("@TheUltroid"))
     except ChannelsTooMuchError:
         LOGS.info("Join @TheUltroid to know about new Updates...")
+    except ChannelPrivateError:
+        LOGS.info("You are Banned from @TheUltroid for some reason. Contact any dev if you think there is some mistake...")
+        exit()
     except Exception as er:
         LOGS.exception(er)
