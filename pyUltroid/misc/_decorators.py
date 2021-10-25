@@ -73,11 +73,8 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
     # Decorator has turned lengthy and non attractive.
     # Todo : Make it better..
     args["func"] = lambda e: not e.fwd_from and not e.via_bot_id
-    stack = inspect.stack()
-    previous_stack_frame = stack[1]
-    file_test = Path(previous_stack_frame.filename)
-    file_test = file_test.stem.replace(".py", "")
-    pattern = args["pattern"]
+    file_test = Path(inspect.stack()[1].filename).stem.replace(".py", "")
+    pattern = args.get("pattern", None)
     black_chats = args.get("chats", None)
     groups_only = args.get("groups_only", False)
     admins_only = args.get("admins_only", False)
@@ -183,9 +180,9 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                         int(udB.get("LOG_CHANNEL")),
                         f"`FloodWaitError:\n{str(fwerr)}\n\nSleeping for {tf((fwerr.seconds + 10)*1000)}`",
                     )
-                    await ult.client.disconnect()
+                    await ultroid_bot.disconnect()
                     await asyncio.sleep(fwerr.seconds + 10)
-                    await ult.client.connect()
+                    await ultroid_bot.connect()
                     await asst.send_message(
                         int(udB.get("LOG_CHANNEL")),
                         "`Bot is working again`",
