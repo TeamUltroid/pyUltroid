@@ -1,6 +1,7 @@
 import time
-from mimetypes import guess_type
 from io import FileIO
+from mimetypes import guess_type
+
 from apiclient.http import MediaFileUpload, MediaIoBaseDownload
 from googleapiclient.discovery import build
 from httplib2 import Http
@@ -113,10 +114,12 @@ class GDriveManager:
             elif fileId.endswith("/view"):
                 fileId = fileId.split("/")[::-1][1]
         else:
-             pass
+            pass
         if not filename:
-            filename = self._build().files().get(fileId=fileId)['title']
-        downloader = self._build().files().get_media(fileId=fileId, supportsTeamDrives=True)
+            filename = self._build().files().get(fileId=fileId)["title"]
+        downloader = (
+            self._build().files().get_media(fileId=fileId, supportsTeamDrives=True)
+        )
         file = FileIO(filename, "wb")
         download = MediaIoBaseDownload(file, downloader)
         _status = None
