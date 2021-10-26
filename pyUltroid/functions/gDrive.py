@@ -109,8 +109,8 @@ class GDriveManager:
 
     async def _download_file(self, event, fileId: str, filename: str = None):
         if fileId.startswith("http"):
-            if fileId.endswith("=download"):
-                fileId = fileId.split("=")[1]
+            if "=download" in fileId:
+                fileId = fileId.split("=")[1][:-7]
             elif fileId.endswith("/view"):
                 fileId = fileId.split("/")[::-1][1]
         else:
