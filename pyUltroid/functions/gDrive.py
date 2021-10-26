@@ -120,21 +120,22 @@ class GDriveManager:
         downloader = (
             self._build().files().get_media(fileId=fileId, supportsTeamDrives=True)
         )
-        file = FileIO(filename, "wb")
-        download = MediaIoBaseDownload(file, downloader)
-        _status = None
-        while not _status:
-            _progress, _status = download.next_chunk(num_retries=3)
-            if _progress:
-                uploaded = _progress.resumable_progress
-                total_size = _progress.total_size
-                await progress(
-                    uploaded,
-                    total_size,
-                    event,
-                    start,
-                    f"Downloading {filename} on GDrive...",
-                )
+        with FileIO(filename, "wb") as file:
+            start = time.time()
+            download = MediaIoBaseDownload(file, downloader)
+            _status = None
+            while not _status:
+                _progress, _status = download.next_chunk(num_retries=3)
+                if _progress:
+                    uploaded = _progress.resumable_progress
+                    total_size = _progress.total_size
+                    await progress(
+                        uploaded,
+                        total_size,
+                        event,
+                        start,
+                        f"Downloading {filename} on GDrive...",
+                    )
 
     def _list_files(self):
         _items = self._build().files().get(fileId="", supportsTeamDrives=True).execute()
