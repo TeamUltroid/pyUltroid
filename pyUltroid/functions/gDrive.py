@@ -116,7 +116,7 @@ class GDriveManager:
         else:
             pass
         if not filename:
-            filename = self._build().files().get(fileId=fileId)["title"]
+            filename = self._build().files().get(fileId=fileId).execute()["title"]
         downloader = (
             self._build().files().get_media(fileId=fileId, supportsTeamDrives=True)
         )
