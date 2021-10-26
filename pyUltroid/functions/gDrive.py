@@ -107,7 +107,7 @@ class GDriveManager:
         )
         return _url.get("webContentLink")
 
-    def _download_file(self, event, fileId: str, filename: str = None):
+    async def _download_file(self, event, fileId: str, filename: str = None):
         if fileId.startswith("http"):
             if fileId.endswith("=download"):
                 fileId = fileId.split("=")[1]
