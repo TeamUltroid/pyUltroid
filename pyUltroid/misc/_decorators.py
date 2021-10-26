@@ -72,7 +72,8 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
     # With time and addition of Stuff
     # Decorator has turned lengthy and non attractive.
     # Todo : Make it better..
-    args["func"] = lambda e: not e.fwd_from and not e.via_bot_id
+    args["func"] = lambda e: not e.via_bot_id
+    args["forwards"] = False
     file_test = Path(inspect.stack()[1].filename).stem.replace(".py", "")
     pattern = args.get("pattern", None)
     black_chats = args.get("chats", None)
