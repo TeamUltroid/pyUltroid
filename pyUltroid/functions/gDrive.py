@@ -134,7 +134,7 @@ class GDriveManager:
                         total_size,
                         event,
                         start,
-                        f"Downloading {filename} on GDrive...",
+                        f"Downloading {filename} from GDrive...",
                     )
 
     def _list_files(self):
