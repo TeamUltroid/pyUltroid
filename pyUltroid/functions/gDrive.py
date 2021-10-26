@@ -1,7 +1,7 @@
 import time
 from mimetypes import guess_type
-
-from apiclient.http import MediaFileUpload
+from io import FileIO
+from apiclient.http import MediaFileUpload, MediaIoBaseDownload
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client.client import OOB_CALLBACK_URN, OAuth2WebServerFlow
@@ -105,6 +105,33 @@ class GDriveManager:
             self._build().files().get(fileId=fileId, supportsTeamDrives=True).execute()
         )
         return _url.get("webContentLink")
+
+    def _download_file(self, event, fileId: str, filename: str = None):
+        if fileId.startswith("http"):
+            if fileId.endswith("=download"):
+                fileId = fileId.split("=")[1]
+            elif fileId.endswith("/view"):
+                fileId = fileId.split("/")[::-1][1]
+        else:
+             pass
+        if not filename:
+            filename = self._build().files().get(fileId=fileId)['title']
+        downloader = self._build().files().get_media(fileId=fileId, supportsTeamDrives=True)
+        file = FileIO(filename, "wb")
+        download = MediaIoBaseDownload(file, downloader)
+        _status = None
+        while not _status:
+            _progress, _status = download.next_chunk(num_retries=3)
+            if _progress:
+                uploaded = _progress.resumable_progress
+                total_size = _progress.total_size
+                await progress(
+                    uploaded,
+                    total_size,
+                    event,
+                    start,
+                    f"Downloading {filename} on GDrive...",
+                )
 
     def _list_files(self):
         _items = self._build().files().get(fileId="", supportsTeamDrives=True).execute()
