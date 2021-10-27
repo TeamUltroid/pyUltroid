@@ -6,7 +6,8 @@ from mimetypes import guess_type
 from apiclient.http import LOGGER, MediaFileUpload, MediaIoBaseDownload
 from googleapiclient.discovery import build, logger
 from httplib2 import Http
-from oauth2client.client import OOB_CALLBACK_URN, OAuth2WebServerFlow, logger as _logger
+from oauth2client.client import OOB_CALLBACK_URN, OAuth2WebServerFlow
+from oauth2client.client import logger as _logger
 from oauth2client.file import Storage
 
 from .. import udB
