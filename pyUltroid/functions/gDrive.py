@@ -111,13 +111,13 @@ class GDriveManager:
         if fileId.startswith("http"):
             if "=download" in fileId:
                 fileId = fileId.split("=")[1][:-7]
-            elif fileId.endswith("/view"):
+            elif "/view" in fileId:
                 fileId = fileId.split("/")[::-1][1]
         else:
             pass
         try:
             if not filename:
-                filename = self._build().files().get(fileId=fileId).execute()["title"]
+                filename = self._build().files().get(fileId=fileId, supportsTeamDrives=True).execute()["title"]
             downloader = (
                 self._build().files().get_media(fileId=fileId, supportsTeamDrives=True)
             )
