@@ -136,6 +136,7 @@ class GDriveManager:
                         start,
                         f"Downloading {filename} from GDrive...",
                     )
+        return filename
 
     def _list_files(self):
         _items = self._build().files().get(fileId="", supportsTeamDrives=True).execute()
