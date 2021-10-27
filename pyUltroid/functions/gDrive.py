@@ -1,9 +1,9 @@
 import time
 from io import FileIO
 from mimetypes import guess_type
-
-from apiclient.http import MediaFileUpload, MediaIoBaseDownload
-from googleapiclient.discovery import build
+from logging import WARNING
+from apiclient.http import MediaFileUpload, MediaIoBaseDownload, LOGGER
+from googleapiclient.discovery import build, logger
 from httplib2 import Http
 from oauth2client.client import OOB_CALLBACK_URN, OAuth2WebServerFlow
 from oauth2client.file import Storage
@@ -12,7 +12,8 @@ from .. import udB
 from .helper import progress
 
 _auth_flow = None
-
+LOGGER.setLevel(WARNING)
+logger.setLevel(WARNING)
 
 class GDriveManager:
     def __init__(self):
