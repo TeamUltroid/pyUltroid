@@ -115,11 +115,14 @@ class GDriveManager:
                 fileId = fileId.split("/")[::-1][1]
         else:
             pass
-        if not filename:
-            filename = self._build().files().get(fileId=fileId).execute()["title"]
-        downloader = (
-            self._build().files().get_media(fileId=fileId, supportsTeamDrives=True)
-        )
+        try:
+            if not filename:
+                filename = self._build().files().get(fileId=fileId).execute()["title"]
+            downloader = (
+                self._build().files().get_media(fileId=fileId, supportsTeamDrives=True)
+            )
+        except Exception as ex:
+            return await event.edit(str(ex))
         with FileIO(filename, "wb") as file:
             start = time.time()
             download = MediaIoBaseDownload(file, downloader)
