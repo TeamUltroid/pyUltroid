@@ -103,7 +103,7 @@ class GDriveManager:
         except BaseException:
             pass
         _url = (
-            self._build().files().get(fileId=fileId, supportsTeamDrives=True).execute()
+            self._build().files().get(fileId=fileId, supportsAllDrives=True).execute()
         )
         return _url.get("webContentLink")
 
@@ -120,11 +120,11 @@ class GDriveManager:
                 filename = (
                     self._build()
                     .files()
-                    .get(fileId=fileId, supportsTeamDrives=True)
+                    .get(fileId=fileId, supportsAllDrives=True)
                     .execute()["title"]
                 )
             downloader = (
-                self._build().files().get_media(fileId=fileId, supportsTeamDrives=True)
+                self._build().files().get_media(fileId=fileId, supportsAllDrives=True)
             )
         except Exception as ex:
             return await event.edit(str(ex))
@@ -147,7 +147,7 @@ class GDriveManager:
         return filename
 
     def _list_files(self):
-        _items = self._build().files().get(fileId="", supportsTeamDrives=True).execute()
+        _items = self._build().files().get(fileId="", supportsAllDrives=True).execute()
         _files = {}
         for files in _items["items"]:
             try:
