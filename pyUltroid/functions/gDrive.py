@@ -117,7 +117,12 @@ class GDriveManager:
             pass
         try:
             if not filename:
-                filename = self._build().files().get(fileId=fileId, supportsTeamDrives=True).execute()["title"]
+                filename = (
+                    self._build()
+                    .files()
+                    .get(fileId=fileId, supportsTeamDrives=True)
+                    .execute()["title"]
+                )
             downloader = (
                 self._build().files().get_media(fileId=fileId, supportsTeamDrives=True)
             )
