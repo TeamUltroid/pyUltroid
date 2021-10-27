@@ -42,8 +42,10 @@ class GDriveManager:
             return udB.set("GDRIVE_AUTH_TOKEN", str(open(self.token_file).read()))
         try:
             _auth_flow = OAuth2WebServerFlow(
-                udB.get("GDRIVE_CLIENT_ID") or "458306970678-jhfbv6o5sf1ar63o1ohp4c0grblp8qba.apps.googleusercontent.com",
-                udB.get("GDRIVE_CLIENT_SECRET") or "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",
+                udB.get("GDRIVE_CLIENT_ID")
+                or "458306970678-jhfbv6o5sf1ar63o1ohp4c0grblp8qba.apps.googleusercontent.com",
+                udB.get("GDRIVE_CLIENT_SECRET")
+                or "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",
                 self.gdrive_creds["oauth_scope"],
                 redirect_uri=self.gdrive_creds["redirect_uri"],
             )
