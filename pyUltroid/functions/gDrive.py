@@ -134,7 +134,7 @@ class GDriveManager:
                 self._build().files().get_media(fileId=fileId, supportsAllDrives=True)
             )
         except Exception as ex:
-            return await event.edit(str(ex))
+            return False, str(ex)
         with FileIO(filename, "wb") as file:
             start = time.time()
             download = MediaIoBaseDownload(file, downloader)
@@ -151,7 +151,7 @@ class GDriveManager:
                         start,
                         f"Downloading {filename} from GDrive...",
                     )
-        return filename
+        return True, filename
 
     def _list_files(self):
         _items = self._build().files().get(fileId="", supportsAllDrives=True).execute()
