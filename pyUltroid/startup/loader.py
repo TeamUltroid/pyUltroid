@@ -82,7 +82,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for assistant
     Loader(path="assistant", key="Assistant").load(
-        log=False, cmd_help=None, exclude=["pmbot"]
+        log=False, exclude=["pmbot"]
     )
 
     # for addons
