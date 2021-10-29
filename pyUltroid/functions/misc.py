@@ -26,7 +26,7 @@ except ImportError:
 
 try:
     import instagrapi
-    from instagrapi.exceptions import ManualInputRequired, LoginRequired
+    from instagrapi.exceptions import LoginRequired, ManualInputRequired
 except ImportError:
     instagrapi = None
     ManualInputRequired = None
