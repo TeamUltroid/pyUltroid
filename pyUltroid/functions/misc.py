@@ -26,7 +26,7 @@ except ImportError:
 
 try:
     import instagrapi
-    from instagrapi.exceptions import ManualInputRequired
+    from instagrapi.exceptions import ManualInputRequired, LoginRequired
 except ImportError:
     instagrapi = None
     ManualInputRequired = None
@@ -287,6 +287,10 @@ async def create_instagram_client(event):
     except ManualInputRequired:
         await eor(event, f"Check Pm From @{asst.me.username}")
         await get_insta_code(cl, username, password)
+    except LoginRequired:
+        # "login required" refers to relogin...
+        udB.delete("INSTA_SET")
+        return await create_instagram_client(event)
     except Exception as er:
         LOGS.exception(er)
         await eor(event, str(er))
