@@ -81,7 +81,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     Loader(path="plugins", key="Official").load()
 
     # for assistant
-    Loader(path="assistant", key="Assistant").load(log=False, exclude=["pmbot"])
+    Loader(path="assistant", key="Official").load(log=False, exclude=["pmbot"])
 
     # for addons
     if addons == "True" or not addons:
