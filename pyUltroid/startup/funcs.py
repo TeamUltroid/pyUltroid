@@ -210,9 +210,10 @@ async def autopilot():
         try:
             achat = await asst.get_entity(int(channel))
         except BaseException as er:
+            achat = None
             LOGS.info("Error while getting Log channel from Assistant")
             LOGS.exception(er)
-        if not achat.admin_rights:
+        if achat and not achat.admin_rights:
             rights = ChatAdminRights(
                 add_admins=True,
                 invite_users=True,
