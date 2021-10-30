@@ -22,10 +22,10 @@ from telethon.tl.functions.channels import (
     CreateChannelRequest,
     EditAdminRequest,
     EditPhotoRequest,
+    InviteToChannelRequest,
     JoinChannelRequest,
 )
 from telethon.tl.functions.contacts import UnblockRequest
-from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.types import (
     ChatAdminRights,
     InputChatUploadedPhoto,
