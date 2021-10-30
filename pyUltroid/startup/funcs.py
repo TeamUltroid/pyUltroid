@@ -25,7 +25,7 @@ from telethon.tl.functions.channels import (
     JoinChannelRequest,
 )
 from telethon.tl.functions.contacts import UnblockRequest
-from telethon.tl.functions.messages import AddChatUserRequest
+from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.types import (
     ChatAdminRights,
     InputChatUploadedPhoto,
@@ -202,7 +202,7 @@ async def autopilot():
         await ultroid_bot.get_permissions(int(channel), asst.me.username)
     except UserNotParticipantError:
         try:
-            await ultroid_bot(AddChatUserRequest(int(channel), asst.me.username, 0))
+            await ultroid_bot(InviteToChannelRequest(int(channel), [asst.me.username]))
         except BaseException as er:
             LOGS.info("Error while Adding Assistant to Log Channel")
             LOGS.exception(er)
@@ -243,7 +243,7 @@ async def autopilot():
         try:
             await ultroid_bot(EditPhotoRequest(chat_id, InputChatUploadedPhoto(ll)))
         except BaseException as er:
-            LOGS.info(er)
+            LOGS.exception(er)
         os.remove(photo)
 
 
