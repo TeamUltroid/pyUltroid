@@ -12,7 +12,7 @@ from random import randint
 from urllib.request import urlretrieve
 
 from pytz import timezone
-from telethon.errors.rpcerrorlist import ChannelPrivateError, ChannelsTooMuchError
+from telethon.errors.rpcerrorlist import ChannelPrivateError, ChannelsTooMuchError, UserNotParticipantError
 from telethon.tl.custom import Button
 from telethon.tl.functions.channels import (
     CreateChannelRequest,
