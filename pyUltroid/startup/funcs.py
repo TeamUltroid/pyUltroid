@@ -230,7 +230,7 @@ async def autopilot():
             )
             try:
                 await ultroid_bot(
-                    EditAdminRequest(chat_id, asst.me.username, rights, "Assistant")
+                    EditAdminRequest(int(channel), asst.me.username, rights, "Assistant")
                 )
             except BaseException as er:
                 LOGS.info("Error while promoting assistant in Log Channel..")
@@ -241,7 +241,7 @@ async def autopilot():
         )
         ll = await ultroid_bot.upload_file(photo)
         try:
-            await ultroid_bot(EditPhotoRequest(chat_id, InputChatUploadedPhoto(ll)))
+            await ultroid_bot(EditPhotoRequest(int(channel), InputChatUploadedPhoto(ll)))
         except BaseException as er:
             LOGS.exception(er)
         os.remove(photo)
