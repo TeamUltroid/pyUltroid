@@ -20,6 +20,8 @@ from telethon.tl.functions.channels import (
     EditPhotoRequest,
     JoinChannelRequest,
 )
+from telethon.utils import get_peer_id
+from telethon.tl.functions.messages import AddChatUserRequest
 from telethon.tl.functions.contacts import UnblockRequest
 from telethon.tl.types import (
     ChatAdminRights,
@@ -159,56 +161,83 @@ async def autopilot():
 
     if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
         udB.set("LOG_CHANNEL", str(Var.LOG_CHANNEL))
-    if udB.get("LOG_CHANNEL"):
+    channel = udB.get("LOG_CHANNEL")
+    if channel:
         try:
-            await ultroid_bot.get_entity(int(udB.get("LOG_CHANNEL")))
-            return
+            chat = await ultroid_bot.get_entity(int(channel))
         except BaseException as er:
             LOGS.error(er)
             udB.delete("LOG_CHANNEL")
-    LOGS.info("Creating a Log Channel for You!")
-    try:
-        r = await ultroid_bot(
+            channel = None
+    if not channel:
+        LOGS.info("Creating a Log Channel for You!")
+        try:
+            r = await ultroid_bot(
             CreateChannelRequest(
                 title="My Ultroid Logs",
                 about="My Ultroid Log Group\n\n Join @TeamUltroid",
                 megagroup=True,
-            ),
-        )
-    except ChannelsTooMuchError:
-        LOGS.info(
+                ),
+            )
+        except ChannelsTooMuchError:
+            LOGS.info(
             "You Are in Too Many Channels & Groups , Leave some And Restart The Bot"
-        )
-        exit(1)
-    except BaseException as er:
-        LOGS.info(er)
-        LOGS.info(
+            )
+            exit(1)
+        except BaseException as er:
+            LOGS.info(er)
+            LOGS.info(
             "Something Went Wrong , Create A Group and set its id on config var LOG_CHANNEL."
-        )
-        exit(1)
-    chat = r.chats[0]
-    chat_id = chat.id
-    if not str(chat_id).startswith("-100"):
-        udB.set("LOG_CHANNEL", "-100" + str(chat_id))
-    else:
-        udB.set("LOG_CHANNEL", str(chat_id))
-    rights = ChatAdminRights(
-        add_admins=True,
-        invite_users=True,
-        change_info=True,
-        ban_users=True,
-        delete_messages=True,
-        pin_messages=True,
-        anonymous=False,
-        manage_call=True,
-    )
-    await ultroid_bot(EditAdminRequest(chat_id, asst.me.username, rights, "Assistant"))
-    photo = await download_file(
+            )
+            exit(1)
+        chat = r.chats[0]
+        channel = get_peer_id(chat)
+        udB.set("LOG_CHANNEL", str(channel))
+    assistant = True
+    try:
+        await ultroid_bot.get_permissions(int(channel), asst.me.username)
+    except UserNotParticipantError:
+        try:
+            await ultroid_bot(AddChatUserRequest(int(channel), asst.me.username , 0))
+        except BaseException as er:
+            LOGS.info("Error while Adding Assistant to Log Channel")
+            LOGS.exception(er)
+            assistant=False
+    except BaseException as er:
+        assistant=False
+        LOGS.exception(er)
+    if assistant:
+        try:
+            achat = await asst.get_entity(int(channel))
+        except BaseException as er:
+            LOGS.info("Error while getting Log channel from Assistant")
+            LOGS.exception(er)
+        if not achat.admin_rights:
+            rights = ChatAdminRights(
+            add_admins=True,
+            invite_users=True,
+            change_info=True,
+            ban_users=True,
+            delete_messages=True,
+            pin_messages=True,
+            anonymous=False,
+            manage_call=True,
+            )
+            try:
+                await ultroid_bot(EditAdminRequest(chat_id, asst.me.username, rights, "Assistant"))
+            except BaseException as er:
+                LOGS.info("Error while promoting assistant in Log Channel..")
+                LOGS.exception(er)
+    if not chat.photo:
+        photo = await download_file(
         "https://telegra.ph/file/27c6812becf6f376cbb10.jpg", "channelphoto.jpg"
-    )
-    ll = await ultroid_bot.upload_file(photo)
-    await ultroid_bot(EditPhotoRequest(chat_id, InputChatUploadedPhoto(ll)))
-    os.remove(photo)
+        )
+        ll = await ultroid_bot.upload_file(photo)
+        try:
+            await ultroid_bot(EditPhotoRequest(chat_id, InputChatUploadedPhoto(ll)))
+        except BaseException as er:
+            LOGS.info(er)
+        os.remove(photo)
 
 
 # customize assistant
