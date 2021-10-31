@@ -31,7 +31,7 @@ def owner_and_sudos():
     if OWNER_SUDOS:
         return OWNER_SUDOS
 
-    from .. import ultroid_bot, udB
+    from .. import udB, ultroid_bot
 
     data = [int(udB.get("OWNER_ID")), *sudoers()]
     [OWNER_SUDOS.append(int(b)) for b in data]
