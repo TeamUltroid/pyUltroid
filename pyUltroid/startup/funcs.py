@@ -54,10 +54,6 @@ def startup_stuff():
         with open("resources/auth/gdrive_creds.json", "w") as t_file:
             t_file.write(GT)
 
-    if YT := udB.get("YT_AUTH_TOKEN"):
-        with open("resources/auth/yt_creds.json", "w") as file:
-            file.write(YT)
-
     if udB.get("AUTH_TOKEN"):
         udB.delete("AUTH_TOKEN")
 
