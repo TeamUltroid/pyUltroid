@@ -37,10 +37,7 @@ if udB.get("BOTMODE") == "True":
 
 ultroid_bot.run_in_loop(autobot())
 
-if udB.get("BOTMODE") == "True":
-    vcClient = None
-else:
-    vcClient = vc_connection(udB, ultroid_bot)
+vcClient = vc_connection(udB, ultroid_bot)
 
 if not udB.get("SUDO"):
     udB.set("SUDO", "False")
