@@ -23,13 +23,22 @@ udB = UltroidDB()
 if udB.ping():
     LOGS.info("Connected to Database Successfully!")
 
-ultroid_bot = UltroidClient(session_file(), udB=udB, proxy=udB.get("TG_PROXY"))
-
-ultroid_bot.run_in_loop(autobot())
+if udB.get("BOTMODE") == "True":
+    if udB.get("DUAL_MODE") == "True":
+        udB.set("DUAL_MODE", "False")
+    ultroid_bot = None
+else:
+    ultroid_bot = UltroidClient(session_file(), udB=udB, proxy=udB.get("TG_PROXY"))
 
 asst = UltroidClient(None, bot_token=udB.get("BOT_TOKEN"), udB=udB)
 
-vcClient = vc_connection(udB, ultroid_bot)
+ultroid_bot = asst
+ultroid_bot.run_in_loop(autobot())
+
+if udB.get("BOTMODE") == "True":
+    vcClient = None
+else:
+    vcClient = vc_connection(udB, ultroid_bot)
 
 if not udB.get("SUDO"):
     udB.set("SUDO", "False")
