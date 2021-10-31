@@ -98,7 +98,7 @@ class GDriveManager:
             if _progress:
                 uploaded = _progress.resumable_progress
                 total_size = _progress.total_size
-                asyncio.get_event_loop().create_task(
+                await asyncio.get_event_loop().create_task(
                     progress(
                         uploaded,
                         total_size,
@@ -147,7 +147,7 @@ class GDriveManager:
                 if _progress:
                     uploaded = _progress.resumable_progress
                     total_size = _progress.total_size
-                    asyncio.get_event_loop().create_task(
+                    await asyncio.get_event_loop().create_task(
                         progress(
                             uploaded,
                             total_size,
