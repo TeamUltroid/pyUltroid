@@ -103,7 +103,7 @@ class GDriveManager:
                     event,
                     start,
                     f"Uploading {filename} on GDrive...",
-                )
+                ))
         fileId = _status.get("id")
         try:
             self._set_permissions(fileId=fileId)
@@ -150,7 +150,8 @@ class GDriveManager:
                         event,
                         start,
                         f"Downloading {filename} from GDrive...",
-                    ))
+                        ),
+                    )
         return True, filename
 
     def _list_files(self):
