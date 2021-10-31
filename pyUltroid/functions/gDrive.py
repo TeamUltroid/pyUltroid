@@ -1,4 +1,4 @@
-import time
+import time, asyncio
 from io import FileIO
 from logging import WARNING
 from mimetypes import guess_type
@@ -97,7 +97,7 @@ class GDriveManager:
             if _progress:
                 uploaded = _progress.resumable_progress
                 total_size = _progress.total_size
-                await progress(
+                asyncio.get_event_loop().create_task(progress(
                     uploaded,
                     total_size,
                     event,
@@ -144,13 +144,13 @@ class GDriveManager:
                 if _progress:
                     uploaded = _progress.resumable_progress
                     total_size = _progress.total_size
-                    await progress(
+                    asyncio.get_event_loop().create_task(progress(
                         uploaded,
                         total_size,
                         event,
                         start,
                         f"Downloading {filename} from GDrive...",
-                    )
+                    ))
         return True, filename
 
     def _list_files(self):
