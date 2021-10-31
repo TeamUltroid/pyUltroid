@@ -13,10 +13,10 @@ from urllib.request import urlretrieve
 
 from pytz import timezone
 from telethon.errors import (
+    BotMethodInvalidError,
     ChannelPrivateError,
     ChannelsTooMuchError,
     UserNotParticipantError,
-    BotMethodInvalidError
 )
 from telethon.tl.custom import Button
 from telethon.tl.functions.channels import (
