@@ -108,5 +108,5 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         Loader(path="assistant/pmbot.py").load_single(log=False)
 
     # vc bot
-    if vcbot == "True":
+    if vcbot == "True" and vcClient:
         Loader(path="vcbot", key="VCBot").load()
