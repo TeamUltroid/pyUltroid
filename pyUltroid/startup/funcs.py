@@ -175,6 +175,9 @@ async def autopilot():
             udB.delete("LOG_CHANNEL")
             channel = None
     if not channel:
+        if ultroid_bot._bot:
+            LOGS.info("'LOG_CHANNEL' not found! Add it in order to use 'BOTMODE'")
+            exit()
         LOGS.info("Creating a Log Channel for You!")
         try:
             r = await ultroid_bot(
@@ -313,6 +316,8 @@ async def plug(plugin_channels):
     from .. import ultroid_bot
     from .utils import load_addons
 
+    if ultroid_bot._bot:
+        return
     if not os.path.exists("addons"):
         os.mkdir("addons")
     if not os.path.exists("addons/__init__.py"):
