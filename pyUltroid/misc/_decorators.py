@@ -32,7 +32,7 @@ from telethon.errors.rpcerrorlist import (
 from telethon.tl import types
 from telethon.utils import get_display_name
 
-from .. import DUAL_HNDLR, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
+from .. import DUAL_MODE, DUAL_HNDLR, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
 from ..dB import DEVLIST
 from ..dB._core import LIST, LOADED
 from ..dB.sudos import is_fullsudo
@@ -47,7 +47,6 @@ from ._wrappers import eod
 hndlr = "\\" + HNDLR
 MANAGER = udB.get("MANAGER")
 TAKE_EDITS = udB.get("TAKE_EDITS")
-DUAL_MODE = udB.get("DUAL_MODE")
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
 owner_and_sudos = owner_and_sudos()
 
