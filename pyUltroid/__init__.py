@@ -32,7 +32,9 @@ else:
 
 asst = UltroidClient(None, bot_token=udB.get("BOT_TOKEN"), udB=udB)
 
-ultroid_bot = asst
+if udB.get("BOTMODE") == "True":
+    ultroid_bot = asst
+
 ultroid_bot.run_in_loop(autobot())
 
 if udB.get("BOTMODE") == "True":
