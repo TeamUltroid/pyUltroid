@@ -34,7 +34,7 @@ if BOT_MODE:
 else:
     ultroid_bot = UltroidClient(session_file(), udB=udB, proxy=udB.get("TG_PROXY"))
 
-if not BOTMODE:
+if not BOT_MODE:
     ultroid_bot.run_in_loop(autobot())
 else:
     if not udB.get("BOT_TOKEN") and Var.BOT_TOKEN:
@@ -45,7 +45,7 @@ else:
 
 asst = UltroidClient(None, bot_token=udB.get("BOT_TOKEN"), udB=udB)
 
-if BOTMODE:
+if BOT_MODE:
     ultroid_bot = asst
 
 vcClient = vc_connection(udB, ultroid_bot)
