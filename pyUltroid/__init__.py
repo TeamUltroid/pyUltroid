@@ -23,8 +23,6 @@ udB = UltroidDB()
 if udB.ping():
     LOGS.info("Connected to Database Successfully!")
 
-asst = UltroidClient(None, bot_token=udB.get("BOT_TOKEN"), udB=udB)
-
 BOT_MODE = udB.get("BOTMODE") == "True"
 DUAL_MODE = udB.get("DUAL_MODE") == "True"
 
@@ -32,11 +30,23 @@ if BOT_MODE:
     if DUAL_MODE:
         udB.set("DUAL_MODE", "False")
         DUAL_MODE = False
-    ultroid_bot = asst
+    ultroid_bot = None
 else:
     ultroid_bot = UltroidClient(session_file(), udB=udB, proxy=udB.get("TG_PROXY"))
 
-ultroid_bot.run_in_loop(autobot())
+if not BOTMODE:
+    ultroid_bot.run_in_loop(autobot())
+else:
+    if not udB.get("BOT_TOKEN") and Var.BOT_TOKEN:
+        udB.set("BOT_TOKEN", Var.BOT_TOKEN)
+    if not udB.get("BOT_TOKEN"):
+        LOGS.info('"BOT_TOKEN" not Found! Please add it, in order to use "BOTMODE"')
+        exit()
+
+asst = UltroidClient(None, bot_token=udB.get("BOT_TOKEN"), udB=udB)
+
+if BOTMODE:
+    ultroid_bot = asst
 
 vcClient = vc_connection(udB, ultroid_bot)
 
