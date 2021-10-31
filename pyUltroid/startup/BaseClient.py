@@ -80,7 +80,7 @@ class UltroidClient(TelegramClient):
             )
             exit()
         # Save some stuff for later use...
-        if myself := udB.get("OWNER_ID"):
+        if myself := self.udB.get("OWNER_ID"):
             self.me = await self.get_entity(int(myself))
         else:
             self.me = await self.get_me()
