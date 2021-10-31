@@ -378,11 +378,15 @@ def time_formatter(milliseconds):
 def humanbytes(size):
     if size in [None, ""]:
         return "0 B"
-    for unit in ["B", "KB", "MB", "GB"]:
+    for unit in ["", "K", "M", "G", "T"]:
         if size < 1024:
             break
         size /= 1024
-    return f"{size:.2f} {unit}"
+    if isinstance(size, int):
+        size = f"{size} {unit}B"
+    elif isinstance(size, float):
+        size = f"{size:.2f} {unit}B"
+    return size
 
 
 def numerize(number):
@@ -390,7 +394,11 @@ def numerize(number):
         if number < 1000:
             break
         number /= 1000
-    return f"{number:.2f} {unit}"
+    if isinstance(number, int):
+        number = f"{number} {unit}"
+    elif isinstance(number, float):
+        number = f"{number:.2f} {unit}"
+    return number
 
 
 No_Flood = {}
