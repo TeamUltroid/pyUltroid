@@ -12,10 +12,11 @@ from random import randint
 from urllib.request import urlretrieve
 
 from pytz import timezone
-from telethon.errors.rpcerrorlist import (
+from telethon.errors import (
     ChannelPrivateError,
     ChannelsTooMuchError,
     UserNotParticipantError,
+    BotMethodInvalidError
 )
 from telethon.tl.custom import Button
 from telethon.tl.functions.channels import (
@@ -390,6 +391,8 @@ async def ready():
     try:
         # To Let Them know About New Updates and Changes
         await ultroid_bot(JoinChannelRequest("@TheUltroid"))
+    except BotMethodInvalidError:
+        pass
     except ChannelsTooMuchError:
         LOGS.info("Join @TheUltroid to know about new Updates...")
     except ChannelPrivateError:
