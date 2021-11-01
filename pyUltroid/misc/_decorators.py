@@ -142,8 +142,6 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
                 chat = ult.chat
                 if mode in ["dualmode", "official", "sudo"]:
                     if not ult.out and mode in ["dualmode", "sudo"]:
-                        if not allow_all and ult.sender_id not in owner_and_sudos:
-                            return
                         if fullsudo and not is_fullsudo(ult.sender_id):
                             return await eod(
                                 ult, "`Full Sudo User Required...`", time=15
@@ -282,9 +280,11 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
 
             if allow_sudo:
                 args["outgoing"] = False
+                args["from_users"] = sudoers()
                 args["pattern"] = compile_pattern(pattern, "\\" + SUDO_HNDLR)
                 ultroid_bot.add_event_handler(doit("sudo"), events.NewMessage(**args))
                 del args["outgoing"]
+                del args["from_users"]
         if "assistant" in type_:
             args["pattern"] = compile_pattern(pattern, "/")
             asst.add_event_handler(doit("assistant"), events.NewMessage(**args))
@@ -296,6 +296,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
             if not (("manager" in type_) and (DUAL_HNDLR == "/")) and not (
                 ("assistant" in type_) and (DUAL_HNDLR == "/")
             ):
+                args["from_users"] = owner_and_sudos()
                 args["pattern"] = compile_pattern(pattern, "\\" + DUAL_HNDLR)
                 asst.add_event_handler(doit("dualmode"), events.NewMessage(**args))
         # Collecting all Handlers as one..
