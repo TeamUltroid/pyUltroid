@@ -98,14 +98,12 @@ class GDriveManager:
             if _progress:
                 uploaded = _progress.resumable_progress
                 total_size = _progress.total_size
-                await asyncio.get_event_loop().create_task(
-                    progress(
+                await progress(
                         uploaded,
                         total_size,
                         event,
                         start,
                         f"Uploading {filename} on GDrive...",
-                    )
                 )
         fileId = _status.get("id")
         try:
@@ -145,14 +143,12 @@ class GDriveManager:
                 if _progress:
                     uploaded = _progress.resumable_progress
                     total_size = _progress.total_size
-                    await asyncio.get_event_loop().create_task(
-                        progress(
+                    await progress(
                             uploaded,
                             total_size,
                             event,
                             start,
                             f"Downloading {filename} from GDrive...",
-                        ),
                     )
         return True, filename
 
