@@ -34,7 +34,6 @@ from telethon.utils import get_display_name
 
 from .. import DUAL_HNDLR, DUAL_MODE, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
 from ..dB import DEVLIST
-from .misc import sudoers
 from ..dB._core import LIST, LOADED
 from ..dB.sudos import is_fullsudo
 from ..functions.admins import admin_check
@@ -44,6 +43,7 @@ from ..version import __version__ as pyver
 from ..version import ultroid_version as ult_ver
 from . import owner_and_sudos, should_allow_sudo
 from ._wrappers import eod
+from .misc import sudoers
 
 hndlr = "\\" + HNDLR
 MANAGER = udB.get("MANAGER")
