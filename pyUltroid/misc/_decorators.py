@@ -275,7 +275,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 args["func"] = lambda e: not e.fwd_from and not e.via_bot_id
             del args["outgoing"]
 
-            if allow_sudo:
+            if allow_sudo and sudoers():
                 args["outgoing"] = False
                 args["from_users"] = sudoers()
                 args["pattern"] = compile_pattern(pattern, "\\" + SUDO_HNDLR)
