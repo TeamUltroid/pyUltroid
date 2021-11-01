@@ -13,6 +13,8 @@ CMD_HELP = {}
 
 
 def sudoers():
+    from .. import _ult_cache
+
     if _ult_cache.get("SUDOS"):
         return _ult_cache["SUDOS"]
     from .. import udB
@@ -31,6 +33,7 @@ def should_allow_sudo():
 
 
 def owner_and_sudos():
+    from .. import _ult_cache
     if _ult_cache.get("OWNER_SUDOS"):
         return _ult_cache["OWNER_SUDOS"]
 
