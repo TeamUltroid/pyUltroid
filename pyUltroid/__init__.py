@@ -34,7 +34,7 @@ if BOT_MODE:
     ultroid_bot = None
 else:
     ultroid_bot = UltroidClient(
-        session_file(), udB=udB, app_version=ultroid_version, proxy=udB.get("TG_PROXY")
+        session_file(), udB=udB, app_version=ultroid_version, device_model="Ultroid", proxy=udB.get("TG_PROXY")
     )
 
 if not BOT_MODE:
