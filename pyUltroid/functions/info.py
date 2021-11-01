@@ -40,10 +40,10 @@ async def get_uinfo(e):
         data = e.pattern_match.group(1)
     else:
         ok = e.pattern_match.group(1).split(maxsplit=1)
-        if len(ok) >= 1:
+        if len(ok) > 1:
             data = ok[1]
         try:
-            user = await get_entity(await get_user_id(ok[0], client=e.client))
+            user = await e.client.get_entity(await get_user_id(ok[0], client=e.client))
         except IndexError:
             pass
     return user, data
