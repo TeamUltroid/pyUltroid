@@ -42,7 +42,7 @@ async def get_uinfo(e):
     else:
         ok = e.pattern_match.group(1).split(maxsplit=1)
         if len(ok) >= 1:
-            usr = ok[0]
+            usr = ok[1]
             if usr.isdigit():
                 usr = int(usr)
             try:
