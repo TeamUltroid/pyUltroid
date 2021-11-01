@@ -37,7 +37,7 @@ class UltroidClient(TelegramClient):
         self.logger = logger
         self.udB = udB
         self.proxy = proxy
-        self.dc_id = self.session.dc_id
+        #self.dc_id = self.session.dc_id
         kwargs["api_id"] = Var.API_ID
         kwargs["api_hash"] = Var.API_HASH
         kwargs["base_logger"] = TelethonLogger
