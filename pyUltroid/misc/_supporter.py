@@ -39,8 +39,7 @@ def admin_cmd(pattern=None, command=None, **args):
     args["func"] = lambda e: not e.via_bot_id and not e.fwd_from
     args["chats"] = black_list_chats
     args["blacklist_chats"] = True
-    stack = inspect.stack()
-    previous_stack_frame = stack[1]
+    previous_stack_frame = inspect.stack()[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     if pattern is not None:
@@ -69,8 +68,7 @@ def admin_cmd(pattern=None, command=None, **args):
         except BaseException:
             pass
     args["outgoing"] = True
-    if "incoming" in args and not args["incoming"]:
-        args["outgoing"] = True
+    args["incoming"] = False
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
         del args["allow_edited_updates"]
     return events.NewMessage(**args)
@@ -86,14 +84,13 @@ def sudo_cmd(allow_sudo=True, pattern=None, command=None, **args):
     args["func"] = lambda e: not e.via_bot_id and not e.fwd_from
     args["chats"] = black_list_chats
     args["blacklist_chats"] = True
-    stack = inspect.stack()
-    previous_stack_frame = stack[1]
+    previous_stack_frame = inspect.stack()[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
     if pattern:
         args["pattern"] = re.compile("\\" + SUDO_HNDLR + pattern)
     if allow_sudo:
-        args["from_users"] = [int(user) for user in sudoers()]
+        args["from_users"] = sudoers()
         args["incoming"] = True
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
         del args["allow_edited_updates"]
