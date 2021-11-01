@@ -34,6 +34,7 @@ from telethon.utils import get_display_name
 
 from .. import DUAL_HNDLR, DUAL_MODE, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
 from ..dB import DEVLIST
+from .misc import sudoers
 from ..dB._core import LIST, LOADED
 from ..dB.sudos import is_fullsudo
 from ..functions.admins import admin_check
