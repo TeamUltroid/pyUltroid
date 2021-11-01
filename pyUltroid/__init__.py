@@ -15,7 +15,7 @@ from .startup.connections import session_file, vc_connection, where_hosted
 from .startup.funcs import autobot
 
 start_time = time.time()
-
+_ult_cache = {}
 HOSTED_ON = where_hosted()
 
 udB = UltroidDB()
