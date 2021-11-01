@@ -82,6 +82,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
     type_ = args.get("type", ["official"])
     only_devs = args.get("only_devs", False)
     allow_pm = args.get("allow_pm", False)
+    allow_all = args.get("allow_all", False)
     if isinstance(type_, str):
         type_ = [type_]
     if "official" in type_ and DUAL_MODE:
@@ -129,7 +130,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
         "type",
         "fullsudo",
         "only_devs",
-        "allow_pm",
+        "allow_pm","allow_all"
     ]:
         if i in args:
             del args[i]
@@ -165,7 +166,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                         time=10,
                     )
                 if groups_only and ult.is_private:
-                    return await eod(ult, "`Use this in group/channel.`")
+                    return await eod(ult, "`Use this in Group/Channel.`")
                 try:
                     await func(ult)
                 except FloodWaitError as fwerr:
