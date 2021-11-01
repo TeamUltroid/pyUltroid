@@ -9,15 +9,18 @@
 from .. import *
 
 CMD_HELP = {}
-OWNER_SUDOS = []
 # ----------------------------------------------#
 
 
 def sudoers():
+    if _ult_cache.get("SUDOS"):
+        return _ult_cache["SUDOS"]
     from .. import udB
 
-    if udB.get("SUDOS"):
-        return udB["SUDOS"].split()
+    if SUDOS := udB.get("SUDOS")
+        li = [int(sudo) for sudo in SUDOS.split()]
+        _ult_cache["SUDOS"] = li
+        return li
     return []
 
 
@@ -28,14 +31,14 @@ def should_allow_sudo():
 
 
 def owner_and_sudos():
-    if OWNER_SUDOS:
-        return OWNER_SUDOS
+    if _ult_cache.get("OWNER_SUDOS"):
+        return _ult_cache["OWNER_SUDOS"]
 
     from .. import udB, ultroid_bot
 
     data = [int(udB.get("OWNER_ID")), *sudoers()]
-    [OWNER_SUDOS.append(int(b)) for b in data]
-    return OWNER_SUDOS
+    _ult_cache["OWNER_SUDOS"] = data
+    return return
 
 
 # ------------------------------------------------ #
