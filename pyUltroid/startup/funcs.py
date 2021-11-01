@@ -313,6 +313,7 @@ async def plug(plugin_channels):
     from .utils import load_addons
 
     if ultroid_bot._bot:
+        LOGS.info("Plugin Channels can't be used in 'BOTMODE'")
         return
     if not os.path.exists("addons"):
         os.mkdir("addons")
