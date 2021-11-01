@@ -43,7 +43,8 @@ IN_BTTS = [
 def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
     """Decorator for assistant's command"""
     name = inspect.stack()[1].filename.split("/")[-1].replace(".py", "")
-
+    kwargs["forwards"] = False
+    kwargs["func"] = lambda x: not x.via_bot_id
     def ult(func):
         if pattern:
             kwargs["pattern"] = re.compile("^/" + pattern)
