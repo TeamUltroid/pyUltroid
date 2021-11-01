@@ -367,7 +367,7 @@ def time_formatter(milliseconds):
         + ((str(minutes) + "m:") if minutes else "")
         + ((str(seconds) + "s") if seconds else "")
     )
-    if tmp == "":
+    if not tmp:
         return "0 s"
 
     if tmp.endswith(":"):
@@ -376,7 +376,7 @@ def time_formatter(milliseconds):
 
 
 def humanbytes(size):
-    if size in [None, ""]:
+    if not size:
         return "0 B"
     for unit in ["", "K", "M", "G", "T"]:
         if size < 1024:
