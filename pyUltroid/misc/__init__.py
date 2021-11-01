@@ -15,7 +15,7 @@ CMD_HELP = {}
 def sudoers():
     from .. import _ult_cache
 
-    if _ult_cache.get("SUDOS"):
+    if _ult_cache.get("SUDOS") is not None:
         return _ult_cache["SUDOS"]
     from .. import udB
 
@@ -35,7 +35,7 @@ def should_allow_sudo():
 def owner_and_sudos():
     from .. import _ult_cache
 
-    if _ult_cache.get("OWNER_SUDOS"):
+    if _ult_cache.get("OWNER_SUDOS") is not None:
         return _ult_cache["OWNER_SUDOS"]
 
     from .. import udB, ultroid_bot
