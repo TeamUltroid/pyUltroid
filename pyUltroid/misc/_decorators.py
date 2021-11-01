@@ -127,7 +127,6 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
         "admins_only",
         "groups_only",
         "type",
-        "allow_all",
         "fullsudo",
         "only_devs",
         "allow_pm",
@@ -272,15 +271,14 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                     events.MessageEdited(**args),
                 )
                 args["func"] = lambda e: not e.fwd_from and not e.via_bot_id
-            del args["outgoing"]
 
             if allow_sudo and sudoers():
                 args["outgoing"] = False
                 args["from_users"] = sudoers()
                 args["pattern"] = compile_pattern(pattern, "\\" + SUDO_HNDLR)
                 ultroid_bot.add_event_handler(doit("sudo"), events.NewMessage(**args))
-                del args["outgoing"]
                 del args["from_users"]
+            del args["outgoing"]
         if "assistant" in type_:
             args["pattern"] = compile_pattern(pattern, "/")
             asst.add_event_handler(doit("assistant"), events.NewMessage(**args))
