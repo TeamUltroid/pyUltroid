@@ -48,7 +48,6 @@ hndlr = "\\" + HNDLR
 MANAGER = udB.get("MANAGER")
 TAKE_EDITS = udB.get("TAKE_EDITS")
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
-owner_and_sudos = owner_and_sudos()
 allow_sudo = should_allow_sudo()
 
 
@@ -276,7 +275,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
 
             if allow_sudo and sudoers():
                 args["outgoing"] = False
-                args["from_users"] = sudoers()
+                args["from_users"] = sudoers
                 args["pattern"] = compile_pattern(pattern, "\\" + SUDO_HNDLR)
                 ultroid_bot.add_event_handler(doit("sudo"), events.NewMessage(**args))
                 del args["from_users"]
