@@ -141,8 +141,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             async def wrapper(ult):
                 chat = ult.chat
                 if mode in ["dualmode", "official", "sudo"]:
-                    if not ult.out and mode in ["dualmode", "sudo"]:
-                        if fullsudo and not is_fullsudo(ult.sender_id):
+                    if fullsudo and not is_fullsudo(ult.sender_id):
                             return await eod(
                                 ult, "`Full Sudo User Required...`", time=15
                             )
