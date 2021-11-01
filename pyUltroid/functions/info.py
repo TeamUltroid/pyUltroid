@@ -47,7 +47,8 @@ async def get_uinfo(e):
         except IndexError:
             pass
         except ValueError as er:
-            return await eor(e, str(er))
+            await eor(e, str(er))
+            return None, None
     return user, data
 
 
