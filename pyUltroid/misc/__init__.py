@@ -17,7 +17,7 @@ def sudoers():
         return _ult_cache["SUDOS"]
     from .. import udB
 
-    if SUDOS := udB.get("SUDOS")
+    if SUDOS := udB.get("SUDOS"):
         li = [int(sudo) for sudo in SUDOS.split()]
         _ult_cache["SUDOS"] = li
         return li
