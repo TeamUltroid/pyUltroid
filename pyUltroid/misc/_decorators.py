@@ -79,7 +79,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
     groups_only = args.get("groups_only", False)
     admins_only = args.get("admins_only", False)
     fullsudo = args.get("fullsudo", False)
-    allow_all = args.get("allow_all", False)
+    args.get("allow_all", False)
     type_ = args.get("type", ["official"])
     only_devs = args.get("only_devs", False)
     allow_pm = args.get("allow_pm", False)
