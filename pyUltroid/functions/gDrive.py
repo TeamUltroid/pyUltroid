@@ -1,4 +1,3 @@
-import asyncio
 import time
 from io import FileIO
 from logging import WARNING
@@ -99,11 +98,11 @@ class GDriveManager:
                 uploaded = _progress.resumable_progress
                 total_size = _progress.total_size
                 await progress(
-                        uploaded,
-                        total_size,
-                        event,
-                        start,
-                        f"Uploading {filename} on GDrive...",
+                    uploaded,
+                    total_size,
+                    event,
+                    start,
+                    f"Uploading {filename} on GDrive...",
                 )
         fileId = _status.get("id")
         try:
@@ -144,11 +143,11 @@ class GDriveManager:
                     uploaded = _progress.resumable_progress
                     total_size = _progress.total_size
                     await progress(
-                            uploaded,
-                            total_size,
-                            event,
-                            start,
-                            f"Downloading {filename} from GDrive...",
+                        uploaded,
+                        total_size,
+                        event,
+                        start,
+                        f"Downloading {filename} from GDrive...",
                     )
         return True, filename
 
