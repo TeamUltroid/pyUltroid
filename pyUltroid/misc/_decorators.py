@@ -53,7 +53,7 @@ allow_sudo = should_allow_sudo()
 
 
 def compile_pattern(data, hndlr):
-    if HNDLR == " ":  # No handler feature
+    if hndlr == " ":  # No handler feature
         return re.compile("^" + data.replace("^", "").replace(".", ""))
     return (
         re.compile(hndlr + data.replace("^", "").replace(".", ""))
