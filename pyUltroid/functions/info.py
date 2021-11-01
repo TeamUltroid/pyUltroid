@@ -48,7 +48,8 @@ async def get_uinfo(e):
             try:
                 user = await e.get_entity(usr)
             except BaseException:
-                pass
+                await eor(e, "Username\entity Not Found.")
+                return
             if len(ok) == 2:
                 data = ok[1]
     return user, data
