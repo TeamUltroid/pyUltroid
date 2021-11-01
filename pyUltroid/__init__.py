@@ -33,7 +33,9 @@ if BOT_MODE:
         DUAL_MODE = False
     ultroid_bot = None
 else:
-    ultroid_bot = UltroidClient(session_file(), udB=udB, app_version=ultroid_version, proxy=udB.get("TG_PROXY"))
+    ultroid_bot = UltroidClient(
+        session_file(), udB=udB, app_version=ultroid_version, proxy=udB.get("TG_PROXY")
+    )
 
 if not BOT_MODE:
     ultroid_bot.run_in_loop(autobot())
