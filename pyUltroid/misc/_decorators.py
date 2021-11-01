@@ -41,9 +41,8 @@ from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
 from ..version import __version__ as pyver
 from ..version import ultroid_version as ult_ver
-from . import owner_and_sudos, should_allow_sudo
+from . import owner_and_sudos, should_allow_sudo, sudoers
 from ._wrappers import eod
-from .misc import sudoers
 
 hndlr = "\\" + HNDLR
 MANAGER = udB.get("MANAGER")
