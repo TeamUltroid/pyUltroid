@@ -40,15 +40,15 @@ async def get_uinfo(e):
         user = reply.sender
         data = e.pattern_match.group(1)
     else:
-        ok = e.pattern_match.group(1).split(maxsplit=1)
+        ok = e.pattern_match.group(1).strip().split(maxsplit=1)
         if len(ok) >= 1:
             usr = ok[0]
             if usr.isdigit():
                 usr = int(usr)
             try:
-                user = await e.get_entity(usr)
+                user = await e.client.get_entity(usr)
             except BaseException:
-                await eor(e, "Username\\entity Not Found.")
+                await eor(e, "Username entity Not Found.")
                 return
             if len(ok) == 2:
                 data = ok[1]
