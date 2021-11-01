@@ -49,7 +49,7 @@ MANAGER = udB.get("MANAGER")
 TAKE_EDITS = udB.get("TAKE_EDITS")
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
 owner_and_sudos = owner_and_sudos()
-
+allow_sudo = should_allow_sudo()
 
 def compile_pattern(data, hndlr):
     if HNDLR == " ":  # No handler feature
@@ -67,12 +67,11 @@ def compile_pattern(data, hndlr):
 # https://github.com/RaphielGang/Telegram-Paperplane/blob/625875a9ecdfd267a53067b3c1580000f5006973/userbot/events.py#L22
 
 
-def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
+def ultroid_cmd(allow_sudo=allow_sudo, **args):
     # With time and addition of Stuff
     # Decorator has turned lengthy and non attractive.
     # Todo : Make it better..
     args["func"] = lambda e: not e.via_bot_id
-    args["forwards"] = False
     file_test = Path(inspect.stack()[1].filename).stem.replace(".py", "")
     pattern = args.get("pattern", None)
     black_chats = args.get("chats", None)
@@ -296,7 +295,7 @@ def ultroid_cmd(allow_sudo=should_allow_sudo(), **args):
             if not (("manager" in type_) and (DUAL_HNDLR == "/")) and not (
                 ("assistant" in type_) and (DUAL_HNDLR == "/")
             ):
-                args["from_users"] = owner_and_sudos()
+                args["from_users"] = owner_and_sudos
                 args["pattern"] = compile_pattern(pattern, "\\" + DUAL_HNDLR)
                 asst.add_event_handler(doit("dualmode"), events.NewMessage(**args))
         # Collecting all Handlers as one..
