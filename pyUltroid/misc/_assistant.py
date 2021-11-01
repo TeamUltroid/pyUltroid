@@ -45,6 +45,7 @@ def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
     name = inspect.stack()[1].filename.split("/")[-1].replace(".py", "")
     kwargs["forwards"] = False
     kwargs["func"] = lambda x: not x.via_bot_id
+
     def ult(func):
         if pattern:
             kwargs["pattern"] = re.compile("^/" + pattern)
