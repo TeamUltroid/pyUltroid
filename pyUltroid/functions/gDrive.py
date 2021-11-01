@@ -123,8 +123,6 @@ class GDriveManager:
                 fileId = fileId.split("=")[1][:-7]
             elif "/view" in fileId:
                 fileId = fileId.split("/")[::-1][1]
-        else:
-            pass
         try:
             if not filename:
                 filename = (
