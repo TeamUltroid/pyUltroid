@@ -46,4 +46,4 @@ def list_cmds():
     ok = get_stuff()
     if ok.keys():
         return ok.keys()
-    return {}
+    return []
