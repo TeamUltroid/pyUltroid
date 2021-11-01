@@ -142,9 +142,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 chat = ult.chat
                 if mode in ["dualmode", "official", "sudo"]:
                     if fullsudo and not is_fullsudo(ult.sender_id):
-                            return await eod(
-                                ult, "`Full Sudo User Required...`", time=15
-                            )
+                        return await eod(ult, "`Full Sudo User Required...`", time=15)
                     if hasattr(chat, "title"):
                         if (
                             "#noub" in chat.title.lower()
