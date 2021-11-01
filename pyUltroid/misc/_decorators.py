@@ -51,6 +51,7 @@ black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
 owner_and_sudos = owner_and_sudos()
 allow_sudo = should_allow_sudo()
 
+
 def compile_pattern(data, hndlr):
     if HNDLR == " ":  # No handler feature
         return re.compile("^" + data.replace("^", "").replace(".", ""))
