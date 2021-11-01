@@ -38,7 +38,7 @@ def owner_and_sudos():
 
     data = [int(udB.get("OWNER_ID")), *sudoers()]
     _ult_cache["OWNER_SUDOS"] = data
-    return return
+    return data
 
 
 # ------------------------------------------------ #
