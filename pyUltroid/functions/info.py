@@ -35,23 +35,19 @@ async def get_user_id(ids, client=ultroid_bot):
 
 async def get_uinfo(e):
     user, data = None, None
-    if e.reply_to:
-        reply = await e.get_reply_message()
-        user = reply.sender
+    if reply := await e.get_reply_message():
+        user = await e.client.get_entity(reply.sender_id)
         data = e.pattern_match.group(1)
     else:
-        ok = e.pattern_match.group(1).strip().split(maxsplit=1)
-        if len(ok) >= 1:
-            usr = ok[0]
-            if usr.isdigit():
-                usr = int(usr)
-            try:
-                user = await e.client.get_entity(usr)
-            except BaseException:
-                await eor(e, "Username entity Not Found.")
-                return
-            if len(ok) == 2:
-                data = ok[1]
+        ok = e.pattern_match.group(1).split(maxsplit=1)
+        if len(ok) > 1:
+            data = ok[1]
+        try:
+            user = await e.client.get_entity(await get_user_id(ok[0], client=e.client))
+        except IndexError:
+            pass
+        except ValueError as er:
+            return await eor(e, str(er))
     return user, data
 
 
