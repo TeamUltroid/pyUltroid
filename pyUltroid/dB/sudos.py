@@ -5,8 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from .. import _ult_cache, udB, ultroid_bot
-from ..misc import sudoers
+from .. import udB, ultroid_bot
 
 
 def str_to_list(text):  # Returns List
@@ -22,7 +21,11 @@ def are_all_nums(list_):  # Takes List , Returns Boolean
     return all(item.isdigit() for item in list_)
 
 
-get_sudos = sudoers
+def get_sudos():  # Returns List
+    sudos = udB.get("SUDOS")
+    if not sudos:
+        return [""]
+    return str_to_list(sudos)
 
 
 def is_sudo(id_):  # Take int or str with numbers only , Returns Boolean
@@ -38,9 +41,7 @@ def add_sudo(id_):  # Take int or str with numbers only , Returns Boolean
         return False
     try:
         sudos = get_sudos()
-        sudos.append(int(id_))
-        if _ult_cache.get("OWNER_SUDOS") and int(id) not in _ult_cache["OWNER_SUDOS"]:
-            _ult_cache["OWNER_SUDOS"].append(int(id_))
+        sudos.append(id_)
         udB.set("SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
@@ -54,11 +55,7 @@ def del_sudo(id_):  # Take int or str with numbers only , Returns Boolean
         return False
     try:
         sudos = get_sudos()
-        if int(id_) not in sudos:
-            return False
-        sudos.remove(int(id_))
-        if _ult_cache.get("OWNER_SUDOS"):
-            _ult_cache["OWNER_SUDOS"].remove(int(id_))
+        sudos.remove(id_)
         udB.set("SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
