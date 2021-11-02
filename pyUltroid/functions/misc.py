@@ -323,7 +323,6 @@ async def _format_quote(event, reply={}, type_="private"):
                 name = get_display_name(sender)
             except ValueError:
                 sender = None
-    name = get_display_name(sender) if not is_fwd else is_fwd.from_name
     entities = []
     if event.entities:
         entities = [entity.to_dict() for entity in event.entities]
