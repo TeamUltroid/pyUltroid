@@ -263,7 +263,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             if TAKE_EDITS:
                 args["func"] = (
                     lambda x: not (
-                        isinstance(x.chat, types.Channel) and x.chat.broadcast
+                        x.is_channel and x.chat.broadcast
                     )
                     and not x.via_bot_id
                 )
