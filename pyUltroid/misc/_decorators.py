@@ -71,7 +71,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
     # Decorator has turned lengthy and non attractive.
     # Todo : Make it better..
     args["func"] = lambda e: not e.via_bot_id
-    file_test = Path(inspect.stack()[1].filename).stem
+    file_test = Path(inspect.stack()[1].filename)
     pattern = args.get("pattern", None)
     black_chats = args.get("chats", None)
     groups_only = args.get("groups_only", False)
@@ -260,12 +260,11 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             args["outgoing"] = True
             cm = doit("official")
             ultroid_bot.add_event_handler(cm, events.NewMessage(**args))
-            n_file = Path(inspect.stack()[1].filename)
-            if "addons/" in str(n_file):
-                if LOADED.get(n_file.stem):
-                    LOADED[n_file.stem].append(cm)
+            if "addons/" in str(file_test):
+                if LOADED.get(file_test.stem):
+                    LOADED[file_test.stem].append(cm)
                 else:
-                    LOADED.update({n_file.stem: [cm]})
+                    LOADED.update({file_test.stem: [cm]})
 
             if TAKE_EDITS:
                 args["func"] = (
@@ -284,24 +283,22 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 args["pattern"] = compile_pattern(pattern, "\\" + SUDO_HNDLR)
                 cm = doit("sudo")
                 ultroid_bot.add_event_handler(cm, events.NewMessage(**args))
-                n_file = Path(inspect.stack()[1].filename)
-                if "addons/" in str(n_file):
-                    if LOADED.get(n_file.stem):
-                        LOADED[n_file.stem].append(cm)
+                if "addons/" in str(file_test):
+                    if LOADED.get(file_test.stem):
+                        LOADED[file_test.stem].append(cm)
                     else:
-                        LOADED.update({n_file.stem: [cm]})
+                        LOADED.update({file_test.stem: [cm]})
                 del args["from_users"]
             del args["outgoing"]
         if "assistant" in type_:
             args["pattern"] = compile_pattern(pattern, "/")
             cm = doit("assistant")
             asst.add_event_handler(cm, events.NewMessage(**args))
-            n_file = Path(inspect.stack()[1].filename)
-            if "addons/" in str(n_file):
-                if LOADED.get(n_file.stem):
-                    LOADED[n_file.stem].append(cm)
+            if "addons/" in str(file_test):
+                if LOADED.get(file_test.stem):
+                    LOADED[file_test.stem].append(cm)
                 else:
-                    LOADED.update({n_file.stem: [cm]})
+                    LOADED.update({file_test.stem: [cm]})
         if MANAGER and "manager" in type_:
             args["pattern"] = compile_pattern(pattern, "/")
             asst.add_event_handler(doit("manager"), events.NewMessage(**args))
