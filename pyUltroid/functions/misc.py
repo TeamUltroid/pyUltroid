@@ -10,12 +10,12 @@ from logging import WARNING
 from random import choice, randrange, shuffle
 
 from bs4 import BeautifulSoup
+from telethon.utils import get_display_name, get_peer_id
 
 from .. import *
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
-from telethon.utils import get_display_name, get_peer_id
 from .tools import async_searcher, check_filename, json_parser
 
 try:
@@ -308,31 +308,41 @@ async def _format_quote(event, reply={}, type_="private"):
     is_fwd = event.fwd_from
     sender = await event.get_sender()
     name = get_display_name(sender) if not is_fwd else is_fwd.from_name
-    message = {"entities":[entity.to_dict() for entity in event.entities],
-              "chatId":event.chat_id,
-              "avatar":True,
-              "from": 
-               {"id":get_peer_id(is_fwd.from_id) if is_fwd else event.sender_id,
-                "first_name":is_fwd.from_name if is_fwd.from_name else sender.first_name,
-                "last_name":None if is_fwd else sender.last_name,
-                "username":sender.username,
-                "language_code":"en",
-                "title":name,
-                "name":name,
-                "type":type_
-               },
-               "text":event.message,
-               "replyMessage":reply
-              }
+    message = {
+        "entities": [entity.to_dict() for entity in event.entities],
+        "chatId": event.chat_id,
+        "avatar": True,
+        "from": {
+            "id": get_peer_id(is_fwd.from_id) if is_fwd else event.sender_id,
+            "first_name": is_fwd.from_name if is_fwd.from_name else sender.first_name,
+            "last_name": None if is_fwd else sender.last_name,
+            "username": sender.username,
+            "language_code": "en",
+            "title": name,
+            "name": name,
+            "type": type_,
+        },
+        "text": event.message,
+        "replyMessage": reply,
+    }
     return message
 
 
 async def create_quotly(event, reply={}, bg="#1b1429", file_name="quote.webp"):
     if not isinstance(event, list):
         event = [event]
-    content = {"type":"quote", format:"webp", "backgroundColor":bg,
-              "width": 512, "height": 768, "scale":2, "messages":[_format_quote(message, reply=reply) for message in event]}
-    request = await async_searcher("https://bot.lyo.su/quote/generate", post=True, json=content, re_json=True)
+    content = {
+        "type": "quote",
+        format: "webp",
+        "backgroundColor": bg,
+        "width": 512,
+        "height": 768,
+        "scale": 2,
+        "messages": [_format_quote(message, reply=reply) for message in event],
+    }
+    request = await async_searcher(
+        "https://bot.lyo.su/quote/generate", post=True, json=content, re_json=True
+    )
     if request.get("ok") and request["ok"]:
         with open(file_name, "wb") as file:
             image = base64.decodebytes(request["result"]["image"].encode("utf-8"))
