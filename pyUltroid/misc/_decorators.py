@@ -161,7 +161,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 if only_devs and not udB.get("I_DEV"):
                     return await eod(
                         ult,
-                        f"**⚠️ Developer Restricted!**\nIf you know what this does, and want to proceed, use\n`{HNDLR}setredis I_DEV True`.\n\nThis Might Be Dangerous.",
+                        f"**⚠️ Developer Restricted!**\nIf you know what this does, and want to proceed, use\n`{HNDLR}setdb I_DEV True`.\n\nThis Might Be Dangerous.",
                         time=10,
                     )
                 if groups_only and ult.is_private:
