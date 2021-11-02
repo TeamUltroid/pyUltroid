@@ -54,7 +54,8 @@ def del_sudo(id_):  # Take int or str with numbers only , Returns Boolean
         return False
     try:
         sudos = get_sudos()
-        if int(id_) not in sudos: return False
+        if int(id_) not in sudos:
+            return False
         sudos.remove(int(id_))
         if _ult_cache.get("OWNER_SUDOS"):
             _ult_cache["OWNER_SUDOS"].remove(int(id_))
