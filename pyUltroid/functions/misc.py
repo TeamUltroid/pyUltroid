@@ -327,7 +327,7 @@ async def _format_quote(event, reply={}, type_="private"):
             "name": name,
             "type": type_,
         },
-        "text": event.message,
+        "text": event.raw_text,
         "replyMessage": reply,
     }
     return message
@@ -348,7 +348,7 @@ async def create_quotly(event, reply={}, bg="#1b1429", file_name="quote.webp"):
     request = await async_searcher(
         "https://bot.lyo.su/quote/generate", post=True, json=content, re_json=True
     )
-    if request.get("ok") and request["ok"]:
+    if request.get("ok"):
         with open(file_name, "wb") as file:
             image = base64.decodebytes(request["result"]["image"].encode("utf-8"))
             file.write(image)
