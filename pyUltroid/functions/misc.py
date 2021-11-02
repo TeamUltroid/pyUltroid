@@ -314,7 +314,7 @@ async def _format_quote(event, reply={}, type_="private"):
         name = get_display_name(sender)
         last_name = sender.last_name
     else:
-        id_ = None
+        id_, sender = None, None
         name = is_fwd.from_name
         if is_fwd.from_id:
             id_ = get_peer_id(is_fwd.from_id)
@@ -322,7 +322,7 @@ async def _format_quote(event, reply={}, type_="private"):
                 sender = await event.client.get_entity(id_)
                 name = get_display_name(sender)
             except ValueError:
-                sender = None
+                pass
     entities = []
     if event.entities:
         entities = [entity.to_dict() for entity in event.entities]
