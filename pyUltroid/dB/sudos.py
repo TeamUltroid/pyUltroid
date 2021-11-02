@@ -38,10 +38,9 @@ def add_sudo(id_):  # Take int or str with numbers only , Returns Boolean
         return False
     try:
         sudos = get_sudos()
-        sudos.append(id_)
-        _ult_cache["SUDOS"].append(id_)
-        if _ult_cache.get("OWNER_SUDOS"):
-            _ult_cache["OWNER_SUDOS"].append(id_)
+        sudos.append(int(id_))
+        if _ult_cache.get("OWNER_SUDOS") and int(id) not in _ult_cache["OWNER_SUDOS"]:
+            _ult_cache["OWNER_SUDOS"].append(int(id_))
         udB.set("SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
@@ -55,10 +54,10 @@ def del_sudo(id_):  # Take int or str with numbers only , Returns Boolean
         return False
     try:
         sudos = get_sudos()
-        sudos.remove(id_)
-        _ult_cache["SUDOS"].remove(id_)
+        if int(id_) not in sudos: return False
+        sudos.remove(int(id_))
         if _ult_cache.get("OWNER_SUDOS"):
-            _ult_cache["OWNER_SUDOS"].remove(id_)
+            _ult_cache["OWNER_SUDOS"].remove(int(id_))
         udB.set("SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
