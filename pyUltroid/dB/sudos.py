@@ -5,8 +5,8 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from .. import udB, ultroid_bot
-
+from .. import udB, ultroid_bot, _ult_cache
+from ..misc import sudoers
 
 def str_to_list(text):  # Returns List
     return text.split(" ")
@@ -21,11 +21,7 @@ def are_all_nums(list_):  # Takes List , Returns Boolean
     return all(item.isdigit() for item in list_)
 
 
-def get_sudos():  # Returns List
-    sudos = udB.get("SUDOS")
-    if not sudos:
-        return [""]
-    return str_to_list(sudos)
+get_sudos = sudoers
 
 
 def is_sudo(id_):  # Take int or str with numbers only , Returns Boolean
@@ -42,6 +38,9 @@ def add_sudo(id_):  # Take int or str with numbers only , Returns Boolean
     try:
         sudos = get_sudos()
         sudos.append(id_)
+        _ult_cache["SUDOS"].append(id_)
+        if _ult_cache.get("OWNER_SUDOS"):
+            _ult_cache["OWNER_SUDOS"].append(id_)
         udB.set("SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
@@ -56,6 +55,9 @@ def del_sudo(id_):  # Take int or str with numbers only , Returns Boolean
     try:
         sudos = get_sudos()
         sudos.remove(id_)
+        _ult_cache["SUDOS"].remove(id_)
+        if _ult_cache.get("OWNER_SUDOS"):
+            _ult_cache["OWNER_SUDOS"].remove(id_)
         udB.set("SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
