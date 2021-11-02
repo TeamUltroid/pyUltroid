@@ -29,7 +29,6 @@ from telethon.errors.rpcerrorlist import (
     MessageNotModifiedError,
     UserIsBotError,
 )
-from telethon.tl import types
 from telethon.utils import get_display_name
 
 from .. import DUAL_HNDLR, DUAL_MODE, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
@@ -262,9 +261,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             ultroid_bot.add_event_handler(doit("official"), events.NewMessage(**args))
             if TAKE_EDITS:
                 args["func"] = (
-                    lambda x: not (
-                        x.is_channel and x.chat.broadcast
-                    )
+                    lambda x: not (x.is_channel and x.chat.broadcast)
                     and not x.via_bot_id
                 )
                 ultroid_bot.add_event_handler(
