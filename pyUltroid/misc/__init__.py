@@ -16,6 +16,7 @@ def sudoers():
     from .. import _ult_cache
 
     if _ult_cache.get("SUDOS") is not None:
+        _ult_cache["SUDOS"] = list(set(_ult_cache["SUDOS"]))
         return _ult_cache["SUDOS"]
     from .. import udB
 
