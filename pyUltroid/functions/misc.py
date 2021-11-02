@@ -308,8 +308,11 @@ async def _format_quote(event, reply={}, type_="private"):
     is_fwd = event.fwd_from
     sender = await event.get_sender()
     name = get_display_name(sender) if not is_fwd else is_fwd.from_name
+    entities = []
+    if event.entities:
+        entities = [entity.to_dict() for entity in event.entities]
     message = {
-        "entities": [entity.to_dict() for entity in event.entities],
+        "entities": entities,
         "chatId": event.chat_id,
         "avatar": True,
         "from": {
