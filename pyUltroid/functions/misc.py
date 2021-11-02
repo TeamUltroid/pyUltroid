@@ -306,7 +306,23 @@ async def _format_quote(event, reply={}, type_="private"):
     if reply:
         reply = await _format_quote(reply)
     is_fwd = event.fwd_from
-    sender = await event.get_sender()
+    name = None
+    last_name = None
+    if not is_fwd:
+        id_ = event.sender_id
+        sender = await event.get_sender()
+        name = get_display_name(sender)
+        last_name = sender.last_name
+    else:
+        id_ = None
+        name = is_fwd.from_name
+        if is_fwd.from_id:
+            id_ = get_peer_id(is_fwd.from_id)
+            try:
+                sender = await event.client.get_entity(id_)
+                name = get_display_name(sender)
+            except ValueError:
+                sender = None
     name = get_display_name(sender) if not is_fwd else is_fwd.from_name
     entities = []
     if event.entities:
@@ -316,12 +332,10 @@ async def _format_quote(event, reply={}, type_="private"):
         "chatId": event.chat_id,
         "avatar": True,
         "from": {
-            "id": get_peer_id(is_fwd.from_id) if is_fwd else event.sender_id,
-            "first_name": is_fwd.from_name
-            if (is_fwd and is_fwd.from_name)
-            else sender.first_name,
-            "last_name": None if is_fwd else sender.last_name,
-            "username": sender.username,
+            "id": id_,
+            "first_name": name or (sender.first_name if sender else None),
+            "last_name": last_name,
+            "username": sender.username if sender else None,
             "language_code": "en",
             "title": name,
             "name": name,
