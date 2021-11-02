@@ -36,6 +36,8 @@ def owner_and_sudos():
     from .. import _ult_cache
 
     if _ult_cache.get("OWNER_SUDOS") is not None:
+        _ult_cache["OWNER_SUDOS"].extend(sudoers())
+        _ult_cache["OWNER_SUDOS"] = list(set(_ult_cache["OWNER_SUDOS"]))
         return _ult_cache["OWNER_SUDOS"]
 
     from .. import udB, ultroid_bot
