@@ -338,7 +338,7 @@ async def create_quotly(event, reply={}, bg="#1b1429", file_name="quote.webp"):
         event = [event]
     content = {
         "type": "quote",
-        format: "webp",
+        "format": "webp",
         "backgroundColor": bg,
         "width": 512,
         "height": 768,
