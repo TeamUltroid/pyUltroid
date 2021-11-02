@@ -71,7 +71,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
     # Decorator has turned lengthy and non attractive.
     # Todo : Make it better..
     args["func"] = lambda e: not e.via_bot_id
-    file_test = Path(inspect.stack()[1].filename).stem.replace(".py", "")
+    file_test = Path(inspect.stack()[1].filename).stem
     pattern = args.get("pattern", None)
     black_chats = args.get("chats", None)
     groups_only = args.get("groups_only", False)
@@ -258,7 +258,15 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
 
         if "official" in type_:
             args["outgoing"] = True
-            ultroid_bot.add_event_handler(doit("official"), events.NewMessage(**args))
+            cm = doit("official")
+            ultroid_bot.add_event_handler(cm, events.NewMessage(**args))
+            n_file = Path(inspect.stack()[1].filename)
+            if "addons/" in n_file:
+                if LOADED.get(n_file.stem):
+                    LOADED[n_file.stem].append(cm)
+                else:
+                    LOADED.update({n_file.stem: [cm]})
+                
             if TAKE_EDITS:
                 args["func"] = (
                     lambda x: not (x.is_channel and x.chat.broadcast)
@@ -274,12 +282,26 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 args["outgoing"] = False
                 args["from_users"] = sudoers
                 args["pattern"] = compile_pattern(pattern, "\\" + SUDO_HNDLR)
-                ultroid_bot.add_event_handler(doit("sudo"), events.NewMessage(**args))
+                cm = doit("sudo")
+                ultroid_bot.add_event_handler(cm, events.NewMessage(**args))
+                n_file = Path(inspect.stack()[1].filename)
+                if "addons/" in n_file:
+                    if LOADED.get(n_file.stem):
+                        LOADED[n_file.stem].append(cm)
+                    else:
+                        LOADED.update({n_file.stem: [cm]})
                 del args["from_users"]
             del args["outgoing"]
         if "assistant" in type_:
             args["pattern"] = compile_pattern(pattern, "/")
-            asst.add_event_handler(doit("assistant"), events.NewMessage(**args))
+            cm = doit("assistant")
+            asst.add_event_handler(cm, events.NewMessage(**args))
+            n_file = Path(inspect.stack()[1].filename)
+            if "addons/" in n_file:
+                if LOADED.get(n_file.stem):
+                    LOADED[n_file.stem].append(cm)
+                else:
+                    LOADED.update({n_file.stem: [cm]})
         if MANAGER and "manager" in type_:
             args["pattern"] = compile_pattern(pattern, "/")
             asst.add_event_handler(doit("manager"), events.NewMessage(**args))
@@ -291,11 +313,4 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 args["from_users"] = owner_and_sudos
                 args["pattern"] = compile_pattern(pattern, "\\" + DUAL_HNDLR)
                 asst.add_event_handler(doit("dualmode"), events.NewMessage(**args))
-        # Collecting all Handlers as one..
-        wrapper = doit("official")
-        try:
-            LOADED[file_test].append(wrapper)
-        except Exception:
-            LOADED.update({file_test: [wrapper]})
-
     return decorator
