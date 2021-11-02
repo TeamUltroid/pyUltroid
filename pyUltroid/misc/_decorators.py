@@ -266,7 +266,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                     LOADED[n_file.stem].append(cm)
                 else:
                     LOADED.update({n_file.stem: [cm]})
-                
+
             if TAKE_EDITS:
                 args["func"] = (
                     lambda x: not (x.is_channel and x.chat.broadcast)
@@ -313,4 +313,5 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 args["from_users"] = owner_and_sudos
                 args["pattern"] = compile_pattern(pattern, "\\" + DUAL_HNDLR)
                 asst.add_event_handler(doit("dualmode"), events.NewMessage(**args))
+
     return decorator
