@@ -317,7 +317,7 @@ async def _format_quote(event, reply={}, type_="private"):
         "avatar": True,
         "from": {
             "id": get_peer_id(is_fwd.from_id) if is_fwd else event.sender_id,
-            "first_name": is_fwd.from_name if is_fwd.from_name else sender.first_name,
+            "first_name": is_fwd.from_name if (is_fwd and is_fwd.from_name) else sender.first_name,
             "last_name": None if is_fwd else sender.last_name,
             "username": sender.username,
             "language_code": "en",
