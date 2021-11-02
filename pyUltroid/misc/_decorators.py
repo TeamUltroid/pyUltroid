@@ -261,7 +261,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             cm = doit("official")
             ultroid_bot.add_event_handler(cm, events.NewMessage(**args))
             n_file = Path(inspect.stack()[1].filename)
-            if "addons/" in n_file:
+            if "addons/" in str(n_file):
                 if LOADED.get(n_file.stem):
                     LOADED[n_file.stem].append(cm)
                 else:
@@ -285,7 +285,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 cm = doit("sudo")
                 ultroid_bot.add_event_handler(cm, events.NewMessage(**args))
                 n_file = Path(inspect.stack()[1].filename)
-                if "addons/" in n_file:
+                if "addons/" in str(n_file):
                     if LOADED.get(n_file.stem):
                         LOADED[n_file.stem].append(cm)
                     else:
@@ -297,7 +297,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             cm = doit("assistant")
             asst.add_event_handler(cm, events.NewMessage(**args))
             n_file = Path(inspect.stack()[1].filename)
-            if "addons/" in n_file:
+            if "addons/" in str(n_file):
                 if LOADED.get(n_file.stem):
                     LOADED[n_file.stem].append(cm)
                 else:
