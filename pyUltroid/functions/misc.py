@@ -5,7 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-
+import base64
 from logging import WARNING
 from random import choice, randrange, shuffle
 
