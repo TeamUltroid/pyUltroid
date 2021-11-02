@@ -309,6 +309,12 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             ):
                 args["from_users"] = owner_and_sudos
                 args["pattern"] = compile_pattern(pattern, "\\" + DUAL_HNDLR)
-                asst.add_event_handler(doit("dualmode"), events.NewMessage(**args))
+                cm = doit("dualmode")
+                asst.add_event_handler(cm, events.NewMessage(**args))
+                if "addons/" in str(file_test):
+                    if LOADED.get(file_test.stem):
+                        LOADED[file_test.stem].append(cm)
+                    else:
+                        LOADED.update({file_test.stem: [cm]})
 
     return decorator
