@@ -18,12 +18,11 @@ def sudoers():
     if _ult_cache.get("SUDOS") is not None:
         return _ult_cache["SUDOS"]
     from .. import udB
-
+    li = []
     if SUDOS := udB.get("SUDOS"):
         li = [int(sudo) for sudo in SUDOS.split()]
-        _ult_cache["SUDOS"] = li
-        return li
-    return []
+    _ult_cache["SUDOS"] = li
+    return _ult_cache["SUDOS"]
 
 
 def should_allow_sudo():
@@ -42,7 +41,7 @@ def owner_and_sudos():
 
     data = [int(udB.get("OWNER_ID")), *sudoers()]
     _ult_cache["OWNER_SUDOS"] = data
-    return data
+    return _ult_cache["OWNER_SUDOS"]
 
 
 # ------------------------------------------------ #
