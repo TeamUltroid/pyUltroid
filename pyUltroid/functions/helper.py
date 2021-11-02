@@ -73,15 +73,14 @@ def un_plug(shortname):
     from .. import asst, ultroid_bot
 
     try:
+        all_func = LOADED[shortname]
         for client in [ultroid_bot, asst]:
-            for i in LOADED[shortname]:
-                client.remove_event_handler(i)
-            try:
-                del LOADED[shortname]
-                del LIST[shortname]
-                ADDONS.remove(shortname)
-            except (ValueError, KeyError):
-                pass
+            for x, y in client.list_event_handlers():
+                if i in all_func:
+                    client.remove_event_handler(i)
+            del LOADED[shortname]
+            del LIST[shortname]
+            ADDONS.remove(shortname)
     except (ValueError, KeyError):
         name = f"addons.{shortname}"
         for client in [ultroid_bot, asst]:
