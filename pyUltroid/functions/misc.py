@@ -305,7 +305,7 @@ async def create_instagram_client(event):
 
 _entities = {
     types.MessageEntityPhone: "phone_number",
-    types.MessageEntityMention: "username",
+    types.MessageEntityMention: "mention",
     types.MessageEntityBold: "bold",
     types.MessageEntityCashtag: "cashtag",
     types.MessageEntityStrike: "strikethrough",
