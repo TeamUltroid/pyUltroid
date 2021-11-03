@@ -302,13 +302,17 @@ async def create_instagram_client(event):
     return cl
 
 
-async def _format_quote(event, reply={}, type_="private"):
+async def _format_quote(event, reply={}, sender=None, type_="private"):
     if reply:
         reply = await _format_quote(reply)
     is_fwd = event.fwd_from
     name = None
     last_name = None
-    if not is_fwd:
+    if sender:
+        id_ = sender.id
+        name = get_display_name(sender)
+        last_name = sender.last_name
+    elif not is_fwd:
         id_ = event.sender_id
         sender = await event.get_sender()
         name = get_display_name(sender)
@@ -332,7 +336,7 @@ async def _format_quote(event, reply={}, type_="private"):
         "avatar": True,
         "from": {
             "id": id_,
-            "first_name": name or (sender.first_name if sender else None),
+            "first_name": (name or (sender.first_name if sender else None)) or "Deleted Account",
             "last_name": last_name,
             "username": sender.username if sender else None,
             "language_code": "en",
