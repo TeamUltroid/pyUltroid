@@ -15,6 +15,7 @@ CMD_HELP = {}
 class _SudoManager:
     def __init__(self):
         from .. import _ult_cache, udB
+
         self.dB = udB
         self.sudos = _ult_cache.get("SUDOS")
         self.owner = int(udB.get("OWNER_ID"))
@@ -22,7 +23,6 @@ class _SudoManager:
     def get_sudos(self):
         if self.sudos:
             return self.sudos
-        list_ = []
         if SUDOS := udB.get("SUDOS"):
             li = [int(sudo) for sudo in SUDOS.split()]
         self.sudos = li
@@ -39,6 +39,7 @@ class _SudoManager:
 
     def remove_sudo(self, id_):
         return self.sudos.remove(_id)
+
 
 _SUDO_M = _SudoManager()
 
