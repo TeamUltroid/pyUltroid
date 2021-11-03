@@ -330,7 +330,8 @@ async def _format_quote(event, reply={}, sender=None, type_="private"):
     if sender:
         id_ = sender.id
         name = get_display_name(sender)
-        last_name = sender.last_name
+        if hasattr(sender, "last_name"):
+            last_name = sender.last_name
     elif not is_fwd:
         id_ = event.sender_id
         sender = await event.get_sender()
