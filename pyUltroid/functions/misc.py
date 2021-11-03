@@ -377,6 +377,12 @@ async def _format_quote(event, reply={}, sender=None, type_="private"):
         "text": event.raw_text,
         "replyMessage": reply,
     }
+    if event.media:
+        file = event.file
+        type_ = event.media.to_dict()
+        type_ = type_[list(type_.keys())[1]]["_"]
+        message.update({"mediaType":type_.lower()})
+        message.update({"media":[{"file_id":file.id, "file_size":file.size, "height":file.height, "width":file.width}]})
     return message
 
 
