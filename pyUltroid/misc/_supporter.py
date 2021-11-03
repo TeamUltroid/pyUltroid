@@ -23,7 +23,7 @@ from pyUltroid.misc._wrappers import eod, eor
 from .. import *
 from ..configs import Var
 from ..dB._core import LIST
-from . import CMD_HELP, sudoers  # ignore: pylint
+from . import CMD_HELP, _SUDO_M  # ignore: pylint
 
 ALIVE_NAME = ultroid_bot.me.first_name
 BOTLOG_CHATID = BOTLOG = int(udB.get("LOG_CHANNEL"))
@@ -90,7 +90,7 @@ def sudo_cmd(allow_sudo=True, pattern=None, command=None, **args):
     if pattern:
         args["pattern"] = re.compile("\\" + SUDO_HNDLR + pattern)
     if allow_sudo:
-        args["from_users"] = sudoers()
+        args["from_users"] = _SUDO_M.get_sudos
         args["incoming"] = True
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
         del args["allow_edited_updates"]
@@ -157,7 +157,7 @@ class Config((object)):
         )
         EMOJI_TO_DISPLAY_IN_HELP = os.environ.get("EMOJI_TO_DISPLAY_IN_HELP", "🔰")
         HANDLR = hndlr
-        SUDO_USERS = sudoers()
+        SUDO_USERS = _SUDO_M.get_sudos()
         GROUP_REG_SED_EX_BOT_S = os.environ.get(
             "GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot"
         )
