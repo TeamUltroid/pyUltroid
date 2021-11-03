@@ -16,7 +16,6 @@ def sudoers():
     from .. import _ult_cache
 
     if _ult_cache.get("SUDOS") is not None:
-        _ult_cache["SUDOS"] = list(set(_ult_cache["SUDOS"]))
         return _ult_cache["SUDOS"]
     from .. import udB
 
@@ -37,8 +36,9 @@ def owner_and_sudos():
     from .. import _ult_cache
 
     if _ult_cache.get("OWNER_SUDOS") is not None:
-        _ult_cache["OWNER_SUDOS"].extend(sudoers())
-        _ult_cache["OWNER_SUDOS"] = list(set(_ult_cache["OWNER_SUDOS"]))
+        for sudo in sudoers():
+            if sudo not in _ult_cache["OWNER_SUDOS"]:
+                _ult_cache["OWNER_SUDOS"].append(sudo)
         return _ult_cache["OWNER_SUDOS"]
 
     from .. import udB, ultroid_bot
