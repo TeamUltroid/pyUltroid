@@ -325,7 +325,7 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
     if reply:
         reply = {
             "name": get_display_name(reply.sender) or "Deleted Account",
-            "text": reply.text,
+            "text": reply.raw_text,
             "chatId": reply.chat_id,
         }
     else:
@@ -336,13 +336,10 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
     if sender:
         id_ = sender.id
         name = get_display_name(sender)
-        if hasattr(sender, "last_name"):
-            last_name = sender.last_name
     elif not is_fwd:
         id_ = event.sender_id
         sender = await event.get_sender()
         name = get_display_name(sender)
-        last_name = sender.last_name
     else:
         id_, sender = None, None
         name = is_fwd.from_name
@@ -353,6 +350,8 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
                 name = get_display_name(sender)
             except ValueError:
                 pass
+    if sender and hasattr(sender, "last_name"):
+        last_name = sender.last_name
     entities = []
     if event.entities:
         for entity in event.entities:
@@ -379,23 +378,6 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         "text": event.raw_text,
         "replyMessage": reply,
     }
-    if event.media:
-        file = event.file
-        type_ = event.media.to_dict()
-        type_ = type_[list(type_.keys())[1]]["_"]
-        message.update({"mediaType": type_.lower()})
-        message.update(
-            {
-                "media": [
-                    {
-                        "file_id": file.id,
-                        "file_size": file.size,
-                        "height": file.height,
-                        "width": file.width,
-                    }
-                ]
-            }
-        )
     return message
 
 
