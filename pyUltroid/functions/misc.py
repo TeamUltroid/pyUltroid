@@ -321,7 +321,7 @@ _entities = {
 }
 
 
-async def _format_quote(event, reply={}, sender=None, type_="private"):
+async def _format_quote(event, reply=None, sender=None, type_="private"):
     if reply:
         reply = {
             "name": get_display_name(reply.sender) or "Deleted Account",
@@ -371,7 +371,7 @@ async def _format_quote(event, reply={}, sender=None, type_="private"):
             "username": sender.username if sender else None,
             "language_code": "en",
             "title": name,
-            "name": name,
+            "name": name or "Unknown",
             "type": type_,
         },
         "text": event.raw_text,
@@ -426,4 +426,4 @@ async def create_quotly(
             image = base64.decodebytes(request["result"]["image"].encode("utf-8"))
             file.write(image)
         return file_name
-    raise Exception(request["error"]["message"])
+    raise Exception(str(request))
