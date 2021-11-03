@@ -40,14 +40,14 @@ from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
 from ..version import __version__ as pyver
 from ..version import ultroid_version as ult_ver
-from . import owner_and_sudos, should_allow_sudo, sudoers
+from . import _SUDO_M
 from ._wrappers import eod
 
 hndlr = "\\" + HNDLR
 MANAGER = udB.get("MANAGER")
 TAKE_EDITS = udB.get("TAKE_EDITS")
 black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
-allow_sudo = should_allow_sudo()
+allow_sudo = _SUDO_M.should_allow_sudo()
 
 
 def compile_pattern(data, hndlr):
@@ -277,9 +277,9 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 )
                 args["func"] = lambda e: not e.fwd_from and not e.via_bot_id
 
-            if allow_sudo and sudoers():
+            if allow_sudo:
                 args["outgoing"] = False
-                args["from_users"] = sudoers
+                args["from_users"] = _SUDO_M.get_sudos
                 args["pattern"] = compile_pattern(pattern, "\\" + SUDO_HNDLR)
                 cm = doit("sudo")
                 ultroid_bot.add_event_handler(cm, events.NewMessage(**args))
@@ -307,7 +307,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             if not (("manager" in type_) and (DUAL_HNDLR == "/")) and not (
                 ("assistant" in type_) and (DUAL_HNDLR == "/")
             ):
-                args["from_users"] = owner_and_sudos
+                args["from_users"] = _SUDO_M.owner_and_sudos
                 args["pattern"] = compile_pattern(pattern, "\\" + DUAL_HNDLR)
                 cm = doit("dualmode")
                 asst.add_event_handler(cm, events.NewMessage(**args))
