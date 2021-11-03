@@ -309,7 +309,7 @@ types.MessageEntityCashtag:"cashtag",
 types.MessageEntityStrike:"strikethrough",
 types.MessageEntityHashtag: "hashtag",
 types.MessageEntityEmail: "email",
-types.MessageEntityMentionName: "text_mention"
+types.MessageEntityMentionName: "text_mention",
 types.MessageEntityUnderline:"underline",
 types.MessageEntityUrl:"url",
 types.MessageEntityTextUrl: "text_link",
