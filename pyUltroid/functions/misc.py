@@ -324,7 +324,7 @@ _entities = {
 async def _format_quote(event, reply={}, sender=None, type_="private"):
     if reply:
         reply = {"name":get_display_name(reply.sender) or "Deleted Account",
-            "text:reply.text, "chatId":reply.chat_id}
+            "text":reply.text, "chatId":reply.chat_id}
     is_fwd = event.fwd_from
     name = None
     last_name = None
