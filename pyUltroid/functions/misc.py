@@ -10,8 +10,9 @@ from logging import WARNING
 from random import choice, randrange, shuffle
 
 from bs4 import BeautifulSoup
-from telethon.utils import get_display_name, get_peer_id
 from telethon.tl import types
+from telethon.utils import get_display_name, get_peer_id
+
 from .. import *
 from ..dB._core import LIST
 from ..misc._wrappers import eor
@@ -301,23 +302,24 @@ async def create_instagram_client(event):
     INSTA_CLIENT.append(cl)
     return cl
 
-_entities = {
-types.MessageEntityPhone:"phone_number",
-types.MessageEntityMention:"username",
-types.MessageEntityBold:"bold",
-types.MessageEntityCashtag:"cashtag",
-types.MessageEntityStrike:"strikethrough",
-types.MessageEntityHashtag: "hashtag",
-types.MessageEntityEmail: "email",
-types.MessageEntityMentionName: "text_mention",
-types.MessageEntityUnderline:"underline",
-types.MessageEntityUrl:"url",
-types.MessageEntityTextUrl: "text_link",
-types.MessageEntityBotCommand:"bot_command",
-types.MessageEntityCode:"code",
-types.MessageEntityPre: "pre"
 
- }
+_entities = {
+    types.MessageEntityPhone: "phone_number",
+    types.MessageEntityMention: "username",
+    types.MessageEntityBold: "bold",
+    types.MessageEntityCashtag: "cashtag",
+    types.MessageEntityStrike: "strikethrough",
+    types.MessageEntityHashtag: "hashtag",
+    types.MessageEntityEmail: "email",
+    types.MessageEntityMentionName: "text_mention",
+    types.MessageEntityUnderline: "underline",
+    types.MessageEntityUrl: "url",
+    types.MessageEntityTextUrl: "text_link",
+    types.MessageEntityBotCommand: "bot_command",
+    types.MessageEntityCode: "code",
+    types.MessageEntityPre: "pre",
+}
+
 
 async def _format_quote(event, reply={}, sender=None, type_="private"):
     if reply:
