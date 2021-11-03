@@ -261,7 +261,7 @@ async def get_insta_code(username, choice):
                 "CODE SHOULD BE INTEGER\nSend The Code Back or\nUse /cancel to Cancel Process..."
             )
             ct = await conv.get_response()
-        return ct.code
+        return ct.text
 
 
 async def create_instagram_client(event):
