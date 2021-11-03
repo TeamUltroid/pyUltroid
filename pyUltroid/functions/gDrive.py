@@ -14,10 +14,9 @@ from .. import udB
 from .helper import progress
 
 _auth_flow = None
-LOGGER.setLevel(WARNING)
-logger.setLevel(WARNING)
-_logger.setLevel(WARNING)
 
+for log in [LOGGER, logger, _logger]:
+    log.setLevel(WARNING)
 
 class GDriveManager:
     def __init__(self):
