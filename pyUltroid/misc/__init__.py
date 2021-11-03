@@ -14,11 +14,9 @@ CMD_HELP = {}
 
 class _SudoManager:
     def __init__(self):
-        from .. import _ult_cache, udB
-
-        self.dB = udB
-        self.sudos = _ult_cache.get("SUDOS")
-        self.owner = int(udB.get("OWNER_ID"))
+        self.db = None
+        self.sudos = []
+        self.owner = None
 
     def get_sudos(self):
         if self.sudos:
@@ -32,6 +30,9 @@ class _SudoManager:
         return self.db.get("SUDO") == "True"
 
     def owner_and_sudos(self):
+        if not self.owner:
+            from .. import udB
+            self.owner = int(udB.get("OWNER_ID"))
         return [self.owner, *self.get_sudos()]
 
     def add_sudo(self, id_):
