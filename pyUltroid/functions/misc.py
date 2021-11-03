@@ -351,7 +351,13 @@ async def _format_quote(event, reply={}, sender=None, type_="private"):
     return message
 
 
-async def create_quotly(event, url="https://bot.lyo.su/quote/generate", reply={}, bg="#1b1429", file_name="quote.webp"):
+async def create_quotly(
+    event,
+    url="https://bot.lyo.su/quote/generate",
+    reply={},
+    bg="#1b1429",
+    file_name="quote.webp",
+):
     if not isinstance(event, list):
         event = [event]
     content = {
@@ -363,9 +369,7 @@ async def create_quotly(event, url="https://bot.lyo.su/quote/generate", reply={}
         "scale": 2,
         "messages": [await _format_quote(message, reply=reply) for message in event],
     }
-    request = await async_searcher(
-        url, post=True, json=content, re_json=True
-    )
+    request = await async_searcher(url, post=True, json=content, re_json=True)
     if request.get("ok"):
         with open(file_name, "wb") as file:
             image = base64.decodebytes(request["result"]["image"].encode("utf-8"))
