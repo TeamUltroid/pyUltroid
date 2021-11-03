@@ -336,7 +336,8 @@ async def _format_quote(event, reply={}, sender=None, type_="private"):
         "avatar": True,
         "from": {
             "id": id_,
-            "first_name": (name or (sender.first_name if sender else None)) or "Deleted Account",
+            "first_name": (name or (sender.first_name if sender else None))
+            or "Deleted Account",
             "last_name": last_name,
             "username": sender.username if sender else None,
             "language_code": "en",
