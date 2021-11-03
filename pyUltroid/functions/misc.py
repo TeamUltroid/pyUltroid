@@ -393,7 +393,10 @@ async def create_quotly(
         "width": 512,
         "height": 768,
         "scale": 2,
-        "messages": [await _format_quote(message, reply=reply, sender=sender) for message in event],
+        "messages": [
+            await _format_quote(message, reply=reply, sender=sender)
+            for message in event
+        ],
     }
     request = await async_searcher(url, post=True, json=content, re_json=True)
     if request.get("ok"):
