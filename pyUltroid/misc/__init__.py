@@ -42,8 +42,9 @@ class _SudoManager:
     def remove_sudo(self, id_):
         return self.sudos.remove(_id)
 
-
 _SUDO_M = _SudoManager()
+owner_and_sudos = _SUDO_M.owner_and_sudos
+sudoers = _SUDO_M.get_sudos
 
 # ------------------------------------------------ #
 
