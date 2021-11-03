@@ -12,7 +12,6 @@ DEVLIST = [
 
 ULTROID_IMAGES = [
     "https://telegra.ph/file/bf59d40184b6fcaea4d04.jpg",
-    "https://telegra.ph/file/855a91151a7f925b3c139.jpg",
     "https://telegra.ph/file/b8cdf9fcd5a82e94c2d06.jpg",
     "https://telegra.ph/file/c1cc6ec98f7a2ad655b26.jpg",
     "https://telegra.ph/file/3c25230ae30d246194eba.jpg",
