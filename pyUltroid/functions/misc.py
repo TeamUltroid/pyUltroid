@@ -328,6 +328,8 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
             "text": reply.text,
             "chatId": reply.chat_id,
         }
+    else:
+        reply = {}
     is_fwd = event.fwd_from
     name = None
     last_name = None
