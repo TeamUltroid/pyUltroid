@@ -10,7 +10,7 @@ import time
 from telethon.errors.rpcerrorlist import UserNotParticipantError
 from telethon.tl import types
 
-from ..misc import owner_and_sudos
+from ..misc import _SUDO_M
 
 
 async def ban_time(event, time_str):
@@ -43,7 +43,7 @@ async def admin_check(event):
     # for Anonymous Admin Support
     if isinstance(event.sender, types.Channel) and event.sender_id == event.chat_id:
         return True
-    if str(event.sender_id) in owner_and_sudos():
+    if event.sender_id in _SUDO_M.owner_and_sudos():
         return True
     try:
         perms = await event.client.get_permissions(event.chat_id, event.sender_id)
