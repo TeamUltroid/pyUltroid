@@ -107,9 +107,9 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             except BaseException:
                 pass
             try:
-                LIST[file_test].append(cmd)
+                LIST[file_test.stem].append(cmd)
             except BaseException:
-                LIST.update({file_test: [cmd]})
+                LIST.update({file_test.stem: [cmd]})
         except BaseException:
             pass
 
