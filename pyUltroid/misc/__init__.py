@@ -12,41 +12,35 @@ CMD_HELP = {}
 # ----------------------------------------------#
 
 
-def sudoers():
-    from .. import _ult_cache
+class _SudoManager:
+    def __init__(self):
+        from .. import _ult_cache, udB
+        self.dB = udB
+        self.sudos = _ult_cache.get("SUDOS")
+        self.owner = int(udB.get("OWNER_ID"))
 
-    if _ult_cache.get("SUDOS") is not None:
-        return _ult_cache["SUDOS"]
-    from .. import udB
+    def get_sudos(self):
+        if self.sudos:
+            return self.sudos
+        list_ = []
+        if SUDOS := udB.get("SUDOS"):
+            li = [int(sudo) for sudo in SUDOS.split()]
+        self.sudos = li
+        return self.sudos
 
-    li = []
-    if SUDOS := udB.get("SUDOS"):
-        li = [int(sudo) for sudo in SUDOS.split()]
-    _ult_cache["SUDOS"] = li
-    return _ult_cache["SUDOS"]
+    def should_allow_sudo(self):
+        return self.db.get("SUDO") == "True"
 
+    def owner_and_sudos(self):
+        return [self.owner, *self.get_sudos()]
 
-def should_allow_sudo():
-    from .. import udB
+    def add_sudo(self, id_):
+        return self.sudos.append(id_)
 
-    return udB.get("SUDO") == "True"
+    def remove_sudo(self, id_):
+        return self.sudos.remove(_id)
 
-
-def owner_and_sudos():
-    from .. import _ult_cache
-
-    if _ult_cache.get("OWNER_SUDOS") is not None:
-        for sudo in sudoers():
-            if sudo not in _ult_cache["OWNER_SUDOS"]:
-                _ult_cache["OWNER_SUDOS"].append(sudo)
-        return _ult_cache["OWNER_SUDOS"]
-
-    from .. import udB, ultroid_bot
-
-    data = [int(udB.get("OWNER_ID")), *sudoers()]
-    _ult_cache["OWNER_SUDOS"] = data
-    return _ult_cache["OWNER_SUDOS"]
-
+_SUDO_M = _SudoManager()
 
 # ------------------------------------------------ #
 
