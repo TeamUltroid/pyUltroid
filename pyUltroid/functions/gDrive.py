@@ -18,6 +18,7 @@ _auth_flow = None
 for log in [LOGGER, logger, _logger]:
     log.setLevel(WARNING)
 
+
 class GDriveManager:
     def __init__(self):
         self.gdrive_creds = {
