@@ -32,6 +32,7 @@ class _SudoManager:
     def owner_and_sudos(self):
         if not self.owner:
             from .. import udB
+
             self.owner = int(udB.get("OWNER_ID"))
         return [self.owner, *self.get_sudos()]
 
