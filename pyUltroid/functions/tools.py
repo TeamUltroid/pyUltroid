@@ -350,7 +350,7 @@ async def get_chatbot_reply(message):
         LOGS.info(f"**ERROR:**`{format_exc()}`")
 
 
-async def resize_photo(photo):
+def resize_photo(photo):
     """Resize the given photo to 512x512"""
     image = Image.open(photo)
     if (image.width and image.height) < 512:
