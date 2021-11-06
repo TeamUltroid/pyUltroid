@@ -51,7 +51,7 @@ async def admin_check(event):
         if _ult_cache.get("LINKED_CHATS") and _ult_cache["LINKED_CHATS"].get(
             event.chat_id
         ):
-            _ignore = ult_cache["LINKED_CHATS"][event.chat_id]["linked_chat"]
+            _ignore = _ult_cache["LINKED_CHATS"][event.chat_id]["linked_chat"]
         else:
             channel = await event.client(
                 functions.channels.GetFullChannelRequest(event.chat_id)
