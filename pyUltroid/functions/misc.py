@@ -362,7 +362,7 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
                 entities.append(enti_)
     message = {
         "entities": entities,
-        "chatId": event.chat_id,
+        "chatId": id_,
         "avatar": True,
         "from": {
             "id": id_,
