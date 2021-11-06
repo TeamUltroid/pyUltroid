@@ -334,7 +334,7 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
     name = None
     last_name = None
     if sender:
-        id_ = sender.id
+        id_ = get_peer_id(sender)
         name = get_display_name(sender)
     elif not is_fwd:
         id_ = event.sender_id
