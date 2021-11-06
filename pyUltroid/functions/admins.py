@@ -66,7 +66,8 @@ async def admin_check(event):
                     {"LINKED_CHATS": {event.chat_id: {"linked_chat": _ignore}}}
                 )
         if _ignore and event.sender.id == _ignore:
-            return
+            return False
+        return True
     if event.sender_id in _SUDO_M.owner_and_sudos():
         return True
     try:
