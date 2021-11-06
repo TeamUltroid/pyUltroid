@@ -8,8 +8,8 @@
 import time
 
 from telethon.errors.rpcerrorlist import UserNotParticipantError
-from telethon.tl import types
-
+from telethon.tl import types, functions
+from .. import _ult_cache
 from ..misc import _SUDO_M
 
 
@@ -41,8 +41,20 @@ async def ban_time(event, time_str):
 
 async def admin_check(event):
     # for Anonymous Admin Support
-    if isinstance(event.sender, types.Channel) and event.sender_id == event.chat_id:
+    if isinstance(event.sender, (types.Chat, types.Channel)) and event.sender_id == event.chat_id:
         return True
+    if isinstance(event.sender, types.Channel):
+        if _ult_cache.get("LINKED_CHATS") and _ult_cache["LINKED_CHATS"].get(event.chat_id):
+            _ignore = ult_cache["LINKED_CHATS"][event.chat_id]["linked_chat"]
+        else:
+            channel = await event.client(functions.channels.GetFullChannelRequest(event.chat_id))
+            _ignore = channel.full_chat.linked_chat
+            if _ult_cache.get("LINKED_CHATS"):
+                _ult_cache["LINKED_CHATS"].update({event.chat_id:{"linked_chat":_ignore}})
+            else:
+                _ult_cache.update({"LINKED_CHATS":{event.chat_id:{"linked_chat":_ignore}}})
+        if _ignore and event.sender.id == _ignore:
+            return
     if event.sender_id in _SUDO_M.owner_and_sudos():
         return True
     try:
