@@ -190,7 +190,7 @@ async def get_random_user_data():
         + f" {cc['credit_card_expiry_date']}\n"
         + f"**C-ID :** {cc['id']}"
     )
-    data_ = (await async_searcher(base_url), re_json=True)["results"][0]
+    data_ = (await async_searcher(base_url, re_json=True))["results"][0]
     _g = data_["gender"]
     gender = "🤵🏻‍♂" if _g == "male" else "🤵🏻‍♀"
     name = data_["name"]
