@@ -51,17 +51,20 @@ from .FastTelethon import upload_file as uploadable
 # ~~~~~~~~~~~~~~~~~~~~ small funcs ~~~~~~~~~~~~~~~~~~~~ #
 
 
-def make_mention(user):
+def make_mention(user, custom=None):
     if user.username:
         return f"@{user.username}"
-    return inline_mention(user)
+    return inline_mention(user, custom=custom)
 
 
-def inline_mention(user):
-    full_name = user_full_name(user)
+def inline_mention(user, custom=None):
+    if not custom:
+        mention_text = user_full_name(user)
+    else:
+        mention_text = custom
     if not isinstance(user, types.User):
-        return full_name
-    return f"[{full_name}](tg://user?id={user.id})"
+        return mention_text
+    return f"[{mention_text}](tg://user?id={user.id})"
 
 
 user_full_name = get_display_name
