@@ -5,7 +5,14 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from .. import udB, ultroid_bot
+from .. import udB, ultroid_bot, LOGS
+
+def isdigits(text:str): -> bool
+    try:
+        int(text)
+        return True
+    except ValueError:
+        return False
 
 
 def str_to_list(text):  # Returns List
@@ -24,12 +31,12 @@ def are_all_nums(list_):  # Takes List , Returns Boolean
 def get_sudos():  # Returns List
     sudos = udB.get("SUDOS")
     if not sudos:
-        return [""]
+        return []
     return str_to_list(sudos)
 
 
 def is_sudo(id_):  # Take int or str with numbers only , Returns Boolean
-    if not str(id_).isdigit():
+    if not isdigits(id_):
         return False
     sudos = get_sudos()
     return str(id_) in sudos
@@ -37,7 +44,7 @@ def is_sudo(id_):  # Take int or str with numbers only , Returns Boolean
 
 def add_sudo(id_):  # Take int or str with numbers only , Returns Boolean
     id_ = str(id_)
-    if not id_.isdigit():
+    if not isdigits(id_):
         return False
     try:
         sudos = get_sudos()
@@ -51,7 +58,7 @@ def add_sudo(id_):  # Take int or str with numbers only , Returns Boolean
 
 def del_sudo(id_):  # Take int or str with numbers only , Returns Boolean
     id_ = str(id_)
-    if not id_.isdigit():
+    if not isdigits(id_):
         return False
     try:
         sudos = get_sudos()
@@ -70,4 +77,3 @@ def is_fullsudo(id_):
     x = udB.get("FULLSUDO")
     if x and id_ in x:
         return True
-    return
