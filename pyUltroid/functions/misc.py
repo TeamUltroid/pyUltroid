@@ -62,7 +62,9 @@ async def YtDataScraper(url: str):
     _common_data = data["twoColumnWatchNextResults"]["results"]["results"]["contents"]
     common_data = _common_data[0]["videoPrimaryInfoRenderer"]
     try:
-        description_data = _common_data[1]["videoSecondaryInfoRenderer"]["description"]["runs"]
+        description_data = _common_data[1]["videoSecondaryInfoRenderer"]["description"][
+            "runs"
+        ]
     except (KeyError, IndexError):
         description_data = [{"text": "U hurrr from here"}]
     description = ""
