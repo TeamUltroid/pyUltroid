@@ -7,7 +7,7 @@
 
 from .. import udB, ultroid_bot, LOGS
 
-def isdigits(text:str): -> bool
+def isdigits(text:str):
     try:
         int(text)
         return True
