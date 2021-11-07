@@ -22,9 +22,10 @@ class _SudoManager:
     def _init_db(self):
         if not self.db:
             from .. import udB
+
             self.db = udB
         return self.db
-        
+
     def get_sudos(self):
         if self.sudos:
             return self.sudos
