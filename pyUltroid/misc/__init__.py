@@ -17,37 +17,46 @@ class _SudoManager:
         self.db = None
         self.sudos = []
         self.owner = None
+        self._owner_sudos = []
 
+    def _init_db(self):
+        if not self.db:
+            from .. import udB
+            self.db = udB
+        return self.db
+        
     def get_sudos(self):
         if self.sudos:
             return self.sudos
-        if not self.db:
-            from .. import udB
+        db = self._init_db()
 
-            self.db = udB
-        if SUDOS := self.db.get("SUDOS"):
+        if SUDOS := db.get("SUDOS"):
             li = [int(sudo) for sudo in SUDOS.split()]
-        self.sudos = li
+            self.sudos = li
         return self.sudos
 
     def should_allow_sudo(self):
-        if not self.db:
-            from .. import udB
-
-            self.db = udB
-        return self.db.get("SUDO") == "True"
+        db = self._init_db()
+        return db.get("SUDO") == "True"
 
     def owner_and_sudos(self):
-        if not self.owner:
-            from .. import udB
+        if self._owner_sudos:
+            return self._owner_sudos
 
-            self.owner = int(udB.get("OWNER_ID"))
-        return [self.owner, *self.get_sudos()]
+        if not self.owner:
+            db = self._init_db()
+            self.owner = int(db.get("OWNER_ID"))
+        self._owner_sudos = [self.owner, *self.get_sudos()]
+        return self._owner_sudos
 
     def add_sudo(self, id_):
+        if self._owner_sudos:
+            self._owner_sudos.append(id_)
         return self.sudos.append(id_)
 
     def remove_sudo(self, id_):
+        if self._owner_sudos:
+            self._owner_sudos.remove(id_)
         return self.sudos.remove(_id)
 
 
