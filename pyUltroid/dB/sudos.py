@@ -5,9 +5,10 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from .. import udB, ultroid_bot, LOGS
+from .. import udB, ultroid_bot
 
-def isdigits(text:str):
+
+def isdigits(text: str):
     try:
         int(text)
         return True
