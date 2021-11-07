@@ -59,9 +59,15 @@ async def YtDataScraper(url: str):
         .find_all("script")[39]
         .text[20:-1]
     )["contents"]
-    common_data = data["twoColumnWatchNextResults"]["results"]["results"]["contents"][
-        0
-    ]["videoPrimaryInfoRenderer"]
+    _common_data = data["twoColumnWatchNextResults"]["results"]["results"]["contents"]
+    common_data = _common_data[0]["videoPrimaryInfoRenderer"]
+    try:
+        description_data = _common_data[1]["videoSecondaryInfoRenderer"]["description"]["runs"]
+    except (KeyError, IndexError):
+        description_data = [{"text": "U hurrr from here"}]
+    description = ""
+    for desc in range(len(description_data)):
+        description += description_data[desc]["text"]
     like_dislike = common_data["videoActions"]["menuRenderer"]["topLevelButtons"]
     to_return["title"] = common_data["title"]["runs"][0]["text"]
     to_return["views"] = (
@@ -83,6 +89,7 @@ async def YtDataScraper(url: str):
             "accessibilityData"
         ]["label"]
     )
+    to_return["description"] = description[:250] + "..."
     return to_return
 
 
@@ -183,7 +190,7 @@ async def get_random_user_data():
         + f" {cc['credit_card_expiry_date']}\n"
         + f"**C-ID :** {cc['id']}"
     )
-    data_ = json_parser(await async_searcher(base_url))["results"][0]
+    data_ = (await async_searcher(base_url), re_json=True)["results"][0]
     _g = data_["gender"]
     gender = "🤵🏻‍♂" if _g == "male" else "🤵🏻‍♀"
     name = data_["name"]
