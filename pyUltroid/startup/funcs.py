@@ -86,7 +86,7 @@ def insta_login():
         settings = eval(udB["INSTA_SET"]) if udB.get("INSTA_SET") else {}
         cl = Client(settings)
         try:
-            status = cl.login(username, password)
+            cl.login(username, password)
             ultroid_bot._cache.update({"insta_creds": cl})
         except Exception:
             udB.delete(key for key in ["INSTA_USERNAME", "INSTA_PASSWORD"])
