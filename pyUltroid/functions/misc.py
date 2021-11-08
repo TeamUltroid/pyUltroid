@@ -255,7 +255,6 @@ async def get_synonyms_or_antonyms(word, type_of_words):
 
 
 def insta_login():
-    from .. import udB, ultroid_bot
 
     if "insta_creds" in ultroid_bot._cache:
         return ultroid_bot._cache["insta_creds"]
