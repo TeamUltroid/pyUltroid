@@ -11,6 +11,7 @@ import time
 from random import randint
 from urllib.request import urlretrieve
 from instagrapi import Client
+from traceback import format_exc
 
 from pytz import timezone
 from telethon.errors import (
@@ -77,16 +78,21 @@ def startup_stuff():
 
 
 def insta_login():
-    if username := udB.get("INSTA_USERNAME") and password := udB.get("INSTA_PASSWORD"):
+    from .. import ultroid_bot, udB
+    username = udB.get("INSTA_USERNAME")
+    password = udB.get("INSTA_PASSWORD")
+    if username and password:
         settings = eval(udB["INSTA_SET"]) if udB.get("INSTA_SET") else {}
         cl = Client(settings)
         try:
             status = cl.login(username, password)
-        except:
+            ultroid_bot._cache.update({"insta_creds": status})
+        except Exception as exc:
             udB.delete(key for key in ["INSTA_USERNAME", "INSTA_PASSWORD"])
-            return None
-        return status
-    return None
+            LOGS.exception(format_exc())
+            return False
+        return True
+    return False
 
 async def autobot():
     from .. import udB, ultroid_bot
