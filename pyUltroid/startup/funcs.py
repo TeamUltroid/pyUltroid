@@ -9,10 +9,10 @@ import asyncio
 import os
 import time
 from random import randint
-from urllib.request import urlretrieve
-from instagrapi import Client
 from traceback import format_exc
+from urllib.request import urlretrieve
 
+from instagrapi import Client
 from pytz import timezone
 from telethon.errors import (
     BotMethodInvalidError,
@@ -78,7 +78,8 @@ def startup_stuff():
 
 
 def insta_login():
-    from .. import ultroid_bot, udB
+    from .. import udB, ultroid_bot
+
     username = udB.get("INSTA_USERNAME")
     password = udB.get("INSTA_PASSWORD")
     if username and password:
@@ -87,12 +88,13 @@ def insta_login():
         try:
             status = cl.login(username, password)
             ultroid_bot._cache.update({"insta_creds": status})
-        except Exception as exc:
+        except Exception:
             udB.delete(key for key in ["INSTA_USERNAME", "INSTA_PASSWORD"])
             LOGS.exception(format_exc())
             return False
         return True
     return False
+
 
 async def autobot():
     from .. import udB, ultroid_bot
