@@ -29,6 +29,7 @@ from telethon.tl.functions.channels import (
 from telethon.tl.functions.contacts import UnblockRequest
 from telethon.tl.types import (
     ChatAdminRights,
+    ChatPhotoEmpty,
     InputChatUploadedPhoto,
     InputMessagesFilterDocument,
 )
@@ -237,7 +238,7 @@ async def autopilot():
             except BaseException as er:
                 LOGS.info("Error while promoting assistant in Log Channel..")
                 LOGS.exception(er)
-    if not chat.photo:
+    if isinstance(chat.photo, ChatPhotoEmpty):
         photo = await download_file(
             "https://telegra.ph/file/27c6812becf6f376cbb10.jpg", "channelphoto.jpg"
         )
