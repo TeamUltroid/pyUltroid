@@ -8,6 +8,7 @@
 import base64
 from logging import WARNING
 from random import choice, randrange, shuffle
+from traceback import format_exc
 
 from bs4 import BeautifulSoup
 from telethon.tl import types
@@ -18,7 +19,6 @@ from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
 from .tools import async_searcher, check_filename, json_parser
-from traceback import format_exc
 
 try:
     import aiofiles
@@ -253,6 +253,7 @@ async def get_synonyms_or_antonyms(word, type_of_words):
 # --------------------- Instagram Plugin ------------------------- #
 # @New-dev0
 
+
 def insta_login():
     from .. import udB, ultroid_bot
 
@@ -272,6 +273,7 @@ def insta_login():
             return False
         return ultroid_bot._cache["insta_creds"]
     return False
+
 
 async def get_insta_code(username, choice):
     from .. import asst, ultroid_bot
