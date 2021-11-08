@@ -77,25 +77,6 @@ def startup_stuff():
             time.tzset()
 
 
-def insta_login():
-    from .. import udB, ultroid_bot
-
-    username = udB.get("INSTA_USERNAME")
-    password = udB.get("INSTA_PASSWORD")
-    if username and password:
-        settings = eval(udB["INSTA_SET"]) if udB.get("INSTA_SET") else {}
-        cl = Client(settings)
-        try:
-            cl.login(username, password)
-            ultroid_bot._cache.update({"insta_creds": cl})
-        except Exception:
-            udB.delete(key for key in ["INSTA_USERNAME", "INSTA_PASSWORD"])
-            LOGS.exception(format_exc())
-            return False
-        return True
-    return False
-
-
 async def autobot():
     from .. import udB, ultroid_bot
 
