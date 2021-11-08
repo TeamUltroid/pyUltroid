@@ -77,7 +77,7 @@ def startup_stuff():
 
 
 def insta_login():
-    if username := udB.get("INSTA_USERNAME") and password:= udB.get("INSTA_PASSWORD"):
+    if username := udB.get("INSTA_USERNAME") and password := udB.get("INSTA_PASSWORD"):
         settings = eval(udB["INSTA_SET"]) if udB.get("INSTA_SET") else {}
         cl = Client(settings)
         try:
