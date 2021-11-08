@@ -18,6 +18,7 @@ from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
 from .tools import async_searcher, check_filename, json_parser
+from traceback import format_exc
 
 try:
     import aiofiles
@@ -252,8 +253,25 @@ async def get_synonyms_or_antonyms(word, type_of_words):
 # --------------------- Instagram Plugin ------------------------- #
 # @New-dev0
 
-INSTA_CLIENT = []
+def insta_login():
+    from .. import udB, ultroid_bot
 
+    if "insta_creds" in ultroid_bot._cache:
+        return ultroid_bot._cache["insta_creds"]
+    username = udB.get("INSTA_USERNAME")
+    password = udB.get("INSTA_PASSWORD")
+    if username and password:
+        settings = eval(udB["INSTA_SET"]) if udB.get("INSTA_SET") else {}
+        cl = Client(settings)
+        try:
+            cl.login(username, password)
+            ultroid_bot._cache.update({"insta_creds": cl})
+        except Exception:
+            udB.delete(key for key in ["INSTA_USERNAME", "INSTA_PASSWORD"])
+            LOGS.exception(format_exc())
+            return False
+        return ultroid_bot._cache["insta_creds"]
+    return False
 
 async def get_insta_code(username, choice):
     from .. import asst, ultroid_bot
