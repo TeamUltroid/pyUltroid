@@ -254,6 +254,8 @@ async def get_synonyms_or_antonyms(word, type_of_words):
 # @New-dev0
 
 INSTA_CLIENT = []
+
+
 def insta_login():
     if "insta_creds" in ultroid_bot._cache:
         return ultroid_bot._cache["insta_creds"]
