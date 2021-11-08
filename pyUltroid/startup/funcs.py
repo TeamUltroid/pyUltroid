@@ -9,10 +9,8 @@ import asyncio
 import os
 import time
 from random import randint
-from traceback import format_exc
 from urllib.request import urlretrieve
 
-from instagrapi import Client
 from pytz import timezone
 from telethon.errors import (
     BotMethodInvalidError,
