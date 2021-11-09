@@ -4,7 +4,6 @@
 
 ###### Searching and Downloading Google Images to the local disk ######
 
-import argparse
 
 # Import Libraries
 import codecs
@@ -68,7 +67,6 @@ args_list = [
     "silent_mode",
     "ignore_urls",
 ]
-
 
 
 class googleimagesdownload:
