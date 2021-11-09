@@ -304,7 +304,7 @@ async def get_insta_code(username, choice):
 
 
 async def create_instagram_client(event):
-    if not instagrapi:
+    if not Client:
         await eor(
             event, "`Instagrapi not Found\nInstall it to use Instagram plugin...`"
         )
