@@ -269,7 +269,7 @@ async def _insta_login():
             ultroid_bot._cache.update({"insta_creds": cl})
         except ManualInputRequired:
             LOGS.exception(format_exc())
-            #await get_insta_code(cl, username, password)
+            # await get_insta_code(cl, username, password)
             return False
         except LoginRequired:
             udB.delete("INSTA_SET")
@@ -279,7 +279,7 @@ async def _insta_login():
             LOGS.exception(format_exc())
             return False
         udB.set("INSTA_SET", str(cl.get_settings()))
-        cl.logger.setLevel(WARNING) 
+        cl.logger.setLevel(WARNING)
         return ultroid_bot._cache["insta_creds"]
     return False
 
