@@ -71,7 +71,10 @@ class UltroidClient(TelegramClient):
         self.logger.info("Trying to login.")
         try:
             await self.start(**kwargs)
-        except (AuthKeyDuplicatedError, ApiIdInvalidError, EOFError):
+        except ApiIdInvalidError:
+            self.logger.error("API ID and API_HASH combination does not match!")
+            exit()
+        except (AuthKeyDuplicatedError, EOFError):
             self.logger.error("String session expired. Create new!")
             exit()
         except AccessTokenExpiredError:
