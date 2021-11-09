@@ -28,10 +28,10 @@ except ImportError:
     aiofiles = None
 
 try:
-    import instagrapi
+    from instagrapi import Client
     from instagrapi.exceptions import LoginRequired, ManualInputRequired
 except ImportError:
-    instagrapi = None
+    Client = None
     ManualInputRequired = None
 
 
@@ -256,7 +256,7 @@ async def get_synonyms_or_antonyms(word, type_of_words):
 INSTA_CLIENT = []
 
 
-def insta_login():
+async def _insta_login():
     if "insta_creds" in ultroid_bot._cache:
         return ultroid_bot._cache["insta_creds"]
     username = udB.get("INSTA_USERNAME")
@@ -267,10 +267,19 @@ def insta_login():
         try:
             cl.login(username, password)
             ultroid_bot._cache.update({"insta_creds": cl})
+        except ManualInputRequired:
+            LOGS.exception(format_exc())
+            #await get_insta_code(cl, username, password)
+            return False
+        except LoginRequired:
+            udB.delete("INSTA_SET")
+            return await _insta_login()
         except Exception:
             udB.delete(key for key in ["INSTA_USERNAME", "INSTA_PASSWORD"])
             LOGS.exception(format_exc())
             return False
+        udB.set("INSTA_SET", str(cl.get_settings()))
+        cl.logger.setLevel(WARNING) 
         return ultroid_bot._cache["insta_creds"]
     return False
 
@@ -311,7 +320,7 @@ async def create_instagram_client(event):
     if not (username and password):
         return
     settings = eval(udB.get("INSTA_SET")) if udB.get("INSTA_SET") else {}
-    cl = instagrapi.Client(settings)
+    cl = Client(settings)
     cl.challenge_code_handler = get_insta_code
     try:
         cl.login(username, password)
