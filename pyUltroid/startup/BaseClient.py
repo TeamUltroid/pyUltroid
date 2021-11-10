@@ -18,7 +18,7 @@ from telethon.network.connection import (
     ConnectionTcpMTProxyRandomizedIntermediate as MtProxy,
 )
 from telethon.utils import get_display_name
-
+import time
 from ..configs import Var
 from . import *
 
@@ -55,7 +55,7 @@ class UltroidClient(TelegramClient):
                 kwargs["proxy"] = None
         super().__init__(session, **kwargs)
         try:
-            self.loop.run_until_complete(self.start_client(bot_token=bot_token))
+            self.run_in_loop(self.start_client(bot_token=bot_token))
         except ValueError as er:
             LOGS.info(er)
             if proxy:
@@ -63,7 +63,7 @@ class UltroidClient(TelegramClient):
                 del kwargs["connection"]
                 del kwargs["proxy"]
             super().__init__(session, **kwargs)
-            self.loop.run_until_complete(self.start_client(bot_token=bot_token))
+            self.run_in_loop(self.start_client(bot_token=bot_token))
         self.dc_id = self.session.dc_id
 
     async def start_client(self, **kwargs):
@@ -95,6 +95,31 @@ class UltroidClient(TelegramClient):
         else:
             setattr(self.me, "phone", None)
             self.logger.info(f"Logged in as {self.full_name}")
+
+    async def fast_uploader(self, file, filename, event, message):
+        """Upload files in a faster way"""
+        from pyUltroid.functions.FastTelethon import upload_file
+        from pyUltroid.functions.helper import progress
+        start_time = time.time()
+        status = None
+        while not status:
+            with open(file, "rb") as f:
+                result = await upload_file(
+                    client=self,
+                    file=f,
+                    filename=filename,
+                    progress_callback=lambda completed, total: self.loop.create_task(
+                        progress(
+                            completed,
+                            total,
+                            event,
+                            start_time,
+                            message,
+                        ),
+                    ),
+                )
+        uploaded_in = time.time() - start_time
+        return status, uploaded_in
 
     def run_in_loop(self, function):
         """run inside asyncio loop"""
