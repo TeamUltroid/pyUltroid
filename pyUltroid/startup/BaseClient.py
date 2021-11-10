@@ -138,7 +138,10 @@ class UltroidClient(TelegramClient):
             "name": filename,
             "raw_file": status,
         }
-        self._ul_dl_cache["upload_cache"].append(cache)
+        if self._ul_dl_cache.get("upload_cache"):
+            self._ul_dl_cache["upload_cache"].append(cache)
+        else:
+            self._ul_dl_cache.update({"upload_cache": list(cache)})
         return status, uploaded_in
 
     async def fast_downloader(self, file, filename, event, message):
