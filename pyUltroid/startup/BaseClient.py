@@ -106,7 +106,7 @@ class UltroidClient(TelegramClient):
         status = None
         while not status:
             with open(file, "rb") as f:
-                result = await upload_file(
+                status = await upload_file(
                     client=self,
                     file=f,
                     filename=filename,
