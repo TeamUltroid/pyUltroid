@@ -117,11 +117,10 @@ async def get_chat_info(chat, event):
     members = getattr(full, "participants_count", chat.participants_count)
     admins = getattr(full, "admins_count", None)
     banned_users = getattr(full, "kicked_count", None)
-    getattr(full, "banned_count", None)
     members_online = getattr(full, "online_count", 0)
     group_stickers = (
-        chat.full_chat.stickerset.title
-        if hasattr(chat.full_chat, "stickerset")
+        full.stickerset.title
+        if hasattr(full, "stickerset")
         else None
     )
     messages_viewable = msg_info.count if msg_info else None
@@ -181,7 +180,7 @@ async def get_chat_info(chat, event):
     if created is not None:
         caption += f"Created: <code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
     else:
-        caption += f"Created: <code>{chat_obj_info.date.date().strftime('%b %d, %Y')} - {chat.date.time()}</code> {warn_emoji}\n"
+        caption += f"Created: <code>{chat.date.date().strftime('%b %d, %Y')} - {chat.date.time()}</code> {warn_emoji}\n"
     caption += f"Data Centre ID: {dc_id}\n"
     if exp_count is not None:
         chat_level = int((1 + math.sqrt(1 + 7 * exp_count / 14)) / 2)
