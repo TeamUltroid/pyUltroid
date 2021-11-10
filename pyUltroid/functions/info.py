@@ -114,6 +114,7 @@ async def get_chat_info(chat, event):
         dc_id = "Null"
 
     description = full.about
+    restricted_users = getattr(full, "banned_count", None)
     members = getattr(full, "participants_count", chat.participants_count)
     admins = getattr(full, "admins_count", None)
     banned_users = getattr(full, "kicked_count", None)
@@ -199,8 +200,8 @@ async def get_chat_info(chat, event):
         caption += f"Bots: <code>{bots}</code>\n"
     if members_online:
         caption += f"Currently online: <code>{members_online}</code>\n"
-    if restrcited_users is not None:
-        caption += f"Restricted users: <code>{restrcited_users}</code>\n"
+    if restricted_users is not None:
+        caption += f"Restricted users: <code>{restricted_users}</code>\n"
     if banned_users is not None:
         caption += f"Banned users: <code>{banned_users}</code>\n"
     if group_stickers is not None:
