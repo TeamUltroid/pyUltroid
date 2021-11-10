@@ -138,11 +138,11 @@ class UltroidClient(TelegramClient):
                     out=fk,
                     progress_callback=lambda completed, total: self.loop.create_task(
                         progress(
-                            d,
-                            t,
+                            completed,
+                            total,
                             event,
                             start_time,
-                            msg,
+                            message,
                         ),
                     ),
                 )
