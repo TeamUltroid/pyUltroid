@@ -97,23 +97,31 @@ class UltroidClient(TelegramClient):
             setattr(self.me, "phone", None)
             self.logger.info(f"Logged in as {self.full_name}")
 
-    async def fast_uploader(self, file, filename, event, message):
+    async def fast_uploader(self, file, **kwargs):
         """Upload files in a faster way"""
+
         import os
         from pathlib import Path
+        start_time = time.time()
+        filename = kwargs.get("filename", None)
+        event = kwargs.get("event", None)
+        path = Path(file)
+        size = os.path.getsize(file)
+        if not filename:
+            filename = path.name
+        message = kwargs.get("message", f"Uploading {filename}...")
 
         if self._ul_dl_cache and self._ul_dl_cache.get("upload_cache"):
             for files in self._ul_dl_cache["upload_cache"]:
                 if (
-                    files["size"] == os.path.getsize(file)
-                    and files["path"] == Path(file)
+                    files["size"] == size
+                    and files["path"] == path
                     and files["name"] == filename
                 ):
-                    return files["raw_file"], 0
+                    return files["raw_file"], time.time() - start_time
         from pyUltroid.functions.FastTelethon import upload_file
         from pyUltroid.functions.helper import progress
 
-        start_time = time.time()
         status = None
         while not status:
             with open(file, "rb") as f:
@@ -121,20 +129,11 @@ class UltroidClient(TelegramClient):
                     client=self,
                     file=f,
                     filename=filename,
-                    progress_callback=lambda completed, total: self.loop.create_task(
-                        progress(
-                            completed,
-                            total,
-                            event,
-                            start_time,
-                            message,
-                        ),
-                    ),
+                    progress_callback=(lambda completed, total: self.loop.create_task(progress(completed,total,event,start_time,message))) if event else None
                 )
-        uploaded_in = time.time() - start_time
         cache = {
-            "size": os.path.getsize(file),
-            "path": Path(file),
+            "size": size,
+            "path": path,
             "name": filename,
             "raw_file": status,
         }
@@ -142,7 +141,7 @@ class UltroidClient(TelegramClient):
             self._ul_dl_cache["upload_cache"].append(cache)
         else:
             self._ul_dl_cache.update({"upload_cache": [cache]})
-        return status, uploaded_in
+        return status, time.time - start_time
 
     async def fast_downloader(self, file, filename, event, message):
         """Download files in a faster way"""
