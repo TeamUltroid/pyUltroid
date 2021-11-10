@@ -11,9 +11,8 @@
 import math
 
 from telethon.tl import functions, types
-from telethon.utils import get_input_location
-from telethon.errors.rpcerrorlist import BotMethodInvalidError
-from .. import ultroid_bot, LOGS
+
+from .. import LOGS, ultroid_bot
 from ..misc._wrappers import eor
 
 # -----------
@@ -118,7 +117,7 @@ async def get_chat_info(chat, event):
     members = getattr(full, "participants_count", chat.participants_count)
     admins = getattr(full, "admins_count", None)
     banned_users = getattr(full, "kicked_count", None)
-    restricted_users = getattr(full, "banned_count", None)
+    getattr(full, "banned_count", None)
     members_online = getattr(full, "online_count", 0)
     group_stickers = (
         chat.full_chat.stickerset.title
@@ -132,31 +131,15 @@ async def get_chat_info(chat, event):
     username = getattr(chat, "username", None)
     bots_list = full.bot_info  # this is a list
     bots = 0
-    supergroup = (
-        "<b>Yes</b>"
-        if hasattr(chat, "megagroup") and chat.megagroup
-        else "No"
-    )
-    slowmode = (
-        "<b>Yes</b>"
-        if getattr(chat, "slowmode_enabled", None)
-        else "No"
-    )
+    supergroup = "<b>Yes</b>" if hasattr(chat, "megagroup") and chat.megagroup else "No"
+    slowmode = "<b>Yes</b>" if getattr(chat, "slowmode_enabled", None) else "No"
     slowmode_time = (
-        full.slowmode_seconds
-        if getattr(chat, "slowmode_enabled", None)
-        else None
+        full.slowmode_seconds if getattr(chat, "slowmode_enabled", None) else None
     )
     restricted = (
-        "<b>Yes</b>"
-        if hasattr(chat, "restricted") and chat.restricted
-        else "No"
+        "<b>Yes</b>" if hasattr(chat, "restricted") and chat.restricted else "No"
     )
-    verified = (
-        "<b>Yes</b>"
-        if hasattr(chat, "verified") and chat.verified
-        else "No"
-    )
+    verified = "<b>Yes</b>" if hasattr(chat, "verified") and chat.verified else "No"
     username = "@{}".format(username) if username else None
     creator_username = "@{}".format(creator_username) if creator_username else None
 
@@ -226,10 +209,7 @@ async def get_chat_info(chat, event):
     caption += "\n"
     if not broadcast:
         caption += f"Slow mode: {slowmode}"
-        if (
-            hasattr(chat, "slowmode_enabled")
-            and chat.slowmode_enabled
-        ):
+        if hasattr(chat, "slowmode_enabled") and chat.slowmode_enabled:
             caption += f", <code>{slowmode_time}s</code>\n\n"
         else:
             caption += "\n\n"
