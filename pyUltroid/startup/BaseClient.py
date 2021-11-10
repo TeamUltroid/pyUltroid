@@ -35,7 +35,7 @@ class UltroidClient(TelegramClient):
         *args,
         **kwargs,
     ):
-        self._upload_cache = {}
+        self._ul_dl_cache = {}
         self._cache = {}
         self.logger = logger
         self.udB = udB
@@ -99,6 +99,12 @@ class UltroidClient(TelegramClient):
 
     async def fast_uploader(self, file, filename, event, message):
         """Upload files in a faster way"""
+        import os
+        from pathlib import Path
+        if self._ul_dl_cache and self._ul_dl_cache.get("upload_cache"):
+            for files in self._ul_dl_cache["upload_cache"]:
+                if (files["size"] == os.path.getsize(file) and files["path"] == Path(file) and files["name"] == filename):
+                    return files["raw_file"], 0
         from pyUltroid.functions.FastTelethon import upload_file
         from pyUltroid.functions.helper import progress
 
@@ -121,6 +127,8 @@ class UltroidClient(TelegramClient):
                     ),
                 )
         uploaded_in = time.time() - start_time
+        cache = {"size": os.path.getsize(file), "path": Path(file), "name": filename,"raw_file": status}
+        self._ul_dl_cache["upload_cache"].append(cache)
         return status, uploaded_in
 
     async def fast_downloader(self, file, filename, event, message):
