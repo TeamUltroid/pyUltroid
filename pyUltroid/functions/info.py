@@ -214,7 +214,7 @@ async def get_chat_info(chat, event):
         else:
             caption += "\n\n"
         caption += f"Supergroup: {supergroup}\n\n"
-    if hasattr(chat_obj_info, "restricted"):
+    if hasattr(chat, "restricted"):
         caption += f"Restricted: {restricted}\n"
         if chat_obj_info.restricted:
             caption += f"> Platform: {chat.restriction_reason[0].platform}\n"
