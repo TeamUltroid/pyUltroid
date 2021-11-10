@@ -119,7 +119,7 @@ async def get_chat_info(chat, event):
     admins = getattr(full, "admins_count", None)
     banned_users = getattr(full, "kicked_count", None)
     restricted_users = getattr(full, "banned_count", None)
-    members_online = getattr(.full, "online_count", 0)
+    members_online = getattr(full, "online_count", 0)
     group_stickers = (
         chat.full_chat.stickerset.title
         if hasattr(chat.full_chat, "stickerset")
