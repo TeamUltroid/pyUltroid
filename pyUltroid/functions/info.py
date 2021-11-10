@@ -118,11 +118,7 @@ async def get_chat_info(chat, event):
     admins = getattr(full, "admins_count", None)
     banned_users = getattr(full, "kicked_count", None)
     members_online = getattr(full, "online_count", 0)
-    group_stickers = (
-        full.stickerset.title
-        if hasattr(full, "stickerset")
-        else None
-    )
+    group_stickers = full.stickerset.title if hasattr(full, "stickerset") else None
     messages_viewable = msg_info.count if msg_info else None
     messages_sent = getattr(full, "read_inbox_max_id", None)
     messages_sent_alt = getattr(full, "read_outbox_max_id", None)
