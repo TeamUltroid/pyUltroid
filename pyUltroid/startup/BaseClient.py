@@ -102,6 +102,7 @@ class UltroidClient(TelegramClient):
 
         import os
         from pathlib import Path
+
         start_time = time.time()
         filename = kwargs.get("filename", None)
         event = kwargs.get("event", None)
@@ -129,7 +130,13 @@ class UltroidClient(TelegramClient):
                     client=self,
                     file=f,
                     filename=filename,
-                    progress_callback=(lambda completed, total: self.loop.create_task(progress(completed,total,event,start_time,message))) if event else None
+                    progress_callback=(
+                        lambda completed, total: self.loop.create_task(
+                            progress(completed, total, event, start_time, message)
+                        )
+                    )
+                    if event
+                    else None,
                 )
         cache = {
             "size": size,
