@@ -123,6 +123,32 @@ class UltroidClient(TelegramClient):
         uploaded_in = time.time() - start_time
         return status, uploaded_in
 
+    async def fast_downloader(self, file, filename, event, message):
+        """Download files in a faster way"""
+        from pyUltroid.functions.FastTelethon import download_file
+        from pyUltroid.functions.helper import progress
+
+        start_time = time.time()
+        status = None
+        while not status:
+            with open(filename, "wb") as fk:
+                status = await download_file(
+                    client=self,
+                    location=file,
+                    out=fk,
+                    progress_callback=lambda completed, total: self.loop.create_task(
+                        progress(
+                            d,
+                            t,
+                            event,
+                            start_time,
+                            msg,
+                        ),
+                    ),
+                )
+        downloaded_in = time.time() - start_time
+        return status, downloaded_in
+
     def run_in_loop(self, function):
         """run inside asyncio loop"""
         return self.loop.run_until_complete(function)
