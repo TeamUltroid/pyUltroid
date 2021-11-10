@@ -106,13 +106,14 @@ class UltroidClient(TelegramClient):
         start_time = time.time()
         filename = kwargs.get("filename", None)
         event = kwargs.get("event", None)
+        use_cache = kwargs.get("use_cache", True)
         path = Path(file)
         size = os.path.getsize(file)
         if not filename:
             filename = path.name
         message = kwargs.get("message", f"Uploading {filename}...")
 
-        if self._ul_dl_cache and self._ul_dl_cache.get("upload_cache"):
+        if use_cache and self._ul_dl_cache and self._ul_dl_cache.get("upload_cache"):
             for files in self._ul_dl_cache["upload_cache"]:
                 if (
                     files["size"] == size
