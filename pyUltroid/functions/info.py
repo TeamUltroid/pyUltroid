@@ -12,8 +12,8 @@ import math
 
 from telethon.tl import functions, types
 from telethon.utils import get_input_location
-
-from .. import ultroid_bot
+from telethon.errors.rpcerrorlist import BotMethodInvalidError
+from .. import ultroid_bot, LOGS
 from ..misc._wrappers import eor
 
 # -----------
@@ -55,41 +55,22 @@ async def get_uinfo(e):
 # Random stuffs dk who added
 
 
-async def fetch_info(event):
-    chat = event.pattern_match.group(1)
-    if chat:
-        chat = await get_user_id(chat)
-    elif event.is_reply:
-        replied = await event.get_reply_message()
-        if replied.fwd_from and replied.fwd_from.channel_id:
-            chat = replied.fwd_from.channel_id
-        elif isinstance(replied.sender, types.Channel):
-            chat = replied.sender_id
-        else:
-            await eor(event, "`Give Channel id/username or reply to user...`")
-            return
-    else:
-        chat = event.chat_id
-    chat = await event.client.get_entity(chat)
+async def get_chat_info(chat, event):
     if isinstance(chat, types.Channel):
         chat_info = await event.client(functions.channels.GetFullChannelRequest(chat))
     elif isinstance(chat, types.Chat):
         chat_info = await event.client(functions.messages.GetFullChatRequest(chat))
     else:
-        await eor(event, "`Use this for Group/Channel.`")
-        return
-    chat = chat_info
-    chat_obj_info = await event.client.get_entity(chat.full_chat.id)
-    broadcast = (
-        chat_obj_info.broadcast if hasattr(chat_obj_info, "broadcast") else False
-    )
+        return await eor(event, "`Use this for Group/Channel.`")
+    full = chat_info.full_chat
+    broadcast = getattr(chat, "broadcast", False)
     chat_type = "Channel" if broadcast else "Group"
-    chat_title = chat_obj_info.title
+    chat_title = chat.title
     warn_emoji = "⚠"
     try:
-        msg_info = await ultroid_bot(
+        msg_info = await event.client(
             functions.messages.GetHistoryRequest(
-                peer=chat_obj_info.id,
+                peer=chat.id,
                 offset_id=0,
                 offset_date=None,
                 add_offset=-0,
@@ -101,7 +82,7 @@ async def fetch_info(event):
         )
     except Exception as e:
         msg_info = None
-        print("Exception:", e)
+        LOGS.info("Exception:", e)
     first_msg_valid = bool(
         msg_info and msg_info.messages and msg_info.messages[0].id == 1
     )
@@ -128,73 +109,52 @@ async def fetch_info(event):
         and msg_info.messages[0].action.title != chat_title
         else None
     )
-    try:
-        dc_id, location = get_input_location(chat.full_chat.chat_photo)
-    except Exception as e:
-        dc_id = "Unknown"
-        str(e)
+    if chat.photo and not isinstance(chat.photo, types.ChatPhotoEmpty):
+        dc_id = chat.photo.dc_id
+    else:
+        dc_id = "Null"
 
-    description = chat.full_chat.about
-    members = (
-        chat.full_chat.participants_count
-        if hasattr(chat.full_chat, "participants_count")
-        else chat_obj_info.participants_count
-    )
-    admins = (
-        chat.full_chat.admins_count if hasattr(chat.full_chat, "admins_count") else None
-    )
-    banned_users = (
-        chat.full_chat.kicked_count if hasattr(chat.full_chat, "kicked_count") else None
-    )
-    restrcited_users = (
-        chat.full_chat.banned_count if hasattr(chat.full_chat, "banned_count") else None
-    )
-    members_online = (
-        chat.full_chat.online_count if hasattr(chat.full_chat, "online_count") else 0
-    )
+    description = full.about
+    members = getattr(full, "participants_count", chat.participants_count)
+    admins = getattr(full, "admins_count", None)
+    banned_users = getattr(full, "kicked_count", None)
+    restricted_users = getattr(full, "banned_count", None)
+    members_online = getattr(.full, "online_count", 0)
     group_stickers = (
         chat.full_chat.stickerset.title
-        if hasattr(chat.full_chat, "stickerset") and chat.full_chat.stickerset
+        if hasattr(chat.full_chat, "stickerset")
         else None
     )
     messages_viewable = msg_info.count if msg_info else None
-    messages_sent = (
-        chat.full_chat.read_inbox_max_id
-        if hasattr(chat.full_chat, "read_inbox_max_id")
-        else None
-    )
-    messages_sent_alt = (
-        chat.full_chat.read_outbox_max_id
-        if hasattr(chat.full_chat, "read_outbox_max_id")
-        else None
-    )
-    exp_count = chat.full_chat.pts if hasattr(chat.full_chat, "pts") else None
-    username = chat_obj_info.username if hasattr(chat_obj_info, "username") else None
-    bots_list = chat.full_chat.bot_info  # this is a list
+    messages_sent = getattr(full, "read_inbox_max_id", None)
+    messages_sent_alt = getattr(full, "read_outbox_max_id", None)
+    exp_count = getattr(full, "pts", None)
+    username = getattr(chat, "username", None)
+    bots_list = full.bot_info  # this is a list
     bots = 0
     supergroup = (
         "<b>Yes</b>"
-        if hasattr(chat_obj_info, "megagroup") and chat_obj_info.megagroup
+        if hasattr(chat, "megagroup") and chat.megagroup
         else "No"
     )
     slowmode = (
         "<b>Yes</b>"
-        if hasattr(chat_obj_info, "slowmode_enabled") and chat_obj_info.slowmode_enabled
+        if getattr(chat, "slowmode_enabled", None)
         else "No"
     )
     slowmode_time = (
-        chat.full_chat.slowmode_seconds
-        if hasattr(chat_obj_info, "slowmode_enabled") and chat_obj_info.slowmode_enabled
+        full.slowmode_seconds
+        if getattr(chat, "slowmode_enabled", None)
         else None
     )
     restricted = (
         "<b>Yes</b>"
-        if hasattr(chat_obj_info, "restricted") and chat_obj_info.restricted
+        if hasattr(chat, "restricted") and chat.restricted
         else "No"
     )
     verified = (
         "<b>Yes</b>"
-        if hasattr(chat_obj_info, "verified") and chat_obj_info.verified
+        if hasattr(chat, "verified") and chat.verified
         else "No"
     )
     username = "@{}".format(username) if username else None
@@ -204,7 +164,7 @@ async def fetch_info(event):
         try:
             participants_admins = await event.client(
                 functions.channels.GetParticipantsRequest(
-                    channel=chat.full_chat.id,
+                    channel=chat.id,
                     filter=types.ChannelParticipantsAdmins(),
                     offset=0,
                     limit=0,
@@ -213,13 +173,13 @@ async def fetch_info(event):
             )
             admins = participants_admins.count if participants_admins else None
         except Exception as e:
-            print("Exception:", e)
+            LOGS.info("Exception:", e)
     if bots_list:
         for _ in bots_list:
             bots += 1
 
     caption = "<b>CHAT INFO:</b>\n"
-    caption += f"ID: <code>{chat_obj_info.id}</code>\n"
+    caption += f"ID: <code>{chat.id}</code>\n"
     if chat_title is not None:
         caption += f"{chat_type} name: {chat_title}\n"
     if former_title is not None:
@@ -238,7 +198,7 @@ async def fetch_info(event):
     if created is not None:
         caption += f"Created: <code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
     else:
-        caption += f"Created: <code>{chat_obj_info.date.date().strftime('%b %d, %Y')} - {chat_obj_info.date.time()}</code> {warn_emoji}\n"
+        caption += f"Created: <code>{chat_obj_info.date.date().strftime('%b %d, %Y')} - {chat.date.time()}</code> {warn_emoji}\n"
     caption += f"Data Centre ID: {dc_id}\n"
     if exp_count is not None:
         chat_level = int((1 + math.sqrt(1 + 7 * exp_count / 14)) / 2)
@@ -262,13 +222,13 @@ async def fetch_info(event):
     if banned_users is not None:
         caption += f"Banned users: <code>{banned_users}</code>\n"
     if group_stickers is not None:
-        caption += f'{chat_type} stickers: <a href="t.me/addstickers/{chat.full_chat.stickerset.short_name}">{group_stickers}</a>\n'
+        caption += f'{chat_type} stickers: <a href="t.me/addstickers/{full.stickerset.short_name}">{group_stickers}</a>\n'
     caption += "\n"
     if not broadcast:
         caption += f"Slow mode: {slowmode}"
         if (
-            hasattr(chat_obj_info, "slowmode_enabled")
-            and chat_obj_info.slowmode_enabled
+            hasattr(chat, "slowmode_enabled")
+            and chat.slowmode_enabled
         ):
             caption += f", <code>{slowmode_time}s</code>\n\n"
         else:
@@ -277,14 +237,14 @@ async def fetch_info(event):
     if hasattr(chat_obj_info, "restricted"):
         caption += f"Restricted: {restricted}\n"
         if chat_obj_info.restricted:
-            caption += f"> Platform: {chat_obj_info.restriction_reason[0].platform}\n"
-            caption += f"> Reason: {chat_obj_info.restriction_reason[0].reason}\n"
-            caption += f"> Text: {chat_obj_info.restriction_reason[0].text}\n\n"
+            caption += f"> Platform: {chat.restriction_reason[0].platform}\n"
+            caption += f"> Reason: {chat.restriction_reason[0].reason}\n"
+            caption += f"> Text: {chat.restriction_reason[0].text}\n\n"
         else:
             caption += "\n"
-    if hasattr(chat_obj_info, "scam") and chat_obj_info.scam:
+    if getattr(chat, "scam", None):
         caption += "Scam: <b>Yes</b>\n\n"
-    if hasattr(chat_obj_info, "verified"):
+    if hasattr(chat, "verified"):
         caption += f"Verified by Telegram: {verified}\n\n"
     if description:
         caption += f"Description: \n<code>{description}</code>\n"
