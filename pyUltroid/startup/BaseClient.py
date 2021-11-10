@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
+import time
 from re import findall
 
 from telethon import TelegramClient
@@ -18,7 +19,7 @@ from telethon.network.connection import (
     ConnectionTcpMTProxyRandomizedIntermediate as MtProxy,
 )
 from telethon.utils import get_display_name
-import time
+
 from ..configs import Var
 from . import *
 
@@ -100,6 +101,7 @@ class UltroidClient(TelegramClient):
         """Upload files in a faster way"""
         from pyUltroid.functions.FastTelethon import upload_file
         from pyUltroid.functions.helper import progress
+
         start_time = time.time()
         status = None
         while not status:
