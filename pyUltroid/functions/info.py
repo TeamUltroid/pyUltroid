@@ -156,7 +156,7 @@ async def get_chat_info(chat, event):
             )
             admins = participants_admins.count if participants_admins else None
         except Exception as e:
-            LOGS.info("Exception:", e)
+            LOGS.info(f"Exception: {e}")
     if bots_list:
         for _ in bots_list:
             bots += 1
