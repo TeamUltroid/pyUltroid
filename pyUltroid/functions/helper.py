@@ -385,9 +385,9 @@ def humanbytes(size):
             break
         size /= 1024
     if isinstance(size, int):
-        size = f"{size} {unit}B"
+        size = f"{size}{unit}B"
     elif isinstance(size, float):
-        size = f"{size:.2f} {unit}B"
+        size = f"{size:.2f}{unit}B"
     return size
 
 
@@ -397,9 +397,9 @@ def numerize(number):
             break
         number /= 1000
     if isinstance(number, int):
-        number = f"{number} {unit}"
+        number = f"{number}{unit}"
     elif isinstance(number, float):
-        number = f"{number:.2f} {unit}"
+        number = f"{number:.2f}{unit}"
     return number
 
 
