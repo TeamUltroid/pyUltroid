@@ -8,7 +8,7 @@
 
 import time
 from re import findall
-
+from io import BytesIO
 from telethon import TelegramClient
 from telethon import utils as telethon_utils
 from telethon.errors import (
@@ -182,6 +182,16 @@ class UltroidClient(TelegramClient):
                 )
         downloaded_in = time.time() - start_time
         return raw_file, downloaded_in
+
+    async def doc_to_bytes(document, file=None):
+        """Download file in memory and create file"""
+        _, input_loc = self.utils.get_input_location(document)
+        file_ = await self.download_file(input_loc)
+        if not file:
+            return file_
+        new_file = BytesIO(file_)
+        new_file.name = file
+        return new_file
 
     def run_in_loop(self, function):
         """run inside asyncio loop"""
