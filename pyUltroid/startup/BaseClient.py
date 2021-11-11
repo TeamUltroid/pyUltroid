@@ -18,8 +18,7 @@ from telethon.errors import (
 from telethon.network.connection import (
     ConnectionTcpMTProxyRandomizedIntermediate as MtProxy,
 )
-from telethon.utils import get_display_name
-
+from telethon import utils as telethon_utils
 from ..configs import Var
 from . import *
 
@@ -159,11 +158,11 @@ class UltroidClient(TelegramClient):
         start_time = time.time()
         status = None
         while not status:
-            with open(filename, "wb") as fk:
+            with open(filename, "wb") as f:
                 status = await download_file(
                     client=self,
                     location=file,
-                    out=fk,
+                    out=f,
                     progress_callback=lambda completed, total: self.loop.create_task(
                         progress(
                             completed,
@@ -186,9 +185,13 @@ class UltroidClient(TelegramClient):
         self.run_until_disconnected()
 
     @property
+    def utils(self):
+        return telethon_utils
+
+    @property
     def full_name(self):
         """full name of Client"""
-        return get_display_name(self.me)
+        return self.utils.get_display_name(self.me)
 
     @property
     def uid(self):
