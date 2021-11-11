@@ -10,6 +10,7 @@ import time
 from re import findall
 
 from telethon import TelegramClient
+from telethon import utils as telethon_utils
 from telethon.errors import (
     AccessTokenExpiredError,
     ApiIdInvalidError,
@@ -18,7 +19,7 @@ from telethon.errors import (
 from telethon.network.connection import (
     ConnectionTcpMTProxyRandomizedIntermediate as MtProxy,
 )
-from telethon import utils as telethon_utils
+
 from ..configs import Var
 from . import *
 
