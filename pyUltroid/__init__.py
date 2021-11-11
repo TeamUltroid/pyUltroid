@@ -34,7 +34,7 @@ if BOT_MODE:
     ultroid_bot = None
 else:
     ultroid_bot = UltroidClient(
-        session_file(),
+        session_file(LOGS),
         udB=udB,
         app_version=ultroid_version,
         device_model="Ultroid",
