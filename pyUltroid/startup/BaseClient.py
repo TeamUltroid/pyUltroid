@@ -10,6 +10,7 @@ import time
 from re import findall
 
 from telethon import TelegramClient
+from telethon import utils as telethon_utils
 from telethon.errors import (
     AccessTokenExpiredError,
     ApiIdInvalidError,
@@ -18,7 +19,6 @@ from telethon.errors import (
 from telethon.network.connection import (
     ConnectionTcpMTProxyRandomizedIntermediate as MtProxy,
 )
-from telethon import utils as telethon_utils
 
 from ..configs import Var
 from . import *
@@ -105,13 +105,16 @@ class UltroidClient(TelegramClient):
         start_time = time.time()
         path = Path(file)
         filename = kwargs.get("filename", path.name)
-        event = kwargs.get("event", None) # If None, progress bar won't be shown
-        use_cache = kwargs.get("use_cache", True) # Whether to use cached file for uploading or not
-        to_delete = kwargs.get("to_delete", False) # Delete original file after uploading
+        # If None, progress bar won't be shown
+        event = kwargs.get("event", None)
+        # Whether to use cached file for uploading or not
+        use_cache = kwargs.get("use_cache", True)
+        # Delete original file after uploading
+        to_delete = kwargs.get("to_delete", False)
         message = kwargs.get("message", f"Uploading {filename}...")
         by_bot = self._bot
         size = os.path.getsize(file)
-        
+
         if use_cache and self._cache and self._cache.get("upload_cache"):
             for files in self._cache["upload_cache"]:
                 if (
