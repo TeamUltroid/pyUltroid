@@ -51,5 +51,5 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=requirements,
     classifiers=classifiers,
-    python_requires=">=3.6, <3.10",
+    python_requires=">3.6, <3.10",
 )
