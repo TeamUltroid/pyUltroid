@@ -53,6 +53,7 @@ class GDriveManager:
             return "Fill GDRIVE client credentials"
         return _auth_flow.step1_get_authorize_url()
 
+    @property
     def _http(self):
         storage = Storage(self.token_file)
         creds = storage.get()
@@ -61,17 +62,18 @@ class GDriveManager:
         creds.refresh(http)
         return creds.authorize(http)
 
+    @property
     def _build(self):
-        return build("drive", "v2", http=self._http(), cache_discovery=False)
+        return build("drive", "v2", http=self._http, cache_discovery=False)
 
     def _set_permissions(self, fileId: str):
         _permissions = {
             "role": "reader",
             "type": "anyone",
         }
-        self._build().permissions().insert(
+        self._build.permissions().insert(
             fileId=fileId, body=permissions, supportsAllDrives=True
-        ).execute(http=self._http())
+        ).execute(http=self._http)
 
     async def _upload_file(self, event, path: str, filename: str = None):
         if not filename:
@@ -86,7 +88,7 @@ class GDriveManager:
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
         upload = (
-            self._build()
+            self._build
             .files()
             .insert(body=body, media_body=media_body, supportsAllDrives=True)
         )
@@ -110,7 +112,7 @@ class GDriveManager:
         except BaseException:
             pass
         _url = (
-            self._build().files().get(fileId=fileId, supportsAllDrives=True).execute()
+            self._build.files().get(fileId=fileId, supportsAllDrives=True).execute()
         )
         return _url.get("webContentLink")
 
@@ -123,13 +125,13 @@ class GDriveManager:
         try:
             if not filename:
                 filename = (
-                    self._build()
+                    self._build
                     .files()
                     .get(fileId=fileId, supportsAllDrives=True)
                     .execute()["title"]
                 )
             downloader = (
-                self._build().files().get_media(fileId=fileId, supportsAllDrives=True)
+                self._build.files().get_media(fileId=fileId, supportsAllDrives=True)
             )
         except Exception as ex:
             return False, str(ex)
@@ -151,8 +153,9 @@ class GDriveManager:
                     )
         return True, filename
 
+    @property
     def _list_files(self):
-        _items = self._build().files().get(fileId="", supportsAllDrives=True).execute()
+        _items = self._build.files().get(fileId="", supportsAllDrives=True).execute()
         _files = {}
         for files in _items["items"]:
             try:
