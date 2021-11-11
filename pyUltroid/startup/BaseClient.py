@@ -10,7 +10,6 @@ import time
 from re import findall
 
 from telethon import TelegramClient
-from telethon import utils as telethon_utils
 from telethon.errors import (
     AccessTokenExpiredError,
     ApiIdInvalidError,
@@ -19,6 +18,7 @@ from telethon.errors import (
 from telethon.network.connection import (
     ConnectionTcpMTProxyRandomizedIntermediate as MtProxy,
 )
+from telethon import utils as telethon_utils
 
 from ..configs import Var
 from . import *
@@ -35,7 +35,6 @@ class UltroidClient(TelegramClient):
         *args,
         **kwargs,
     ):
-        self._ul_dl_cache = {}
         self._cache = {}
         self.logger = logger
         self.udB = udB
@@ -104,30 +103,31 @@ class UltroidClient(TelegramClient):
         from pathlib import Path
 
         start_time = time.time()
-        filename = kwargs.get("filename", None)
-        event = kwargs.get("event", None)
-        use_cache = kwargs.get("use_cache", True)
         path = Path(file)
-        size = os.path.getsize(file)
-        if not filename:
-            filename = path.name
+        filename = kwargs.get("filename", path.name)
+        event = kwargs.get("event", None) # If None, progress bar won't be shown
+        use_cache = kwargs.get("use_cache", True) # Whether to use cached file for uploading or not
+        to_delete = kwargs.get("to_delete", False) # Delete original file after uploading
         message = kwargs.get("message", f"Uploading {filename}...")
-
-        if use_cache and self._ul_dl_cache and self._ul_dl_cache.get("upload_cache"):
-            for files in self._ul_dl_cache["upload_cache"]:
+        by_bot = self._bot
+        size = os.path.getsize(file)
+        
+        if use_cache and self._cache and self._cache.get("upload_cache"):
+            for files in self._cache["upload_cache"]:
                 if (
                     files["size"] == size
                     and files["path"] == path
                     and files["name"] == filename
+                    and files["by_bot"] == by_bot
                 ):
                     return files["raw_file"], time.time() - start_time
         from pyUltroid.functions.FastTelethon import upload_file
         from pyUltroid.functions.helper import progress
 
-        status = None
-        while not status:
+        raw_file = None
+        while not raw_file:
             with open(file, "rb") as f:
-                status = await upload_file(
+                raw_file = await upload_file(
                     client=self,
                     file=f,
                     filename=filename,
@@ -140,16 +140,19 @@ class UltroidClient(TelegramClient):
                     else None,
                 )
         cache = {
+            "by_bot": by_bot,
             "size": size,
             "path": path,
             "name": filename,
-            "raw_file": status,
+            "raw_file": raw_file,
         }
-        if self._ul_dl_cache.get("upload_cache"):
-            self._ul_dl_cache["upload_cache"].append(cache)
+        if self._cache.get("upload_cache"):
+            self._cache["upload_cache"].append(cache)
         else:
-            self._ul_dl_cache.update({"upload_cache": [cache]})
-        return status, time.time() - start_time
+            self._cache.update({"upload_cache": [cache]})
+        if to_delete:
+            os.remove(file)
+        return raw_file, time.time() - start_time
 
     async def fast_downloader(self, file, filename, event, message):
         """Download files in a faster way"""
@@ -157,10 +160,10 @@ class UltroidClient(TelegramClient):
         from pyUltroid.functions.helper import progress
 
         start_time = time.time()
-        status = None
-        while not status:
+        raw_file = None
+        while not raw_file:
             with open(filename, "wb") as f:
-                status = await download_file(
+                raw_file = await download_file(
                     client=self,
                     location=file,
                     out=f,
@@ -175,7 +178,7 @@ class UltroidClient(TelegramClient):
                     ),
                 )
         downloaded_in = time.time() - start_time
-        return status, downloaded_in
+        return raw_file, downloaded_in
 
     def run_in_loop(self, function):
         """run inside asyncio loop"""
