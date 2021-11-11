@@ -15,13 +15,17 @@ from ..configs import Var
 from . import *
 
 
-def session_file():
+def session_file(logger):
     if os.path.exists("client-session.session"):
         _session = "client-session"
     elif Var.SESSION:
+        if len(Var.SESSION.strip()) != 353:
+            logger.exception("Wrong string session. Copy paste correctly!")
+            exit()
         _session = StringSession(Var.SESSION)
     else:
-        raise Exception("No String Session found. Quitting...")
+        logger.exception("No String Session found. Quitting...")
+        exit()
     return _session
 
 
