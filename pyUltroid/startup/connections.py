@@ -15,63 +15,6 @@ from telethon.sessions import StringSession
 from ..configs import Var
 from . import *
 
-
-class RedisConnection(Redis):
-    def __init__(
-        self,
-        host,
-        port,
-        password,
-        platform=None,
-        logger=LOGS,
-        *args,
-        **kwargs,
-    ):
-        if host and ":" in host:
-            spli_ = host.split(":")
-            host = spli_[0]
-            port = int(spli_[-1])
-            if host.startswith("http"):
-                logger.error("Your REDIS_URI should not start with http !")
-                exit()
-        elif not host or not port:
-            logger.error("Port Number not found")
-            exit()
-        kwargs["host"] = host
-        kwargs["password"] = password
-        kwargs["port"] = port
-
-        if platform.lower() == "qovery" and not host:
-            var, hash_, host, password = "", "", "", ""
-            for vars_ in os.environ:
-                if vars_.startswith("QOVERY_REDIS_") and vars.endswith("_HOST"):
-                    var = vars_
-            if var:
-                hash_ = var.split("_", maxsplit=2)[1].split("_")[0]
-            if hash:
-                kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash_}_HOST")
-                kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash_}_PORT")
-                kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash_}_PASSWORD")
-        if logger:
-            logger.info("Connecting to redis database")
-        super().__init__(**kwargs)
-
-    def set_redis(self, key, value):
-        return self.set(str(key), str(value))
-
-    def get_redis(self, key):
-        data = None
-        if self.get(str(key)):
-            try:
-                data = eval(self.get(str(key)))
-            except BaseException:
-                data = self.get(str(key))
-        return data
-
-    def del_redis(self, key):
-        return bool(self.delete(str(key)))
-
-
 def session_file():
     if os.path.exists("client-session.session"):
         _session = "client-session"
