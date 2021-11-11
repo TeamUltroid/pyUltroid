@@ -7,13 +7,13 @@
 
 import os
 
-from redis import Redis
 from telethon import TelegramClient
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
 
 from ..configs import Var
 from . import *
+
 
 def session_file():
     if os.path.exists("client-session.session"):
