@@ -87,10 +87,8 @@ class GDriveManager:
         }
         if self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
-        upload = (
-            self._build
-            .files()
-            .insert(body=body, media_body=media_body, supportsAllDrives=True)
+        upload = self._build.files().insert(
+            body=body, media_body=media_body, supportsAllDrives=True
         )
         start = time.time()
         _status = None
@@ -111,9 +109,7 @@ class GDriveManager:
             self._set_permissions(fileId=fileId)
         except BaseException:
             pass
-        _url = (
-            self._build.files().get(fileId=fileId, supportsAllDrives=True).execute()
-        )
+        _url = self._build.files().get(fileId=fileId, supportsAllDrives=True).execute()
         return _url.get("webContentLink")
 
     async def _download_file(self, event, fileId: str, filename: str = None):
@@ -125,13 +121,12 @@ class GDriveManager:
         try:
             if not filename:
                 filename = (
-                    self._build
-                    .files()
+                    self._build.files()
                     .get(fileId=fileId, supportsAllDrives=True)
                     .execute()["title"]
                 )
-            downloader = (
-                self._build.files().get_media(fileId=fileId, supportsAllDrives=True)
+            downloader = self._build.files().get_media(
+                fileId=fileId, supportsAllDrives=True
             )
         except Exception as ex:
             return False, str(ex)
