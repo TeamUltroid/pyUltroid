@@ -7,7 +7,6 @@
 
 
 import time
-from io import BytesIO
 from re import findall
 
 from telethon import TelegramClient
