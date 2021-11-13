@@ -13,7 +13,7 @@ from traceback import format_exc
 from bs4 import BeautifulSoup
 from telethon.tl import types
 from telethon.utils import get_display_name, get_peer_id
-
+import os
 from .. import *
 from ..dB._core import LIST
 from ..misc._wrappers import eor
@@ -344,14 +344,6 @@ async def create_instagram_client(event):
 # Quotly
 
 
-async def doc_to_bytes(event):
-    eve_ = event.photo or event.document
-    if not eve_:
-        return
-    _, input_file = utils.get_input_location(eve_)
-    return await event.client.download_file(input_file)
-
-
 _entities = {
     types.MessageEntityPhone: "phone_number",
     types.MessageEntityMention: "mention",
@@ -428,8 +420,8 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         "replyMessage": reply,
     }
     if event.photo:
-        file_ = await doc_to_bytes(event)
-        files = {"file": file_}
+        file_ = await event.download_media()
+        files = {"file": open(file_, "rb").read()}
         uri = (
             "https://telegra.ph"
             + (
@@ -439,6 +431,7 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
             )[0]["src"]
         )
         message.update({"media": {"url": uri}})
+        os.remove(file_)
     return message
 
 
