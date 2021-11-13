@@ -235,7 +235,7 @@ async def webuploader(file, uploader: str = None):
         json = sites[uploader]["json"]
     with open(file, "rb") as data:
         # todo: add progress bar
-        status = await async_searcher(url, data=data.read(), post=True, re_json=json)
+        status = await async_searcher(url, data={"file": data.read()}, post=True, re_json=json)
     return status
 
 
