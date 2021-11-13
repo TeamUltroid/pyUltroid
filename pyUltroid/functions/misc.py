@@ -40,6 +40,7 @@ try:
 except ImportError:
     Image = None
 
+
 async def randomchannel(
     tochat, channel, range1, range2, caption=None, client=ultroid_bot
 ):
@@ -427,9 +428,9 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
     if event.photo or event.sticker:
         file_ = await event.download_media()
         if file_.lower().endswith(".webp"):
-            Image.open(file_).save(file_+".png", "PNG")
+            Image.open(file_).save(file_ + ".png", "PNG")
             os.remove(file_)
-            file_ = file_+".png"
+            file_ = file_ + ".png"
         files = {"file": open(file_, "rb").read()}
         uri = (
             "https://telegra.ph"
