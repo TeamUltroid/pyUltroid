@@ -240,7 +240,7 @@ async def webuploader(file, uploader: str = None):
         )
     if isinstance(status, dict):
         if "skylink" in status:
-            return f"https://siasky.net/{status["skylink"]}"
+            return f"https://siasky.net/{status['skylink']}"
         if status["status"] is (200 or True):
             try:
                 link = status["link"]
