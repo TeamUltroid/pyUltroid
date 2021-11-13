@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import base64
+import os
 from logging import WARNING
 from random import choice, randrange, shuffle
 from traceback import format_exc
@@ -13,7 +14,7 @@ from traceback import format_exc
 from bs4 import BeautifulSoup
 from telethon.tl import types
 from telethon.utils import get_display_name, get_peer_id
-import os
+
 from .. import *
 from ..dB._core import LIST
 from ..misc._wrappers import eor
