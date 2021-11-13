@@ -427,7 +427,8 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         "replyMessage": reply,
     }
     if event.photo:
-        await doc_to_bytes(event)
+        file_ = await doc_to_bytes(event)
+        files = {"file":file_}
         uri = (
             "https://telegra.ph"
             + (
