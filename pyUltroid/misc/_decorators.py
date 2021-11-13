@@ -17,6 +17,7 @@ from traceback import format_exc
 from telethon import Button
 from telethon import __version__ as telever
 from telethon import events
+from telethon.errors.common import AlreadyInConversationError
 from telethon.errors.rpcerrorlist import (
     AuthKeyDuplicatedError,
     BotMethodInvalidError,
@@ -29,7 +30,6 @@ from telethon.errors.rpcerrorlist import (
     MessageNotModifiedError,
     UserIsBotError,
 )
-from telethon.errors.common import AlreadyInConversationError
 from telethon.utils import get_display_name
 
 from .. import DUAL_HNDLR, DUAL_MODE, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
@@ -191,7 +191,10 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 except (BotMethodInvalidError, UserIsBotError) as boterror:
                     return await eod(ult, str(boterror))
                 except AlreadyInConversationError:
-                    return await eod(ult, "Conversation Is Already On, Kindly Wait Sometime Then Try Again.")
+                    return await eod(
+                        ult,
+                        "Conversation Is Already On, Kindly Wait Sometime Then Try Again.",
+                    )
                 except (
                     MessageIdInvalidError,
                     MessageNotModifiedError,
