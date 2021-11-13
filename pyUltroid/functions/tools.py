@@ -228,7 +228,7 @@ async def saavn_dl(query: str):
 }
 
 async def webuploader(file, uploader: str = None):
-    sites = {"anonfiles": {"url": "https://api.anonfiles.com/upload", "json"=True}, "transfer": {"url": "https://transfer.sh", "json"=False}}
+    sites = {"anonfiles": {"url": "https://api.anonfiles.com/upload", "json":True}, "transfer": {"url": "https://transfer.sh", "json":False}}
     if uploader and uploader in sites.keys():
         url = sites[uploader]["url"]
         json = sites[uploader]["json"]
