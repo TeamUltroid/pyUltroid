@@ -241,7 +241,7 @@ async def webuploader(file, uploader: str = None):
     if isinstance(status, dict):
         if "skylink" in status:
             return f"https://siasky.net/{status['skylink']}"
-        if status["status"] is (200 or True):
+        if status["status"] is 200 or status["status"] is True:
             try:
                 link = status["link"]
             except KeyError:
