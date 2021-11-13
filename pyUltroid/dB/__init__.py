@@ -2,7 +2,7 @@ DEVLIST = [
     719195224,  # @xditya
     1322549723,  # @danish_00
     1444249738,  # @KarbonCopy
-    1903729401,  # @its_buddhhu
+    1950319407,  # @its_buddhhu // Most Unlucky Guy
     1303895686,  # @Sipak_OP
     611816596,  # @Arnab431
     1318486004,  # @sppidy
