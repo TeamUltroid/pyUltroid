@@ -220,7 +220,7 @@ async def saavn_dl(query: str):
 # --- webupload ------#
 # @buddhhu
 
-CMD_WEB = {
+{
     "anonfiles": 'curl -F "file=@{}" https://api.anonfiles.com/upload',
     "transfer": 'curl --upload-file "{}" https://transfer.sh/',
     "bayfiles": 'curl -F "file=@{}" https://api.bayfiles.com/upload',
@@ -229,18 +229,12 @@ CMD_WEB = {
     "siasky": 'curl -X POST "https://siasky.net/skynet/skyfile" -F "file=@{}"',
 }
 
-
-async def dloader(e, host, file):
-    selected = CMD_WEB[host].format(file)
-    dn, er = await bash(selected)
-    if er:
-        text = f"**Error :** `{er}`"
-    else:
-        keys = json_parser(dn)
-        text = "".join(f"• **{i}** : `{keys[i]}`" for i in keys.keys())
-    os.remove(file)
-    return await e.edit(text)
-
+async def webuploader(file, uploader: str = None):
+    sites = {"anonfiles": {"url": "https://api.anonfiles.com/upload", "json"=True}}
+    if uploader and uploader in sites.keys():
+        url = sites[uploader]["url"]
+        json = sites[uploader]["json"]
+    
 
 def get_all_files(path):
     filelist = []
