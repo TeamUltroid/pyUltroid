@@ -20,6 +20,7 @@ from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
 from .tools import async_searcher, check_filename, json_parser
+from .helper import mediainfo
 
 try:
     import aiofiles
@@ -425,7 +426,7 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         "text": event.raw_text,
         "replyMessage": reply,
     }
-    if event.photo or event.sticker:
+    if event.media and mediainfo(event.media) in ["sticker", "pic"]:
         file_ = await event.download_media()
         if file_.lower().endswith(".webp"):
             Image.open(file_).save(file_ + ".png", "PNG")
