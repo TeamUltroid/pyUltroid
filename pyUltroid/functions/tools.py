@@ -220,22 +220,22 @@ async def saavn_dl(query: str):
 # --- webupload ------#
 # @buddhhu
 
-{
-    "bayfiles": 'curl -F "file=@{}" https://api.bayfiles.com/upload',
-    "x0": 'curl -F "file=@{}" https://x0.at/',
-    "file.io": 'curl -F "file=@{}" https://file.io',
-    "siasky": 'curl -X POST "https://siasky.net/skynet/skyfile" -F "file=@{}"',
-}
-
-
 async def webuploader(file, uploader: str = None):
     sites = {
         "anonfiles": {"url": "https://api.anonfiles.com/upload", "json": True},
+        "siasky": {"url": "https://siasky.net/skynet/skyfile", "json": True},
+        "file.io": {"url": "https://file.io", "json": True},
+        "bayfiles": {"url": "https://api.bayfiles.com/upload", "json": True},
+        "x0.at": {"url": "https://x0.at/", "json": False},
         "transfer": {"url": "https://transfer.sh", "json": False},
     }
     if uploader and uploader in sites.keys():
-        sites[uploader]["url"]
-        sites[uploader]["json"]
+        url = sites[uploader]["url"]
+        json = sites[uploader]["json"]
+    with open(file, "rb") as data:
+        # todo: add progress bar
+        status = await async_searcher(url, data=data.read(), post=True, re_json=json)
+    return status
 
 
 def get_all_files(path):
