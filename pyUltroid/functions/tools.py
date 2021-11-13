@@ -238,6 +238,15 @@ async def webuploader(file, uploader: str = None):
         status = await async_searcher(
             url, data={"file": data.read()}, post=True, re_json=json
         )
+    if isinstance(status, dict):
+        if "skylink" in status:
+            return f"https://siasky.net/{status["skylink"]}"
+        if status["status"] is (200 or True):
+            try:
+                link = status["link"]
+            except KeyError:
+                link = status["data"]["file"]["url"]["short"]
+            return link
     return status
 
 
