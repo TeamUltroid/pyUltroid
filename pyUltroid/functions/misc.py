@@ -35,6 +35,10 @@ except ImportError:
     Client = None
     ManualInputRequired = None
 
+try:
+    from PIL import Image
+except ImportError:
+    Image = None
 
 async def randomchannel(
     tochat, channel, range1, range2, caption=None, client=ultroid_bot
@@ -420,8 +424,12 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         "text": event.raw_text,
         "replyMessage": reply,
     }
-    if event.photo:
+    if event.photo or event.sticker:
         file_ = await event.download_media()
+        if file_.lower().endswith(".webp"):
+            Image.open(file_).save(file_+".png", "PNG")
+            os.remove(file_)
+            file_ = file_+".png"
         files = {"file": open(file_, "rb").read()}
         uri = (
             "https://telegra.ph"
