@@ -345,9 +345,10 @@ async def create_instagram_client(event):
 
 
 async def doc_to_bytes(event):
-    if not event.document:
+    eve_ = event.photo or event.document
+    if not eve_:
         return
-    _, input_file = utils.get_input_location(event.document)
+    _, input_file = utils.get_input_location(eve_)
     return await event.client.download_file(input_file)
 
 
