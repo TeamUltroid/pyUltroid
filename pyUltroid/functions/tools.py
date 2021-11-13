@@ -221,8 +221,6 @@ async def saavn_dl(query: str):
 # @buddhhu
 
 {
-    "anonfiles": 'curl -F "file=@{}" https://api.anonfiles.com/upload',
-    "transfer": 'curl --upload-file "{}" https://transfer.sh/',
     "bayfiles": 'curl -F "file=@{}" https://api.bayfiles.com/upload',
     "x0": 'curl -F "file=@{}" https://x0.at/',
     "file.io": 'curl -F "file=@{}" https://file.io',
@@ -230,7 +228,7 @@ async def saavn_dl(query: str):
 }
 
 async def webuploader(file, uploader: str = None):
-    sites = {"anonfiles": {"url": "https://api.anonfiles.com/upload", "json"=True}}
+    sites = {"anonfiles": {"url": "https://api.anonfiles.com/upload", "json"=True}, "transfer": {"url": "https://transfer.sh", "json"=False}}
     if uploader and uploader in sites.keys():
         url = sites[uploader]["url"]
         json = sites[uploader]["json"]
