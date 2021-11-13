@@ -12,7 +12,7 @@ from traceback import format_exc
 
 from bs4 import BeautifulSoup
 from telethon.tl import types
-from telethon.utils import get_display_name, get_peer_id, get_input_location
+from telethon.utils import get_display_name, get_peer_id
 
 from .. import *
 from ..dB._core import LIST
@@ -343,6 +343,7 @@ async def create_instagram_client(event):
 
 # Quotly
 
+
 async def doc_to_bytes(event):
     if not event.document:
         return
@@ -426,9 +427,16 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         "replyMessage": reply,
     }
     if event.photo:
-        dl = await doc_to_bytes(event)
-        uri = "https://telegra.ph"+(await async_searcher("https://telegra.ph/upload", post=True, data=files, re_json=True))[0]["src"]
-        message.update({"media":{"url":uri}})
+        await doc_to_bytes(event)
+        uri = (
+            "https://telegra.ph"
+            + (
+                await async_searcher(
+                    "https://telegra.ph/upload", post=True, data=files, re_json=True
+                )
+            )[0]["src"]
+        )
+        message.update({"media": {"url": uri}})
     return message
 
 
