@@ -48,21 +48,21 @@ def startup_stuff():
         if not os.path.isdir(x):
             os.mkdir(x)
 
-    if CT := udB.get("CUSTOM_THUMBNAIL"):
+    if CT := udB.get_key("CUSTOM_THUMBNAIL"):
         urlretrieve(CT, "resources/extras/ultroid.jpg")
 
-    if GT := udB.get("GDRIVE_AUTH_TOKEN"):
+    if GT := udB.get_key("GDRIVE_AUTH_TOKEN"):
         with open("resources/auth/gdrive_creds.json", "w") as t_file:
             t_file.write(GT)
 
-    if udB.get("AUTH_TOKEN"):
-        udB.delete("AUTH_TOKEN")
+    if udB.get_key("AUTH_TOKEN"):
+        udB.del_key("AUTH_TOKEN")
 
-    if (MM := udB.get("MEGA_MAIL")) and (MP := udB.get("MEGA_PASS")):
+    if (MM := udB.get_key("MEGA_MAIL")) and (MP := udB.get_key("MEGA_PASS")):
         with open(".megarc", "w") as mega:
             mega.write(f"[Login]\nUsername = {MM}\nPassword = {MP}")
 
-    if TZ := udB.get("TIMEZONE"):
+    if TZ := udB.get_key("TIMEZONE"):
         try:
             timezone(TZ)
             os.environ["TZ"] = TZ
@@ -78,10 +78,10 @@ def startup_stuff():
 async def autobot():
     from .. import udB, ultroid_bot
 
-    if udB.get("BOT_TOKEN"):
+    if udB.get_key("BOT_TOKEN"):
         return
     if Var.BOT_TOKEN:
-        return udB.set("BOT_TOKEN", Var.BOT_TOKEN)
+        return udB.set_key("BOT_TOKEN", Var.BOT_TOKEN)
     await ultroid_bot.start()
     LOGS.info("MAKING A TELEGRAM BOT FOR YOU AT @BotFather, Kindly Wait")
     who = ultroid_bot.me
@@ -128,7 +128,7 @@ async def autobot():
         nowdone = (await ultroid_bot.get_messages(bf, limit=1))[0].text
         if nowdone.startswith("Done!"):
             token = nowdone.split("`")[1]
-            udB.set("BOT_TOKEN", token)
+            udB.set_key("BOT_TOKEN", token)
             await ultroid_bot.send_message(bf, "/setinline")
             await asyncio.sleep(1)
             await ultroid_bot.send_message(bf, f"@{username}")
@@ -143,7 +143,7 @@ async def autobot():
             exit(1)
     elif isdone.startswith("Done!"):
         token = isdone.split("`")[1]
-        udB.set("BOT_TOKEN", token)
+        udB.set_key("BOT_TOKEN", token)
         await ultroid_bot.send_message(bf, "/setinline")
         await asyncio.sleep(1)
         await ultroid_bot.send_message(bf, f"@{username}")
@@ -162,14 +162,14 @@ async def autopilot():
     from .. import asst, udB, ultroid_bot
 
     if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
-        udB.set("LOG_CHANNEL", str(Var.LOG_CHANNEL))
-    channel = udB.get("LOG_CHANNEL")
+        udB.set_key("LOG_CHANNEL", str(Var.LOG_CHANNEL))
+    channel = udB.get_key("LOG_CHANNEL")
     if channel:
         try:
             chat = await ultroid_bot.get_entity(int(channel))
         except BaseException as er:
             LOGS.error(er)
-            udB.delete("LOG_CHANNEL")
+            udB.del_key("LOG_CHANNEL")
             channel = None
     if not channel:
         if ultroid_bot._bot:
@@ -197,7 +197,7 @@ async def autopilot():
             exit(1)
         chat = r.chats[0]
         channel = get_peer_id(chat)
-        udB.set("LOG_CHANNEL", str(channel))
+        udB.set_key("LOG_CHANNEL", str(channel))
     assistant = True
     try:
         await ultroid_bot.get_permissions(int(channel), asst.me.username)
@@ -259,7 +259,7 @@ async def customize():
     from .. import asst, udB, ultroid_bot
 
     try:
-        chat_id = int(udB.get("LOG_CHANNEL"))
+        chat_id = int(udB.get_key("LOG_CHANNEL"))
         if asst.me.photo:
             return
         LOGS.info("Customising Ur Assistant Bot in @BOTFATHER")
@@ -355,18 +355,18 @@ async def plug(plugin_channels):
 async def ready():
     from .. import asst, udB, ultroid_bot
 
-    chat_id = int(udB.get("LOG_CHANNEL"))
+    chat_id = int(udB.get_key("LOG_CHANNEL"))
     spam_sent = None
-    if not udB.get("INIT_DEPLOY"):  # Detailed Message at Initial Deploy
+    if not udB.get_key("INIT_DEPLOY"):  # Detailed Message at Initial Deploy
         MSG = """🎇 **Thanks for Deploying Ultroid Userbot!**
 • Here, are the Some Basic stuff from, where you can Know, about its Usage."""
         PHOTO = "https://telegra.ph/file/54a917cc9dbb94733ea5f.jpg"
         BTTS = Button.inline("• Click to Start •", "initft_2")
-        udB.set("INIT_DEPLOY", "Done")
+        udB.set_key("INIT_DEPLOY", "Done")
     else:
         MSG = f"**Ultroid has been deployed!**\n➖➖➖➖➖➖➖➖➖\n**UserMode**: [{ultroid_bot.me.first_name}](tg://user?id={ultroid_bot.me.id})\n**Assistant**: @{asst.me.username}\n➖➖➖➖➖➖➖➖➖\n**Support**: @TeamUltroid\n➖➖➖➖➖➖➖➖➖"
         BTTS, PHOTO = None, None
-        prev_spam = udB.get("LAST_UPDATE_LOG_SPAM")
+        prev_spam = udB.get_key("LAST_UPDATE_LOG_SPAM")
         if prev_spam:
             try:
                 await ultroid_bot.delete_messages(chat_id, int(prev_spam))
@@ -390,7 +390,7 @@ async def ready():
         except Exception as ef:
             LOGS.info(ef)
     if spam_sent and not spam_sent.media:
-        udB.set("LAST_UPDATE_LOG_SPAM", spam_sent.id)
+        udB.set_key("LAST_UPDATE_LOG_SPAM", spam_sent.id)
     try:
         # To Let Them know About New Updates and Changes
         await ultroid_bot(JoinChannelRequest("@TheUltroid"))
