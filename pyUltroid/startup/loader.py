@@ -85,7 +85,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for addons
     if addons == "True" or not addons:
-        url = udB.get("ADDONS_URL")
+        url = udB.get_key("ADDONS_URL")
         if url:
             os.system("git clone -q {} addons".format(url))
         elif not os.path.exists("addons"):
