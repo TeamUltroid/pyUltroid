@@ -128,7 +128,7 @@ async def metadata(file):
         info = info["media"]["track"]
         data["title"] = info[0].get("Title") or file.split("/")[-1].split(".")[0]
         data["duration"] = (
-            int(float(info[0]["Duration"])) if info[0].get("Duration") else 0
+            int(float(info[0]["Duration"])) if info[0].get("Duration") else 69
         )
         data["performer"] = (
             info[0].get("Performer") or udB.get("artist") or ultroid_bot.me.first_name
@@ -137,7 +137,9 @@ async def metadata(file):
             data["height"] = int(info[1]["Height"]) if info[1].get("Height") else 720
             data["width"] = int(info[1]["Width"]) if info[1].get("Width") else 1280
     except BaseException:
-        pass
+        data["title"] = file.split("/")[-1].split(".")[0]
+        data["duration"] = 69
+        data["performer"] = udB.get("artist") or ultroid_bot.me.first_name
     return data
 
 
