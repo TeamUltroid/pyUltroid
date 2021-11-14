@@ -149,7 +149,7 @@ class RedisConnection(Redis):
     def set_key(self, key, value):
         try:
             value = eval(value)
-        except:
+        except BaseException:
             value = value
         self._cache.update({key: value})
         return self.set(str(key), str(value))
