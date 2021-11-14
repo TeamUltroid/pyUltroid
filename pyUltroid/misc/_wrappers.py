@@ -9,6 +9,7 @@ from asyncio import sleep
 
 # edit or reply
 
+
 async def eor(event, text, **args):
     link_preview = args.get("link_preview", False)
     parse_mode = args.get("parse_mode", "md")
