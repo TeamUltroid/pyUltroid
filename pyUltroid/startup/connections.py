@@ -30,7 +30,7 @@ def session_file(logger):
 
 
 def vc_connection(udB, ultroid_bot):
-    VC_SESSION = Var.VC_SESSION or udB.get("VC_SESSION")
+    VC_SESSION = Var.VC_SESSION or udB.get_key("VC_SESSION")
     if VC_SESSION and VC_SESSION != Var.SESSION:
         try:
             return TelegramClient(
@@ -41,7 +41,7 @@ def vc_connection(udB, ultroid_bot):
                 "Your VC_SESSION Expired. Deleting VC_SESSION from redis..."
                 + "\nRenew/Change it to Use Voice/Video Chat from VC Account..."
             )
-            udB.delete("VC_SESSION")
+            udB.del_key("VC_SESSION")
         except Exception as er:
             LOGS.error("VC_SESSION: {}".format(str(er)))
     return ultroid_bot
