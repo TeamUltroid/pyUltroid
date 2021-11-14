@@ -59,7 +59,7 @@ class UltroidClient(TelegramClient):
         except ValueError as er:
             LOGS.info(er)
             if proxy:
-                udB.delete("TG_PROXY")
+                udB.del_key("TG_PROXY")
                 del kwargs["connection"]
                 del kwargs["proxy"]
             super().__init__(session, **kwargs)
@@ -80,13 +80,13 @@ class UltroidClient(TelegramClient):
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
             # And at Early Process, Its saved in Redis.
-            self.udB.delete("BOT_TOKEN")
+            self.udB.del_key("BOT_TOKEN")
             self.logger.error(
                 "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
             exit()
         # Save some stuff for later use...
-        myself = self.udB.get("OWNER_ID")
+        myself = self.udB.get_key("OWNER_ID")
         self.me = await self.get_me()
         if self.me.bot:
             if myself and self.me.id == int(myself):
