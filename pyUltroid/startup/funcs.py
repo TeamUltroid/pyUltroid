@@ -322,7 +322,7 @@ async def plug(plugin_channels):
         with open("addons/__init__.py", "w") as f:
             f.write("from plugins import *\n\nbot = ultroid_bot")
     LOGS.info("• Loading Plugins from Plugin Channel(s) •")
-    for Plug_channel in plugin_channels.split():
+    for Plug_channel in str(plugin_channels.split()):
         LOGS.info(f"{'•'*4} {Plug_channel}")
         try:
             if Plug_channel.startswith("@"):
