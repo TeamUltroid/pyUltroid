@@ -15,7 +15,7 @@ from .startup.funcs import autopilot, customize, plug, ready, startup_stuff
 from .startup.loader import load_other_plugins
 
 # Option to Auto Update On Restarts..
-if udB.get("UPDATE_ON_RESTART") and os.path.exists(".git") and updater():
+if udB.get_key("UPDATE_ON_RESTART") and os.path.exists(".git") and updater():
     os.system("git pull -f -q && pip3 install --no-cache-dir -U -q -r requirements.txt")
     os.execl(sys.executable, "python3", "-m", "pyUltroid")
 
@@ -26,7 +26,7 @@ ultroid_bot.me.phone = None
 ultroid_bot.first_name = ultroid_bot.me.first_name
 
 if not ultroid_bot.me.bot:
-    udB.set("OWNER_ID", ultroid_bot.uid)
+    udB.set_key("OWNER_ID", ultroid_bot.uid)
 
 
 LOGS.info("Initialising...")
@@ -34,10 +34,10 @@ LOGS.info("Initialising...")
 
 ultroid_bot.run_in_loop(autopilot())
 
-pmbot = udB.get("PMBOT")
-manager = udB.get("MANAGER")
-addons = udB.get("ADDONS") or Var.ADDONS
-vcbot = udB.get("VCBOT") or Var.VCBOT
+pmbot = udB.get_key("PMBOT")
+manager = udB.get_key("MANAGER")
+addons = udB.get_key("ADDONS") or Var.ADDONS
+vcbot = udB.get_key("VCBOT") or Var.VCBOT
 
 # Railway dont allow Music Bots
 if HOSTED_ON == "railway" and not vcbot:
@@ -52,7 +52,7 @@ suc_msg = """
 """
 
 # for channel plugins
-plugin_channels = udB.get("PLUGIN_CHANNEL")
+plugin_channels = udB.get_key("PLUGIN_CHANNEL")
 
 # Customize Ultroid Assistant...
 ultroid_bot.run_in_loop(customize())
@@ -62,7 +62,7 @@ if plugin_channels:
     ultroid_bot.run_in_loop(plug(plugin_channels))
 
 # Send/Ignore Deploy Message..
-if not udB.get("LOG_OFF"):
+if not udB.get_key("LOG_OFF"):
     ultroid_bot.run_in_loop(ready())
 
 cleanup_cache()
