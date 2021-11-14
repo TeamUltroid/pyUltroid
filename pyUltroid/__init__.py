@@ -29,7 +29,7 @@ DUAL_MODE = udB.get_key("DUAL_MODE") == "True"
 
 if BOT_MODE:
     if DUAL_MODE:
-        udB.delete("DUAL_MODE")
+        udB.del_key("DUAL_MODE")
         DUAL_MODE = False
     ultroid_bot = None
 else:
