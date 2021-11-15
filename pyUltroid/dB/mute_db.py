@@ -9,7 +9,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("MUTE")
+    a = udB.get_key("MUTE")
     if not a:
         return {}
     try:

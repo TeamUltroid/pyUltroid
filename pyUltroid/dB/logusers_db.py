@@ -18,7 +18,7 @@ def list_to_str(list_):  # Returns String
 
 
 def get_logger():  # Returns List
-    pmperm = udB.get("LOGUSERS")
+    pmperm = udB.get_key("LOGUSERS")
     if not pmperm:
         return [""]
     return str_to_list(pmperm)

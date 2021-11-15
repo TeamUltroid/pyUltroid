@@ -11,7 +11,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("AFK_DB")
+    a = udB.get_key("AFK_DB")
     if not a:
         return []
     try:

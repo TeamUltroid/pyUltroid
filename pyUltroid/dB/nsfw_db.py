@@ -10,7 +10,7 @@ from .. import udB
 
 
 def get_stuff(key=None):
-    kk = udB.get(key)
+    kk = udB.get_key(key)
     if not kk:
         return {}
     try:

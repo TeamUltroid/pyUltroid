@@ -8,7 +8,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("GBLACKLISTS")
+    a = udB.get_key("GBLACKLISTS")
     if not a:
         return []
     try:

@@ -9,7 +9,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("ECHO")
+    a = udB.get_key("ECHO")
     if not a:
         return {}
     try:

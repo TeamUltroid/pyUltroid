@@ -9,7 +9,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("CHATBOT_USERS")
+    a = udB.get_key("CHATBOT_USERS")
     if not a:
         return {}
     try:

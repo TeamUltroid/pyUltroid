@@ -32,7 +32,7 @@ BOTLOG_CHATID = BOTLOG = udB.get_key("LOG_CHANNEL")
 bot = borg = friday = ultroid_bot
 
 hndlr = "\\" + HNDLR
-black_list_chats = udB.get("BLACKLIST_CHATS")
+black_list_chats = udB.get_key("BLACKLIST_CHATS")
 
 
 def admin_cmd(pattern=None, command=None, **args):
@@ -120,7 +120,7 @@ class Config((object)):
         TEMP_DOWNLOAD_DIRECTORY = TMP_DOWNLOAD_DIRECTORY
         TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "Ultroid")
         OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
-        G_BAN_LOGGER_GROUP = int(udB.get("LOG_CHANNEL"))
+        G_BAN_LOGGER_GROUP = int(udB.get_key("LOG_CHANNEL"))
         GOOGLE_SEARCH_COUNT_LIMIT = int(os.environ.get("GOOGLE_SEARCH_COUNT_LIMIT", 9))
         TG_GLOBAL_ALBUM_LIMIT = int(os.environ.get("TG_GLOBAL_ALBUM_LIMIT", 9))
         TG_BOT_TOKEN_BF_HER = Var.BOT_TOKEN
@@ -128,7 +128,7 @@ class Config((object)):
         DUAL_LOG = os.environ.get("DUAL_LOG", None)
         MAX_MESSAGE_SIZE_LIMIT = 4095
         UB_BLACK_LIST_CHAT = [
-            int(blacklist) for blacklist in udB.get("BLACKLIST_CHATS")
+            int(blacklist) for blacklist in udB.get_key("BLACKLIST_CHATS")
         ]
         MAX_ANTI_FLOOD_MESSAGES = 10
         ANTI_FLOOD_WARN_MODE = types.ChatBannedRights(
@@ -145,8 +145,8 @@ class Config((object)):
         NC_LOG_P_M_S = bool(os.environ.get("NC_LOG_P_M_S", True))
         HEROKU_APP_NAME = Var.HEROKU_APP_NAME
         HEROKU_API_KEY = Var.HEROKU_API
-        PRIVATE_GROUP_BOT_API_ID = int(udB.get("LOG_CHANNEL"))
-        PM_LOGGR_BOT_API_ID = int(udB.get("LOG_CHANNEL"))
+        PRIVATE_GROUP_BOT_API_ID = int(udB.get_key("LOG_CHANNEL"))
+        PM_LOGGR_BOT_API_ID = int(udB.get_key("LOG_CHANNEL"))
         DB_URI = os.environ.get("DATABASE_URL", None)
         NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD = int(
             os.environ.get("NO_OF_BUTTONS_DISPLAYED_IN_H_ME_CMD", 7)

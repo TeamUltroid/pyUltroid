@@ -22,14 +22,14 @@ def are_all_nums(list_):  # Takes List , Returns Boolean
 
 
 def get_channels():  # Returns List
-    channels = udB.get("BROADCAST")
+    channels = udB.get_key("BROADCAST")
     if not channels:
         return [""]
     return str_to_list(channels)
 
 
 def get_no_channels():  # Returns List
-    channels = udB.get("BROADCAST")
+    channels = udB.get_key("BROADCAST")
     if not channels:
         return 0
     return len(channels.split(" "))

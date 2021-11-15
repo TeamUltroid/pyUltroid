@@ -22,7 +22,7 @@ def are_all_nums(list):  # Takes List , Returns Boolean
 
 
 def get_vcsudos():  # Returns List
-    sudos = udB.get("VC_SUDOS")
+    sudos = udB.get_key("VC_SUDOS")
     if sudos is None or sudos == "":
         return [""]
     else:

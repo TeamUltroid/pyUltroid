@@ -151,7 +151,7 @@ async def allcmds(event, telegraph):
 
 
 async def ReTrieveFile(input_file_name):
-    RMBG_API = udB.get("RMBG_API")
+    RMBG_API = udB.get_key("RMBG_API")
     headers = {"X-API-Key": RMBG_API}
     files = {"image_file": open(input_file_name, "rb").read()}
     async with aiohttp.ClientSession() as ses:
@@ -266,10 +266,10 @@ INSTA_CLIENT = []
 async def _insta_login():
     if "insta_creds" in ultroid_bot._cache:
         return ultroid_bot._cache["insta_creds"]
-    username = udB.get("INSTA_USERNAME")
-    password = udB.get("INSTA_PASSWORD")
+    username = udB.get_key("INSTA_USERNAME")
+    password = udB.get_key("INSTA_PASSWORD")
     if username and password:
-        settings = eval(udB["INSTA_SET"]) if udB.get("INSTA_SET") else {}
+        settings = eval(udB["INSTA_SET"]) if udB.get_key("INSTA_SET") else {}
         cl = Client(settings)
         try:
             cl.login(username, password)
@@ -322,11 +322,11 @@ async def create_instagram_client(event):
         pass
     from .. import udB
 
-    username = udB.get("INSTA_USERNAME")
-    password = udB.get("INSTA_PASSWORD")
+    username = udB.get_key("INSTA_USERNAME")
+    password = udB.get_key("INSTA_PASSWORD")
     if not (username and password):
         return
-    settings = eval(udB.get("INSTA_SET")) if udB.get("INSTA_SET") else {}
+    settings = eval(udB.get_key("INSTA_SET")) if udB.get_key("INSTA_SET") else {}
     cl = Client(settings)
     cl.challenge_code_handler = get_insta_code
     try:

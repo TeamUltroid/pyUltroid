@@ -9,7 +9,7 @@ from .. import udB
 
 
 def get_gban_stuff():
-    a = udB.get("GBAN")
+    a = udB.get_key("GBAN")
     if not a:
         return {}
     try:
@@ -19,7 +19,7 @@ def get_gban_stuff():
     return {}
 
 
-ge = udB.get("GMUTE")
+ge = udB.get_key("GMUTE")
 if ge:
     try:
         if "list" not in str(type(eval(ge))):
@@ -71,6 +71,6 @@ def is_gmuted(user):
 
 
 def list_gmuted():
-    if udB.get("GMUTE"):
-        return eval(udB.get("GMUTE"))
+    if udB.get_key("GMUTE"):
+        return eval(udB.get_key("GMUTE"))
     return []

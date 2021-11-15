@@ -10,7 +10,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("BOTCHAT")
+    a = udB.get_key("BOTCHAT")
     if a:
         try:
             return eval(a)

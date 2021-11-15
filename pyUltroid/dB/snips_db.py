@@ -9,7 +9,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("SNIP")
+    a = udB.get_key("SNIP")
     if not a:
         return {}
     try:

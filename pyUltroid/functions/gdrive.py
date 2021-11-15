@@ -21,7 +21,7 @@ from .helper import humanbytes, time_formatter
 
 OAUTH_SCOPE = "https://www.googleapis.com/auth/drive.file"
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
-parent_id = udB.get("GDRIVE_FOLDER_ID")
+parent_id = udB.get_key("GDRIVE_FOLDER_ID")
 G_DRIVE_DIR_MIME_TYPE = "application/vnd.google-apps.folder"
 
 
@@ -124,8 +124,8 @@ def file_ops(file_path):
 
 async def create_token_file(token_file, event):
     flow = OAuth2WebServerFlow(
-        udB.get("GDRIVE_CLIENT_ID"),
-        udB.get("GDRIVE_CLIENT_SECRET"),
+        udB.get_key("GDRIVE_CLIENT_ID"),
+        udB.get_key("GDRIVE_CLIENT_SECRET"),
         OAUTH_SCOPE,
         redirect_uri=REDIRECT_URI,
     )

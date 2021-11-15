@@ -30,7 +30,7 @@ def are_all_nums(list_):  # Takes List , Returns Boolean
 
 
 def get_sudos():  # Returns List
-    sudos = udB.get("SUDOS")
+    sudos = udB.get_key("SUDOS")
     if not sudos:
         return []
     return str_to_list(sudos)
@@ -75,6 +75,6 @@ def is_fullsudo(id_):
     if id_ == ultroid_bot.uid:
         return True
     id_ = str(id_)
-    x = udB.get("FULLSUDO")
+    x = udB.get_key("FULLSUDO")
     if x and id_ in x:
         return True

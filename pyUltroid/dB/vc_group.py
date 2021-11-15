@@ -10,7 +10,7 @@ from .. import udB
 
 
 def get_chats():
-    cha = udB.get("VC_AUTH_GROUPS")
+    cha = udB.get_key("VC_AUTH_GROUPS")
     if not cha:
         cha = "{}"
     return eval(cha)

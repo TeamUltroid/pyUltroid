@@ -9,7 +9,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("BLACKLIST_DB")
+    a = udB.get_key("BLACKLIST_DB")
     if not a:
         return {}
     try:

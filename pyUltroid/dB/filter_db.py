@@ -9,7 +9,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("FILTERS")
+    a = udB.get_key("FILTERS")
     if not a:
         return {}
     try:

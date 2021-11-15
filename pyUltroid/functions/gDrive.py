@@ -30,8 +30,8 @@ class GDriveManager:
             "dir_mimetype": "application/vnd.google-apps.folder",
             "redirect_uri": OOB_CALLBACK_URN,
         }
-        self.auth_token = udB.get("GDRIVE_AUTH_TOKEN")
-        self.folder_id = udB.get("GDRIVE_FOLDER_ID")
+        self.auth_token = udB.get_key("GDRIVE_AUTH_TOKEN")
+        self.folder_id = udB.get_key("GDRIVE_FOLDER_ID")
         self.token_file = "resources/auth/gdrive_creds.json"
 
     def _create_token_file(self, code: str = None):
@@ -42,9 +42,9 @@ class GDriveManager:
             return udB.set("GDRIVE_AUTH_TOKEN", str(open(self.token_file).read()))
         try:
             _auth_flow = OAuth2WebServerFlow(
-                udB.get("GDRIVE_CLIENT_ID")
+                udB.get_key("GDRIVE_CLIENT_ID")
                 or "458306970678-jhfbv6o5sf1ar63o1ohp4c0grblp8qba.apps.googleusercontent.com",
-                udB.get("GDRIVE_CLIENT_SECRET")
+                udB.get_key("GDRIVE_CLIENT_SECRET")
                 or "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",
                 self.gdrive_creds["oauth_scope"],
                 redirect_uri=self.gdrive_creds["redirect_uri"],

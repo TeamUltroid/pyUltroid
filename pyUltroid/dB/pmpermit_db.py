@@ -9,7 +9,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("PMPERMIT")
+    a = udB.get_key("PMPERMIT")
     if not a:
         return []
     try:
@@ -17,7 +17,7 @@ def get_stuff():
     except BaseException:
         try:
             # Transferring stuff From old format to new
-            x, y = [], udB.get("PMPERMIT").split()
+            x, y = [], udB.get_key("PMPERMIT").split()
             for z in y:
                 x.append(int(z))
             udB.set("PMPERMIT", str(x))

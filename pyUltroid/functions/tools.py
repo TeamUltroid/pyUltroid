@@ -131,7 +131,7 @@ async def metadata(file):
             int(float(info[0]["Duration"])) if info[0].get("Duration") else 69
         )
         data["performer"] = (
-            info[0].get("Performer") or udB.get("artist") or ultroid_bot.me.first_name
+            info[0].get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
         )
         if len(info) >= 2:
             data["height"] = int(info[1]["Height"]) if info[1].get("Height") else 720
@@ -139,7 +139,7 @@ async def metadata(file):
     except BaseException:
         data["title"] = file.split("/")[-1].split(".")[0]
         data["duration"] = 69
-        data["performer"] = udB.get("artist") or ultroid_bot.me.first_name
+        data["performer"] = udB.get_key("artist") or ultroid_bot.me.first_name
     return data
 
 
@@ -484,7 +484,7 @@ def telegraph_client():
 
     from .. import udB
 
-    token = udB.get("_TELEGRAPH_TOKEN")
+    token = udB.get_key("_TELEGRAPH_TOKEN")
     TelegraphClient = Telegraph(token)
     if token:
         TELEGRAPH.append(TelegraphClient)

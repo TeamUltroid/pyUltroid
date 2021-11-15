@@ -12,7 +12,7 @@ from .. import udB
 
 def get_chats():
     n = []
-    cha = udB.get("FORCESUB")
+    cha = udB.get_key("FORCESUB")
     if not cha:
         cha = "{}"
     n.append(ast.literal_eval(cha))

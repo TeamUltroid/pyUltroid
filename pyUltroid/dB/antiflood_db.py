@@ -11,10 +11,10 @@ from .. import udB
 
 
 def get_flood():
-    if not udB.get("ANTIFLOOD"):
+    if not udB.get_key("ANTIFLOOD"):
         return {}
 
-    n = [ast.literal_eval(udB.get("ANTIFLOOD"))]
+    n = [ast.literal_eval(udB.get_key("ANTIFLOOD"))]
     return n[0]
 
 
