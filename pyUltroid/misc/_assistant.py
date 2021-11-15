@@ -49,7 +49,7 @@ def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
         if pattern:
             kwargs["pattern"] = re.compile("^/" + pattern)
         if owner:
-            kwargs["from_users"] = _SUDO_M.owner_and_sudos
+            kwargs["from_users"] = SUDO_M.owner_and_sudos
         asst.add_event_handler(func, NewMessage(**kwargs))
         if load is not None:
             append_or_update(load, func, name, kwargs)
@@ -62,7 +62,7 @@ def callback(data=None, owner=False, **kwargs):
 
     def ultr(func):
         async def wrapper(event):
-            if owner and event.sender_id not in _SUDO_M.owner_and_sudos():
+            if owner and event.sender_id not in SUDO_M.owner_and_sudos():
                 return await event.answer(f"This is {OWNER}'s bot!!")
             try:
                 await func(event)
@@ -79,7 +79,7 @@ def in_pattern(pattern=None, owner=False, **kwargs):
 
     def don(func):
         async def wrapper(event):
-            if owner and event.sender_id not in _SUDO_M.owner_and_sudos():
+            if owner and event.sender_id not in SUDO_M.owner_and_sudos():
                 res = [
                     await event.builder.article(
                         title="Ultroid Userbot",
