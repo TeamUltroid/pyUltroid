@@ -65,7 +65,7 @@ class _SudoManager:
         fsudos = db.get("FULLSUDO")
         if not fsudos:
             return []
-         return [int(_) for _ in fsudos.split()]
+        return [int(_) for _ in fsudos.split()]
 
     def is_sudo(self, id_):
         return bool(id_ in self.get_sudos())
