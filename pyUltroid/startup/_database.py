@@ -30,12 +30,12 @@ if Deta and Var.DETA_KEY:
 
 
 def get_data(self_, key):
-    data = None
-    if self_.get(str(key)):
+    data = self_.get(str(key))
+    if data and not " " in data:
         try:
-            data = eval(self_.get(str(key)))
+            data = eval(data)
         except BaseException:
-            data = self_.get(str(key))
+            pass
     return data
 
 
@@ -150,7 +150,7 @@ class RedisConnection(Redis):
         try:
             value = eval(value)
         except BaseException:
-            value = value
+            pass
         self._cache.update({key: value})
         return self.set(str(key), str(value))
 
