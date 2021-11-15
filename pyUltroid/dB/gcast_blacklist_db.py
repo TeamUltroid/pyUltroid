@@ -14,7 +14,7 @@ def get_stuff():
     try:
         return eval(a)
     except BaseException:
-        udB.delete("GBLACKLISTS")
+        udB.del_key("GBLACKLISTS")
     return []
 
 

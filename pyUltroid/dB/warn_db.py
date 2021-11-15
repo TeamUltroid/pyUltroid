@@ -15,7 +15,7 @@ def get_stuff(key="WARNS"):
     try:
         return eval(kk)
     except BaseException:
-        udB.delete(key)
+        udB.del_key(key)
     return {}
 
 

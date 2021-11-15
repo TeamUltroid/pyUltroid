@@ -15,7 +15,7 @@ def get_stuff():
     try:
         return eval(a)
     except BaseException:
-        udB.delete("CHATBOT_USERS")
+        udB.del_key("CHATBOT_USERS")
     return {}
 
 

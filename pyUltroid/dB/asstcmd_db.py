@@ -16,7 +16,7 @@ def get_stuff():
     try:
         return eval(a)
     except BaseException:
-        udB.delete("ASST_CMDS")
+        udB.del_key("ASST_CMDS")
     return {}
 
 

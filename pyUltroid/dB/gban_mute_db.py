@@ -15,7 +15,7 @@ def get_gban_stuff():
     try:
         return dict(eval(a))
     except BaseException:
-        udB.delete("GBAN")
+        udB.del_key("GBAN")
     return {}
 
 

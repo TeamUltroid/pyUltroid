@@ -279,10 +279,10 @@ async def _insta_login():
             # await get_insta_code(cl, username, password)
             return False
         except LoginRequired:
-            udB.delete("INSTA_SET")
+            udB.del_key("INSTA_SET")
             return await _insta_login()
         except Exception:
-            udB.delete(key for key in ["INSTA_USERNAME", "INSTA_PASSWORD"])
+            udB.del_key(key for key in ["INSTA_USERNAME", "INSTA_PASSWORD"])
             LOGS.exception(format_exc())
             return False
         udB.set("INSTA_SET", str(cl.get_settings()))
@@ -336,7 +336,7 @@ async def create_instagram_client(event):
         await get_insta_code(cl, username, password)
     except LoginRequired:
         # "login required" refers to relogin...
-        udB.delete("INSTA_SET")
+        udB.del_key("INSTA_SET")
         return await create_instagram_client(event)
     except Exception as er:
         LOGS.exception(er)
