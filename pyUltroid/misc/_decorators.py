@@ -66,6 +66,7 @@ def ult_cmd(pattern=None, **kwargs):
     only_devs = kwargs.get("only_devs", False)
     func = kwargs.get("func", lambda e: not e.via_bot_id)
     file_test = Path(inspect.stack()[1].filename)
+
     def decor(dec):
         async def wrapp(ult):
             chat = ult.chat
@@ -90,7 +91,7 @@ def ult_cmd(pattern=None, **kwargs):
                     time=10,
                 )
             if groups_only and ult.is_private:
-                    return await eod(ult, "`Use this in Group/Channel.`")
+                return await eod(ult, "`Use this in Group/Channel.`")
             try:
                 await dec(ult)
             except FloodWaitError as fwerr:
@@ -147,7 +148,9 @@ def ult_cmd(pattern=None, **kwargs):
                 LOGS.exception(e)
                 date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
                 naam = get_display_name(chat)
-                ftext = "**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n"
+                ftext = (
+                    "**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n"
+                )
                 ftext += "**Py-Ultroid Version:** `" + str(pyver)
                 ftext += "`\n**Ultroid Version:** `" + str(ult_ver)
                 ftext += "`\n**Telethon Version:** `" + str(telever) + "`\n\n"
@@ -183,6 +186,7 @@ def ult_cmd(pattern=None, **kwargs):
                         udB.get_key("LOG_CHANNEL"),
                         ftext,
                     )
+
         cmd = None
         from_users = None
         blacklist_chats = False
@@ -196,17 +200,37 @@ def ult_cmd(pattern=None, **kwargs):
         if black_list_chats:
             blacklist_chats = True
             chats = list(black_list_chats)
-        ultroid_bot.add_event_handler(wrapp, events.NewMessage(pattern=cmd, from_users=from_users, forwads=False, func=func, chats=chats, blacklist_chats=blacklist_chats))
+        ultroid_bot.add_event_handler(
+            wrapp,
+            events.NewMessage(
+                pattern=cmd,
+                from_users=from_users,
+                forwads=False,
+                func=func,
+                chats=chats,
+                blacklist_chats=blacklist_chats,
+            ),
+        )
         if TAKE_EDITS:
-            ultroid_bot.add_event_handler(wrapp, events.MessageEdited(pattern=cmd, from_users=from_users, forwads=False, func=func, chats=chats, blacklist_chats=blacklist_chats))
+            ultroid_bot.add_event_handler(
+                wrapp,
+                events.MessageEdited(
+                    pattern=cmd,
+                    from_users=from_users,
+                    forwads=False,
+                    func=func,
+                    chats=chats,
+                    blacklist_chats=blacklist_chats,
+                ),
+            )
         if "addons/" in str(file_test):
             if LOADED.get(file_test.stem):
                 LOADED[file_test.stem].append(wrapp)
             else:
                 LOADED.update({file_test.stem: [wrapp]})
         return wrapp
-    return decor
 
+    return decor
 
 
 # decorator
