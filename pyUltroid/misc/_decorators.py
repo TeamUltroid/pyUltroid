@@ -35,6 +35,7 @@ from telethon.utils import get_display_name
 from .. import DUAL_HNDLR, DUAL_MODE, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
 from ..dB import DEVLIST
 from ..dB._core import LIST, LOADED
+from ..dB.sudos import is_fullsudo
 from ..functions.admins import admin_check
 from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
@@ -51,13 +52,161 @@ allow_sudo = SUDO_M.should_allow_sudo
 
 
 def compile_pattern(data, hndlr):
-    if hndlr == " ":  # No handler feature
-        return re.compile("^" + data.replace("^", "").replace(".", ""))
-    return (
-        re.compile(hndlr + data.replace("^", "").replace(".", ""))
-        if data.startswith("^")
-        else re.compile(hndlr + data)
-    )
+    data = data.replace("^", "").replace(".", "")
+    if not hndlr:
+        pat = f"\\{HNDLR}{data}|\\{SUDO_HNDLR}{data}"
+        return re.compile(pat)
+    return re.compile(hndlr + data)
+
+
+def ult_cmd(pattern=None, **kwargs):
+    groups_only = kwargs.get("groups_only", False)
+    admins_only = kwargs.get("admins_only", False)
+    fullsudo = kwargs.get("fullsudo", False)
+    only_devs = kwargs.get("only_devs", False)
+    func = kwargs.get("func", lambda e: not e.via_bot_id)
+    file_test = Path(inspect.stack()[1].filename)
+    def decor(dec):
+        async def wrapp(ult):
+            chat = ult.chat
+            if not ult.out and fullsudo and not is_fullsudo(ult.sender_id):
+                return await eod(ult, "`Full Sudo User Required...`", time=15)
+            if hasattr(chat, "title"):
+                if (
+                    "#noub" in chat.title.lower()
+                    and not (chat.admin_rights or chat.creator)
+                    and not (ult.sender_id in DEVLIST)
+                ):
+                    return
+            if admins_only:
+                if ult.is_private:
+                    return await eod(ult, "`Use this in group/channel.`")
+                if not (chat.admin_rights or chat.creator):
+                    return await eod(ult, "`I am not an admin.`")
+            if only_devs and not udB.get_key("I_DEV"):
+                return await eod(
+                    ult,
+                    f"**⚠️ Developer Restricted!**\nIf you know what this does, and want to proceed, use\n`{HNDLR}setdb I_DEV True`.\n\nThis Might Be Dangerous.",
+                    time=10,
+                )
+            if groups_only and ult.is_private:
+                    return await eod(ult, "`Use this in Group/Channel.`")
+            try:
+                await dec(ult)
+            except FloodWaitError as fwerr:
+                await asst.send_message(
+                    int(udB.get_key("LOG_CHANNEL")),
+                    f"`FloodWaitError:\n{str(fwerr)}\n\nSleeping for {tf((fwerr.seconds + 10)*1000)}`",
+                )
+                await ultroid_bot.disconnect()
+                await asyncio.sleep(fwerr.seconds + 10)
+                await ultroid_bot.connect()
+                await asst.send_message(
+                    int(udB.get_key("LOG_CHANNEL")),
+                    "`Bot is working again`",
+                )
+                return
+            except ChatSendInlineForbiddenError:
+                return await eod(ult, "`Inline Locked In This Chat.`")
+            except (ChatSendMediaForbiddenError, ChatSendStickersForbiddenError):
+                return await eod(
+                    ult, "`Sending media or sticker is not allowed in this chat.`"
+                )
+            except (BotMethodInvalidError, UserIsBotError) as boterror:
+                return await eod(ult, str(boterror))
+            except AlreadyInConversationError:
+                return await eod(
+                    ult,
+                    "Conversation Is Already On, Kindly Wait Sometime Then Try Again.",
+                )
+            except (
+                MessageIdInvalidError,
+                MessageNotModifiedError,
+                MessageDeleteForbiddenError,
+            ):
+                pass
+            except AuthKeyDuplicatedError as er:
+                LOGS.exception(er)
+                await asst.send_message(
+                    int(udB.get_key("LOG_CHANNEL")),
+                    "Session String expired, create new session from 👇",
+                    buttons=[
+                        Button.url("Bot", "t.me/SessionGeneratorBot?start="),
+                        Button.url(
+                            "Repl",
+                            "https://replit.com/@TeamUltroid/UltroidStringSession",
+                        ),
+                    ],
+                )
+                exit()
+            except events.StopPropagation:
+                raise events.StopPropagation
+            except KeyboardInterrupt:
+                pass
+            except Exception as e:
+                LOGS.exception(e)
+                date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+                naam = get_display_name(chat)
+                ftext = "**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n"
+                ftext += "**Py-Ultroid Version:** `" + str(pyver)
+                ftext += "`\n**Ultroid Version:** `" + str(ult_ver)
+                ftext += "`\n**Telethon Version:** `" + str(telever) + "`\n\n"
+                ftext += "--------START ULTROID CRASH LOG--------"
+                ftext += "\n**Date:** `" + date
+                ftext += "`\n**Group:** `" + str(ult.chat_id) + "` " + str(naam)
+                ftext += "\n**Sender ID:** `" + str(ult.sender_id)
+                ftext += "`\n**Replied:** `" + str(ult.is_reply)
+                ftext += "`\n\n**Event Trigger:**`\n"
+                ftext += str(ult.text)
+                ftext += "`\n\n**Traceback info:**`\n"
+                ftext += str(format_exc())
+                ftext += "`\n\n**Error text:**`\n"
+                ftext += str(sys.exc_info()[1])
+                ftext += "`\n\n--------END ULTROID CRASH LOG--------"
+                ftext += "\n\n\n**Last 5 commits:**`\n"
+
+                stdout, stderr = await bash('git log --pretty=format:"%an: %s" -5')
+                result = str(stdout.strip()) + str(stderr.strip())
+
+                ftext += result + "`"
+
+                if len(ftext) > 4096:
+                    with BytesIO(ftext.encode()) as file:
+                        file.name = "logs.txt"
+                        await asst.send_file(
+                            udB.get_key("LOG_CHANNEL"),
+                            file,
+                            caption="**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n",
+                        )
+                else:
+                    await asst.send_message(
+                        udB.get_key("LOG_CHANNEL"),
+                        ftext,
+                    )
+        cmd = None
+        from_users = None
+        blacklist_chats = False
+        chats = None
+        if pattern:
+            cmd = compile_pattern(pattern, "\\" + HNDLR)
+        if allow_sudo:
+            from_users = sudoers
+            if pattern:
+                cmd = compile_pattern(pattern)
+        if black_list_chats:
+            blacklist_chats = True
+            chats = list(black_list_chats)
+        ultroid_bot.add_event_handler(wrapp, events.NewMessage(pattern=cmd, from_users=from_users, forwads=False, func=func, chats=chats, blacklist_chats=blacklist_chats))
+        if TAKE_EDITS:
+            ultroid_bot.add_event_handler(wrapp, events.MessageEdited(pattern=cmd, from_users=from_users, forwads=False, func=func, chats=chats, blacklist_chats=blacklist_chats))
+        if "addons/" in str(file_test):
+            if LOADED.get(file_test.stem):
+                LOADED[file_test.stem].append(wrapp)
+            else:
+                LOADED.update({file_test.stem: [wrapp]})
+        return wrapp
+    return decor
+
 
 
 # decorator
@@ -138,11 +287,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             async def wrapper(ult):
                 chat = ult.chat
                 if mode in ["dualmode", "official", "sudo"]:
-                    if (
-                        not ult.out
-                        and fullsudo
-                        and ult.sender_id not in SUDO_M.fullsudos
-                    ):
+                    if not ult.out and fullsudo and not is_fullsudo(ult.sender_id):
                         return await eod(ult, "`Full Sudo User Required...`", time=15)
                     if hasattr(chat, "title"):
                         if (
