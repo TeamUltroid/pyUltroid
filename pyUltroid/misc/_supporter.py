@@ -23,16 +23,16 @@ from pyUltroid.misc._wrappers import eod, eor
 from .. import *
 from ..configs import Var
 from ..dB._core import LIST
-from . import _SUDO_M, CMD_HELP  # ignore: pylint
+from . import SUDO_M, CMD_HELP  # ignore: pylint
 
 ALIVE_NAME = ultroid_bot.me.first_name
-BOTLOG_CHATID = BOTLOG = int(udB.get("LOG_CHANNEL"))
+BOTLOG_CHATID = BOTLOG = udB.get_key("LOG_CHANNEL")
 
 
-bot = borg = friday = jarvis = ultroid_bot
+bot = borg = friday = ultroid_bot
 
 hndlr = "\\" + HNDLR
-black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
+black_list_chats = udB.get("BLACKLIST_CHATS")
 
 
 def admin_cmd(pattern=None, command=None, **args):
@@ -75,7 +75,6 @@ def admin_cmd(pattern=None, command=None, **args):
 
 
 friday_on_cmd = admin_cmd
-j_cmd = admin_cmd
 command = ultroid_cmd
 register = ultroid_cmd
 
@@ -90,7 +89,7 @@ def sudo_cmd(allow_sudo=True, pattern=None, command=None, **args):
     if pattern:
         args["pattern"] = re.compile("\\" + SUDO_HNDLR + pattern)
     if allow_sudo:
-        args["from_users"] = _SUDO_M.get_sudos
+        args["from_users"] = SUDO_M.get_sudos
         args["incoming"] = True
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
         del args["allow_edited_updates"]
@@ -129,7 +128,7 @@ class Config((object)):
         DUAL_LOG = os.environ.get("DUAL_LOG", None)
         MAX_MESSAGE_SIZE_LIMIT = 4095
         UB_BLACK_LIST_CHAT = [
-            int(blacklist) for blacklist in udB.get("BLACKLIST_CHATS")
+            int(blacklist) for blacklist in udB.get("BLACKLIST_CHATS").split()
         ]
         MAX_ANTI_FLOOD_MESSAGES = 10
         ANTI_FLOOD_WARN_MODE = types.ChatBannedRights(
