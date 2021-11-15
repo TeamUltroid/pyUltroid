@@ -60,6 +60,13 @@ class _SudoManager:
             self._owner_sudos.remove(id_)
         return self.sudos.remove(_id)
 
+    def fullsudos(self):
+        db = self._init_db()
+        fsudos = db.get("FULLSUDO")
+        if not fsudos:
+            return []
+         return [int(_) for _ in fsudos.split()]
+
     def is_sudo(self, id_):
         return bool(id_ in self.get_sudos())
 
@@ -68,6 +75,7 @@ _SUDO_M = _SudoManager()
 owner_and_sudos = _SUDO_M.owner_and_sudos
 sudoers = _SUDO_M.get_sudos
 is_sudo = _SUDO_M.is_sudo
+get_fullsudos = _SUDO_M.fullsudos
 
 # ------------------------------------------------ #
 
