@@ -413,4 +413,4 @@ def _version_changes(udb):
         return
     key = udb.get("SUDOS")
     new_ = [int(_) for _ in key.split()]
-    udB.set_key("SUDOS", new_)
+    udb.set_key("SUDOS", new_)
