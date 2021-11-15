@@ -23,7 +23,7 @@ from pyUltroid.misc._wrappers import eod, eor
 from .. import *
 from ..configs import Var
 from ..dB._core import LIST
-from . import CMD_HELP, SUDO_M  # ignore: pylint
+from . import SUDO_M, CMD_HELP  # ignore: pylint
 
 ALIVE_NAME = ultroid_bot.me.first_name
 BOTLOG_CHATID = BOTLOG = udB.get_key("LOG_CHANNEL")
@@ -128,7 +128,7 @@ class Config((object)):
         DUAL_LOG = os.environ.get("DUAL_LOG", None)
         MAX_MESSAGE_SIZE_LIMIT = 4095
         UB_BLACK_LIST_CHAT = [
-            int(blacklist) for blacklist in udB.get("BLACKLIST_CHATS").split()
+            int(blacklist) for blacklist in udB.get("BLACKLIST_CHATS")
         ]
         MAX_ANTI_FLOOD_MESSAGES = 10
         ANTI_FLOOD_WARN_MODE = types.ChatBannedRights(
