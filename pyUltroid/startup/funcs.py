@@ -408,9 +408,9 @@ async def ready():
 
 
 def _version_changes(udb):
-    key = udb.get_key("SUDOS")
-    if not key or isinstance(key, list):
-        return
-    key = udb.get("SUDOS")
-    new_ = [int(_) for _ in key.split()]
-    udb.set_key("SUDOS", new_)
+    for _ in ["SUDOS","CLEANCHAT"]:
+        key = udb.get_key(_)
+        if key and not isinstance(key, list):
+            key = udb.get(_)
+            new_ = [int(a_) for a_ in key.split()]
+            udb.set_key(_, new_)
