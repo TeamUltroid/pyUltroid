@@ -15,7 +15,6 @@ from telethon.tl.types import InputWebDocument
 from .. import LOGS, asst, ultroid_bot
 from . import append_or_update, owner_and_sudos
 
-ULTROID_PIC = "https://telegra.ph/file/dde85d441fa051a0d7d1d.jpg"
 OWNER = ultroid_bot.full_name
 
 MSG = f"""
@@ -86,7 +85,7 @@ def in_pattern(pattern=None, owner=False, **kwargs):
                         url="https://t.me/TheUltroid",
                         description="(c) TeamUltroid",
                         text=MSG,
-                        thumb=InputWebDocument(ULTROID_PIC, 0, "image/jpeg", []),
+                        thumb=InputWebDocument("https://telegra.ph/file/dde85d441fa051a0d7d1d.jpg", 0, "image/jpeg", []),
                         buttons=IN_BTTS,
                     )
                 ]
