@@ -116,6 +116,7 @@ def manager_cmd(**args):
             pass
     if args.get("pattern"):
         args["pattern"] = "^(/|!)" + args.get("pattern")
+
     def decorator(func):
         async def function(ult):
             if not allow_all and not (await admin_check(ult)):
@@ -126,5 +127,7 @@ def manager_cmd(**args):
                 await func(ult)
             except Exception as er:
                 LOGS.exception(er)
-        asst.add_event_handler(function, NewMessage(*args)) 
+
+        asst.add_event_handler(function, NewMessage(*args))
+
     return decorator
