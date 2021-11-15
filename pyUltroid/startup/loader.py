@@ -84,7 +84,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     Loader(path="assistant").load(log=False, exclude=["pmbot"])
 
     # for addons
-    if addons == "True" or not addons:
+    if addons != False:
         url = udB.get_key("ADDONS_URL")
         if url:
             os.system("git clone -q {} addons".format(url))
@@ -100,13 +100,13 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         Loader(path="addons", key="Addons").load(func=load_addons)
 
     # group manager
-    if manager == "True":
+    if manager:
         Loader(path="assistant/manager", key="Group Manager").load(cmd_help=None)
 
     # chat via assistant
-    if pmbot == "True":
+    if pmbot:
         Loader(path="assistant/pmbot.py").load_single(log=False)
 
     # vc bot
-    if vcbot == "True" and not vcClient._bot:
+    if vcbot and not vcClient._bot:
         Loader(path="vcbot", key="VCBot").load()
