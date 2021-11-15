@@ -70,7 +70,7 @@ def ult_cmd(pattern=None, **kwargs):
     def decor(dec):
         async def wrapp(ult):
             chat = ult.chat
-            if not ult.out and fullsudo and not is_fullsudo(ult.sender_id):
+            if not ult.out and fullsudo and ult.sender_id not in SUDO_M.fullsudos:
                 return await eod(ult, "`Full Sudo User Required...`", time=15)
             if hasattr(chat, "title"):
                 if (
@@ -311,7 +311,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             async def wrapper(ult):
                 chat = ult.chat
                 if mode in ["dualmode", "official", "sudo"]:
-                    if not ult.out and fullsudo and not is_fullsudo(ult.sender_id):
+                    if not ult.out and fullsudo and ult.sender_id not in SUDO_M.fullsudos:
                         return await eod(ult, "`Full Sudo User Required...`", time=15)
                     if hasattr(chat, "title"):
                         if (
