@@ -69,12 +69,3 @@ def del_sudo(id_):  # Take int or str with numbers only , Returns Boolean
     except Exception as e:
         print(f"Ultroid LOG : // functions/sudos/del_sudo : {e}")
         return False
-
-
-def is_fullsudo(id_):
-    if id_ == ultroid_bot.uid:
-        return True
-    id_ = str(id_)
-    x = udB.get_key("FULLSUDO")
-    if x and id_ in x:
-        return True
