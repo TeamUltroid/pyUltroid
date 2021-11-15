@@ -13,7 +13,6 @@ from telethon.events import CallbackQuery, InlineQuery, NewMessage
 from telethon.tl.types import InputWebDocument
 
 from .. import LOGS, asst, ultroid_bot
-from ..functions.admins import admin_check
 from . import append_or_update, owner_and_sudos
 
 ULTROID_PIC = "https://telegra.ph/file/dde85d441fa051a0d7d1d.jpg"
@@ -104,5 +103,3 @@ def in_pattern(pattern=None, owner=False, **kwargs):
         asst.add_event_handler(wrapper, InlineQuery(pattern=pattern, **kwargs))
 
     return don
-
-
