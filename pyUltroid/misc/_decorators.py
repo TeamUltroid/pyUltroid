@@ -45,9 +45,9 @@ from . import _SUDO_M
 from ._wrappers import eod
 
 hndlr = "\\" + HNDLR
-MANAGER = udB.get("MANAGER")
-TAKE_EDITS = udB.get("TAKE_EDITS")
-black_list_chats = eval(udB.get("BLACKLIST_CHATS"))
+MANAGER = udB.get_key("MANAGER")
+TAKE_EDITS = udB.get_key("TAKE_EDITS")
+black_list_chats = eval(udB.get_key("BLACKLIST_CHATS"))
 allow_sudo = _SUDO_M.should_allow_sudo()
 
 
@@ -159,7 +159,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                         return
                     elif not (await admin_check(ult)):
                         return
-                if only_devs and not udB.get("I_DEV"):
+                if only_devs and not udB.get_key("I_DEV"):
                     return await eod(
                         ult,
                         f"**⚠️ Developer Restricted!**\nIf you know what this does, and want to proceed, use\n`{HNDLR}setdb I_DEV True`.\n\nThis Might Be Dangerous.",
@@ -171,14 +171,14 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                     await func(ult)
                 except FloodWaitError as fwerr:
                     await asst.send_message(
-                        int(udB.get("LOG_CHANNEL")),
+                        int(udB.get_key("LOG_CHANNEL")),
                         f"`FloodWaitError:\n{str(fwerr)}\n\nSleeping for {tf((fwerr.seconds + 10)*1000)}`",
                     )
                     await ultroid_bot.disconnect()
                     await asyncio.sleep(fwerr.seconds + 10)
                     await ultroid_bot.connect()
                     await asst.send_message(
-                        int(udB.get("LOG_CHANNEL")),
+                        int(udB.get_key("LOG_CHANNEL")),
                         "`Bot is working again`",
                     )
                     return
@@ -204,7 +204,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                 except AuthKeyDuplicatedError as er:
                     LOGS.exception(er)
                     await asst.send_message(
-                        int(udB.get("LOG_CHANNEL")),
+                        int(udB.get_key("LOG_CHANNEL")),
                         "Session String expired, create new session from 👇",
                         buttons=[
                             Button.url("Bot", "t.me/SessionGeneratorBot?start="),
@@ -250,13 +250,13 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                         with BytesIO(ftext.encode()) as file:
                             file.name = "logs.txt"
                             await asst.send_file(
-                                int(udB["LOG_CHANNEL"]),
+                                int(udB.get_key("LOG_CHANNEL")),
                                 file,
                                 caption="**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n",
                             )
                     else:
                         await asst.send_message(
-                            int(udB["LOG_CHANNEL"]),
+                            int(udB.get_key("LOG_CHANNEL"),
                             ftext,
                         )
 
