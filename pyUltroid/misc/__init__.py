@@ -46,7 +46,7 @@ class _SudoManager:
 
         if not self.owner:
             db = self._init_db()
-            self.owner = int(db.get("OWNER_ID"))
+            self.owner = db.get_key("OWNER_ID")
         self._owner_sudos = [self.owner, *self.get_sudos()]
         return self._owner_sudos
 
@@ -64,9 +64,13 @@ class _SudoManager:
     def fullsudos(self):
         db = self._init_db()
         fsudos = db.get("FULLSUDO")
+        if not self.owner:
+            self.owner = db.get_key("OWNER_ID")
         if not fsudos:
-            return []
-        return [int(_) for _ in fsudos.split()]
+            return [self.owner]
+        fsudos = fsudos.split()
+        fsudos.append(self.owner)
+        return [int(_) for _ in fsudos]
 
     def is_sudo(self, id_):
         return bool(id_ in self.get_sudos())
