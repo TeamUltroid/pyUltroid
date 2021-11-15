@@ -142,7 +142,7 @@ class RedisConnection(Redis):
         super().__init__(**kwargs)
         self.re_cache()
 
-    # dict is faster than Redis   
+    # dict is faster than Redis
     def re_cache(self):
         self._cache = {}
         for keys in self.keys():
