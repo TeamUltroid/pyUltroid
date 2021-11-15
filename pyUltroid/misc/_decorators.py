@@ -47,7 +47,7 @@ from ._wrappers import eod
 hndlr = "\\" + HNDLR
 MANAGER = udB.get_key("MANAGER")
 TAKE_EDITS = udB.get_key("TAKE_EDITS")
-black_list_chats = eval(udB.get_key("BLACKLIST_CHATS"))
+black_list_chats = udB.get_key("BLACKLIST_CHATS")
 allow_sudo = _SUDO_M.should_allow_sudo()
 
 
