@@ -31,7 +31,7 @@ if Deta and Var.DETA_KEY:
 
 def get_data(self_, key):
     data = self_.get(str(key))
-    if data and not " " in data:
+    if data and " " not in data:
         try:
             data = eval(data)
         except BaseException:
