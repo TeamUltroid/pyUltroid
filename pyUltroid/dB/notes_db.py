@@ -25,21 +25,21 @@ def add_note(chat, word, msg, media, button):
         ok[chat].update({word: {"msg": msg, "media": media, "button": button}})
     else:
         ok.update({chat: {word: {"msg": msg, "media": media, "button": button}}})
-    udB.set("NOTE", str(ok))
+    udB.set_key("NOTE", str(ok))
 
 
 def rem_note(chat, word):
     ok = get_stuff()
     if ok.get(chat) and ok[chat].get(word):
         ok[chat].pop(word)
-        udB.set("NOTE", str(ok))
+        udB.set_key("NOTE", str(ok))
 
 
 def rem_all_note(chat):
     ok = get_stuff()
     if ok.get(chat):
         ok.pop(chat)
-        udB.set("NOTE", str(ok))
+        udB.set_key("NOTE", str(ok))
 
 
 def get_notes(chat, word):

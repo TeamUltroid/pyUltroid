@@ -22,7 +22,7 @@ def get_stuff():
 def add_stuff(msg_id, user_id):
     ok = get_stuff()
     ok.update({msg_id: user_id})
-    udB.set("BOTCHAT", str(ok))
+    udB.set_key("BOTCHAT", str(ok))
 
 
 def get_who(msg_id):
@@ -38,7 +38,7 @@ def tag_add(msg, chat, user):
         ok.update({"TAG": {msg: [chat, user]}})
     else:
         ok["TAG"].update({msg: [chat, user]})
-    udB.set("BOTCHAT", str(ok))
+    udB.set_key("BOTCHAT", str(ok))
 
 
 def who_tag(msg):

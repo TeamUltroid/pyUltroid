@@ -22,7 +22,7 @@ def get_stuff(key=None):
 def add_welcome(chat, msg, media, button):
     ok = get_stuff("WELCOME")
     ok.update({chat: {"welcome": msg, "media": media, "button": button}})
-    return udB.set("WELCOME", str(ok))
+    return udB.set_key("WELCOME", str(ok))
 
 
 def get_welcome(chat):
@@ -38,14 +38,14 @@ def delete_welcome(chat):
     wl = ok.get(chat)
     if wl:
         ok.pop(chat)
-        return udB.set("WELCOME", str(ok))
+        return udB.set_key("WELCOME", str(ok))
     return
 
 
 def add_goodbye(chat, msg, media, button):
     ok = get_stuff("GOODBYE")
     ok.update({chat: {"goodbye": msg, "media": media, "button": button}})
-    return udB.set("GOODBYE", str(ok))
+    return udB.set_key("GOODBYE", str(ok))
 
 
 def get_goodbye(chat):
@@ -61,21 +61,21 @@ def delete_goodbye(chat):
     wl = ok.get(chat)
     if wl:
         ok.pop(chat)
-        return udB.set("GOODBYE", str(ok))
+        return udB.set_key("GOODBYE", str(ok))
     return
 
 
 def add_thanks(chat):
     x = get_stuff("THANK_MEMBERS")
     x.update({chat: True})
-    return udB.set("THANK_MEMBERS", str(x))
+    return udB.set_key("THANK_MEMBERS", str(x))
 
 
 def remove_thanks(chat):
     x = get_stuff("THANK_MEMBERS")
     if x.get(chat):
         x.pop(chat)
-        return udB.set("THANK_MEMBERS", str(x))
+        return udB.set_key("THANK_MEMBERS", str(x))
     return
 
 

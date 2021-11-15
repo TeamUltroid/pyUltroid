@@ -45,7 +45,7 @@ def add_source_channel(id_):  # Take int or str with numbers only , Returns Bool
     try:
         channels = get_source_channels()
         channels.append(id_)
-        udB.set("CH_SOURCE", list_to_str(channels))
+        udB.set_key("CH_SOURCE", list_to_str(channels))
         return True
     except Exception as e:
         print(f"Ultroid LOG : // functions/broadcast_db/add_channel : {e}")
@@ -56,7 +56,7 @@ def rem_source_channel(id_):
     try:
         channels = get_source_channels()
         channels.remove(str(id_))
-        udB.set("CH_SOURCE", list_to_str(channels))
+        udB.set_key("CH_SOURCE", list_to_str(channels))
         return True
     except Exception:
         return False
@@ -89,7 +89,7 @@ def add_destination(id_):  # Take int or str with numbers only , Returns Boolean
     try:
         channels = get_destinations()
         channels.append(id_)
-        udB.set("CH_DESTINATION", list_to_str(channels))
+        udB.set_key("CH_DESTINATION", list_to_str(channels))
         return True
     except Exception as e:
         print(f"Ultroid LOG : // functions/broadcast_db/add_channel : {e}")
@@ -100,7 +100,7 @@ def rem_destination(id_):
     try:
         channels = get_destinations()
         channels.remove(str(id_))
-        udB.set("CH_DESTINATION", list_to_str(channels))
+        udB.set_key("CH_DESTINATION", list_to_str(channels))
         return True
     except Exception as e:
         print(f"Ultroid LOG : // functions/broadcast_db/rem_channel : {e}")

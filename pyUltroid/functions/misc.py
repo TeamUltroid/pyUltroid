@@ -285,7 +285,7 @@ async def _insta_login():
             udB.del_key(key for key in ["INSTA_USERNAME", "INSTA_PASSWORD"])
             LOGS.exception(format_exc())
             return False
-        udB.set("INSTA_SET", str(cl.get_settings()))
+        udB.set_key("INSTA_SET", str(cl.get_settings()))
         cl.logger.setLevel(WARNING)
         return ultroid_bot._cache["insta_creds"]
     return False
@@ -342,7 +342,7 @@ async def create_instagram_client(event):
         LOGS.exception(er)
         await eor(event, str(er))
         return False
-    udB.set("INSTA_SET", str(cl.get_settings()))
+    udB.set_key("INSTA_SET", str(cl.get_settings()))
     cl.logger.setLevel(WARNING)
     INSTA_CLIENT.append(cl)
     return cl

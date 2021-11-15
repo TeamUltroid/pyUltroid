@@ -25,7 +25,7 @@ def add_warn(chat, user, count, reason):
         x[chat].update({user: [count, reason]})
     except BaseException:
         x.update({chat: {user: [count, reason]}})
-    return udB.set("WARNS", str(x))
+    return udB.set_key("WARNS", str(x))
 
 
 def warns(chat, user):
@@ -41,6 +41,6 @@ def reset_warn(chat, user):
     x = get_stuff()
     try:
         x[chat].pop(user)
-        return udB.set("WARNS", str(x))
+        return udB.set_key("WARNS", str(x))
     except BaseException:
         return

@@ -21,7 +21,7 @@ def get_flood():
 def set_flood(chat_id, limit):
     omk = get_flood()
     omk[int(chat_id)] = int(limit)
-    udB.set("ANTIFLOOD", str(omk))
+    udB.set_key("ANTIFLOOD", str(omk))
     return True
 
 
@@ -39,7 +39,7 @@ def rem_flood(chat_id):
 
     try:
         del omk[int(chat_id)]
-        udB.set("ANTIFLOOD", str(omk))
+        udB.set_key("ANTIFLOOD", str(omk))
         return True
     except KeyError:
         return False

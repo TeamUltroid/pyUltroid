@@ -28,7 +28,7 @@ def add_echo(chat, user):
         x.update({chat: k})
     except BaseException:
         x.update({chat: [user]})
-    return udB.set("ECHO", str(x))
+    return udB.set_key("ECHO", str(x))
 
 
 def rem_echo(chat, user):
@@ -40,7 +40,7 @@ def rem_echo(chat, user):
         x.update({chat: k})
     except BaseException:
         pass
-    return udB.set("ECHO", str(x))
+    return udB.set_key("ECHO", str(x))
 
 
 def check_echo(chat, user):

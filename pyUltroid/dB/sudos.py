@@ -50,7 +50,7 @@ def add_sudo(id_):  # Take int or str with numbers only , Returns Boolean
     try:
         sudos = get_sudos()
         sudos.append(id_)
-        udB.set("SUDOS", list_to_str(sudos))
+        udB.set_key("SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
         print(f"Ultroid LOG : // functions/sudos/add_sudo : {e}")
@@ -64,7 +64,7 @@ def del_sudo(id_):  # Take int or str with numbers only , Returns Boolean
     try:
         sudos = get_sudos()
         sudos.remove(id_)
-        udB.set("SUDOS", list_to_str(sudos))
+        udB.set_key("SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
         print(f"Ultroid LOG : // functions/sudos/del_sudo : {e}")

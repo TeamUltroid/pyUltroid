@@ -23,14 +23,14 @@ def get_stuff(key=None):
 def nsfw_chat(chat, action):
     x = get_stuff("NSFW")
     x.update({chat: action})
-    return udB.set("NSFW", str(x))
+    return udB.set_key("NSFW", str(x))
 
 
 def rem_nsfw(chat):
     x = get_stuff("NSFW")
     if x.get(chat):
         x.pop(chat)
-        return udB.set("NSFW", str(x))
+        return udB.set_key("NSFW", str(x))
     return
 
 
@@ -44,14 +44,14 @@ def is_nsfw(chat):
 def profan_chat(chat, action):
     x = get_stuff("PROFANITY")
     x.update({chat: action})
-    return udB.set("PROFANITY", str(x))
+    return udB.set_key("PROFANITY", str(x))
 
 
 def rem_profan(chat):
     x = get_stuff("PROFANITY")
     if x.get(chat):
         x.pop(chat)
-        return udB.set("PROFANITY", str(x))
+        return udB.set_key("PROFANITY", str(x))
     return
 
 

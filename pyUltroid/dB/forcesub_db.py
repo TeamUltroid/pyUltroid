@@ -22,7 +22,7 @@ def get_chats():
 def add_forcesub(chat_id, chattojoin):
     omk = get_chats()
     omk.update({str(chat_id): str(chattojoin)})
-    udB.set("FORCESUB", str(omk))
+    udB.set_key("FORCESUB", str(omk))
     return True
 
 
@@ -41,7 +41,7 @@ def rem_forcesub(chat_id):
 
     try:
         del omk[str(chat_id)]
-        udB.set("FORCESUB", str(omk))
+        udB.set_key("FORCESUB", str(omk))
         return True
     except KeyError:
         return False

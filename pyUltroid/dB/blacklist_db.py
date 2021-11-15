@@ -27,14 +27,14 @@ def add_blacklist(chat, word):
                 ok[chat].append(z)
     else:
         ok.update({chat: [word]})
-    udB.set("BLACKLIST_DB", str(ok))
+    udB.set_key("BLACKLIST_DB", str(ok))
 
 
 def rem_blacklist(chat, word):
     ok = get_stuff()
     if ok.get(chat) and word in ok[chat]:
         ok[chat].remove(word)
-        udB.set("BLACKLIST_DB", str(ok))
+        udB.set_key("BLACKLIST_DB", str(ok))
 
 
 def list_blacklist(chat):

@@ -21,14 +21,14 @@ def add_clean(chat):
     if not is_clean_added(chat):
         k = udB.get_key("CLEANCHAT")
         if k:
-            return udB.set("CLEANCHAT", k + " " + str(chat))
-        return udB.set("CLEANCHAT", str(chat))
+            return udB.set_key("CLEANCHAT", k + " " + str(chat))
+        return udB.set_key("CLEANCHAT", str(chat))
     return
 
 
 def rem_clean(chat):
     if is_clean_added(chat):
         k = udB.get_key("CLEANCHAT")
-        udB.set("CLEANCHAT", k.replace(str(chat), ""))
+        udB.set_key("CLEANCHAT", k.replace(str(chat), ""))
         return True
     return

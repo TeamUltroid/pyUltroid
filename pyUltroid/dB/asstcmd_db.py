@@ -23,14 +23,14 @@ def get_stuff():
 def add_cmd(cmd, msg, media, button):
     ok = get_stuff()
     ok.update({cmd: {"msg": msg, "media": media, "button": button}})
-    return udB.set("ASST_CMDS", str(ok))
+    return udB.set_key("ASST_CMDS", str(ok))
 
 
 def rem_cmd(cmd):
     ok = get_stuff()
     if ok.get(cmd):
         ok.pop(cmd)
-        return udB.set("ASST_CMDS", str(ok))
+        return udB.set_key("ASST_CMDS", str(ok))
     return
 
 

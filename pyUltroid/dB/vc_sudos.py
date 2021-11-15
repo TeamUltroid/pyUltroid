@@ -43,7 +43,7 @@ def add_vcsudo(id):  # Take int or str with numbers only , Returns Boolean
     try:
         sudos = get_vcsudos()
         sudos.append(id)
-        udB.set("VC_SUDOS", list_to_str(sudos))
+        udB.set_key("VC_SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
         print(f"Ultroid LOG : // functions/sudos/add_sudo : {e}")
@@ -57,7 +57,7 @@ def del_vcsudo(id):  # Take int or str with numbers only , Returns Boolean
     try:
         sudos = get_vcsudos()
         sudos.remove(id)
-        udB.set("VC_SUDOS", list_to_str(sudos))
+        udB.set_key("VC_SUDOS", list_to_str(sudos))
         return True
     except Exception as e:
         print(f"Ultroid LOG : // functions/sudos/del_sudo : {e}")

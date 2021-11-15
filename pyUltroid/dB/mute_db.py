@@ -26,14 +26,14 @@ def mute(chat, id):
             ok[chat].append(id)
     else:
         ok.update({chat: [id]})
-    udB.set("MUTE", str(ok))
+    udB.set_key("MUTE", str(ok))
 
 
 def unmute(chat, id):
     ok = get_stuff()
     if ok.get(chat) and id in ok[chat]:
         ok[chat].remove(id)
-    udB.set("MUTE", str(ok))
+    udB.set_key("MUTE", str(ok))
 
 
 def is_muted(chat, id):

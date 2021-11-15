@@ -22,14 +22,14 @@ def get_stuff():
 def add_snip(word, msg, media, button):
     ok = get_stuff()
     ok.update({word: {"msg": msg, "media": media, "button": button}})
-    udB.set("SNIP", str(ok))
+    udB.set_key("SNIP", str(ok))
 
 
 def rem_snip(word):
     ok = get_stuff()
     if ok.get(word):
         ok.pop(word)
-        udB.set("SNIP", str(ok))
+        udB.set_key("SNIP", str(ok))
 
 
 def get_snips(word):

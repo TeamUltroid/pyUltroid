@@ -26,14 +26,14 @@ def add_gblacklist(id):
     ok = get_gblacklists()
     if id not in ok:
         ok.append(id)
-        udB.set("GBLACKLISTS", str(ok))
+        udB.set_key("GBLACKLISTS", str(ok))
 
 
 def rem_gblacklist(id):
     ok = get_gblacklists()
     if id in ok:
         ok.remove(id)
-        udB.set("GBLACKLISTS", str(ok))
+        udB.set_key("GBLACKLISTS", str(ok))
 
 
 def is_gblacklisted(id):

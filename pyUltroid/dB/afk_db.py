@@ -23,7 +23,7 @@ def get_stuff():
 
 def add_afk(msg, media_type, media):
     time = dt.now().strftime("%b %d %Y %I:%M:%S%p")
-    udB.set("AFK_DB", str([msg, media_type, media, time]))
+    udB.set_key("AFK_DB", str([msg, media_type, media, time]))
     return
 
 
@@ -37,4 +37,4 @@ def is_afk():
 
 
 def del_afk():
-    return udB.set("AFK_DB", "[]")
+    return udB.set_key("AFK_DB", "[]")

@@ -37,11 +37,11 @@ def add_chatbot(chat, id):
         ok.update({chat: [id]})
     elif id not in ok[chat]:
         ok[chat].append(id)
-    return udB.set("CHATBOT_USERS", str(ok))
+    return udB.set_key("CHATBOT_USERS", str(ok))
 
 
 def rem_chatbot(chat, id):
     ok = get_stuff()
     if ok.get(chat) and id in ok[chat]:
         ok[chat].remove(id)
-    return udB.set("CHATBOT_USERS", str(ok))
+    return udB.set_key("CHATBOT_USERS", str(ok))

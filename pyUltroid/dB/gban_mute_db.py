@@ -23,22 +23,22 @@ ge = udB.get_key("GMUTE")
 if ge:
     try:
         if "list" not in str(type(eval(ge))):
-            udB.set("GMUTE", "[]")
+            udB.set_key("GMUTE", "[]")
     except BaseException:
-        udB.set("GMUTE", "[]")
+        udB.set_key("GMUTE", "[]")
 
 
 def gban(user, reason):
     ok = list_gbanned()
     ok.update({user: reason or "No Reason. "})
-    udB.set("GBAN", str(ok))
+    udB.set_key("GBAN", str(ok))
 
 
 def ungban(user):
     ok = list_gbanned()
     if ok.get(user):
         del ok[user]
-        udB.set("GBAN", str(ok))
+        udB.set_key("GBAN", str(ok))
 
 
 def is_gbanned(user):
@@ -55,14 +55,14 @@ def list_gbanned():
 def gmute(user):
     ok = list_gmuted()
     ok.append(user)
-    udB.set("GMUTE", str(ok))
+    udB.set_key("GMUTE", str(ok))
 
 
 def ungmute(user):
     ok = list_gmuted()
     if user in ok:
         ok.remove(user)
-        udB.set("GMUTE", str(ok))
+        udB.set_key("GMUTE", str(ok))
 
 
 def is_gmuted(user):

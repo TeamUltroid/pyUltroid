@@ -19,7 +19,7 @@ def get_chats():
 def add_vcauth(chat_id, admins=False):
     omk = get_chats()
     omk.update({chat_id: {"admins": admins}})
-    udB.set("VC_AUTH_GROUPS", str(omk))
+    udB.set_key("VC_AUTH_GROUPS", str(omk))
     return True
 
 
@@ -35,7 +35,7 @@ def rem_vcauth(chat_id):
     if chat_id in omk.keys():
         try:
             del omk[chat_id]
-            udB.set("VC_AUTH_GROUPS", str(omk))
+            udB.set_key("VC_AUTH_GROUPS", str(omk))
             return True
         except KeyError:
             return False

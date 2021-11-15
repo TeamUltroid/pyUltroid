@@ -501,7 +501,7 @@ def telegraph_client():
     except Exception as er:
         LOGS.exception(er)
         return
-    udB.set("_TELEGRAPH_TOKEN", TelegraphClient.get_access_token())
+    udB.set_key("_TELEGRAPH_TOKEN", TelegraphClient.get_access_token())
     TELEGRAPH.append(TelegraphClient)
     return TelegraphClient
 

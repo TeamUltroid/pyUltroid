@@ -38,7 +38,7 @@ def log_user(id_):  # Take int or str with numbers only , Returns Boolean
     try:
         pmperm = get_logger()
         pmperm.append(id_)
-        udB.set("LOGUSERS", list_to_str(pmperm))
+        udB.set_key("LOGUSERS", list_to_str(pmperm))
         return True
     except Exception as e:
         print(f"Ultroid LOG : // functions/logusers_db/log_user : {e}")
@@ -52,7 +52,7 @@ def nolog_user(id_):  # Take int or str with numbers only , Returns Boolean
     try:
         pmperm = get_logger()
         pmperm.remove(id_)
-        udB.set("LOGUSERS", list_to_str(pmperm))
+        udB.set_key("LOGUSERS", list_to_str(pmperm))
         return True
     except Exception as e:
         print(f"Ultroid LOG : // functions/loguser_db/nolog_user : {e}")
