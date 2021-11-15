@@ -12,7 +12,7 @@ from .startup import *
 from .startup._database import UltroidDB
 from .startup.BaseClient import UltroidClient
 from .startup.connections import session_file, vc_connection, where_hosted
-from .startup.funcs import autobot, _version_changes
+from .startup.funcs import _version_changes, autobot
 from .version import ultroid_version
 
 start_time = time.time()
