@@ -36,9 +36,10 @@ class _SudoManager:
             self.sudos = li
         return self.sudos
 
+    @property
     def should_allow_sudo(self):
         db = self._init_db()
-        return db.get("SUDO") == "True"
+        return db.get_key("SUDO")
 
     def owner_and_sudos(self):
         if self._owner_sudos:
@@ -60,6 +61,7 @@ class _SudoManager:
             self._owner_sudos.remove(id_)
         return self.sudos.remove(_id)
 
+    @property
     def fullsudos(self):
         db = self._init_db()
         fsudos = db.get("FULLSUDO")
@@ -71,11 +73,10 @@ class _SudoManager:
         return bool(id_ in self.get_sudos())
 
 
-_SUDO_M = _SudoManager()
-owner_and_sudos = _SUDO_M.owner_and_sudos
-sudoers = _SUDO_M.get_sudos
-is_sudo = _SUDO_M.is_sudo
-get_fullsudos = _SUDO_M.fullsudos
+SUDO_M = _SudoManager()
+owner_and_sudos = SUDO_M.owner_and_sudos
+sudoers = SUDO_M.get_sudos
+is_sudo = SUDO_M.is_sudo
 
 # ------------------------------------------------ #
 
