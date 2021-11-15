@@ -127,8 +127,8 @@ def manager_cmd(**args):
             try:
                 await func(ult)
             except Exception as er:
-                LOGS.exception(f"Manager [{ult.chat_id}]: {er}")
+                LOGS.exception(f"MANAGER [{ult.chat_id}]: {er}")
 
-        asst.add_event_handler(function, NewMessage(*args))
+        asst.add_event_handler(function, NewMessage(**args))
 
     return decorator
