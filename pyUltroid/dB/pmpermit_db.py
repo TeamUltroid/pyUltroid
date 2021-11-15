@@ -33,18 +33,18 @@ def get_approved():
 
 def approve_user(id):
     ok = get_approved()
-    if id not in ok:
-        ok.append(id)
-        udB.set_key("PMPERMIT", str(ok))
+    if id in ok:
+        return True
+    ok.append(id)
+    return udB.set_key("PMPERMIT", ok)
 
 
 def disapprove_user(id):
     ok = get_approved()
     if id in ok:
         ok.remove(id)
-        udB.set_key("PMPERMIT", str(ok))
+        return udB.set_key("PMPERMIT", ok)
 
 
 def is_approved(id):
-    ok = get_approved()
-    return id in ok
+    return id in get_approved()
