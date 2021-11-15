@@ -12,7 +12,7 @@ from .startup import *
 from .startup._database import UltroidDB
 from .startup.BaseClient import UltroidClient
 from .startup.connections import session_file, vc_connection, where_hosted
-from .startup.funcs import autobot
+from .startup.funcs import autobot, _version_changes
 from .version import ultroid_version
 
 start_time = time.time()
@@ -59,6 +59,8 @@ vcClient = vc_connection(udB, ultroid_bot)
 
 if not udB.get_key("SUDO"):
     udB.set_key("SUDO", "False")
+
+_version_changes(udB)
 
 if udB.get_key("SUDOS") is None:
     udB.set_key("SUDOS", "")
