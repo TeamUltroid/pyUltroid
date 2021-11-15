@@ -41,14 +41,14 @@ from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
 from ..version import __version__ as pyver
 from ..version import ultroid_version as ult_ver
-from . import _SUDO_M
+from . import SUDO_M
 from ._wrappers import eod
 
 hndlr = "\\" + HNDLR
 MANAGER = udB.get_key("MANAGER")
 TAKE_EDITS = udB.get_key("TAKE_EDITS")
 black_list_chats = udB.get_key("BLACKLIST_CHATS")
-allow_sudo = _SUDO_M.should_allow_sudo()
+allow_sudo = SUDO_M.should_allow_sudo
 
 
 def compile_pattern(data, hndlr):
@@ -81,7 +81,6 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
     type_ = args.get("type", ["official"])
     only_devs = args.get("only_devs", False)
     allow_pm = args.get("allow_pm", False)
-    args.get("allow_all", False)
     if isinstance(type_, str):
         type_ = [type_]
     if "official" in type_ and DUAL_MODE:
