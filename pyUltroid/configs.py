@@ -24,8 +24,8 @@ class Var:
     HEROKU_APP_NAME = config("HEROKU_APP_NAME", default=None)
     HEROKU_API = config("HEROKU_API", default=None)
     VC_SESSION = config("VC_SESSION", default=None)
-    ADDONS = config("ADDONS", default="True")
-    VCBOT = config("VCBOT", default="True")
+    ADDONS = config("ADDONS", default=False, cast=bool)
+    VCBOT = config("VCBOT", default=True, cast=bool)
     # for railway
     REDISPASSWORD = config("REDISPASSWORD", default=None)
     REDISHOST = config("REDISHOST", default=None)
