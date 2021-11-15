@@ -41,7 +41,7 @@ from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
 from ..version import __version__ as pyver
 from ..version import ultroid_version as ult_ver
-from . import SUDO_M
+from . import sudoers, owner_and_sudos
 from ._wrappers import eod
 
 hndlr = "\\" + HNDLR
@@ -284,7 +284,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
 
             if allow_sudo:
                 args["outgoing"] = False
-                args["from_users"] = _SUDO_M.get_sudos
+                args["from_users"] = sudoers
                 args["pattern"] = compile_pattern(pattern, "\\" + SUDO_HNDLR)
                 cm = doit("sudo")
                 ultroid_bot.add_event_handler(cm, events.NewMessage(**args))
@@ -312,7 +312,7 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             if not (("manager" in type_) and (DUAL_HNDLR == "/")) and not (
                 ("assistant" in type_) and (DUAL_HNDLR == "/")
             ):
-                args["from_users"] = _SUDO_M.owner_and_sudos
+                args["from_users"] = owner_and_sudos
                 args["pattern"] = compile_pattern(pattern, "\\" + DUAL_HNDLR)
                 cm = doit("dualmode")
                 asst.add_event_handler(cm, events.NewMessage(**args))
