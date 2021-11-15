@@ -131,7 +131,9 @@ async def metadata(file):
             int(float(info[0]["Duration"])) if info[0].get("Duration") else 69
         )
         data["performer"] = (
-            info[0].get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
+            info[0].get("Performer")
+            or udB.get_key("artist")
+            or ultroid_bot.me.first_name
         )
         if len(info) >= 2:
             data["height"] = int(info[1]["Height"]) if info[1].get("Height") else 720
