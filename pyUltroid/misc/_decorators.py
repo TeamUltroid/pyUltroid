@@ -35,7 +35,6 @@ from telethon.utils import get_display_name
 from .. import DUAL_HNDLR, DUAL_MODE, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
 from ..dB import DEVLIST
 from ..dB._core import LIST, LOADED
-from ..dB.sudos import is_fullsudo
 from ..functions.admins import admin_check
 from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
@@ -311,7 +310,11 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
             async def wrapper(ult):
                 chat = ult.chat
                 if mode in ["dualmode", "official", "sudo"]:
-                    if not ult.out and fullsudo and ult.sender_id not in SUDO_M.fullsudos:
+                    if (
+                        not ult.out
+                        and fullsudo
+                        and ult.sender_id not in SUDO_M.fullsudos
+                    ):
                         return await eod(ult, "`Full Sudo User Required...`", time=15)
                     if hasattr(chat, "title"):
                         if (
