@@ -112,7 +112,6 @@ class RedisConnection(Redis):
         *args,
         **kwargs,
     ):
-        self._cache = {}
         if host and ":" in host:
             spli_ = host.split(":")
             host = spli_[0]
@@ -141,8 +140,11 @@ class RedisConnection(Redis):
         if logger:
             logger.info("Connecting to redis database")
         super().__init__(**kwargs)
+        self.re_cache()
 
-        # dict is faster than Redis
+    # dict is faster than Redis   
+    def re_cache(self):
+        self._cache = {}
         for keys in self.keys():
             self._cache.update({keys: self.get_key(keys)})
 
@@ -151,6 +153,8 @@ class RedisConnection(Redis):
             value = eval(value)
         except BaseException:
             pass
+        if isinstance(value, list):
+            del self._cache[key]
         self._cache.update({key: value})
         return self.set(str(key), str(value))
 
