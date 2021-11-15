@@ -405,3 +405,12 @@ async def ready():
         exit()
     except Exception as er:
         LOGS.exception(er)
+
+
+def _version_changes(udb):
+    key = udb.get_key("SUDOS")
+    if not key or isinstance(key, list):
+        return
+    key = udb.get("SUDOS")
+    new_ = [int(_) for _ in key.split()]
+    udB.set_key("SUDOS", new_)
