@@ -41,7 +41,7 @@ from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
 from ..version import __version__ as pyver
 from ..version import ultroid_version as ult_ver
-from . import owner_and_sudos, sudoers, SUDO_M
+from . import SUDO_M, owner_and_sudos, sudoers
 from ._wrappers import eod
 
 hndlr = "\\" + HNDLR
