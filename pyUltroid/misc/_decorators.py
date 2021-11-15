@@ -250,13 +250,13 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                         with BytesIO(ftext.encode()) as file:
                             file.name = "logs.txt"
                             await asst.send_file(
-                                int(udB.get_key("LOG_CHANNEL")),
+                                udB.get_key("LOG_CHANNEL"),
                                 file,
                                 caption="**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n",
                             )
                     else:
                         await asst.send_message(
-                            int(udB.get_key("LOG_CHANNEL"),
+                            udB.get_key("LOG_CHANNEL"),
                             ftext,
                         )
 
