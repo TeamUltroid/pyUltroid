@@ -106,31 +106,3 @@ def in_pattern(pattern=None, owner=False, **kwargs):
     return don
 
 
-def manager_cmd(**args):
-    args["forwards"] = args.get("forwards", False)
-    allow_all = args.get("allow_all", False)
-    allow_pm = args.get("only_pm", False)
-    for arg in ["allow_pm", "allow_all"]:
-        try:
-            del args[arg]
-        except KeyError:
-            pass
-    if args.get("pattern"):
-        args["pattern"] = "^(/|!)" + args.get("pattern")
-
-    def decorator(func):
-        async def function(ult):
-            if ult.sender.bot:
-                return
-            if not allow_all and not (await admin_check(ult)):
-                return
-            if not allow_pm and ult.is_private:
-                return
-            try:
-                await func(ult)
-            except Exception as er:
-                LOGS.exception(f"MANAGER [{ult.chat_id}]: {er}")
-
-        asst.add_event_handler(function, NewMessage(**args))
-
-    return decorator
