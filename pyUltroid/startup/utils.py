@@ -53,7 +53,7 @@ def load_addons(plugin_name):
     mod.ultroid_cmd = ultroid_cmd
     mod.on_cmd = ultroid_cmd
     mod.callback = callback
-    mod.Redis = udB.get
+    mod.Redis = udB.get_key
     mod.admin_cmd = admin_cmd
     mod.sudo_cmd = sudo_cmd
     modules["ub"] = xxx
