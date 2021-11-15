@@ -11,7 +11,7 @@ from telethon.errors.rpcerrorlist import UserNotParticipantError
 from telethon.tl import functions, types
 
 from .. import _ult_cache
-from ..misc import _SUDO_M
+from ..misc import SUDO_M
 
 
 async def ban_time(event, time_str):
@@ -68,7 +68,7 @@ async def admin_check(event):
         if _ignore and event.sender.id == _ignore:
             return False
         return True
-    if event.sender_id in _SUDO_M.owner_and_sudos():
+    if event.sender_id in SUDO_M.owner_and_sudos():
         return True
     try:
         perms = await event.client.get_permissions(event.chat_id, event.sender_id)
