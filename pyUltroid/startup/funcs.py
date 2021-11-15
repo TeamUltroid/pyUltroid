@@ -408,7 +408,7 @@ async def ready():
 
 
 def _version_changes(udb):
-    for _ in ["SUDOS", "CLEANCHAT"]:
+    for _ in ["VC_SUDOS", "SUDOS", "CLEANCHAT"]:
         key = udb.get_key(_)
         if key and not isinstance(key, list):
             key = udb.get(_)
