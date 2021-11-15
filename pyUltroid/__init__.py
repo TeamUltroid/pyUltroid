@@ -24,8 +24,8 @@ udB = UltroidDB()
 if udB.ping():
     LOGS.info("Connected to Database Successfully!")
 
-BOT_MODE = udB.get_key("BOTMODE") == "True"
-DUAL_MODE = udB.get_key("DUAL_MODE") == "True"
+BOT_MODE = udB.get_key("BOTMODE")
+DUAL_MODE = udB.get_key("DUAL_MODE")
 
 if BOT_MODE:
     if DUAL_MODE:
