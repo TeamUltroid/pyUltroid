@@ -280,7 +280,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 ),
             )
         file = Path(inspect.stack()[1].filename)
-        if True: # "addons/" in str(file):
+        if True:  # "addons/" in str(file):
             if LOADED.get(file.stem):
                 LOADED[file.stem].append(wrapp)
             else:
