@@ -72,10 +72,11 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
     def decor(dec):
         async def wrapp(ult):
             chat = ult.chat
-            if not ult.out and ult.sender_id not in owner_and_sudos():
-                return
-            if fullsudo and ult.sender_id not in SUDO_M.fullsudos:
-                return await eod(ult, "`Full Sudo User Required...`", time=15)
+            if not ult.out:
+                if ult.sender_id not in owner_and_sudos():
+                    return
+                if fullsudo and ult.sender_id not in SUDO_M.fullsudos:
+                    return await eod(ult, "`Full Sudo User Required...`", time=15)
             if hasattr(chat, "title"):
                 if (
                     "#noub" in chat.title.lower()
