@@ -110,6 +110,8 @@ class DetaDB:
     del_key = delete
 
     def get_key(self, key):
+        if key in self._cache:
+            return self._cache[key]
         return get_data(self, key)
 
 
