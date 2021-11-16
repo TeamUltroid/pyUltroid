@@ -173,7 +173,7 @@ class RedisConnection(Redis):
         return bool(self.delete(str(key)))
 
     @property
-    def name:
+    def name(self):
         return "Redis"
 # --------------------------------------------------------------------------------------------- #
 
