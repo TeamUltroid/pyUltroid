@@ -35,13 +35,13 @@ from telethon.utils import get_display_name
 
 from .. import DUAL_HNDLR, DUAL_MODE, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
 from ..dB import DEVLIST
-from ..dB._core import LIST, LOADED
+from ..dB._core import LOADED
 from ..functions.admins import admin_check
 from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
 from ..version import __version__ as pyver
 from ..version import ultroid_version as ult_ver
-from . import SUDO_M, owner_and_sudos, sudoers
+from . import SUDO_M, owner_and_sudos
 from ._wrappers import eod
 
 hndlr = "\\" + HNDLR
