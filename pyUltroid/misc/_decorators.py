@@ -65,7 +65,6 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
     fullsudo = kwargs.get("fullsudo", False)
     only_devs = kwargs.get("only_devs", False)
     func = kwargs.get("func", lambda e: not e.via_bot_id)
-    file_test = Path(inspect.stack()[1].filename)
 
     def decor(dec):
         async def wrapp(ult):
@@ -280,11 +279,12 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
                     blacklist_chats=blacklist_chats,
                 ),
             )
-        if "addons/" in str(file_test):
-            if LOADED.get(file_test.stem):
-                LOADED[file_test.stem].append(wrapp)
+        file = Path(inspect.stack()[1].filename)
+        if "addons/" in str(file):
+            if LOADED.get(file.stem):
+                LOADED[file.stem].append(wrapp)
             else:
-                LOADED.update({file_test.stem: [wrapp]})
+                LOADED.update({file.stem: [wrapp]})
         return wrapp
 
     return decor
