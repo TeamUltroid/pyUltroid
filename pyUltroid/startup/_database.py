@@ -49,7 +49,8 @@ class DetaDB:
             self.db = Deta(key).AsyncBase("Ultroid")
             self.loop = asyncio.get_event_loop()
             for key in self.run(self.db.fetch()).items:
-                self._cache.update({key["key"]: key["value"]})
+                if key.get("value"):
+                    self._cache.update({key["key"]: key["value"]})
         except Exception as er:
             LOGS.exception(er)
 
