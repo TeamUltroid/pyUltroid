@@ -213,7 +213,10 @@ def ult_cmd(pattern=None, **kwargs):
             ),
         )
         if TAKE_EDITS:
-            func_ = lambda x: not (x.is_channel and x.chat.broadcast)
+
+            def func_(x):
+                return not (x.is_channel and x.chat.broadcast)
+
             func_ = func_ and func
             ultroid_bot.add_event_handler(
                 wrapp,
@@ -227,14 +230,17 @@ def ult_cmd(pattern=None, **kwargs):
             )
         if DUAL_MODE:
             cmd = compile_pattern(pattern, DUAL_HNDLR)
-            asst.add_event_handler(wrapp,
-                events.NewMessage(pattern=cmd,
+            asst.add_event_handler(
+                wrapp,
+                events.NewMessage(
+                    pattern=cmd,
                     incoming=True,
                     forwads=False,
                     func=func,
                     chats=chats,
-                    blacklist_chats=blacklist_chats,)
-                )
+                    blacklist_chats=blacklist_chats,
+                ),
+            )
         if "addons/" in str(file_test):
             if LOADED.get(file_test.stem):
                 LOADED[file_test.stem].append(wrapp)
