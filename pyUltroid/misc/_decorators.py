@@ -238,9 +238,11 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
                 ),
             )
         if manager and MANAGER:
+
             async def manager_cmd(ult):
                 # [WIP]
                 pass
+
         if DUAL_MODE:
             cmd = compile_pattern(pattern, DUAL_HNDLR)
             asst.add_event_handler(
