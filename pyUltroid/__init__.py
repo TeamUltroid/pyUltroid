@@ -22,7 +22,7 @@ HOSTED_ON = where_hosted()
 udB = UltroidDB()
 
 if udB.ping():
-    LOGS.info("Connected to Database Successfully!")
+    LOGS.info(f"Connected to {udB.name} Successfully!")
 
 BOT_MODE = udB.get_key("BOTMODE")
 DUAL_MODE = udB.get_key("DUAL_MODE")
