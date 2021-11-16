@@ -50,7 +50,12 @@ class DetaDB:
             self.loop = asyncio.get_event_loop()
             for key in self.run(self.db.fetch()).items:
                 if key.get("value"):
-                    self._cache.update({key["key"]: key["value"]})
+                    new = key["value"]
+                    try:
+                        new = eval(new)
+                    except BaseException:
+                        pass
+                    self._cache.update({key["key"]: new})
         except Exception as er:
             LOGS.exception(er)
 
