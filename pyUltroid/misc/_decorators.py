@@ -59,7 +59,7 @@ def compile_pattern(data, hndlr):
     return re.compile(hndlr + data)
 
 
-def ult_cmd(pattern=None, manager=False, **kwargs):
+def ultroid_cmd(pattern=None, manager=False, **kwargs):
     groups_only = kwargs.get("groups_only", False)
     admins_only = kwargs.get("admins_only", False)
     fullsudo = kwargs.get("fullsudo", False)
@@ -295,6 +295,7 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
 # Inspiration of ultroid_cmd decor is from RaphielGang/Telegram-Paperlane
 # https://github.com/RaphielGang/Telegram-Paperplane/blob/625875a9ecdfd267a53067b3c1580000f5006973/userbot/events.py#L22
 
+"""
 
 def ultroid_cmd(allow_sudo=allow_sudo, **args):
     # With time and addition of Stuff
@@ -556,3 +557,4 @@ def ultroid_cmd(allow_sudo=allow_sudo, **args):
                         LOADED.update({file_test.stem: [cm]})
 
     return decorator
+"""
