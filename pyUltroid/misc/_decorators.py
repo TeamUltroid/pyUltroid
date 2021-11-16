@@ -255,7 +255,7 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
                     LOGS.exception(er)
 
             if pattern:
-                cmd = compile_pattern(pattern, "/")
+                cmd = compile_pattern(pattern, "\\/")
             asst.add_event_handler(
                 manager_cmd,
                 NewMessage(
@@ -269,7 +269,7 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
             )
         if DUAL_MODE and not (manager and DUAL_HNDLR == "/"):
             if pattern:
-                cmd = compile_pattern(pattern, DUAL_HNDLR)
+                cmd = compile_pattern(pattern, "\\" + DUAL_HNDLR)
             asst.add_event_handler(
                 wrapp,
                 NewMessage(
