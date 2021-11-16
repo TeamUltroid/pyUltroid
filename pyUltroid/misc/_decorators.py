@@ -52,7 +52,10 @@ allow_sudo = SUDO_M.should_allow_sudo
 
 
 def compile_pattern(data, hndlr):
-    data = data.replace("^", "").replace(".", "")
+    if data.startswith("^"):
+        data = data.replace("^", "")
+    if data startswith("."):
+        data = data.replace(".", "")
     if not hndlr:
         pat = f"\\{HNDLR}{data}|\\{SUDO_HNDLR}{data}"
         return re.compile(pat)
@@ -197,7 +200,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
         _add_new = allow_sudo and HNDLR != SUDO_HNDLR
         if _add_new:
             if pattern:
-                cmd = compile_pattern(pattern, f"\\{SUDO_HNDLR.strip()}")
+                cmd = compile_pattern(pattern, "\\" + SUDO_HNDLR)
             ultroid_bot.add_event_handler(
                 wrapp,
                 NewMessage(
@@ -210,7 +213,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 ),
             )
         if pattern:
-            cmd = compile_pattern(pattern, f"\\{HNDLR.strip()}")
+            cmd = compile_pattern(pattern, "\\" + HNDLR)
         ultroid_bot.add_event_handler(
             wrapp,
             NewMessage(
