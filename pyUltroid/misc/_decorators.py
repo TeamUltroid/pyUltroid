@@ -225,10 +225,8 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
         )
         if TAKE_EDITS:
 
-            def func_(x):
-                return not (x.is_channel and x.chat.broadcast)
+            func_ = lambda x: not x.via_bot_id and not (x.is_channel and x.chat.broadcast)
 
-            func_ = func_ and func
             ultroid_bot.add_event_handler(
                 wrapp,
                 MessageEdited(
