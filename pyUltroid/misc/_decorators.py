@@ -197,7 +197,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
         _add_new = allow_sudo and HNDLR != SUDO_HNDLR
         if _add_new:
             if pattern:
-                cmd = compile_pattern(pattern, "\\" + SUDO_HNDLR)
+                cmd = compile_pattern(pattern, f"\\{SUDO_HNDLR.strip()}")
             ultroid_bot.add_event_handler(
                 wrapp,
                 NewMessage(
@@ -210,7 +210,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 ),
             )
         if pattern:
-            cmd = compile_pattern(pattern, "\\" + HNDLR)
+            cmd = compile_pattern(pattern, f"\\{HNDLR.strip()}")
         ultroid_bot.add_event_handler(
             wrapp,
             NewMessage(
@@ -280,7 +280,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 ),
             )
         file = Path(inspect.stack()[1].filename)
-        if "addons/" in str(file):
+        if True: # "addons/" in str(file):
             if LOADED.get(file.stem):
                 LOADED[file.stem].append(wrapp)
             else:
