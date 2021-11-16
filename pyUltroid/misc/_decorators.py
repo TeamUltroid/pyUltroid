@@ -17,6 +17,7 @@ from traceback import format_exc
 from telethon import Button
 from telethon import __version__ as telever
 from telethon import events
+from telethon.events import NewMessage, MessageEdited
 from telethon.errors.common import AlreadyInConversationError
 from telethon.errors.rpcerrorlist import (
     AuthKeyDuplicatedError,
@@ -200,7 +201,7 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
                 cmd = compile_pattern(pattern, "\\" + SUDO_HNDLR)
             ultroid_bot.add_event_handler(
                 wrapp,
-                events.NewMessage(
+                NewMessage(
                     pattern=cmd,
                     incoming=True,
                     forwards=False,
@@ -213,7 +214,7 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
             cmd = compile_pattern(pattern, "\\" + HNDLR)
         ultroid_bot.add_event_handler(
             wrapp,
-            events.NewMessage(
+            NewMessage(
                 outgoing=True if _add_new else None,
                 pattern=cmd,
                 forwards=False,
@@ -230,7 +231,7 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
             func_ = func_ and func
             ultroid_bot.add_event_handler(
                 wrapp,
-                events.MessageEdited(
+                MessageEdited(
                     pattern=cmd,
                     forwards=False,
                     func=func_,
@@ -239,16 +240,29 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
                 ),
             )
         if manager and MANAGER:
+            allow_all = kwargs.get("allow_all", False)
+            allow_pm = kwargs.get("allow_pm", False)
 
             async def manager_cmd(ult):
-                # [WIP]
-                pass
-
-        if DUAL_MODE:
-            cmd = compile_pattern(pattern, DUAL_HNDLR)
+                if not allow_all and not (await admin_check(ult)):
+                    return
+                elif not allow_pm and ult.is_private:
+                    return
+                try:
+                    await dec(ult)
+                except Exception as er:
+                    LOGS.info(f"• MANAGER [{e.chat_id}]:")
+                    LOGS.exception(er)
+            if pattern:
+                cmd = compile_pattern(pattern, "/")
+            asst.add_event_handler(manager_cmd, NewMessage(pattern=cmd, forwards=False, incoming=True, func=func, chats=chats,
+                blacklist_chats=blacklist_chats))
+        if DUAL_MODE and not (manager and DUAL_HNDLR == "/"):
+            if pattern:
+                cmd = compile_pattern(pattern, DUAL_HNDLR)
             asst.add_event_handler(
                 wrapp,
-                events.NewMessage(
+                NewMessage(
                     pattern=cmd,
                     incoming=True,
                     forwards=False,
