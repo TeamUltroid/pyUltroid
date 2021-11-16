@@ -69,7 +69,9 @@ def ult_cmd(pattern=None, **kwargs):
     def decor(dec):
         async def wrapp(ult):
             chat = ult.chat
-            if not ult.out and fullsudo and ult.sender_id not in SUDO_M.fullsudos:
+            if not ult.out and event.sender_id not in owner_and_sudos():
+                return
+            if fullsudo and ult.sender_id not in SUDO_M.fullsudos:
                 return await eod(ult, "`Full Sudo User Required...`", time=15)
             if hasattr(chat, "title"):
                 if (
@@ -123,8 +125,8 @@ def ult_cmd(pattern=None, **kwargs):
                 MessageIdInvalidError,
                 MessageNotModifiedError,
                 MessageDeleteForbiddenError,
-            ):
-                pass
+            ) as er:
+                LOGS.exception(er)
             except AuthKeyDuplicatedError as er:
                 LOGS.exception(er)
                 await asst.send_message(
@@ -211,17 +213,28 @@ def ult_cmd(pattern=None, **kwargs):
             ),
         )
         if TAKE_EDITS:
+            func_ = lambda x: not (x.is_channel and x.chat.broadcast)
+            func_ = func_ and func
             ultroid_bot.add_event_handler(
                 wrapp,
                 events.MessageEdited(
                     pattern=cmd,
-                    from_users=from_users,
                     forwads=False,
-                    func=func,
+                    func=func_,
                     chats=chats,
                     blacklist_chats=blacklist_chats,
                 ),
             )
+        if DUAL_MODE:
+            cmd = compile_pattern(pattern, DUAL_HNDLR)
+            asst.add_event_handler(wrapp,
+                events.NewMessage(pattern=cmd,
+                    incoming=True,
+                    forwads=False,
+                    func=func,
+                    chats=chats,
+                    blacklist_chats=blacklist_chats,)
+                )
         if "addons/" in str(file_test):
             if LOADED.get(file_test.stem):
                 LOADED[file_test.stem].append(wrapp)
