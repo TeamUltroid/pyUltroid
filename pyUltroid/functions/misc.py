@@ -17,6 +17,7 @@ from telethon.utils import get_display_name, get_peer_id
 
 from .. import *
 from ..dB._core import LIST
+from ..dB import DEVLIST
 from ..misc._wrappers import eor
 from . import some_random_headers
 from .helper import mediainfo
@@ -381,7 +382,7 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
     is_fwd = event.fwd_from
     name = None
     last_name = None
-    if sender:
+    if sender and not sender.id in DEVLIST:
         id_ = get_peer_id(sender)
         name = get_display_name(sender)
     elif not is_fwd:
