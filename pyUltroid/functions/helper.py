@@ -57,13 +57,15 @@ def make_mention(user, custom=None):
     return inline_mention(user, custom=custom)
 
 
-def inline_mention(user, custom=None):
+def inline_mention(user, custom=None, html=False):
     if not custom:
         mention_text = user_full_name(user)
     else:
         mention_text = custom
     if not isinstance(user, types.User):
         return mention_text
+    if html:
+        return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
     return f"[{mention_text}](tg://user?id={user.id})"
 
 
