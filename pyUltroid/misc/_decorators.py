@@ -53,9 +53,9 @@ allow_sudo = SUDO_M.should_allow_sudo
 
 def compile_pattern(data, hndlr):
     if data.startswith("^"):
-        data = data.replace("^", "")
+        data = data[1:]
     if data.startswith("."):
-        data = data.replace(".", "")
+        data = data[1:]
     if not hndlr:
         pat = f"\\{HNDLR}{data}|\\{SUDO_HNDLR}{data}"
         return re.compile(pat)
