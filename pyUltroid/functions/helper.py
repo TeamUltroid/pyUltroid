@@ -68,6 +68,7 @@ def inline_mention(user, custom=None, html=False):
         return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
     return f"[{mention_text}](tg://user?id={user.id})"
 
+
 # ----------------- Load \\ Unloader ---------------- #
 
 
