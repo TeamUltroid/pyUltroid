@@ -189,7 +189,6 @@ def ult_cmd(pattern=None, **kwargs):
                     )
 
         cmd = None
-        from_users = None
         blacklist_chats = False
         chats = None
         if black_list_chats:
@@ -198,7 +197,7 @@ def ult_cmd(pattern=None, **kwargs):
         if allow_sudo:
             if HNDLR != SUDO_HNDLR:
                 if pattern:
-                    cmd = compile_pattern(pattern, "\\"+SUDO_HNDLR)
+                    cmd = compile_pattern(pattern, "\\" + SUDO_HNDLR)
                 ultroid_bot.add_event_handler(
                     wrapp,
                     events.NewMessage(
@@ -209,7 +208,7 @@ def ult_cmd(pattern=None, **kwargs):
                         chats=chats,
                         blacklist_chats=blacklist_chats,
                     ),
-             )
+                )
         if pattern:
             cmd = compile_pattern(pattern, "\\" + HNDLR)
         ultroid_bot.add_event_handler(
