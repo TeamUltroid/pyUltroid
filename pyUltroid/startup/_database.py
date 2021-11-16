@@ -175,6 +175,8 @@ class RedisConnection(Redis):
     @property
     def name(self):
         return "Redis"
+
+
 # --------------------------------------------------------------------------------------------- #
 
 
