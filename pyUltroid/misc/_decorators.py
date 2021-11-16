@@ -203,7 +203,7 @@ def ult_cmd(pattern=None, **kwargs):
                     events.NewMessage(
                         pattern=cmd,
                         incoming=True,
-                        forwads=False,
+                        forwards=False,
                         func=func,
                         chats=chats,
                         blacklist_chats=blacklist_chats,
@@ -215,7 +215,7 @@ def ult_cmd(pattern=None, **kwargs):
             wrapp,
             events.NewMessage(
                 pattern=cmd,
-                forwads=False,
+                forwards=False,
                 func=func,
                 chats=chats,
                 blacklist_chats=blacklist_chats,
@@ -231,7 +231,7 @@ def ult_cmd(pattern=None, **kwargs):
                 wrapp,
                 events.MessageEdited(
                     pattern=cmd,
-                    forwads=False,
+                    forwards=False,
                     func=func_,
                     chats=chats,
                     blacklist_chats=blacklist_chats,
@@ -244,7 +244,7 @@ def ult_cmd(pattern=None, **kwargs):
                 events.NewMessage(
                     pattern=cmd,
                     incoming=True,
-                    forwads=False,
+                    forwards=False,
                     func=func,
                     chats=chats,
                     blacklist_chats=blacklist_chats,
