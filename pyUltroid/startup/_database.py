@@ -83,7 +83,8 @@ class DetaDB:
         if key in self._cache:
             return self._cache[key]
         _get = self.run(self.db.get(key))
-        self._cache.update({key: _get["value"]})
+        if _get is not None:
+            self._cache.update({key: _get["value"]})
         if _get is not None:
             return cast(_get["value"])
 
