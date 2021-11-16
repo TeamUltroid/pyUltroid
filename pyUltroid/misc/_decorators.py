@@ -17,7 +17,6 @@ from traceback import format_exc
 from telethon import Button
 from telethon import __version__ as telever
 from telethon import events
-from telethon.events import NewMessage, MessageEdited
 from telethon.errors.common import AlreadyInConversationError
 from telethon.errors.rpcerrorlist import (
     AuthKeyDuplicatedError,
@@ -31,6 +30,7 @@ from telethon.errors.rpcerrorlist import (
     MessageNotModifiedError,
     UserIsBotError,
 )
+from telethon.events import MessageEdited, NewMessage
 from telethon.utils import get_display_name
 
 from .. import DUAL_HNDLR, DUAL_MODE, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
@@ -253,10 +253,20 @@ def ult_cmd(pattern=None, manager=False, **kwargs):
                 except Exception as er:
                     LOGS.info(f"• MANAGER [{e.chat_id}]:")
                     LOGS.exception(er)
+
             if pattern:
                 cmd = compile_pattern(pattern, "/")
-            asst.add_event_handler(manager_cmd, NewMessage(pattern=cmd, forwards=False, incoming=True, func=func, chats=chats,
-                blacklist_chats=blacklist_chats))
+            asst.add_event_handler(
+                manager_cmd,
+                NewMessage(
+                    pattern=cmd,
+                    forwards=False,
+                    incoming=True,
+                    func=func,
+                    chats=chats,
+                    blacklist_chats=blacklist_chats,
+                ),
+            )
         if DUAL_MODE and not (manager and DUAL_HNDLR == "/"):
             if pattern:
                 cmd = compile_pattern(pattern, DUAL_HNDLR)
