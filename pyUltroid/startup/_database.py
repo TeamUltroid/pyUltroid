@@ -57,6 +57,10 @@ class DetaDB:
     def run(self):
         return self.loop.run_until_complete
 
+    @property
+    def name(self):
+        return "DetaDB"
+
     def keys(self):
         return [a["key"] for a in self.run(self.db.fetch()).items]
 
@@ -168,7 +172,9 @@ class RedisConnection(Redis):
             del self._cache[key]
         return bool(self.delete(str(key)))
 
-
+    @property
+    def name:
+        return "Redis"
 # --------------------------------------------------------------------------------------------- #
 
 
