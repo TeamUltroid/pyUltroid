@@ -58,7 +58,7 @@ def compile_pattern(data, hndlr):
     return re.compile(hndlr + data)
 
 
-def ult_cmd(pattern=None, **kwargs):
+def ult_cmd(pattern=None, manager=False, **kwargs):
     groups_only = kwargs.get("groups_only", False)
     admins_only = kwargs.get("admins_only", False)
     fullsudo = kwargs.get("fullsudo", False)
@@ -237,6 +237,10 @@ def ult_cmd(pattern=None, **kwargs):
                     blacklist_chats=blacklist_chats,
                 ),
             )
+        if manager and MANAGER:
+            async def manager_cmd(ult):
+                # [WIP]
+                pass
         if DUAL_MODE:
             cmd = compile_pattern(pattern, DUAL_HNDLR)
             asst.add_event_handler(
