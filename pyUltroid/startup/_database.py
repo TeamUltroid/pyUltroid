@@ -172,6 +172,7 @@ class RedisConnection(Redis):
             self._cache.update({keys: self.get_key(keys)})
 
     def set_key(self, key, value):
+        value = str(value)
         try:
             value = eval(value)
         except BaseException:
