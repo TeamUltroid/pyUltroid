@@ -355,7 +355,7 @@ async def plug(plugin_channels):
 async def ready():
     from .. import asst, udB, ultroid_bot
 
-    chat_id = int(udB.get_key("LOG_CHANNEL"))
+    chat_id = udB.get_key("LOG_CHANNEL")
     spam_sent = None
     if not udB.get_key("INIT_DEPLOY"):  # Detailed Message at Initial Deploy
         MSG = """🎇 **Thanks for Deploying Ultroid Userbot!**
