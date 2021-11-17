@@ -5,7 +5,7 @@ since, it will be a breaking change
 """
 
 import asyncio
-import os
+import os, ast
 
 from redis import Redis
 
@@ -52,7 +52,7 @@ class DetaDB:
                 if key.get("value"):
                     new = key["value"]
                     try:
-                        new = eval(new)
+                        new = ast.literal_eval(new)
                     except BaseException:
                         pass
                     self._cache.update({key["key"]: new})
