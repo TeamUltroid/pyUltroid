@@ -176,8 +176,6 @@ class RedisConnection(Redis):
             value = eval(value)
         except BaseException:
             pass
-        if isinstance(value, list) or isinstance(value, dict):
-            del self._cache[key]
         self._cache.update({key: value})
         return self.set(str(key), str(value))
 
