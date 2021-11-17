@@ -284,11 +284,16 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 ),
             )
         file = Path(inspect.stack()[1].filename)
-        if True:  # "addons/" in str(file):
+        if "addons/" in str(file):
             if LOADED.get(file.stem):
                 LOADED[file.stem].append(wrapp)
             else:
                 LOADED.update({file.stem: [wrapp]})
+        if pattern:
+            try:
+                LIST[file.stem].append(pattern)
+            except BaseException:
+                LIST.update({file.stem: [pattern]})
         return wrapp
 
     return decor
