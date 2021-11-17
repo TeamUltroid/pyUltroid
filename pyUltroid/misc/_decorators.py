@@ -35,7 +35,7 @@ from telethon.utils import get_display_name
 
 from .. import DUAL_HNDLR, DUAL_MODE, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
 from ..dB import DEVLIST
-from ..dB._core import LOADED
+from ..dB._core import LOADED, LIST
 from ..functions.admins import admin_check
 from ..functions.helper import bash
 from ..functions.helper import time_formatter as tf
