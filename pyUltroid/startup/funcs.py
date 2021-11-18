@@ -322,16 +322,9 @@ async def plug(plugin_channels):
         with open("addons/__init__.py", "w") as f:
             f.write("from plugins import *\n\nbot = ultroid_bot")
     LOGS.info("• Loading Plugins from Plugin Channel(s) •")
-    for Plug_channel in str(plugin_channels).split():
-        LOGS.info(f"{'•'*4} {Plug_channel}")
+    for chat in plugin_channels:
+        LOGS.info(f"{'•'*4} {chat}")
         try:
-            if Plug_channel.startswith("@"):
-                chat = Plug_channel
-            else:
-                try:
-                    chat = int(Plug_channel)
-                except BaseException:
-                    return
             async for x in ultroid_bot.iter_messages(
                 chat, search=".py", filter=InputMessagesFilterDocument, wait_time=10
             ):
