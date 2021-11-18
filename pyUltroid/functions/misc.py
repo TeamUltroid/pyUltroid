@@ -327,7 +327,7 @@ async def create_instagram_client(event):
     password = udB.get_key("INSTA_PASSWORD")
     if not (username and password):
         return
-    settings = eval(udB.get_key("INSTA_SET")) if udB.get_key("INSTA_SET") else {}
+    settings = udB.get_key("INSTA_SET") or {}
     cl = Client(settings)
     cl.challenge_code_handler = get_insta_code
     try:
