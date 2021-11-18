@@ -34,7 +34,7 @@ class Loader:
         for plugin in files:
             plugin = plugin.replace(".py", "")
             if func == import_module:
-                plugin = plugin.replace("/", ".")
+                plugin = plugin.replace("/", ".").replace("\\", ".")
             else:
                 plugin = plugin.split("/")[-1]
             try:
