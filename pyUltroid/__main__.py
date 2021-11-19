@@ -36,7 +36,9 @@ ultroid_bot.run_in_loop(autopilot())
 
 pmbot = udB.get_key("PMBOT")
 manager = udB.get_key("MANAGER")
-addons = udB.get_key("ADDONS") or Var.ADDONS
+addons = udB.get_key("ADDONS")
+if addons is None:
+    addons = Var.ADDONS
 vcbot = udB.get_key("VCBOT") or Var.VCBOT
 
 # Railway dont allow Music Bots
