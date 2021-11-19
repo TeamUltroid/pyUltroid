@@ -84,7 +84,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     Loader(path="assistant").load(log=False, exclude=["pmbot"])
 
     # for addons
-    if addons:
+    if addons is not False:
         url = udB.get_key("ADDONS_URL")
         if url:
             os.system("git clone -q {} addons".format(url))
