@@ -34,7 +34,8 @@ async def get_user_id(ids, client=ultroid_bot):
 
 async def get_uinfo(e):
     user, data = None, None
-    if reply := await e.get_reply_message():
+    reply = await e.get_reply_message()
+    if reply:
         user = await e.client.get_entity(reply.sender_id)
         data = e.pattern_match.group(1)
     else:
