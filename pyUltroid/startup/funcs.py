@@ -48,21 +48,26 @@ def startup_stuff():
         if not os.path.isdir(x):
             os.mkdir(x)
 
-    if CT := udB.get_key("CUSTOM_THUMBNAIL"):
+    CT= udB.get_key("CUSTOM_THUMBNAIL")
+    if CT:
         urlretrieve(CT, "resources/extras/ultroid.jpg")
 
-    if GT := udB.get_key("GDRIVE_AUTH_TOKEN"):
+    GT= udB.get_key("GDRIVE_AUTH_TOKEN")
+    if GT:
         with open("resources/auth/gdrive_creds.json", "w") as t_file:
             t_file.write(GT)
 
     if udB.get_key("AUTH_TOKEN"):
         udB.del_key("AUTH_TOKEN")
 
-    if (MM := udB.get_key("MEGA_MAIL")) and (MP := udB.get_key("MEGA_PASS")):
+    MM = udB.get_key("MEGA_MAIL")
+    MP = udB.get_key("MEGA_PASS")
+    if MM and MP:
         with open(".megarc", "w") as mega:
             mega.write(f"[Login]\nUsername = {MM}\nPassword = {MP}")
 
-    if TZ := udB.get_key("TIMEZONE"):
+    TZ = udB.get_key("TIMEZONE")
+    if TZ:
         try:
             timezone(TZ)
             os.environ["TZ"] = TZ
