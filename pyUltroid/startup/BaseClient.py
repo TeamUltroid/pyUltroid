@@ -105,8 +105,11 @@ class UltroidClient(TelegramClient):
         start_time = time.time()
         path = Path(file)
         filename = kwargs.get("filename", path.name)
-        # If None, progress bar won't be shown
-        event = kwargs.get("event", None)
+        # Set to True and pass event to show progress bar.
+        show_progress = kwargs.get("show_progress", False)
+        event = None
+        if show_progress:
+            event = kwargs["event"]
         # Whether to use cached file for uploading or not
         use_cache = kwargs.get("use_cache", True)
         # Delete original file after uploading
@@ -139,7 +142,7 @@ class UltroidClient(TelegramClient):
                             progress(completed, total, event, start_time, message)
                         )
                     )
-                    if event
+                    if show_progress
                     else None,
                 )
         cache = {
@@ -157,8 +160,14 @@ class UltroidClient(TelegramClient):
             os.remove(file)
         return raw_file, time.time() - start_time
 
-    async def fast_downloader(self, file, filename, event, message):
+    async def fast_downloader(self, file, filename, **kwargs):
         """Download files in a faster way"""
+        # Set to True and pass event to show progress bar.
+        show_progress = kwargs.get("show_progress", False)
+        event = None
+        if show_progress:
+            event = kwargs["event"]
+        message = kwargs.get("message", f"Uploading {filename}...")
         from pyUltroid.functions.FastTelethon import download_file
         from pyUltroid.functions.helper import progress
 
@@ -170,18 +179,15 @@ class UltroidClient(TelegramClient):
                     client=self,
                     location=file,
                     out=f,
-                    progress_callback=lambda completed, total: self.loop.create_task(
-                        progress(
-                            completed,
-                            total,
-                            event,
-                            start_time,
-                            message,
-                        ),
-                    ),
+                    progress_callback=(
+                        lambda completed, total: self.loop.create_task(
+                            progress(completed, total, event, start_time, message)
+                        )
+                    )
+                    if show_progress
+                    else None,
                 )
-        downloaded_in = time.time() - start_time
-        return raw_file, downloaded_in
+        return raw_file, time.time() - start_time
 
     def run_in_loop(self, function):
         """run inside asyncio loop"""
