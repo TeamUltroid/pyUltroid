@@ -31,7 +31,8 @@ class _SudoManager:
             return self.sudos
         db = self._init_db()
 
-        if SUDOS := db.get_key("SUDOS"):
+        SUDOS = db.get_key("SUDOS")
+        if SUDOS:
             self.sudos = SUDOS
         return self.sudos
 
