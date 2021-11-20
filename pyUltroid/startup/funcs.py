@@ -48,11 +48,11 @@ def startup_stuff():
         if not os.path.isdir(x):
             os.mkdir(x)
 
-    CT= udB.get_key("CUSTOM_THUMBNAIL")
+    CT = udB.get_key("CUSTOM_THUMBNAIL")
     if CT:
         urlretrieve(CT, "resources/extras/ultroid.jpg")
 
-    GT= udB.get_key("GDRIVE_AUTH_TOKEN")
+    GT = udB.get_key("GDRIVE_AUTH_TOKEN")
     if GT:
         with open("resources/auth/gdrive_creds.json", "w") as t_file:
             t_file.write(GT)
