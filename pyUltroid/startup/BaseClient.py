@@ -107,7 +107,6 @@ class UltroidClient(TelegramClient):
         filename = kwargs.get("filename", path.name)
         # Set to True and pass event to show progress bar.
         show_progress = kwargs.get("show_progress", False)
-        event = None
         if show_progress:
             event = kwargs["event"]
         # Whether to use cached file for uploading or not
@@ -117,7 +116,8 @@ class UltroidClient(TelegramClient):
         message = kwargs.get("message", f"Uploading {filename}...")
         by_bot = self._bot
         size = os.path.getsize(file)
-
+        if size < 5*2**20: # Don't show progress bar when file size is less than 5MB.
+            show_progress = False
         if use_cache and self._cache and self._cache.get("upload_cache"):
             for files in self._cache["upload_cache"]:
                 if (
@@ -129,7 +129,6 @@ class UltroidClient(TelegramClient):
                     return files["raw_file"], time.time() - start_time
         from pyUltroid.functions.FastTelethon import upload_file
         from pyUltroid.functions.helper import progress
-
         raw_file = None
         while not raw_file:
             with open(file, "rb") as f:
@@ -164,13 +163,13 @@ class UltroidClient(TelegramClient):
         """Download files in a faster way"""
         # Set to True and pass event to show progress bar.
         show_progress = kwargs.get("show_progress", False)
-        event = None
+        message = kwargs.get("message", f"Uploading {filename}...")
         if show_progress:
             event = kwargs["event"]
-        message = kwargs.get("message", f"Uploading {filename}...")
+        if file.size < 10*2**20: # Don't show progress bar when file size is less than 10MB.
+            show_progress = False
         from pyUltroid.functions.FastTelethon import download_file
         from pyUltroid.functions.helper import progress
-
         start_time = time.time()
         raw_file = None
         while not raw_file:
