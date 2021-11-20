@@ -197,7 +197,11 @@ def gen_chlog(repo, diff):
 def updater():
     from .. import LOGS
 
-    off_repo = Repo().remotes[0].config_reader.get("url").replace(".git", "")
+    try:
+        off_repo = Repo().remotes[0].config_reader.get("url").replace(".git", "")
+    except Exception as er:
+        LOGS.exception(er)
+        return
     try:
         repo = Repo()
     except NoSuchPathError as error:
