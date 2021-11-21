@@ -93,16 +93,16 @@ def get_data(type, data):
             _size = m["filesize"]
             _ext = "mp3"
             if _id == 249:
-                f"[MP3 64KBPS]"
+                _quality = f"[MP3 64KBPS]"
             elif _id == 250:
-                f"[MP3 128KBPS]"
+                _quality = f"[MP3 128KBPS]"
             elif _id == 140:
                 _ext = "m4a"
-                f"[M4A 256KBPS]"
+                _quality = f"[M4A 256KBPS]"
             elif _id == 251:
                 _ext = "opus"
-                f"[OPUS 320KBPS]"
-            _audio.update({"id": _id, "quality": quality, "size": _size, "ext": _ext})
+                _quality = f"[OPUS 320KBPS]"
+            _audio.update({"id": _id, "quality": _quality, "size": _size, "ext": _ext})
             audio.append(_audio)
         return audio
     else:
