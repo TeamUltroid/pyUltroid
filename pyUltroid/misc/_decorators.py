@@ -44,7 +44,6 @@ from ..version import ultroid_version as ult_ver
 from . import SUDO_M, owner_and_sudos
 from ._wrappers import eod
 
-hndlr = "\\" + HNDLR
 MANAGER = udB.get_key("MANAGER")
 TAKE_EDITS = udB.get_key("TAKE_EDITS")
 black_list_chats = udB.get_key("BLACKLIST_CHATS")
@@ -56,9 +55,8 @@ def compile_pattern(data, hndlr):
         data = data[1:]
     if data.startswith("."):
         data = data[1:]
-    if not hndlr:
-        pat = f"\\{HNDLR}{data}|\\{SUDO_HNDLR}{data}"
-        return re.compile(pat)
+    if hndlr == "\\ ": # No Hndlr Feature
+        return re.compile("^" + data)
     return re.compile(hndlr + data)
 
 
@@ -290,9 +288,9 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
             else:
                 LOADED.update({file.stem: [wrapp]})
         if pattern:
-            try:
+            if LIST.get(file.stem):
                 LIST[file.stem].append(pattern)
-            except BaseException:
+            else:
                 LIST.update({file.stem: [pattern]})
         return wrapp
 
