@@ -84,20 +84,28 @@ async def download_yt(event, link, ytd):
 # @New-Dev0 @buddhhu @1danish-00
 
 
-def get_data(types, data):
-    audio = []
-    video = []
-    try:
+def get_data(type, data):
+    if type = "audio":
+        audio = []
         for m in data["formats"]:
-            id_ = m["format_id"]
-            note = m["format_note"]
-            size = m["filesize"]
-            j = f"{id_} {note} {humanbytes(size)}"
-            if id == "251":
-                a_size = m["filesize"]
-            if note == "tiny":
-                audio.append(j)
-            else:
+                _audio = {}
+                _id = int(m["format_id"])
+                _size = m["filesize"]
+                _ext = "mp3"
+                if _id == 249:
+                    _quality = f'[MP3 64KBPS]'
+                elif _id == 250:
+                    _quality = f'[MP3 128KBPS]'
+                elif _id == 140:
+                    _ext = "m4a"
+                    _quality = f'[M4A 256KBPS]'
+                elif _id == 251:
+                    _ext = "opus"
+                    _quality = f'[OPUS 320KBPS]'
+                _audio.update({"id": _id, "quality": quality, "size": _size, "ext": _ext})
+                audio.append(_audio)
+        return audio
+     else:
                 if m["acodec"] == "none":
                     note = f"{m['width']}x{m['height']}p"
                     str(m["format_id"]) + "+" + str(audio[-1].split()[0])
