@@ -26,7 +26,6 @@ if udB.ping():
 
 BOT_MODE = udB.get_key("BOTMODE")
 DUAL_MODE = udB.get_key("DUAL_MODE")
-have_brain = udB.get_key("I_HAVE_BRAIN") or Var.I_HAVE_BRAIN
 
 if BOT_MODE:
     if DUAL_MODE:
