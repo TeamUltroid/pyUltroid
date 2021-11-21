@@ -85,7 +85,7 @@ async def download_yt(event, link, ytd):
 
 
 def get_data(type, data):
-    if type = "audio":
+    if type == "audio":
         audio = []
         for m in data["formats"]:
                 _audio = {}
