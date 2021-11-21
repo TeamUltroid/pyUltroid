@@ -88,7 +88,7 @@ def get_data(type, data):
     if type == "audio":
         audio = []
         for m in data["formats"]:
-            if m["acodec"] is not "none":
+            if m["vcodec"] is "none":
                 _audio = {}
                 _id = int(m["format_id"])
                 _size = m["filesize"]
