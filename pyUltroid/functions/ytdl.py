@@ -105,12 +105,12 @@ def get_data(type, data):
                 _audio.update({"id": _id, "quality": quality, "size": _size, "ext": _ext})
                 audio.append(_audio)
         return audio
-     else:
-                if m["acodec"] == "none":
-                    note = f"{m['width']}x{m['height']}p"
-                    str(m["format_id"]) + "+" + str(audio[-1].split()[0])
-                    j = f"{id_} {note} {humanbytes(size+a_size)}"
-                video.append(j)
+    else:
+        if m["acodec"] == "none":
+            note = f"{m['width']}x{m['height']}p"
+            str(m["format_id"]) + "+" + str(audio[-1].split()[0])
+            j = f"{id_} {note} {humanbytes(size+a_size)}"
+        video.append(j)
     except BaseException:
         pass
     if types == "audio":
