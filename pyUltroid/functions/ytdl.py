@@ -88,24 +88,23 @@ def get_data(type, data):
     if type == "audio":
         audio = []
         for m in data["formats"]:
-            if m["acodec"] is "none":
-                return
-            _audio = {}
-            _id = int(m["format_id"])
-            _size = m["filesize"]
-            _ext = "mp3"
-            if _id == 249:
-                _quality = f"[MP3 64KBPS]"
-            elif _id == 250:
-                _quality = f"[MP3 128KBPS]"
-            elif _id == 140:
-                _ext = "m4a"
-                _quality = f"[M4A 256KBPS]"
-            elif _id == 251:
-                _ext = "opus"
-                _quality = f"[OPUS 320KBPS]"
-            _audio.update({"id": _id, "quality": _quality, "size": _size, "ext": _ext})
-            audio.append(_audio)
+            if m["acodec"] is not "none":
+                _audio = {}
+                _id = int(m["format_id"])
+                _size = m["filesize"]
+                _ext = "mp3"
+                if _id == 249:
+                    _quality = f"[MP3 64KBPS]"
+                elif _id == 250:
+                    _quality = f"[MP3 128KBPS]"
+                elif _id == 140:
+                    _ext = "m4a"
+                    _quality = f"[M4A 256KBPS]"
+                elif _id == 251:
+                    _ext = "opus"
+                    _quality = f"[OPUS 320KBPS]"
+                _audio.update({"id": _id, "quality": _quality, "size": _size, "ext": _ext})
+                audio.append(_audio)
         return audio
     else:
         if m["acodec"] == "none":
