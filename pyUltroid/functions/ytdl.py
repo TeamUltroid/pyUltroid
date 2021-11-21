@@ -103,7 +103,9 @@ def get_data(type, data):
                 elif _id == 251:
                     _ext = "opus"
                     _quality = f"[OPUS 320KBPS]"
-                _audio.update({"id": _id, "quality": _quality, "size": _size, "ext": _ext})
+                _audio.update(
+                    {"id": _id, "quality": _quality, "size": _size, "ext": _ext}
+                )
                 audio.append(_audio)
         return audio
     else:
