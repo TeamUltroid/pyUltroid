@@ -35,6 +35,3 @@ class Var:
     DETA_KEY = config("DETA_KEY", default=None)
     # for future
     MULTI_SESSIONS = config("MULTI_SESSIONS", default=None)
-
-    # For Talented People
-    I_HAVE_BRAIN = config("I_HAVE_BRAIN", default=False, cast=bool)
