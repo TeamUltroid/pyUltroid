@@ -111,13 +111,6 @@ def get_data(type, data):
             str(m["format_id"]) + "+" + str(audio[-1].split()[0])
             j = f"{id_} {note} {humanbytes(size+a_size)}"
         video.append(j)
-    except BaseException:
-        pass
-    if types == "audio":
-        return audio
-    if types == "video":
-        return video
-    return []
 
 
 def get_buttons(typee, listt):
