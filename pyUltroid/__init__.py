@@ -48,7 +48,9 @@ else:
         udB.set_key("BOT_TOKEN", Var.BOT_TOKEN)
     if not udB.get_key("BOT_TOKEN"):
         LOGS.info('"BOT_TOKEN" not Found! Please add it, in order to use "BOTMODE"')
-        import sys; sys.exit()
+        import sys
+
+        sys.exit()
 
 asst = UltroidClient(None, bot_token=udB.get_key("BOT_TOKEN"), udB=udB)
 

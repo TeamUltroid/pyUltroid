@@ -184,10 +184,14 @@ class RedisConnection(Redis):
             port = int(spli_[-1])
             if host.startswith("http"):
                 logger.error("Your REDIS_URI should not start with http !")
-                import sys; sys.exit()
+                import sys
+
+                sys.exit()
         elif not host or not port:
             logger.error("Port Number not found")
-            import sys; sys.exit()
+            import sys
+
+            sys.exit()
         kwargs["host"] = host
         kwargs["password"] = password
         kwargs["port"] = port

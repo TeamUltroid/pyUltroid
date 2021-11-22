@@ -5,7 +5,6 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import sys
 import time
 from re import findall
 
@@ -73,7 +72,9 @@ class UltroidClient(TelegramClient):
             await self.start(**kwargs)
         except ApiIdInvalidError:
             self.logger.error("API ID and API_HASH combination does not match!")
-            import sys; sys.exit()
+            import sys
+
+            sys.exit()
         except (AuthKeyDuplicatedError, EOFError):
             self.logger.error("String session expired. Create new!")
             sys.exit()
@@ -84,7 +85,9 @@ class UltroidClient(TelegramClient):
             self.logger.error(
                 "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
-            import sys; sys.exit()
+            import sys
+
+            sys.exit()
         # Save some stuff for later use...
         myself = self.udB.get_key("OWNER_ID")
         self.me = await self.get_me()

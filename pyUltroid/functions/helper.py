@@ -487,7 +487,9 @@ async def shutdown(ult):
                 "`HEROKU_API` and `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars."
             )
     else:
-        import sys; sys.exit(1)
+        import sys
+
+        sys.exit(1)
 
 
 async def heroku_logs(event):

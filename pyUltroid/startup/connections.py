@@ -19,11 +19,15 @@ def session_file(logger):
     if Var.SESSION:
         if len(Var.SESSION.strip()) != 353:
             logger.exception("Wrong string session. Copy paste correctly!")
-            import sys; sys.exit()
+            import sys
+
+            sys.exit()
         return StringSession(Var.SESSION)
     else:
         logger.exception("No String Session found. Quitting...")
-        import sys; sys.exit()
+        import sys
+
+        sys.exit()
 
 
 def vc_connection(udB, ultroid_bot):
