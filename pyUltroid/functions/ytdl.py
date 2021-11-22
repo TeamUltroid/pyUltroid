@@ -14,7 +14,7 @@ from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
-from .helper import download_file, humanbytes, uploader
+from .helper import download_file, uploader
 from .tools import async_searcher
 
 
@@ -121,7 +121,13 @@ def get_data(type, data):
                 if vid["ext"] == "webm":
                     _ext = "mkv"
                 _video.update(
-                    {"id": _id, "quality": _quality, "size": _size, "ext": _ext, "audio_quality": _audio_quality}
+                    {
+                        "id": _id,
+                        "quality": _quality,
+                        "size": _size,
+                        "ext": _ext,
+                        "audio_quality": _audio_quality,
+                    }
                 )
                 video.append(_video)
         return video
