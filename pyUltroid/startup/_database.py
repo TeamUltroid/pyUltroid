@@ -66,6 +66,22 @@ class MongoDB:
     def keys(self):
         return self.db.list_collection_names()
 
+    def set_key(self, key, value):
+        if key in self.db.keys():
+            self.cache.update({key: value})
+            self.db.replace_one({"_id": key}, {"value": value})
+        else:
+            self.db.insert_one({"_id": key, "value": value})
+        self.cache.update({key: value})
+
+    def del_key(self, key):
+        if key in self.db.keys():
+            try:
+                del self.cache[key]
+            except KeyError:
+                pass
+            return self.db.delete_one({"_id": key})
+
 
 # --------------------------------------------------------------------------------------------- #
 
