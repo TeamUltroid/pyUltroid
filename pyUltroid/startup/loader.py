@@ -94,6 +94,9 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
             )
         elif os.path.exists("addons/.git"):
             os.system("cd addons && git pull -q && cd ..")
+
+        if not os.path.exists("addons"):
+            os.system("git clone -q https://github.com/TeamUltroid/UltroidAddons.git addons")
         if os.path.exists("addons/addons.txt"):
             # generally addons req already there so it won't take much time
             os.system("pip3 install --no-cache-dir -q -r ./addons/addons.txt")
