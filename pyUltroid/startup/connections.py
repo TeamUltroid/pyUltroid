@@ -18,16 +18,15 @@ from . import *
 
 def session_file(logger):
     if len(sys.argv) > 1:
-        return None
+        return
     if Var.SESSION:
         if len(Var.SESSION.strip()) != 353:
             logger.exception("Wrong string session. Copy paste correctly!")
             exit()
-        _session = StringSession(Var.SESSION)
+        return StringSession(Var.SESSION)
     else:
         logger.exception("No String Session found. Quitting...")
         exit()
-    return _session
 
 
 def vc_connection(udB, ultroid_bot):
