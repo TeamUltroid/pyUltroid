@@ -89,8 +89,12 @@ class MongoDB:
         if key in self.cache:
             return self.cache[key]
         if key in self.keys():
-            value = self.db[key].find()[0]["value"] if len(self.db[key].find()) > 0 else None
-            if value != None:
+            value = (
+                self.db[key].find()[0]["value"]
+                if len(self.db[key].find()) > 0
+                else None
+            )
+            if value is not None:
                 self.cache.update({key: value})
                 return value
         return None
