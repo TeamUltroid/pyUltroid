@@ -84,7 +84,7 @@ async def download_yt(event, link, ytd):
 # @New-Dev0 @buddhhu @1danish-00
 
 
-def get_data(type, data):
+def get_formats(type, data):
     if type == "audio":
         audio = []
         for aud in data["formats"]:
