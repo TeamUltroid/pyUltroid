@@ -22,7 +22,6 @@ except ImportError:
 
 try:
     from pymongo import MongoClient
-    from pymongo.errors import DuplicateKeyError
 except ImportError:
     MongoClient = None
 
@@ -94,7 +93,6 @@ class MongoDB:
             self.cache.update({key: value})
             return value
         return None
-            
 
 
 # --------------------------------------------------------------------------------------------- #
