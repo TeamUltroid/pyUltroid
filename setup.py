@@ -3,11 +3,12 @@ import re
 import setuptools
 
 requirements = [
-    "redis",
+    "redis-py",
     "python-decouple==3.3",
     "python-dotenv==0.15.0",
     "aiofiles",
-    "aiohttp",
+    "aiohttp[speedups]",
+    "hiredis"
 ]
 
 
