@@ -108,7 +108,7 @@ async def autobot():
         LOGS.info(
             "Please make a Bot from @BotFather and add it's token in BOT_TOKEN, as an env var and restart me."
         )
-        exit(1)
+        import sys; sys.exit(1)
     await ultroid_bot.send_message(bf, name)
     await asyncio.sleep(1)
     isdone = (await ultroid_bot.get_messages(bf, limit=1))[0].text
@@ -120,7 +120,7 @@ async def autobot():
             LOGS.info(
                 "Please make a Bot from @BotFather and add it's token in BOT_TOKEN, as an env var and restart me."
             )
-            exit(1)
+            import sys; sys.exit(1)
     await ultroid_bot.send_message(bf, username)
     await asyncio.sleep(1)
     isdone = (await ultroid_bot.get_messages(bf, limit=1))[0].text
@@ -145,7 +145,7 @@ async def autobot():
                 "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
             )
 
-            exit(1)
+            import sys; sys.exit(1)
     elif isdone.startswith("Done!"):
         token = isdone.split("`")[1]
         udB.set_key("BOT_TOKEN", token)
@@ -160,7 +160,7 @@ async def autobot():
             "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
         )
 
-        exit(1)
+        import sys; sys.exit(1)
 
 
 async def autopilot():
@@ -179,7 +179,7 @@ async def autopilot():
     if not channel:
         if ultroid_bot._bot:
             LOGS.info("'LOG_CHANNEL' not found! Add it in order to use 'BOTMODE'")
-            exit()
+            import sys; sys.exit()
         LOGS.info("Creating a Log Channel for You!")
         try:
             r = await ultroid_bot(
@@ -193,13 +193,13 @@ async def autopilot():
             LOGS.info(
                 "You Are in Too Many Channels & Groups , Leave some And Restart The Bot"
             )
-            exit(1)
+            import sys; sys.exit(1)
         except BaseException as er:
             LOGS.info(er)
             LOGS.info(
                 "Something Went Wrong , Create A Group and set its id on config var LOG_CHANNEL."
             )
-            exit(1)
+            import sys; sys.exit(1)
         chat = r.chats[0]
         channel = get_peer_id(chat)
         udB.set_key("LOG_CHANNEL", str(channel))
@@ -400,7 +400,7 @@ async def ready():
         LOGS.info(
             "You are Banned from @TheUltroid for some reason. Contact any dev if you think there is some mistake..."
         )
-        exit()
+        import sys; sys.exit()
     except Exception as er:
         LOGS.exception(er)
 

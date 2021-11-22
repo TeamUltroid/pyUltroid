@@ -142,7 +142,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                         ),
                     ],
                 )
-                exit()
+                import sys; sys.exit()
             except events.StopPropagation:
                 raise events.StopPropagation
             except KeyboardInterrupt:
