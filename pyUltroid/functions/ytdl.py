@@ -104,7 +104,13 @@ def get_formats(type, data):
                     _ext = "opus"
                     _quality = f"320KBPS"
                 _audio.update(
-                    {"type": "audio", "id": str(_id), "quality": _quality, "size": _size, "ext": _ext}
+                    {
+                        "type": "audio",
+                        "id": str(_id),
+                        "quality": _quality,
+                        "size": _size,
+                        "ext": _ext,
+                    }
                 )
                 audio.append(_audio)
         return audio
