@@ -3,7 +3,7 @@ import re
 import setuptools
 
 requirements = [
-    "redis-py",
+    "redis",
     "python-decouple==3.3",
     "python-dotenv==0.15.0",
     "aiofiles",
