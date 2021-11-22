@@ -87,11 +87,11 @@ async def download_yt(event, link, ytd):
 def get_data(type, data):
     if type == "audio":
         audio = []
-        for m in data["formats"]:
-            if m["vcodec"] is "none":
+        for aud in data["formats"]:
+            if aud["vcodec"] is "none":
                 _audio = {}
-                _id = int(m["format_id"])
-                _size = m["filesize"]
+                _id = int(aud["format_id"])
+                _size = aud["filesize"]
                 _ext = "mp3"
                 if _id == 249:
                     _quality = f"[MP3 64KBPS]"
@@ -108,12 +108,24 @@ def get_data(type, data):
                 )
                 audio.append(_audio)
         return audio
-    else:
-        if m["acodec"] == "none":
-            note = f"{m['width']}x{m['height']}p"
-            str(m["format_id"]) + "+" + str(audio[-1].split()[0])
-            j = f"{id_} {note} {humanbytes(size+a_size)}"
-        video.append(j)
+    elif type == "video":
+        video = []
+        for vid in data["formats"]:
+            if vid["vcodec"] is not "none":
+                _video = {}
+                _id = int(vid["format_id"])
+                _quality = vid["format_note"]
+                _size = vid["filesize"]
+                _audio_quality = 251
+                _ext = "mp4"
+                if vid["ext"] == "webm":
+                    _ext = "mkv"
+                _video.update(
+                    {"id": _id, "quality": _quality, "size": _size, "ext": _ext, "audio_quality": _audio_quality}
+                )
+                video.append(_video)
+        return video
+    return []
 
 
 def get_buttons(typee, listt):
