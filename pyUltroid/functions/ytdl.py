@@ -94,17 +94,17 @@ def get_formats(type, data):
                 _size = aud["filesize"]
                 _ext = "mp3"
                 if _id == 249:
-                    _quality = f"[MP3 64KBPS]"
+                    _quality = f"64KBPS"
                 elif _id == 250:
-                    _quality = f"[MP3 128KBPS]"
+                    _quality = f"128KBPS"
                 elif _id == 140:
                     _ext = "m4a"
-                    _quality = f"[M4A 256KBPS]"
+                    _quality = f"256KBPS"
                 elif _id == 251:
                     _ext = "opus"
-                    _quality = f"[OPUS 320KBPS]"
+                    _quality = f"320KBPS"
                 _audio.update(
-                    {"id": _id, "quality": _quality, "size": _size, "ext": _ext}
+                    {"type": "audio", "id": str(_id), "quality": _quality, "size": _size, "ext": _ext}
                 )
                 audio.append(_audio)
         return audio
@@ -116,17 +116,16 @@ def get_formats(type, data):
                 _id = int(vid["format_id"])
                 _quality = vid["format_note"]
                 _size = vid["filesize"]
-                _audio_quality = 251
                 _ext = "mp4"
                 if vid["ext"] == "webm":
                     _ext = "mkv"
                 _video.update(
                     {
-                        "id": _id,
+                        "type": "video",
+                        "id": str(_id) + "+251",
                         "quality": _quality,
                         "size": _size,
                         "ext": _ext,
-                        "audio_quality": _audio_quality,
                     }
                 )
                 video.append(_video)
@@ -137,12 +136,8 @@ def get_formats(type, data):
 def get_buttons(typee, listt):
     butts = [
         Button.inline(
-            str(x.split(" ", maxsplit=2)[1:])
-            .replace("'", "")
-            .replace("[", "")
-            .replace("]", "")
-            .replace(",", ""),
-            data=typee + x.split(" ", maxsplit=2)[0],
+            text=f'[{x["quality"]} {x["ext"]}]',
+            data=f"{x['type']}_{x['id']}",
         )
         for x in listt
     ]
