@@ -21,7 +21,6 @@ from pyUltroid.misc._decorators import ultroid_cmd
 from pyUltroid.misc._wrappers import eod, eor
 
 from .. import *
-from ..configs import Var
 from ..dB._core import LIST
 from . import CMD_HELP, SUDO_M  # ignore: pylint
 
