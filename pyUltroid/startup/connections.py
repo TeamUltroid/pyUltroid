@@ -19,9 +19,7 @@ from . import *
 def session_file(logger):
     if len(sys.argv) > 1:
         return None
-    if os.path.exists("client-session.session"):
-        _session = "client-session"
-    elif Var.SESSION:
+    if Var.SESSION:
         if len(Var.SESSION.strip()) != 353:
             logger.exception("Wrong string session. Copy paste correctly!")
             exit()
