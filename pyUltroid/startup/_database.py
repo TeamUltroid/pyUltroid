@@ -65,7 +65,7 @@ class MongoDB:
 
     def keys(self):
         return self.db.list_collection_names()
-    
+
 
 # --------------------------------------------------------------------------------------------- #
 
