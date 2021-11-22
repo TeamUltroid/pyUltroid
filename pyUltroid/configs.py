@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import sys
+
 from decouple import config
 from dotenv import find_dotenv, load_dotenv
 
@@ -15,10 +16,16 @@ load_dotenv(find_dotenv())
 class Var:
     # mandatory
     API_ID = sys.argv[1] if len(sys.argv) > 1 else config("API_ID", default=6, cast=int)
-    API_HASH = sys.argv[2] if len(sys.argv) > 2 else config("API_HASH", default="eb06d4abfb49dc3eeb1aeb98ae0f581e")
+    API_HASH = (
+        sys.argv[2]
+        if len(sys.argv) > 2
+        else config("API_HASH", default="eb06d4abfb49dc3eeb1aeb98ae0f581e")
+    )
     SESSION = sys.argv[3] if len(sys.argv) > 3 else config("SESSION", default=None)
     REDIS_URI = sys.argv[4] if len(sys.argv) > 4 else config("REDIS_URI", default=None)
-    REDIS_PASSWORD = sys.argv[5] if len(sys.argv) > 5 else config("REDIS_PASSWORD", default=None)
+    REDIS_PASSWORD = (
+        sys.argv[5] if len(sys.argv) > 5 else config("REDIS_PASSWORD", default=None)
+    )
     # extras
     BOT_TOKEN = config("BOT_TOKEN", default=None)
     LOG_CHANNEL = config("LOG_CHANNEL", default=0, cast=int)
