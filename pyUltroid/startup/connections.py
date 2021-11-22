@@ -6,7 +6,6 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-import sys
 
 from telethon import TelegramClient
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
@@ -17,8 +16,6 @@ from . import *
 
 
 def session_file(logger):
-    if len(sys.argv) > 1:
-        return
     if Var.SESSION:
         if len(Var.SESSION.strip()) != 353:
             logger.exception("Wrong string session. Copy paste correctly!")
