@@ -22,6 +22,7 @@ except ImportError:
 
 try:
     from pymongo import MongoClient
+    from pymongo.errors import DuplicateKeyError
 except ImportError:
     MongoClient = None
 
@@ -51,36 +52,49 @@ def get_data(self_, key):
 class MongoDB:
     def __init__(self, key):
         self.cache = {}
-        self.db = MongoClient(key).Ultroid
+        self.dB = MongoClient(key)
+        self.db = self.dB.UltroidDB
         for key in self.keys():
-            self.cache.update({key: self.db[key]["value"]})
+            self.cache.update({key: self.get_key(key)})
 
     @property
     def name(self):
         return "MongoDB"
 
     def ping(self):
-        if self.db.server_info():
+        if self.dB.server_info():
             return True
 
     def keys(self):
         return self.db.list_collection_names()
 
     def set_key(self, key, value):
-        if key in self.db.keys():
+        if key in self.keys():
             self.cache.update({key: value})
-            self.db.replace_one({"_id": key}, {"value": value})
+            self.db[key].replace_one({"_id": key}, {"value": value})
         else:
-            self.db.insert_one({"_id": key, "value": value})
+            self.db[key].insert_one({"_id": key, "value": value})
         self.cache.update({key: value})
+        return True
 
     def del_key(self, key):
-        if key in self.db.keys():
+        if key in self.keys():
             try:
                 del self.cache[key]
             except KeyError:
                 pass
-            return self.db.delete_one({"_id": key})
+            self.db[key].delete_one({"_id": key})
+            return True
+
+    def get_key(self, key):
+        if key in self.cache:
+            return self.cache[key]
+        if key in self.keys():
+            value = self.db[key].find()[0]["value"]
+            self.cache.update({key: value})
+            return value
+        return None
+            
 
 
 # --------------------------------------------------------------------------------------------- #
