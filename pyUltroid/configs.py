@@ -41,5 +41,7 @@ class Var:
     REDISUSER = config("REDISUSER", default=None)
     # for deta base
     DETA_KEY = config("DETA_KEY", default=None)
+    # for MONGODB users
+    MONGO_URI = config("MONGO_URI", default=None)
     # for future
     MULTI_SESSIONS = config("MULTI_SESSIONS", default=None)
