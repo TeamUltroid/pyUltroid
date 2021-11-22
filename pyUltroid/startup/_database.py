@@ -82,21 +82,17 @@ class MongoDB:
                 del self.cache[key]
             except KeyError:
                 pass
-            self.db[key].delete_one({"_id": key})
+            self.db.drop_collection(key)
             return True
 
     def get_key(self, key):
         if key in self.cache:
             return self.cache[key]
         if key in self.keys():
-            value = (
-                self.db[key].find()[0]["value"]
-                if len(self.db[key].find()) > 0
-                else None
-            )
-            if value is not None:
-                self.cache.update({key: value})
-                return value
+            value = self.db[key].find_one({"_id": key})
+            if value:
+                self.cache.update({key: value["value"]})
+                return value["value"]
         return None
 
 
