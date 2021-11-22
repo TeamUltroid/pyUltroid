@@ -5,7 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-
+import sys
 import time
 from re import findall
 
@@ -75,8 +75,9 @@ class UltroidClient(TelegramClient):
             self.logger.error("API ID and API_HASH combination does not match!")
             exit()
         except (AuthKeyDuplicatedError, EOFError):
+            self.logger.error(Var.SESSION)
             self.logger.error("String session expired. Create new!")
-            exit()
+            sys.exit()
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
             # And at Early Process, Its saved in Redis.
