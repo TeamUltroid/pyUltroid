@@ -8,7 +8,7 @@ requirements = [
     "python-dotenv==0.15.0",
     "aiofiles",
     "aiohttp[speedups]",
-    "hiredis"
+    "hiredis",
 ]
 
 
