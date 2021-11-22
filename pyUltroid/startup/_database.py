@@ -20,6 +20,11 @@ except ImportError:
     if Var.DETA_KEY:
         LOGS.error("'deta' not found!\nInstall deta to use deta base..")
 
+try:
+    from pymongo import MongoClient
+except ImportError:
+    MongoClient = None
+
 if Deta and Var.DETA_KEY:
     try:
         import nest_asyncio
@@ -39,6 +44,28 @@ def get_data(self_, key):
             pass
     return data
 
+
+# --------------------------------------------------------------------------------------------- #
+
+
+class MongoDB:
+    def __init__(self, key):
+        self.cache = {}
+        self.db = MongoClient(key).Ultroid
+        for key in self.keys():
+            self.cache.update({key: self.db[key]["value"]})
+
+    @property
+    def name(self):
+        return "MongoDB"
+
+    def ping(self):
+        if self.db.server_info():
+            return True
+
+    def keys(self):
+        return self.db.list_collection_names()
+    
 
 # --------------------------------------------------------------------------------------------- #
 
@@ -201,6 +228,8 @@ class RedisConnection(Redis):
 def UltroidDB():
     if Deta and Var.DETA_KEY:
         return DetaDB(Var.DETA_KEY)
+    elif MongoClient and Var.MONGO_URI:
+        return MongoDB(Var.MONGO_URI)
     from .. import HOSTED_ON
 
     return RedisConnection(
