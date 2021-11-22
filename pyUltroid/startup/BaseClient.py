@@ -75,7 +75,6 @@ class UltroidClient(TelegramClient):
             self.logger.error("API ID and API_HASH combination does not match!")
             exit()
         except (AuthKeyDuplicatedError, EOFError):
-            self.logger.error(Var.SESSION)
             self.logger.error("String session expired. Create new!")
             sys.exit()
         except AccessTokenExpiredError:
