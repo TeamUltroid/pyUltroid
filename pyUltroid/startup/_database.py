@@ -92,7 +92,7 @@ class MongoDB:
         if key in self._cache:
             return self._cache[key]
         if key in self.keys():
-            value = self.db[key].find_one({"_id": key})
+            value = self.get(key)
             if value:
                 self._cache.update({key: value["value"]})
                 try:
@@ -101,6 +101,10 @@ class MongoDB:
                     value = value["value"]
                 return value
         return None
+
+    def get(self, key):
+        if x := self.db[key].find_one({"_id": key}):
+            return x["value"]
 
     def flushall(self):
         self.dB.drop_database("UltroidDB")
