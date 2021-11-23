@@ -173,7 +173,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 ftext += "\n\n\n**Last 5 commits:**`\n"
 
                 stdout, stderr = await bash('git log --pretty=format:"%an: %s" -5')
-                result = str(stdout.strip()) + str(stderr.strip())
+                result = stdout + stderr
 
                 ftext += result + "`"
 
@@ -252,7 +252,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 try:
                     await dec(ult)
                 except Exception as er:
-                    LOGS.info(f"• MANAGER [{e.chat_id}]:")
+                    LOGS.info(f"• MANAGER [{ult.chat_id}]:")
                     LOGS.exception(er)
 
             if pattern:
