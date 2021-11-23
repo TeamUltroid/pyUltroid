@@ -50,15 +50,18 @@ def get_data(self_, key):
 
 class MongoDB:
     def __init__(self, key):
-        self.cache = {}
         self.dB = MongoClient(key)
         self.db = self.dB.UltroidDB
-        for key in self.keys():
-            self.cache.update({key: self.get_key(key)})
+        self.re_cache()
 
     @property
     def name(self):
         return "MongoDB"
+
+    def re_cache(self):
+        self._cache = {}
+        for key in self.keys():
+            self._cache.update({key: self.get_key(key)})
 
     def ping(self):
         if self.dB.server_info():
@@ -69,29 +72,29 @@ class MongoDB:
 
     def set_key(self, key, value):
         if key in self.keys():
-            self.cache.update({key: value})
+            self._cache.update({key: value})
             self.db[key].replace_one({"_id": key}, {"value": value})
         else:
             self.db[key].insert_one({"_id": key, "value": value})
-        self.cache.update({key: value})
+        self._cache.update({key: value})
         return True
 
     def del_key(self, key):
         if key in self.keys():
             try:
-                del self.cache[key]
+                del self._cache[key]
             except KeyError:
                 pass
             self.db.drop_collection(key)
             return True
 
     def get_key(self, key):
-        if key in self.cache:
-            return self.cache[key]
+        if key in self._cache:
+            return self._cache[key]
         if key in self.keys():
             value = self.db[key].find_one({"_id": key})
             if value:
-                self.cache.update({key: value["value"]})
+                self._cache.update({key: value["value"]})
                 return value["value"]
         return None
 
@@ -220,8 +223,6 @@ class RedisConnection(Redis):
                 kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash_}_HOST")
                 kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash_}_PORT")
                 kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash_}_PASSWORD")
-        if logger:
-            logger.info("Connecting to redis database")
         super().__init__(**kwargs)
         self.re_cache()
 
