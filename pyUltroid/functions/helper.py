@@ -520,10 +520,10 @@ async def heroku_logs(event):
     await xx.delete()
 
 
-async def def_logs(ult):
+async def def_logs(ult, file):
     await ult.client.send_file(
         ult.chat_id,
-        file="ultroid.log",
+        file=file,
         thumb="resources/extras/ultroid.jpg",
         caption="**Ultroid Logs.**",
     )
