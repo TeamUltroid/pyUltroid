@@ -107,7 +107,8 @@ class MongoDB:
             for key in self.keys():
                 try:
                     del self._cache[key]
-                except KeyError: pass
+                except KeyError:
+                    pass
                 self.del_key(key)
         return True
 
