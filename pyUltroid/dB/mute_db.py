@@ -8,34 +8,30 @@
 from .. import udB
 
 
-def get_stuff():
+def get_muted():
     a = udB.get_key("MUTE")
     if not a:
         return {}
-    try:
-        return eval(a)
-    except BaseException:
-        udB.del_key("MUTE")
-    return {}
+    return a
 
 
 def mute(chat, id):
-    ok = get_stuff()
+    ok = get_muted()
     if ok.get(chat):
         if id not in ok[chat]:
             ok[chat].append(id)
     else:
         ok.update({chat: [id]})
-    udB.set_key("MUTE", str(ok))
+    return udB.set_key("MUTE", ok)
 
 
 def unmute(chat, id):
-    ok = get_stuff()
+    ok = get_muted()
     if ok.get(chat) and id in ok[chat]:
         ok[chat].remove(id)
-    udB.set_key("MUTE", str(ok))
+    return udB.set_key("MUTE", str(ok))
 
 
 def is_muted(chat, id):
-    ok = get_stuff()
+    ok = get_muted()
     return bool(ok.get(chat) and id in ok[chat])
