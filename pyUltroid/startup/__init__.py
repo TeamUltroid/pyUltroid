@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
+import sys
 import time
 from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
 
@@ -15,8 +16,12 @@ from telethon import __version__
 from ..version import __version__ as __pyUltroid__
 from ..version import ultroid_version
 
-if os.path.exists("ultroid.log"):
-    os.remove("ultroid.log")
+file = "ultroid.log"
+if len(sys.argv) > 6:
+    file = f"ultroid{sys.argv[6]}.log"
+
+if os.path.exists(file):
+    os.remove(file)
 
 LOGS = getLogger("pyUltLogs")
 TelethonLogger = getLogger("Telethon")
@@ -26,7 +31,7 @@ basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] : %(message)s",
     level=INFO,
     datefmt="%m/%d/%Y, %H:%M:%S",
-    handlers=[FileHandler("ultroid.log"), StreamHandler()],
+    handlers=[FileHandler(file), StreamHandler()],
 )
 
 LOGS.info(
