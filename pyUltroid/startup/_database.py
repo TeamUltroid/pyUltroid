@@ -98,7 +98,7 @@ class MongoDB:
                 try:
                     value = eval(value["value"])
                 except BaseException:
-                    pass
+                    value = value["value"]
                 return value
         return None
 
