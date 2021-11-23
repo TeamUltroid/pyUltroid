@@ -97,7 +97,7 @@ class MongoDB:
                 self._cache.update({key: value["value"]})
                 try:
                     eval(value["value"])
-                except:
+                except BaseException:
                     pass
                 return value
         return None
