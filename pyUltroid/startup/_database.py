@@ -73,9 +73,9 @@ class MongoDB:
     def set_key(self, key, value):
         if key in self.keys():
             self._cache.update({key: value})
-            self.db[key].replace_one({"_id": key}, {"value": value})
+            self.db[key].replace_one({"_id": key}, {"value": str(value)})
         else:
-            self.db[key].insert_one({"_id": key, "value": value})
+            self.db[key].insert_one({"_id": key, "value": str(value)})
         self._cache.update({key: value})
         return True
 
@@ -95,7 +95,11 @@ class MongoDB:
             value = self.db[key].find_one({"_id": key})
             if value:
                 self._cache.update({key: value["value"]})
-                return value["value"]
+                try:
+                    eval(value["value"])
+                except:
+                    pass
+                return value
         return None
 
 
