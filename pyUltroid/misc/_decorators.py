@@ -7,7 +7,7 @@
 
 import asyncio
 import inspect
-import re, sys
+import re
 from io import BytesIO
 from pathlib import Path
 from time import gmtime, strftime
