@@ -52,14 +52,18 @@ class _SudoManager:
         return self._owner_sudos
 
     def add_sudo(self, id_):
-        if self._owner_sudos:
+        if id in self.get_sudos():
+            return
+        if id not in self._owner_sudos:
             self._owner_sudos.append(id_)
         return self.sudos.append(id_)
 
     def remove_sudo(self, id_):
-        if self._owner_sudos:
+        if id_ not in self.get_sudos():
+            return
+        if id_ in self._owner_sudos:
             self._owner_sudos.remove(id_)
-        return self.sudos.remove(_id)
+        self.sudos.remove(id_)
 
     @property
     def fullsudos(self):
