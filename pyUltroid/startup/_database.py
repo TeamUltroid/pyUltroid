@@ -102,6 +102,15 @@ class MongoDB:
                 return value
         return None
 
+    def flushall(self):
+        if self.keys():
+            for key in self.keys():
+                try:
+                    del self._cache[key]
+                except KeyError: pass
+                self.del_key(key)
+        return True
+
 
 # --------------------------------------------------------------------------------------------- #
 
