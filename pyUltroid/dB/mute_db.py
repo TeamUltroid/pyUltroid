@@ -29,7 +29,7 @@ def unmute(chat, id):
     ok = get_muted()
     if ok.get(chat) and id in ok[chat]:
         ok[chat].remove(id)
-    return udB.set_key("MUTE", str(ok))
+    return udB.set_key("MUTE", ok)
 
 
 def is_muted(chat, id):
