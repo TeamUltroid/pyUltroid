@@ -21,6 +21,7 @@ HOSTED_ON = where_hosted()
 
 udB = UltroidDB()
 
+LOGS.info(f"Connecting to {udB.name}...")
 if udB.ping():
     LOGS.info(f"Connected to {udB.name} Successfully!")
 
