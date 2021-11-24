@@ -14,7 +14,7 @@ from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
-from .helper import download_file, run_asynchronously, uploader
+from .helper import download_file, run_asynchronously, uploader, humanbytes
 from .tools import async_searcher
 
 
@@ -147,7 +147,7 @@ def get_formats(type, id, data):
 def get_buttons(typee, listt):
     butts = [
         Button.inline(
-            text=f'[{x["quality"]} {x["ext"]}]',
+            text=f'[{x["quality"]} {humanbytes(x["size"])}]',
             data=f"{x['type']}_{x['id']}",
         )
         for x in listt
