@@ -145,7 +145,7 @@ def get_formats(type, id, data):
     return []
 
 
-def get_buttons(typee, listt):
+def get_buttons(typee, id, listt):
     butts = [
         Button.inline(
             text=f'[{x["quality"]} {humanbytes(x["size"])}]',
@@ -156,7 +156,7 @@ def get_buttons(typee, listt):
     buttons = list(zip(butts[::2], butts[1::2]))
     if len(butts) % 2 == 1:
         buttons.append((butts[-1],))
-    buttons.append([Button.inline("« Back", "ytdl_back")])
+    buttons.append([Button.inline("« Back", f"ytdl_back:{id})])
     return buttons
 
 
