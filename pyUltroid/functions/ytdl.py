@@ -14,9 +14,9 @@ from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
+from .. import LOGS
 from .helper import download_file, humanbytes, run_asynchronously, uploader
 from .tools import async_searcher
-from .. import LOGS
 
 
 def get_yt_link(query):
