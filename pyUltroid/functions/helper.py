@@ -36,6 +36,11 @@ try:
     from html_telegraph_poster import TelegraphPoster
 except ImportError:
     TelegraphPoster = None
+import asyncio
+import multiprocessing
+from concurrent.futures import ThreadPoolExecutor
+from functools import partial, wraps
+
 from telethon.helpers import _maybe_await
 from telethon.tl import types
 from telethon.utils import get_display_name
@@ -48,18 +53,18 @@ from ..version import ultroid_version
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
 
-import multiprocessing, asyncio
-from concurrent.futures import ThreadPoolExecutor
-from functools import wraps, partial
+_executor = ThreadPoolExecutor(max_workers=multiprocessing.cpu_count() * 5)
 
-
-_executor = ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()*5)
 
 def run_asynchronously(function):
     @wraps(function)
     async def wrapper(*args, **kwargs):
-        return await asyncio.get_event_loop().run_in_executor(_executor, partial(function, *args, **kwargs))
+        return await asyncio.get_event_loop().run_in_executor(
+            _executor, partial(function, *args, **kwargs)
+        )
+
     return wrapper
+
 
 # ~~~~~~~~~~~~~~~~~~~~ small funcs ~~~~~~~~~~~~~~~~~~~~ #
 
