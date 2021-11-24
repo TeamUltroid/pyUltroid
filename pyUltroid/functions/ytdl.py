@@ -148,7 +148,7 @@ def get_buttons(typee, listt):
     butts = [
         Button.inline(
             text=f'[{x["quality"]} {humanbytes(x["size"])}]',
-            data=f"{x['type']}_{x['id']}",
+            data=f"{x['type']}:{x['id']}:{x['ytid']}",
         )
         for x in listt
     ]
