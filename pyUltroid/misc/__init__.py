@@ -15,7 +15,6 @@ CMD_HELP = {}
 class _SudoManager:
     def __init__(self):
         self.db = None
-        self.sudos = []
         self.owner = None
         self._owner_sudos = []
 
@@ -27,14 +26,9 @@ class _SudoManager:
         return self.db
 
     def get_sudos(self):
-        if self.sudos:
-            return self.sudos
         db = self._init_db()
-
         SUDOS = db.get_key("SUDOS")
-        if SUDOS:
-            self.sudos = SUDOS
-        return self.sudos
+        return SUDOS or []
 
     @property
     def should_allow_sudo(self):
@@ -42,27 +36,19 @@ class _SudoManager:
         return db.get_key("SUDO")
 
     def owner_and_sudos(self):
-        if self._owner_sudos:
-            return self._owner_sudos
-
         if not self.owner:
             db = self._init_db()
             self.owner = db.get_key("OWNER_ID")
-        self._owner_sudos = [self.owner, *self.get_sudos()]
-        return self._owner_sudos
+        return [self.owner, *self.get_sudos())
 
     def add_sudo(self, id_):
         if id in self.get_sudos():
             return
-        if id not in self._owner_sudos:
-            self._owner_sudos.append(id_)
         return self.sudos.append(id_)
 
     def remove_sudo(self, id_):
         if id_ not in self.get_sudos():
             return
-        if id_ in self._owner_sudos:
-            self._owner_sudos.remove(id_)
         self.sudos.remove(id_)
 
     @property
