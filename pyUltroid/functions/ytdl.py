@@ -117,12 +117,15 @@ def get_formats(type, id, data):
         return audio
     elif type == "video":
         video = []
+        size = 0
         for vid in data["formats"]:
+            if vid["format__id"] == "251":
+                size += vid["filesize"]
             if vid["vcodec"] is not "none":
                 _video = {}
                 _id = int(vid["format_id"])
-                _quality = vid["format_note"]
-                _size = vid["filesize"]
+                _quality = str(vid["height"]) + "×" + str(vid["width"])
+                _size = size + vid["filesize"]
                 _ext = "mp4"
                 if vid["ext"] == "webm":
                     _ext = "mkv"
