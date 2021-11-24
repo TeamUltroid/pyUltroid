@@ -145,7 +145,8 @@ def get_formats(type, id, data):
     return []
 
 
-def get_buttons(typee, id, listt):
+def get_buttons(listt):
+    id = listt[0]["ytid"]
     butts = [
         Button.inline(
             text=f'[{x["quality"]} {humanbytes(x["size"])}]',
