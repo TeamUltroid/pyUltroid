@@ -477,3 +477,13 @@ async def create_quotly(
             file.write(image)
         return file_name
     raise Exception(str(request))
+
+
+# Some Sarcasm
+
+def split_list(List, index):
+    new_ = []
+    while List:
+        new_.extend([List[:index]])
+        List = List[index:]
+    return new_
