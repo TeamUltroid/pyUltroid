@@ -14,7 +14,7 @@ from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
-from .helper import download_file, uploader, run_asynchronously
+from .helper import download_file, run_asynchronously, uploader
 from .tools import async_searcher
 
 
@@ -167,7 +167,7 @@ async def dler(event, url, opts=None, download=False):
 @run_asynchronously
 def ytdownload(url, opts):
     _down = None
-    if not "quiet" in opts:
+    if "quiet" not in opts:
         opts["quiet"] = True
     try:
         with YoutubeDL(opts) as ytd:
