@@ -14,9 +14,9 @@ from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
-from .. import LOGS
 from .helper import download_file, humanbytes, run_asynchronously, uploader
 from .tools import async_searcher
+from .. import LOGS
 
 
 def get_yt_link(query):
@@ -160,10 +160,10 @@ def get_buttons(typee, listt):
 
 
 async def dler(event, url, opts=None, download=False):
+    await event.edit("`Getting Data from YouTube..`")
     if download:
         return await ytdownload(url, opts)
     try:
-        await event.edit("`Getting Data from YouTube..`")
         return YoutubeDL(opts).extract_info(url=url, download=False)
     except Exception as e:
         await event.edit(f"{type(e)}: {e}")
@@ -172,15 +172,12 @@ async def dler(event, url, opts=None, download=False):
 
 @run_asynchronously
 def ytdownload(url, opts):
-    _down = None
     if "quiet" not in opts:
         opts["quiet"] = True
     try:
-        with YoutubeDL(opts) as ytd:
-            _down = ytd.download([url])
+        return YoutubeDL(opts).extract_info(url=url, download=True)
     except Exception as ex:
         LOGS.error(ex)
-    return _down
 
 
 async def get_videos_link(url):
