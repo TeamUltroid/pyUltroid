@@ -126,7 +126,7 @@ def get_formats(type, id, data):
                 _video = {}
                 _id = int(vid["format_id"])
                 _quality = str(vid["height"]) + "×" + str(vid["width"])
-                _size = size + vid["filesize"]
+                _size = size + (vid["filesize"] or 0)
                 _ext = "mp4"
                 if vid["ext"] == "webm":
                     _ext = "mkv"
