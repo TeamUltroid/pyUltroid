@@ -41,16 +41,6 @@ class _SudoManager:
             self.owner = db.get_key("OWNER_ID")
         return [self.owner, *self.get_sudos()]
 
-    def add_sudo(self, id_):
-        if id in self.get_sudos():
-            return
-        return self.sudos.append(id_)
-
-    def remove_sudo(self, id_):
-        if id_ not in self.get_sudos():
-            return
-        self.sudos.remove(id_)
-
     @property
     def fullsudos(self):
         db = self._init_db()
