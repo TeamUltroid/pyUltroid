@@ -48,6 +48,19 @@ from ..version import ultroid_version
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
 
+import multiprocessing, asyncio
+from concurrent.futures import ThreadPoolExecutor
+from functools import wraps, partial
+
+
+_executor = ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()*5)
+
+def run_asynchronously(function):
+    @wraps(function)
+    async def wrapper(*args, **kwargs):
+        return await asyncio.get_event_loop().run_in_executor(_executor, partial(function, *args, **kwargs))
+    return wrapper
+
 # ~~~~~~~~~~~~~~~~~~~~ small funcs ~~~~~~~~~~~~~~~~~~~~ #
 
 
