@@ -39,7 +39,7 @@ class _SudoManager:
         if not self.owner:
             db = self._init_db()
             self.owner = db.get_key("OWNER_ID")
-        return [self.owner, *self.get_sudos())
+        return [self.owner, *self.get_sudos()]
 
     def add_sudo(self, id_):
         if id in self.get_sudos():
