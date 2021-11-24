@@ -481,6 +481,7 @@ async def create_quotly(
 
 # Some Sarcasm
 
+
 def split_list(List, index):
     new_ = []
     while List:
