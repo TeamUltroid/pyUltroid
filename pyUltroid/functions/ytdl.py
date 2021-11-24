@@ -16,6 +16,7 @@ from youtubesearchpython import VideosSearch
 
 from .helper import download_file, humanbytes, run_asynchronously, uploader
 from .tools import async_searcher
+from .. import LOGS
 
 
 def get_yt_link(query):
