@@ -163,10 +163,12 @@ def get_buttons(listt):
 
 async def dler(event, url, opts=None, download=False):
     await event.edit("`Getting Data from YouTube..`")
+    if "quiet" not in opts:
+        opts["quiet"] = True
     if download:
-        return await ytdownload(url, opts)
+        await ytdownload(url, opts)
     try:
-        return YoutubeDL(opts).extract_info(url=url, download=False)
+        return YoutubeDL({}).extract_info(url=url, download=False)
     except Exception as e:
         await event.edit(f"{type(e)}: {e}")
         return
@@ -174,10 +176,8 @@ async def dler(event, url, opts=None, download=False):
 
 @run_asynchronously
 def ytdownload(url, opts):
-    if "quiet" not in opts:
-        opts["quiet"] = True
     try:
-        return YoutubeDL(opts).extract_info(url=url, download=True)
+        YoutubeDL(opts).download([url])
     except Exception as ex:
         LOGS.error(ex)
 
