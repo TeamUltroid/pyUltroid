@@ -8,60 +8,31 @@
 from .. import udB
 
 
-def is_added(id_):  # Take int or str with numbers only , Returns Boolean
-    return id_ in get_all_users()
+def get_all_users(key):
+    return udB.get_key(key) or []
 
 
-def add_user(id_):  # Take int or str with numbers only , Returns Boolean
-    try:
-        users = get_all_users()
+def is_added(id_):
+    return id_ in get_all_users("BOT_USERS")
+
+
+def add_user(id_):
+        users = get_all_users("BOT_USERS")
         users.append(id_)
-        udB.set_key("BOT_USERS", users)
-        return True
-    except Exception as e:
-        print(f"Ultroid LOG : // functions/pmbot/add_user : {e}")
-        return False
+        return udB.set_key("BOT_USERS", users)
 
 
-def get_all_users():  # Returns List
-    users = udB.get_key("BOT_USERS")
-    if not users:
-        return []
-    if isinstance(users, str):
-        return [int(user) for user in users.split()]
-    return users
+def is_blacklisted(id_):
+    return id_ in get_all_users("BOT_BLS")
 
 
-def is_blacklisted(id_):  # Take int or str with numbers only , Returns Boolean
-    return id_ in get_all_bl_users()
-
-
-def blacklist_user(id_):  # Take int or str with numbers only , Returns Boolean
-    try:
-        users = get_all_bl_users()
+def blacklist_user(id_):
+        users = get_all_users("BOT_BLS")
         users.append(id_)
-        udB.set_key("BOT_BLS", users)
-        return True
-    except Exception as e:
-        print(f"Ultroid LOG : // functions/pmbot/blacklist_user : {e}")
-        return False
+        return udB.set_key("BOT_BLS", users)
 
 
-def rem_blacklist(id_):  # Take int or str with numbers only , Returns Boolean
-    try:
-        users = get_all_bl_users()
+def rem_blacklist(id_):
+        users = get_all_users("BOT_BLS")
         users.remove(id_)
-        udB.set_key("BOT_BLS", users)
-        return True
-    except Exception as e:
-        print(f"Ultroid LOG : // functions/pmbot/rem_blacklist : {e}")
-        return False
-
-
-def get_all_bl_users():  # Returns List
-    users = udB.get_key("BOT_BLS")
-    if not users:
-        return []
-    if isinstance(users, str):
-        return [int(user) for user in users.split()]
-    return users
+        return udB.set_key("BOT_BLS", users)
