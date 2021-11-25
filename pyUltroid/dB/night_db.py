@@ -8,31 +8,20 @@
 from .. import udB
 
 
-def get_stuff():
-    a = udB.get_key("NIGHT_CHATS")
-    if not a:
-        return []
-    try:
-        return eval(a)
-    except BaseException:
-        udB.del_key("NIGHT_CHATS")
-    return []
+def night_grps():
+    return udB.get_key("NIGHT_CHATS") or []
 
 
 def add_night(chat):
-    chats = get_stuff()
+    chats = night_grps()
     if chat not in chats:
         chats.append(chat)
-        udB.set_key("NIGHT_CHATS", str(chats))
+        return udB.set_key("NIGHT_CHATS", chats)
     return
 
 
 def rem_night(chat):
-    chats = get_stuff()
+    chats = night_grps()
     if chat in chats:
         chats.remove(chat)
-        udB.set_key("NIGHT_CHATS", str(chats))
-    return
-
-
-night_grps = get_stuff
+        return udB.set_key("NIGHT_CHATS", chats)
