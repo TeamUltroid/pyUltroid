@@ -7,7 +7,7 @@
 
 import asyncio
 import inspect
-import re
+import re, sys
 from io import BytesIO
 from pathlib import Path
 from time import gmtime, strftime
@@ -141,8 +141,6 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                         ),
                     ],
                 )
-                import sys
-
                 sys.exit()
             except events.StopPropagation:
                 raise events.StopPropagation
