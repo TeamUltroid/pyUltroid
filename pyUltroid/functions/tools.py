@@ -216,8 +216,8 @@ async def saavn_dl(query: str):
         performer = data["primary_artists"]
     except BaseException:
         return None, None, None, None
-    song = await fast_download(url, filename=title + ".mp3")
-    thumb = await fast_download(img, filename=title + ".jpg")
+    song, _ = await fast_download(url, filename=title + ".mp3")
+    thumb, _ = await fast_download(img, filename=title + ".jpg")
     return song, duration, performer, thumb
 
 
