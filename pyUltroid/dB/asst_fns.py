@@ -17,9 +17,9 @@ def is_added(id_):
 
 
 def add_user(id_):
-        users = get_all_users("BOT_USERS")
-        users.append(id_)
-        return udB.set_key("BOT_USERS", users)
+    users = get_all_users("BOT_USERS")
+    users.append(id_)
+    return udB.set_key("BOT_USERS", users)
 
 
 def is_blacklisted(id_):
@@ -27,12 +27,12 @@ def is_blacklisted(id_):
 
 
 def blacklist_user(id_):
-        users = get_all_users("BOT_BLS")
-        users.append(id_)
-        return udB.set_key("BOT_BLS", users)
+    users = get_all_users("BOT_BLS")
+    users.append(id_)
+    return udB.set_key("BOT_BLS", users)
 
 
 def rem_blacklist(id_):
-        users = get_all_users("BOT_BLS")
-        users.remove(id_)
-        return udB.set_key("BOT_BLS", users)
+    users = get_all_users("BOT_BLS")
+    users.remove(id_)
+    return udB.set_key("BOT_BLS", users)
