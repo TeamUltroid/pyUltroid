@@ -15,7 +15,11 @@ from .startup.funcs import autopilot, customize, plug, ready, startup_stuff
 from .startup.loader import load_other_plugins
 
 # Option to Auto Update On Restarts..
-if udB.get_key("UPDATE_ON_RESTART") and os.path.exists(".git") and ultroid_bot.run_in_loop(updater()):
+if (
+    udB.get_key("UPDATE_ON_RESTART")
+    and os.path.exists(".git")
+    and ultroid_bot.run_in_loop(updater())
+):
     os.system("git pull -f -q && pip3 install --no-cache-dir -U -q -r requirements.txt")
     os.execl(sys.executable, "python3", "-m", "pyUltroid")
 
