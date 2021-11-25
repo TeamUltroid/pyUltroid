@@ -212,8 +212,7 @@ def gen_chlog(repo, diff):
     return ch_log, tldr_log
 
 
-@run_async
-def updater():
+async def updater():
     from .. import LOGS
 
     try:
@@ -245,7 +244,7 @@ def updater():
         LOGS.info(er)
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
-    changelog, tl_chnglog = gen_chlog(repo, f"HEAD..upstream/{ac_br}")
+    changelog, tl_chnglog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
     return bool(changelog)
 
 
