@@ -11,37 +11,26 @@ from .. import udB
 
 
 def get_chats():
-    n = []
-    cha = udB.get_key("FORCESUB")
-    if not cha:
-        cha = "{}"
-    n.append(ast.literal_eval(cha))
-    return n[0]
+    return udB.get_key("FORCESUB") or {}
 
 
 def add_forcesub(chat_id, chattojoin):
     omk = get_chats()
-    omk.update({str(chat_id): str(chattojoin)})
-    udB.set_key("FORCESUB", str(omk))
-    return True
+    omk.update({chat_id: chattojoin})
+    return udB.set_key("FORCESUB", omk)
 
 
 def get_forcesetting(chat_id):
     omk = get_chats()
-    if str(chat_id) in omk.keys():
-        return omk[str(chat_id)]
-    else:
-        return None
+    if chat_id in omk.keys():
+        return omk[chat_id]
 
 
 def rem_forcesub(chat_id):
     omk = get_chats()
-    if str(chat_id) not in omk.keys():
-        return None
-
-    try:
-        del omk[str(chat_id)]
-        udB.set_key("FORCESUB", str(omk))
-        return True
-    except KeyError:
-        return False
+    if chat_id in omk.keys():
+        try:
+            del omk[chat_id]
+            return udB.set_key("FORCESUB", omk)
+        except KeyError:
+            return False
