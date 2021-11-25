@@ -15,7 +15,7 @@ from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
 from .. import LOGS
-from .helper import download_file, humanbytes, run_asynchronously, uploader
+from .helper import download_file, humanbytes, run_async, uploader
 from .tools import async_searcher
 
 
@@ -174,7 +174,7 @@ async def dler(event, url, opts=None, download=False):
         return
 
 
-@run_asynchronously
+@run_async
 def ytdownload(url, opts):
     try:
         YoutubeDL(opts).download([url])
