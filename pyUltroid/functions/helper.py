@@ -313,16 +313,17 @@ async def fast_download(download_url, filename=None, progress_callback=None):
                 filename = download_url.rpartition("/")[-1]
             total_size = int(response.headers.get("content-length", 0)) or None
             downloaded_size = 0
+            start_time = time.time()
             with open(filename, "wb") as f:
                 async for chunk in response.content.iter_chunked(1024):
                     if chunk:
                         f.write(chunk)
                         downloaded_size += len(chunk)
-                    if progress_callback:
+                    if progress_callback and total_size:
                         await _maybe_await(
                             progress_callback(downloaded_size, total_size)
                         )
-            return filename
+            return filename, time.time() - start_time
 
 
 # --------------------------Media Funcs-------------------------------- #
