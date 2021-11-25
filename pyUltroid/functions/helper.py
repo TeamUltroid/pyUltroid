@@ -330,6 +330,7 @@ async def fast_download(download_url, filename=None, progress_callback=None):
 
 # --------------------------Media Funcs-------------------------------- #
 
+
 @run_async
 def make_html_telegraph(title, author, text):
     client = TelegraphPoster(use_api=True)
