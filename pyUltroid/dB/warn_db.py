@@ -8,15 +8,8 @@
 from .. import udB
 
 
-def get_stuff(key="WARNS"):
-    kk = udB.get_key(key)
-    if not kk:
-        return {}
-    try:
-        return eval(kk)
-    except BaseException:
-        udB.del_key(key)
-    return {}
+def get_stuff():
+    return udB.get_key("WARNS") or {}
 
 
 def add_warn(chat, user, count, reason):
@@ -25,7 +18,7 @@ def add_warn(chat, user, count, reason):
         x[chat].update({user: [count, reason]})
     except BaseException:
         x.update({chat: {user: [count, reason]}})
-    return udB.set_key("WARNS", str(x))
+    return udB.set_key("WARNS", x)
 
 
 def warns(chat, user):
@@ -41,6 +34,6 @@ def reset_warn(chat, user):
     x = get_stuff()
     try:
         x[chat].pop(user)
-        return udB.set_key("WARNS", str(x))
+        return udB.set_key("WARNS", x)
     except BaseException:
         return
