@@ -9,33 +9,26 @@
 from .. import udB
 
 
-def get_stuff(key=None):
-    kk = udB.get_key(key)
-    if not kk:
-        return {}
-    try:
-        return eval(kk)
-    except BaseException:
-        udB.del_key(key)
-    return {}
+def get_stuff(key="NSFW"):
+    return udB.get_key(key) or {}
 
 
 def nsfw_chat(chat, action):
-    x = get_stuff("NSFW")
+    x = get_stuff()
     x.update({chat: action})
-    return udB.set_key("NSFW", str(x))
+    return udB.set_key("NSFW", x)
 
 
 def rem_nsfw(chat):
-    x = get_stuff("NSFW")
+    x = get_stuff()
     if x.get(chat):
         x.pop(chat)
-        return udB.set_key("NSFW", str(x))
+        return udB.set_key("NSFW", x)
     return
 
 
 def is_nsfw(chat):
-    x = get_stuff("NSFW")
+    x = get_stuff()
     if x.get(chat):
         return x[chat]
     return
@@ -44,14 +37,14 @@ def is_nsfw(chat):
 def profan_chat(chat, action):
     x = get_stuff("PROFANITY")
     x.update({chat: action})
-    return udB.set_key("PROFANITY", str(x))
+    return udB.set_key("PROFANITY", x)
 
 
 def rem_profan(chat):
     x = get_stuff("PROFANITY")
     if x.get(chat):
         x.pop(chat)
-        return udB.set_key("PROFANITY", str(x))
+        return udB.set_key("PROFANITY", x)
     return
 
 
