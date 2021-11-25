@@ -179,7 +179,7 @@ async def autopilot():
     channel = udB.get_key("LOG_CHANNEL")
     if channel:
         try:
-            chat = await ultroid_bot.get_entity(int(channel))
+            chat = await ultroid_bot.get_entity(channel)
         except BaseException as er:
             LOGS.error(er)
             udB.del_key("LOG_CHANNEL")
@@ -384,7 +384,7 @@ async def ready():
                 await ultroid_bot.delete_messages(chat_id, int(prev_spam))
             except Exception as E:
                 LOGS.info("Error while Deleting Previous Update Message :" + str(E))
-        if updater():
+        if await updater():
             BTTS = Button.inline("Update Available", "updtavail")
 
     try:
