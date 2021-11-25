@@ -161,7 +161,7 @@ def get_buttons(listt):
     return buttons
 
 
-async def dler(event, url, opts=None, download=False):
+async def dler(event, url, opts: dict = {}, download=False):
     await event.edit("`Getting Data from YouTube..`")
     if "quiet" not in opts:
         opts["quiet"] = True
