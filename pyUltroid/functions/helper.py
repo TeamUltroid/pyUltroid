@@ -196,6 +196,7 @@ async def updateme_requirements():
         return format_exc()
 
 
+@run_async
 def gen_chlog(repo, diff):
     UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
     ac_br = repo.active_branch.name
@@ -211,6 +212,7 @@ def gen_chlog(repo, diff):
     return ch_log, tldr_log
 
 
+@run_async
 def updater():
     from .. import LOGS
 
@@ -328,7 +330,7 @@ async def fast_download(download_url, filename=None, progress_callback=None):
 
 # --------------------------Media Funcs-------------------------------- #
 
-
+@run_async
 def make_html_telegraph(title, author, text):
     client = TelegraphPoster(use_api=True)
     client.create_api_token(title)
