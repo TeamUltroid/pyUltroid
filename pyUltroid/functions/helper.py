@@ -54,7 +54,7 @@ from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
 
 
-def run_asynchronously(function):
+def run_async(function):
     @wraps(function)
     async def wrapper(*args, **kwargs):
         return await asyncio.get_event_loop().run_in_executor(
