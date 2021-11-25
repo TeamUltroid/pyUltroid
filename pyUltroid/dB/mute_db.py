@@ -9,10 +9,7 @@ from .. import udB
 
 
 def get_muted():
-    a = udB.get_key("MUTE")
-    if not a:
-        return {}
-    return a
+    return udB.get_key("MUTE") or {}
 
 
 def mute(chat, id):
