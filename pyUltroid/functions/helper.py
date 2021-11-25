@@ -131,7 +131,8 @@ async def safeinstall(event):
         and reply.file.name.endswith(".py")
     ):
         return await eod(ok, "`Please reply to any python plugin`")
-    if reply.file.name in [x.split("/")[-1] for x in glob.glob("*s/*.py")]:
+    plug = reply.file.name.replace(".py", "")
+    if plug in list(LOADED):
         return await eod(ok, f"Plugin `{reply.file.name}` is already installed.")
     dl = await reply.download_media("addons/")
     if event.text[9:] != "f":
@@ -142,7 +143,6 @@ async def safeinstall(event):
                 return await ok.edit(
                     f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{reply.file.name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
                 )
-    plug = reply.file.name.replace(".py", "")
     try:
         load_addons(plug)
     except BaseException:
