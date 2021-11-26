@@ -33,5 +33,4 @@ def get_snips(word):
 
 
 def list_snip():
-    ok = get_all_snips()
-    return "".join(f"👉 ${z}\n" for z in ok)
+    return "".join(f"👉 ${z}\n" for z in get_all_snips())
