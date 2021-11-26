@@ -187,7 +187,7 @@ class DetaDB:
         if key in self._cache:
             return self._cache[key]
         value = get_data(self, key)
-        self.update({key:value})
+        self.update({key: value})
         return value
 
 
