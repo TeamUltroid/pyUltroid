@@ -420,7 +420,15 @@ async def ready():
 
 
 def _version_changes(udb):
-    for _ in ["BOT_USERS", "BOT_BLS", "VC_SUDOS", "SUDOS", "CLEANCHAT", "LOGUSERS", "PLUGIN_CHANNEL"]:
+    for _ in [
+        "BOT_USERS",
+        "BOT_BLS",
+        "VC_SUDOS",
+        "SUDOS",
+        "CLEANCHAT",
+        "LOGUSERS",
+        "PLUGIN_CHANNEL",
+    ]:
         key = udb.get_key(_)
         if key and str(key)[0] != "[":
             key = udb.get(_)
