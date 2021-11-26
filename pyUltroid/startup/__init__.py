@@ -8,7 +8,7 @@
 import os
 import sys
 import time
-from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
+from logging import INFO, DEBUG, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
 
 from safety.tools import *
 from telethon import __version__
@@ -25,11 +25,11 @@ if os.path.exists(file):
 
 LOGS = getLogger("pyUltLogs")
 TelethonLogger = getLogger("Telethon")
-TelethonLogger.setLevel(WARNING)
+TelethonLogger.setLevel(DEBUG)
 
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] : %(message)s",
-    level=INFO,
+    level=DEGUG,
     datefmt="%m/%d/%Y, %H:%M:%S",
     handlers=[FileHandler(file), StreamHandler()],
 )
