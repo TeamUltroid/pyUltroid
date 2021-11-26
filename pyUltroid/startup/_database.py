@@ -93,12 +93,12 @@ class MongoDB:
             return self._cache[key]
         if key in self.keys():
             value = self.get(key)
+            self._cache.update({key: value})
             if value:
-                self._cache.update({key: value["value"]})
                 try:
-                    value = eval(value["value"])
+                    value = eval(value)
                 except BaseException:
-                    value = value["value"]
+                    pass
                 return value
         return None
 
