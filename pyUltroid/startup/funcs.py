@@ -175,7 +175,7 @@ async def autopilot():
     from .. import asst, udB, ultroid_bot
 
     if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
-        udB.set_key("LOG_CHANNEL", str(Var.LOG_CHANNEL))
+        udB.set_key("LOG_CHANNEL", Var.LOG_CHANNEL)
     channel = udB.get_key("LOG_CHANNEL")
     if channel:
         try:
@@ -320,7 +320,7 @@ async def customize():
             f"✨ PowerFul Ultroid Assistant Bot ✨\n✨ Master ~ {sir} ✨\n\n✨ Powered By ~ @TeamUltroid ✨",
         )
         await asyncio.sleep(2)
-        await ultroid_bot.send_message(
+        await asst.send_message(
             chat_id, "**Auto Customisation** Done at @BotFather"
         )
         LOGS.info("Customisation Done")
