@@ -9,7 +9,6 @@ import os
 import sys
 import time
 from logging import (
-    DEBUG,
     INFO,
     WARNING,
     FileHandler,
@@ -33,11 +32,11 @@ if os.path.exists(file):
 
 LOGS = getLogger("pyUltLogs")
 TelethonLogger = getLogger("Telethon")
-TelethonLogger.setLevel(DEBUG)
+TelethonLogger.setLevel(INFO)
 
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] : %(message)s",
-    level=DEBUG,
+    level=INFO,
     datefmt="%m/%d/%Y, %H:%M:%S",
     handlers=[FileHandler(file), StreamHandler()],
 )
