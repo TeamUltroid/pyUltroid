@@ -8,7 +8,15 @@
 import os
 import sys
 import time
-from logging import INFO, DEBUG, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
+from logging import (
+    DEBUG,
+    INFO,
+    WARNING,
+    FileHandler,
+    StreamHandler,
+    basicConfig,
+    getLogger,
+)
 
 from safety.tools import *
 from telethon import __version__
