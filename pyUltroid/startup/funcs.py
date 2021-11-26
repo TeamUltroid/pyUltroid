@@ -432,5 +432,8 @@ def _version_changes(udb):
         key = udb.get_key(_)
         if key and str(key)[0] != "[":
             key = udb.get(_)
-            new_ = [int(z) if z.isdigit() or z.startswith("-100") else z for z in key.split()]
+            new_ = [
+                int(z) if z.isdigit() or z.startswith("-100") else z
+                for z in key.split()
+            ]
             udb.set_key(_, new_)
