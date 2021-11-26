@@ -9,7 +9,7 @@ from .. import udB
 
 
 def get_all_snips():
-    return udB.get_key("SNIP")
+    return udB.get_key("SNIP") or {}
 
 
 def add_snip(word, msg, media, button):
