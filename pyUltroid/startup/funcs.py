@@ -420,15 +420,9 @@ async def ready():
 
 
 def _version_changes(udb):
-    for _ in ["VC_SUDOS", "SUDOS", "CLEANCHAT", "PLUGIN_CHANNEL"]:
+    for _ in ["BOT_USERS", "BOT_BLS", "VC_SUDOS", "SUDOS", "CLEANCHAT", "LOGUSERS", "PLUGIN_CHANNEL"]:
         key = udb.get_key(_)
         if key and str(key)[0] != "[":
             key = udb.get(_)
-            new_ = []
-            for n_ in key.split():
-                try:
-                    n_ = int(n_)
-                except ValueError:
-                    pass
-                new_.append(n_)
+            new_ = [int(z) for z in key.split() if z.isdigit()]
             udb.set_key(_, new_)
