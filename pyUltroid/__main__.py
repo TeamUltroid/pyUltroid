@@ -47,10 +47,6 @@ vcbot = udB.get_key("VCBOT")
 if vcbot is None:
     vcbot = Var.VCBOT
 
-# Railway dont allow Music Bots
-if HOSTED_ON == "railway" and not vcbot:
-    vcbot = False
-
 load_other_plugins(addons=addons, pmbot=pmbot, manager=manager, vcbot=vcbot)
 
 suc_msg = """
