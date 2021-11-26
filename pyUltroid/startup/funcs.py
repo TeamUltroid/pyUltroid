@@ -433,7 +433,7 @@ def _version_changes(udb):
         if key and str(key)[0] != "[":
             key = udb.get(_)
             new_ = [
-                int(z) if z.isdigit() or (z[0] == "-" and z[1:].isdigit()) else z
+                int(z) if z.isdigit() or (z.startswith("-") and z[1:].isdigit()) else z
                 for z in key.split()
             ]
             udb.set_key(_, new_)
