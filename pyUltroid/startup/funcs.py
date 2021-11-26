@@ -320,9 +320,7 @@ async def customize():
             f"✨ PowerFul Ultroid Assistant Bot ✨\n✨ Master ~ {sir} ✨\n\n✨ Powered By ~ @TeamUltroid ✨",
         )
         await asyncio.sleep(2)
-        await asst.send_message(
-            chat_id, "**Auto Customisation** Done at @BotFather"
-        )
+        await asst.send_message(chat_id, "**Auto Customisation** Done at @BotFather")
         LOGS.info("Customisation Done")
     except Exception as e:
         LOGS.exception(e)
