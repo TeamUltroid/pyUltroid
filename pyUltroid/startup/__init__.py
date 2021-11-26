@@ -37,7 +37,7 @@ TelethonLogger.setLevel(DEBUG)
 
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] : %(message)s",
-    level=DEGUG,
+    level=DEBUG,
     datefmt="%m/%d/%Y, %H:%M:%S",
     handlers=[FileHandler(file), StreamHandler()],
 )
