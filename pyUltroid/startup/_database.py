@@ -161,16 +161,13 @@ class DetaDB:
         if key in self._cache:
             return self._cache[key]
         _get = self.run(self.db.get(key))
-        if _get is not None:
-            self._cache.update({key: _get["value"]})
+        self._cache.update({key: None if not _get else _get["value"]})
         if _get is not None:
             return cast(_get["value"])
 
     def delete(self, key):
         if key in self._cache:
             del self._cache[key]
-        if not self.get(key):
-            return 0
         self.run(self.db.delete(key))
         return True
 
@@ -189,7 +186,9 @@ class DetaDB:
     def get_key(self, key):
         if key in self._cache:
             return self._cache[key]
-        return get_data(self, key)
+        value = get_data(self, key)
+        self.update({key:value})
+        return value
 
 
 # --------------------------------------------------------------------------------------------- #
