@@ -108,6 +108,7 @@ class MongoDB:
 
     def flushall(self):
         self.dB.drop_database("UltroidDB")
+        self._cache = {}
         return True
 
 
