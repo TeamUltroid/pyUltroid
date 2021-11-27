@@ -12,7 +12,7 @@ import re
 import sys
 import time
 from traceback import format_exc
-
+from urllib.parse import unquote
 try:
     import aiofiles
     import aiohttp
@@ -310,7 +310,7 @@ async def fast_download(download_url, filename=None, progress_callback=None):
     async with aiohttp.ClientSession() as session:
         async with session.get(download_url, timeout=None) as response:
             if not filename:
-                filename = download_url.rpartition("/")[-1]
+                filename = unquote(download_url.rpartition("/")[-1])
             total_size = int(response.headers.get("content-length", 0)) or None
             downloaded_size = 0
             start_time = time.time()
