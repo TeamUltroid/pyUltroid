@@ -113,6 +113,7 @@ async def admin_check(event, require=None):
         return
     if require:
         if not getattr(perms, require, False):
+            await event.reply(f"You are missing the right of `{require}`")
             return False
     return True
 
