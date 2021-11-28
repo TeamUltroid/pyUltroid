@@ -103,10 +103,12 @@ async def admin_check(event, require=None):
         if not get_:
             return
         user, perms = get_
+        event._sender_id = user.id
+        event._sender = user
     else:
-        user = event.sender_id
+        user = event.sender
         try:
-            perms = await event.client.get_permissions(event.chat_id, user)
+            perms = await event.client.get_permissions(event.chat_id, user.id)
         except UserNotParticipantError:
             await event.reply("You need to join this chat First!")
             return False
