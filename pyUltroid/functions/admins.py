@@ -47,7 +47,7 @@ async def _callback_check(event):
     id_ = str(uuid.uuid1()).split("-")[0]
     time.time()
     msg = await event.reply(
-        "Click Below Button within 2 minutes to prove self as Admin!",
+        "Click Below Button to prove self as Admin!",
         buttons=Button.inline("Click Me", f"cc_{id_}"),
     )
     if not _ult_cache.get("admin_callback"):
@@ -56,9 +56,9 @@ async def _callback_check(event):
         _ult_cache["admin_callback"].update({id_: None})
     while not _ult_cache["admin_callback"].get(id_):
         await asyncio.sleep(1)
-    if not _ult_cache.get("admin_callback", {}).get(id_):
-        await msg.delete()
-        return
+   # if not _ult_cache.get("admin_callback", {}).get(id_):
+   #    await msg.delete()
+   #    return
     key = _ult_cache.get("admin_callback", {}).get(id_)
     del _ult_cache["admin_callback"][id_]
     return key
@@ -105,14 +105,16 @@ async def admin_check(event, require=None):
         user, perms = get_
     else:
         user = event.sender_id
-    try:
-        perms = await event.client.get_permissions(event.chat_id, user)
-    except UserNotParticipantError:
-        return False
-    return isinstance(
-        perms.participant,
-        (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
-    )
+        try:
+            perms = await event.client.get_permissions(event.chat_id, user)
+        except UserNotParticipantError:
+            return False
+    if not perms.is_admin:
+        return
+    if require:
+        if not getattr(perms, require, False):
+            return False
+    return True
 
 
 # ------------------Lock Unlock----------------
