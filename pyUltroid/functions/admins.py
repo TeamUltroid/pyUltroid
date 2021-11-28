@@ -7,6 +7,7 @@
 
 import time
 import uuid
+
 from telethon.errors.rpcerrorlist import UserNotParticipantError
 from telethon.tl import functions, types
 
@@ -39,14 +40,18 @@ async def ban_time(event, time_str):
 
 # ------------------Admin Check--------------- #
 
+
 async def _callback_check(event):
     id_ = uuid.uuid1().split("-")[0]
-    time = time.time()
-    msg = await event.reply("Click Below Button within 2 minutes to prove self as Admin!", buttons=Button.inline("Click Me", f"cc_{id_}"))
+    time.time()
+    msg = await event.reply(
+        "Click Below Button within 2 minutes to prove self as Admin!",
+        buttons=Button.inline("Click Me", f"cc_{id_}"),
+    )
     if not _ult_cache.get("admin_callback"):
-        _ult_cache.update({"admin_callback":{id_:None}})
+        _ult_cache.update({"admin_callback": {id_: None}})
     else:
-        _ult_cache["admin_callback"].update({id_:None})
+        _ult_cache["admin_callback"].update({id_: None})
     while not _ult_cache["admin_callback"].get(id_):
         await asyncio.sleep(1)
     if not _ult_cache.get("admin_callback", {}).get(id_):
@@ -55,6 +60,7 @@ async def _callback_check(event):
     key = _ult_cache.get("admin_callback", {}).get(id_)
     del _ult_cache["admin_callback"][id_]
     return key
+
 
 async def admin_check(event, require=None):
     if event.sender_id in SUDO_M.owner_and_sudos():
