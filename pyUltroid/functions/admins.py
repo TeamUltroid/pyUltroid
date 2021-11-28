@@ -108,8 +108,10 @@ async def admin_check(event, require=None):
         try:
             perms = await event.client.get_permissions(event.chat_id, user)
         except UserNotParticipantError:
+            await event.reply("You need to join this chat First!")
             return False
     if not perms.is_admin:
+        await event.reply("Only Admins can use this command!")
         return
     if require:
         if not getattr(perms, require, False):
