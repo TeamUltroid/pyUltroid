@@ -5,7 +5,8 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import time, sys
+import sys
+import time
 from re import findall
 
 from telethon import TelegramClient
