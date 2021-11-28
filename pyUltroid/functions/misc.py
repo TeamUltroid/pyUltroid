@@ -331,7 +331,7 @@ async def create_instagram_client(event):
     cl = Client(settings)
     cl.challenge_code_handler = get_insta_code
     try:
-        await cl.login(username, password)
+        cl.login(username, password)
     except ManualInputRequired:
         await eor(event, f"Check Pm From @{asst.me.username}")
         await get_insta_code(cl, username, password)
