@@ -242,9 +242,10 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
         if manager and MANAGER:
             allow_all = kwargs.get("allow_all", False)
             allow_pm = kwargs.get("allow_pm", False)
+            require = kwargs.get("require", None)
 
             async def manager_cmd(ult):
-                if not allow_all and not (await admin_check(ult)):
+                if not allow_all and not (await admin_check(ult, require=require)):
                     return
                 elif not allow_pm and ult.is_private:
                     return
