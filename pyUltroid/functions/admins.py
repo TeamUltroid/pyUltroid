@@ -56,9 +56,9 @@ async def _callback_check(event):
         _ult_cache["admin_callback"].update({id_: None})
     while not _ult_cache["admin_callback"].get(id_):
         await asyncio.sleep(1)
-   # if not _ult_cache.get("admin_callback", {}).get(id_):
-   #    await msg.delete()
-   #    return
+    # if not _ult_cache.get("admin_callback", {}).get(id_):
+    #    await msg.delete()
+    #    return
     key = _ult_cache.get("admin_callback", {}).get(id_)
     del _ult_cache["admin_callback"][id_]
     return key
