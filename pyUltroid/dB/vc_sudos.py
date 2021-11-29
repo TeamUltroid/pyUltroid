@@ -13,7 +13,7 @@ def get_vcsudos():
 
 
 def is_vcsudo(id):
-    return id in get_sudos()
+    return id in get_vcsudos()
 
 
 def add_vcsudo(id):
@@ -27,4 +27,3 @@ def del_vcsudo(id):
         sudos = get_vcsudos()
         sudos.remove(id)
         return udB.set_key("VC_SUDOS", sudos)
-    return True
