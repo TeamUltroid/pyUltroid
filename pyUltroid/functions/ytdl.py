@@ -130,7 +130,7 @@ def get_formats(type, id, data):
                 _ext = "mp4"
                 if vid["ext"] == "webm":
                     _ext = "mkv"
-                if _size < 2147483648: # Telegram's Limit of 2GB
+                if _size < 2147483648:  # Telegram's Limit of 2GB
                     _video.update(
                         {
                             "ytid": id,
