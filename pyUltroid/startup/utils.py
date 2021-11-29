@@ -27,6 +27,7 @@ def load_addons(plugin_name):
     name = path.replace("/", ".")
     spec = util.spec_from_file_location(name, path + ".py")
     mod = util.module_from_spec(spec)
+    mod.LOG_CHANNEL = udB.get_key("LOG_CHANNEL")
     mod.asst = asst
     mod.tgbot = asst
     mod.ultroid_bot = ultroid_bot
