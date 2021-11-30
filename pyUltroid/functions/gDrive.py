@@ -1,4 +1,5 @@
-import time, asyncio
+import asyncio
+import time
 from io import FileIO
 from logging import WARNING
 from mimetypes import guess_type
@@ -97,13 +98,15 @@ class GDriveManager:
             if _progress:
                 uploaded = _progress.resumable_progress
                 total_size = _progress.total_size
-                asyncio.get_event_loop().create_task(progress(
-                    uploaded,
-                    total_size,
-                    event,
-                    start,
-                    f"Uploading {filename} on GDrive...",
-                ))
+                asyncio.get_event_loop().create_task(
+                    progress(
+                        uploaded,
+                        total_size,
+                        event,
+                        start,
+                        f"Uploading {filename} on GDrive...",
+                    )
+                )
         fileId = _status.get("id")
         try:
             self._set_permissions(fileId=fileId)
