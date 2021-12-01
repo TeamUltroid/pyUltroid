@@ -92,7 +92,7 @@ def get_formats(type, id, data):
             if aud["vcodec"] is "none":
                 _audio = {}
                 _id = int(aud["format_id"])
-                _size = aud.get("filesize") or 0
+                _size = aud["filesize"] if aud.get("filesize") else 0
                 _ext = "mp3"
                 if _id == 249:
                     _quality = f"64KBPS"
@@ -121,12 +121,12 @@ def get_formats(type, id, data):
         size = 0
         for vid in data["formats"]:
             if vid["format_id"] == "251":
-                size += vid.get("filesize") or 0
+                size += vid["filesize"] if vid.get("filesize") else 0
             if vid["vcodec"] is not "none":
                 _video = {}
                 _id = int(vid["format_id"])
                 _quality = str(vid["height"]) + "×" + str(vid["width"])
-                _size = size + vid.get("filesize") or 0
+                _size = size + (vid["filesize"] if vid.get("filesize") else 0)
                 _ext = "mp4"
                 if vid["ext"] == "webm":
                     _ext = "mkv"
