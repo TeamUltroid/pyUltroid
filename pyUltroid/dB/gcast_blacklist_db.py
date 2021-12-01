@@ -8,34 +8,22 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get_key("GBLACKLISTS")
-    if not a:
-        return []
-    try:
-        return eval(a)
-    except BaseException:
-        udB.del_key("GBLACKLISTS")
-    return []
-
-
-def get_gblacklists():
-    return get_stuff()
+    return udB.get_key("GBLACKLISTS") or []
 
 
 def add_gblacklist(id):
-    ok = get_gblacklists()
+    ok = get_stuff()
     if id not in ok:
         ok.append(id)
-        udB.set_key("GBLACKLISTS", str(ok))
+        return udB.set_key("GBLACKLISTS", ok)
 
 
 def rem_gblacklist(id):
-    ok = get_gblacklists()
+    ok = get_stuff()
     if id in ok:
         ok.remove(id)
-        udB.set_key("GBLACKLISTS", str(ok))
+        return udB.set_key("GBLACKLISTS", ok)
 
 
 def is_gblacklisted(id):
-    ok = get_gblacklists()
-    return id in ok
+    return id in get_stuff()
