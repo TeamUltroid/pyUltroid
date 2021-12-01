@@ -9,54 +9,36 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get_key("ECHO")
-    if not a:
-        return {}
-    try:
-        return eval(a)
-    except BaseException:
-        udB.del_key("ECHO")
-    return {}
+    return udB.get_key("ECHO") or {}
 
 
 def add_echo(chat, user):
     x = get_stuff()
-    try:
-        k = x[chat]
+    if k := x.get(chat):
         if user not in k:
             k.append(user)
         x.update({chat: k})
-    except BaseException:
+    else:
         x.update({chat: [user]})
-    return udB.set_key("ECHO", str(x))
-
+    return udB.set_key("ECHO", x)
 
 def rem_echo(chat, user):
     x = get_stuff()
-    try:
-        k = x[chat]
+    if k := x.get(chat):
         if user in k:
             k.remove(user)
         x.update({chat: k})
-    except BaseException:
-        pass
-    return udB.set_key("ECHO", str(x))
+    return udB.set_key("ECHO", x)
 
 
 def check_echo(chat, user):
     x = get_stuff()
-    try:
-        k = x[chat]
+    if k := x.get(chat):
         if user in k:
             return True
-        return
-    except BaseException:
-        return
 
 
 def list_echo(chat):
     x = get_stuff()
-    try:
-        return x[chat]
-    except BaseException:
-        return
+    if k := x.get(chat):
+        return k
