@@ -22,6 +22,7 @@ def add_echo(chat, user):
         x.update({chat: [user]})
     return udB.set_key("ECHO", x)
 
+
 def rem_echo(chat, user):
     x = get_stuff()
     if k := x.get(chat):
