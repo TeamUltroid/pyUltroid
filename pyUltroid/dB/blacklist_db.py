@@ -9,14 +9,7 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get_key("BLACKLIST_DB")
-    if not a:
-        return {}
-    try:
-        return eval(a)
-    except BaseException:
-        udB.del_key("BLACKLIST_DB")
-    return {}
+    return udB.get_key("BLACKLIST_DB") or {}
 
 
 def add_blacklist(chat, word):
@@ -27,14 +20,14 @@ def add_blacklist(chat, word):
                 ok[chat].append(z)
     else:
         ok.update({chat: [word]})
-    udB.set_key("BLACKLIST_DB", str(ok))
+    return udB.set_key("BLACKLIST_DB", ok)
 
 
 def rem_blacklist(chat, word):
     ok = get_stuff()
     if ok.get(chat) and word in ok[chat]:
         ok[chat].remove(word)
-        udB.set_key("BLACKLIST_DB", str(ok))
+        return udB.set_key("BLACKLIST_DB", ok)
 
 
 def list_blacklist(chat):
@@ -43,11 +36,9 @@ def list_blacklist(chat):
         txt = "".join(f"👉`{z}`\n" for z in ok[chat])
         if txt:
             return txt
-    return
 
 
 def get_blacklist(chat):
     ok = get_stuff()
     if ok.get(chat):
         return ok[chat]
-    return False
