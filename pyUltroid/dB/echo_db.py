@@ -41,5 +41,4 @@ def check_echo(chat, user):
 
 def list_echo(chat):
     x = get_stuff()
-    if k := x.get(chat):
-        return k
+    return x.get(chat)
