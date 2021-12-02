@@ -10,7 +10,7 @@ from asyncio import sleep
 # edit or reply
 
 
-async def eor(event, text, **args):
+async def eor(event, text=None, **args):
     time = args.get("time", None)
     if "time" in args:
         del args["time"]
@@ -26,6 +26,6 @@ async def eor(event, text, **args):
     return ok
 
 
-async def eod(event, text, **kwargs):
+async def eod(event, text=None, **kwargs):
     kwargs["time"] = kwargs.get("time", 8)
     return await eor(event, text, **kwargs)
