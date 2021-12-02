@@ -11,8 +11,6 @@ from asyncio import sleep
 
 
 async def eor(event, text, **args):
-    args.get("link_preview", False)
-    args.get("parse_mode", "md")
     time = args.get("time", None)
     if "time" in args:
         del args["time"]
