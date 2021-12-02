@@ -14,16 +14,16 @@ async def eor(event, text, **args):
     link_preview = args.get("link_preview", False)
     parse_mode = args.get("parse_mode", "md")
     time = args.get("time", None)
+    if "time" in args:
+        del args["time"]
     if event.out:
-        ok = await event.edit(text, link_preview=link_preview, parse_mode=parse_mode)
+        ok = await event.edit(text, **args)
     else:
-        reply_to = event.reply_to_msg_id or event
+        args["reply_to"] = event.reply_to_msg_id or event
         ok = await event.client.send_message(
             event.chat_id,
             text,
-            link_preview=link_preview,
-            parse_mode=parse_mode,
-            reply_to=reply_to,
+            **args
         )
 
     if time:
