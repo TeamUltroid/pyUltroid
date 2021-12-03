@@ -23,20 +23,27 @@ class Loader:
         self.key = key
         self._logger = logger
 
-    def load(self, log=True, func=import_module, cmd_help=HELP, exclude=[]):
-        files = sorted(glob.glob(self.path + "/*.py"))
-        if exclude:
-            for path in exclude:
-                if not path.startswith("_"):
-                    try:
-                        files.remove(f"{self.path}/{path}.py")
-                    except ValueError:
-                        pass
+    def load(self, log=True, func=import_module, cmd_help=HELP, include=[], exclude=[]):
+        if include:
+            files = glob.glob(f"{self.path}/_*.py")
+            for file in include:
+                path = f"{self.path}/{file}.py"
+                if os.path.exists(path):
+                    files.append(path)
+        else:
+            files = glob.glob(f"{self.path}/*.py")
+            if exclude:
+                for path in exclude:
+                    if not path.startswith("_"):
+                        try:
+                            files.remove(f"{self.path}/{path}.py")
+                        except ValueError:
+                            pass
         if log:
             self._logger.info(
                 f"• Installing {self.key}'s Plugins || Count : {len(files)} •"
             )
-        for plugin in files:
+        for plugin in sorted(files):
             plugin = plugin.replace(".py", "")
             if func == import_module:
                 plugin = plugin.replace("/", ".").replace("\\", ".")
@@ -86,7 +93,10 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     _exclude = udB.get_key("EXCLUDE_OFFICIAL")
     _exclude = _exclude.split() if _exclude else []
 
-    Loader().load(exclude=_exclude)
+    # "INCLUDE_ONLY" was added to reduce Big List in "EXCLUDE_OFFICIAL" Plugin
+    _in_only = udB.get_key("INCLUDE_ONLY")
+    _in_only = _in_only.split() if _in_only else []
+    Loader().load(include=_in_only, exclude=_exclude)
 
     # for assistant
     Loader(path="assistant").load(log=False, exclude=["pmbot"])
