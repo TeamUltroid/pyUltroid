@@ -10,13 +10,12 @@ DEVLIST = [
 ]
 
 ULTROID_IMAGES = [
-    "https://telegra.ph/file/bf59d40184b6fcaea4d04.jpg",
-    "https://telegra.ph/file/b8cdf9fcd5a82e94c2d06.jpg",
-    "https://telegra.ph/file/c1cc6ec98f7a2ad655b26.jpg",
-    "https://telegra.ph/file/3c25230ae30d246194eba.jpg",
-    "https://telegra.ph/file/b01715a61b9e876c0d45d.jpg",
-    "https://telegra.ph/file/4ceaf720a96a24527ecff.jpg",
-    "https://telegra.ph/file/92ac7b30769bc074dba5c.jpg",
+    f"https://telegra.ph/file/{_}.jpg" for _ in [
+    "b8cdf9fcd5a82e94c2d06",
+    "3c25230ae30d246194eba",
+    "b01715a61b9e876c0d45d",
+    "4ceaf720a96a24527ecff",
+    "92ac7b30769bc074dba5c"]
 ]
 
 stickers = [
