@@ -30,7 +30,12 @@ class Loader:
                 f"• Installing {self.key}'s Plugins || Count : {len(files)} •"
             )
         if exclude:
-            [files.remove(f"{self.path}/{path}.py") for path in exclude]
+            for path in exclude:
+                if not path.startswith("_"):
+                    try:
+                        files.remove(f"{self.path}/{path}.py")
+                    except ValueError:
+                        pass
         for plugin in files:
             plugin = plugin.replace(".py", "")
             if func == import_module:
@@ -78,7 +83,10 @@ class Loader:
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for official
-    Loader().load()
+    _exclude = udB.get_key("EXCLUDE_OFFICIAL")
+    _exclude = _exclude.split() if _exclude else []
+
+    Loader().load(exclude=_exclude)
 
     # for assistant
     Loader(path="assistant").load(log=False, exclude=["pmbot"])
