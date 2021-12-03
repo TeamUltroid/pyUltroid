@@ -14,7 +14,7 @@ async def eor(event, text=None, **args):
     time = args.get("time", None)
     edit_time = args.get("edit_time", None)
     if "edit_time" in args:
-        del args["edit_time")
+        del args["edit_time"]
     if "time" in args:
         del args["time"]
     if event.out:
