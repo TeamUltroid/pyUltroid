@@ -9,9 +9,7 @@ from .. import udB
 
 
 def list_gbanned():
-    if x := udB.get_key("GBAN"):
-        return x
-    return {}
+    return udB.get_key("GBAN") or {}
 
 
 def gban(user, reason):
@@ -51,6 +49,4 @@ def is_gmuted(user):
 
 
 def list_gmuted():
-    if x := udB.get_key("GMUTE"):
-        return x
-    return []
+    return udB.get_key("GMUTE") or []
