@@ -501,8 +501,13 @@ def telegraph_client():
             short_name=short_name, author_name=gd_name, author_url=profile_url
         )
     except Exception as er:
-        LOGS.exception(er)
-        return
+        if "SHORT_NAME_TOO_LONG" in str(er):
+            TelegraphClient.create_account(
+                short_name="ultroiduser", author_name=gd_name, author_url=profile_url
+            )
+        else:
+            LOGS.exception(er)
+            return
     udB.set_key("_TELEGRAPH_TOKEN", TelegraphClient.get_access_token())
     TELEGRAPH.append(TelegraphClient)
     return TelegraphClient
