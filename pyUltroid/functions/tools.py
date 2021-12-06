@@ -14,6 +14,10 @@ import subprocess
 from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
+import random
+import string
+from ..dB.filestore_db import store_msg, get_stored_msg
+import base64
 
 import aiohttp
 import certifi
@@ -245,7 +249,7 @@ async def webuploader(file, uploader: str = None):
     if isinstance(status, dict):
         if "skylink" in status:
             return f"https://siasky.net/{status['skylink']}"
-        if status["status"] is 200 or status["status"] is True:
+        if status["status"] == 200 or status["status"] is True:
             try:
                 link = status["link"]
             except KeyError:
@@ -524,6 +528,39 @@ async def Carbon(
     file = BytesIO(con)
     file.name = file_name + ".jpg"
     return file
+
+
+async def get_file_link(msg):
+    msg_id = await msg.forward_to(Var.LOG_CHANNEL)
+    await msg_id.reply(
+        "**Message has been stored to generate a shareable link. Do not delete it.**"
+    )
+    msg_id = msg_id.id
+    msg_hash = (
+        base64.b64encode(
+            "".join(random.choices(string.ascii_letters + string.digits, k=10)).encode(
+                "ascii"
+            )
+        )
+    ).decode("ascii")
+    store_msg(msg_hash, msg_id)
+    return msg_hash
+
+
+async def get_stored_file(event, hash):
+    # hash = (base64.b64decode(hash.encode("ascii"))).decode("ascii")
+    msg_id = get_stored_msg(hash)
+    try:
+        msg = await asst.get_messages(Var.LOG_CHANNEL, ids=msg_id)
+    except Exception as er:
+        LOGS.warning(f"FileStore, Error: {er}")
+        return
+    if msg is None:
+        await asst.send_message(
+            event.chat_id, "__Message was deleted by owner!__", reply_to=event.id
+        )
+        return
+    await asst.send_message(event.chat_id, msg.text, file=msg.media, reply_to=event.id)
 
 
 # --------- END --------- #
