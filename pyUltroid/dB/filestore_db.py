@@ -22,7 +22,7 @@ def get_stored():
 def store_msg(hash, msg_id):
     all = get_stored()
     all.update({hash: msg_id})
-    udB.set("FILE_STORE", str(all))
+    udB.set_key("FILE_STORE", str(all))
 
 
 def list_all_stored_msgs():
