@@ -9,29 +9,21 @@ from .. import udB
 
 
 def get_stored():
-    stored = udB.get("FILE_STORE")
-    if stored is None:
-        return {}
-    try:
-        return eval(stored)
-    except BaseException:
-        udB.delete("FILE_STORE")
-    return {}
+    return udB.get_key("FILE_STORE") or {}
 
 
 def store_msg(hash, msg_id):
     all = get_stored()
     all.update({hash: msg_id})
-    udB.set_key("FILE_STORE", str(all))
+    return udB.set_key("FILE_STORE", all)
 
 
 def list_all_stored_msgs():
     all = get_stored()
-    return [i for i in all]
+    return list(all.keys())
 
 
 def get_stored_msg(hash):
     all = get_stored()
-    if all[hash]:
+    if all.get(hash):
         return all[hash]
-    return None
