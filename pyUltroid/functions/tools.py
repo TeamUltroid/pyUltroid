@@ -548,10 +548,11 @@ async def get_file_link(msg):
 
 
 async def get_stored_file(event, hash):
+    from .. import udB
     # hash = (base64.b64decode(hash.encode("ascii"))).decode("ascii")
     msg_id = get_stored_msg(hash)
     try:
-        msg = await asst.get_messages(Var.LOG_CHANNEL, ids=msg_id)
+        msg = await asst.get_messages(udB.get_key("LOG_CHANNEL"), ids=msg_id)
     except Exception as er:
         LOGS.warning(f"FileStore, Error: {er}")
         return
