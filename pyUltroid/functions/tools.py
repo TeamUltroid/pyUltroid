@@ -549,6 +549,7 @@ async def get_file_link(msg):
 
 async def get_stored_file(event, hash):
     from .. import udB
+
     # hash = (base64.b64decode(hash.encode("ascii"))).decode("ascii")
     msg_id = get_stored_msg(hash)
     try:
