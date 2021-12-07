@@ -537,12 +537,16 @@ async def get_file_link(msg):
     )
     msg_id = msg_id.id
     msg_hash = (
-        base64.b64encode(
-            "".join(random.choices(string.ascii_letters + string.digits, k=10)).encode(
-                "ascii"
+        (
+            base64.b64encode(
+                "".join(
+                    random.choices(string.ascii_letters + string.digits, k=10)
+                ).encode("ascii")
             )
         )
-    ).decode("ascii").replace("=", "")
+        .decode("ascii")
+        .replace("=", "")
+    )
     store_msg(msg_hash, msg_id)
     return msg_hash
 
