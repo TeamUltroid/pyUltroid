@@ -542,7 +542,7 @@ async def get_file_link(msg):
                 "ascii"
             )
         )
-    ).decode("ascii")
+    ).decode("ascii").replace("=", "")
     store_msg(msg_hash, msg_id)
     return msg_hash
 
