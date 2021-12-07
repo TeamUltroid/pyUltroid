@@ -532,6 +532,7 @@ async def Carbon(
 
 async def get_file_link(msg):
     from .. import udB
+
     msg_id = await msg.forward_to(udB.get_key("LOG_CHANNEL"))
     await msg_id.reply(
         "**Message has been stored to generate a shareable link. Do not delete it.**"
