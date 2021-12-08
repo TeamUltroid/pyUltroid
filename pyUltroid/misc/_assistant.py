@@ -56,8 +56,12 @@ def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
     return ult
 
 
-def callback(data=None, from_users=None, owner=False):
+def callback(data=None, **kwargs):
     """Assistant's callback decorator"""
+    kwargs["from_users"] = kwargs.get("from_users", None)
+    owner = kwargs.get("owner", False)
+    if "owner" in kwargs:
+        del kwargs["owner"]
 
     def ultr(func):
         async def wrapper(event):
