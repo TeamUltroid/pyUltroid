@@ -56,16 +56,12 @@ def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
     return ult
 
 
-def callback(data=None, **kwargs):
+def callback(data=None, from_users=None, owner=False):
     """Assistant's callback decorator"""
-    kwargs["from_users"] = kwargs.get("from_users", None)
-    owner = kwargs.get("owner", False)
-    if "owner" in kwargs:
-        del kwargs["owner"]
 
     def ultr(func):
         async def wrapper(event):
-            if from_users and event.sender_id not in from_users():
+            if from_users and event.sender_id not in from_users:
                 return await event.answer("Not for You!", alert=True)
             elif owner and event.sender_id not in owner_and_sudos():
                 return await event.answer(f"This is {OWNER}'s bot!!")
