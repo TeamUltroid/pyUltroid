@@ -56,7 +56,7 @@ def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
     return ult
 
 
-def callback(data=None, from_users=None, owner=False):
+def callback(data=None, from_users=None, owner=False, **kwargs):
     """Assistant's callback decorator"""
 
     def ultr(func):
