@@ -10,7 +10,9 @@ Core library of [The Ultroid](https://github.com/TeamUltroid/pyUltroid), a pytho
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
 
 # Installation
-`pip install py-Ultroid`
+```bash
+pip3 install -U py-Ultroid
+```
 
 # Documentation 
 [![Documentation](https://img.shields.io/badge/Documentation-Ultroid-blue)](http://ultroid.tech/)
@@ -70,5 +72,5 @@ See more working plugins on [the offical repository](https://github.com/TeamUltr
 Ultroid is licensed under [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.en.html) v3 or later.
 
 # Credits
-* [![TeamUltroid-Devs](https://img.shields.io/static/v1?label=Teamultroid&message=devs&color=critical)](https://t.me/UltroidDevs)
+* [![TeamUltroid-Devs](https://img.shields.io/static/v1?label=TeamUltroid&message=devs&color=critical)](https://t.me/UltroidDevs)
 * [Lonami](https://github.com/Lonami) for [Telethon](https://github.com/LonamiWebs/Telethon)
