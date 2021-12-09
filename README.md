@@ -15,9 +15,17 @@ Core library of [The Ultroid](https://github.com/TeamUltroid/pyUltroid), a pytho
 # Usage
 - Create folders named `plugins`, `addons`, `assistant` and `resources`.   
 - Add your plugins in the `plugins` folder and others accordingly.   
-- Create a `.env` file with `API_ID`, `API_HASH`, `SESSION`, `REDIS_URI` & `REDIS_PASSWORD` as mandatory environment variables. Check
+- Create a `.env` file with following mandatory Environment Variables
+   ```
+   API_ID
+   API_HASH
+   SESSION
+   REDIS_URI
+   REDIS_PASSWORD
+   ```
+- Check
 [`.env.sample`](https://github.com/TeamUltroid/Ultroid/blob/main/.env.sample) for more details.   
-- Run `python -m pyUltroid` to start the bot.   
+- Run `python3 -m pyUltroid` to start the bot.   
 
 ## Creating plugins
 ### To work everywhere
