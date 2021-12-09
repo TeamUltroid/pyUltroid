@@ -6,9 +6,11 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 from asyncio import sleep
+
 from telethon.tl.custom import Message
 
 # edit or reply
+
 
 async def eor(event, text=None, **args):
     time = args.get("time", None)
