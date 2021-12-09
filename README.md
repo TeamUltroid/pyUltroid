@@ -5,6 +5,9 @@ Core library of [The Ultroid](https://github.com/TeamUltroid/pyUltroid), a pytho
 [![CodeFactor](https://www.codefactor.io/repository/github/teamultroid/pyultroid/badge)](https://www.codefactor.io/repository/github/teamultroid/pyultroid)
 [![PyPI - Version](https://img.shields.io/pypi/v/py-Ultroid?style=round)](https://pypi.org/project/py-Ultroid)    
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/py-Ultroid?label=DOWNLOADS&style=round)](https://pypi.org/project/py-Ultroid)    
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/TeamUltroid/Ultroid/graphs/commit-activity)
+[![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/TeamUltroid/Ultroid)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
 
 # Installation
 `pip install py-Ultroid`
@@ -28,7 +31,7 @@ Core library of [The Ultroid](https://github.com/TeamUltroid/pyUltroid), a pytho
 - Run `python3 -m pyUltroid` to start the bot.   
 
 ## Creating plugins
-### To work everywhere
+ - ### To work everywhere
 
 ```python
 @ultroid_cmd(
@@ -38,7 +41,7 @@ async def _(e):
     await eor(e, "Ultroid Started.")   
 ```
 
-### To work only in groups
+- ### To work only in groups
 
 ```python
 @ultroid_cmd(
@@ -49,7 +52,7 @@ async def _(e):
     await eor(e, "Ultroid Started.")   
 ```
 
-### Assistant Plugins 👇
+- ### Assistant Plugins 👇
 
 ```python
 @asst_cmd("start")   
@@ -68,4 +71,4 @@ Ultroid is licensed under [GNU Affero General Public License](https://www.gnu.or
 
 # Credits
 * [![TeamUltroid-Devs](https://img.shields.io/static/v1?label=Teamultroid&message=devs&color=critical)](https://t.me/UltroidDevs)
-* [Lonami](https://github.com/LonamiWebs) for [Telethon](https://github.com/LonamiWebs/Telethon)
+* [Lonami](https://github.com/Lonami) for [Telethon](https://github.com/LonamiWebs/Telethon)
