@@ -43,75 +43,26 @@ async def ban_time(event, time_str):
 # ------------------Admin Check--------------- #
 
 
-async def _callback_check(event):
-    id_ = str(uuid.uuid1()).split("-")[0]
-    time.time()
-    msg = await event.reply(
-        "Click Below Button to prove self as Admin!",
-        buttons=Button.inline("Click Me", f"cc_{id_}"),
-    )
-    if not _ult_cache.get("admin_callback"):
-        _ult_cache.update({"admin_callback": {id_: None}})
-    else:
-        _ult_cache["admin_callback"].update({id_: None})
-    while not _ult_cache["admin_callback"].get(id_):
-        await asyncio.sleep(1)
-    # if not _ult_cache.get("admin_callback", {}).get(id_):
-    #    await msg.delete()
-    #    return
-    key = _ult_cache.get("admin_callback", {}).get(id_)
-    del _ult_cache["admin_callback"][id_]
-    return key
-
-
 async def admin_check(event, require=None):
+    """ This func need a lot of update/fixes.
+        In order to support channel/anonymous admins..
+    """
     if event.sender_id in SUDO_M.owner_and_sudos():
         return True
-    callback = None
-
     # for Anonymous Admin Support
     if (
         isinstance(event.sender, (types.Chat, types.Channel))
         and event.sender_id == event.chat_id
     ):
-        if not require:
-            return True
-        callback = True
-    if isinstance(event.sender, types.Channel):
-        if _ult_cache.get("LINKED_CHATS") and _ult_cache["LINKED_CHATS"].get(
-            event.chat_id
-        ):
-            _ignore = _ult_cache["LINKED_CHATS"][event.chat_id]["linked_chat"]
-        else:
-            channel = await event.client(
-                functions.channels.GetFullChannelRequest(event.chat_id)
-            )
-            _ignore = channel.full_chat.linked_chat_id
-            if _ult_cache.get("LINKED_CHATS"):
-                _ult_cache["LINKED_CHATS"].update(
-                    {event.chat_id: {"linked_chat": _ignore}}
-                )
-            else:
-                _ult_cache.update(
-                    {"LINKED_CHATS": {event.chat_id: {"linked_chat": _ignore}}}
-                )
-        if _ignore and event.sender.id == _ignore:
-            return False
-        callback = True
-    if callback:
-        get_ = await _callback_check(event)
-        if not get_:
-            return
-        user, perms = get_
-        event._sender_id = user.id
-        event._sender = user
-    else:
-        user = event.sender
-        try:
-            perms = await event.client.get_permissions(event.chat_id, user.id)
-        except UserNotParticipantError:
-            await event.reply("You need to join this chat First!")
-            return False
+        # Blindly allow Anonymous Admin to do anything
+        return True
+    if not isinstance(event.sender, types.User):
+        return False
+    try:
+        perms = await event.client.get_permissions(event.chat_id, user.id)
+    except UserNotParticipantError:
+        await event.reply("You need to join this chat First!")
+        return False
     if not perms.is_admin:
         await event.reply("Only Admins can use this command!")
         return
