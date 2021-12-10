@@ -15,7 +15,7 @@ from telethon.tl import functions, types
 
 from .. import _ult_cache
 from ..misc import SUDO_M
-
+from ..misc._wrappers import eor
 
 async def ban_time(event, time_str):
     """Simplify ban time from text"""
@@ -113,11 +113,11 @@ async def admin_check(event, require=None):
             await event.reply("You need to join this chat First!")
             return False
     if not perms.is_admin:
-        await event.reply("Only Admins can use this command!")
+        await eor(event, "Only Admins can use this command!", time=8)
         return
     if require:
         if not getattr(perms, require, False):
-            await event.reply(f"You are missing the right of `{require}`")
+            await eor(event, f"You are missing the right of `{require}`", time=8)
             return False
     return True
 
