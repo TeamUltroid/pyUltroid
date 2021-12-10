@@ -16,6 +16,7 @@ from telethon.tl import functions, types
 from .. import _ult_cache
 from ..misc import SUDO_M
 
+
 async def ban_time(event, time_str):
     """Simplify ban time from text"""
     if not any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
@@ -40,6 +41,7 @@ async def ban_time(event, time_str):
 
 
 # ------------------Admin Check--------------- #
+
 
 async def _callback_check(event):
     id_ = str(uuid.uuid1()).split("-")[0]
