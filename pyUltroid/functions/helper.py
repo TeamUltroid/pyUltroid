@@ -134,7 +134,7 @@ async def safeinstall(event):
     plug = reply.file.name.replace(".py", "")
     if plug in list(LOADED):
         return await eod(ok, f"Plugin `{reply.file.name}` is already installed.")
-    sm = reply.file.name.replace("_", "-").replace("|","-")
+    sm = reply.file.name.replace("_", "-").replace("|", "-")
     dl = await reply.download_media(f"addons/{sm}")
     if event.text[9:] != "f":
         read = open(dl).read()
