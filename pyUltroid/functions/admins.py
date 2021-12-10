@@ -5,15 +5,11 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import asyncio
 import time
-import uuid
 
-from telethon import Button
 from telethon.errors.rpcerrorlist import UserNotParticipantError
-from telethon.tl import functions, types
+from telethon.tl import types
 
-from .. import _ult_cache
 from ..misc import SUDO_M
 
 
@@ -44,8 +40,8 @@ async def ban_time(event, time_str):
 
 
 async def admin_check(event, require=None):
-    """ This func need a lot of update/fixes.
-        In order to support channel/anonymous admins..
+    """This func need a lot of update/fixes.
+    In order to support channel/anonymous admins..
     """
     if event.sender_id in SUDO_M.owner_and_sudos():
         return True
