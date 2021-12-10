@@ -345,18 +345,23 @@ async def plug(plugin_channels):
             async for x in ultroid_bot.iter_messages(
                 chat, search=".py", filter=InputMessagesFilterDocument, wait_time=10
             ):
-                if x.file.name in os.listdir("addons"):
-                    LOGS.info(f"Plugin {x.file.name} is Pre Installed")
-                    continue
-                await asyncio.sleep(0.6)
-                file = await ultroid_bot.download_media(x.media, "./addons/")
                 plugin = x.file.name
-                try:
-                    load_addons(plugin.replace(".py", ""))
-                except Exception as e:
-                    LOGS.info(f"Ultroid - PLUGIN_CHANNEL - ERROR - {plugin}")
-                    LOGS.exception(e)
-                    os.remove(file)
+                if plugin in os.listdir("addons"):
+                    try:
+                        load_addons(plugin.replace(".py", ""))
+                    except Exception as e:
+                        LOGS.info(f"Ultroid - PLUGIN_CHANNEL - ERROR - {plugin}")
+                        LOGS.exception(e)
+                        os.remove(file)
+                else:
+                    await asyncio.sleep(0.6)
+                    file = await ultroid_bot.download_media(x.media, "./addons/")
+                    try:
+                        load_addons(plugin.replace(".py", ""))
+                    except Exception as e:
+                        LOGS.info(f"Ultroid - PLUGIN_CHANNEL - ERROR - {plugin}")
+                        LOGS.exception(e)
+                        os.remove(file)
         except Exception as e:
             LOGS.exception(e)
 
