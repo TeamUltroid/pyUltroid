@@ -17,6 +17,7 @@ from .. import _ult_cache
 from ..misc import SUDO_M
 from ..misc._wrappers import eor
 
+
 async def ban_time(event, time_str):
     """Simplify ban time from text"""
     if not any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
