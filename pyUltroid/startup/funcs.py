@@ -354,7 +354,7 @@ async def plug(plugin_channels):
                 except Exception as e:
                     LOGS.info(f"Ultroid - PLUGIN_CHANNEL - ERROR - {plugin}")
                     LOGS.exception(e)
-                    os.remove(file)
+                    os.remove(plugin)
         except Exception as er:
             LOGS.exception(er)
 
