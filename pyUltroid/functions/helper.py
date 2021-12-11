@@ -133,7 +133,7 @@ async def safeinstall(event):
         return await eod(ok, "`Please reply to any python plugin`")
     plug = reply.file.name.replace(".py", "")
     if plug in list(LOADED):
-        return await eod(ok, f"Plugin `{reply.file.name}` is already installed.")
+        return await eod(ok, f"Plugin `{plug}` is already installed.")
     sm = reply.file.name.replace("_", "-").replace("|", "-")
     dl = await reply.download_media(f"addons/{sm}")
     if event.text[9:] != "f":
@@ -145,10 +145,11 @@ async def safeinstall(event):
                     f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{reply.file.name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
                 )
     try:
-        load_addons(plug)
+        load_addons(dl.split("/")[-1].replace(".py",""))
     except BaseException:
         os.remove(dl)
         return await eor(ok, f"**ERROR**\n\n`{format_exc()}`", time=30)
+    plug = sm.replace(".py", "")
     if plug in HELP:
         output = "**Plugin** - `{}`\n".format(plug)
         for i in HELP[plug]:
