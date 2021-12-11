@@ -99,7 +99,10 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     Loader().load(include=_in_only, exclude=_exclude)
 
     # for assistant
-    Loader(path="assistant").load(log=False, exclude=["pmbot"])
+    _ast_exc = ["pmbot"]
+    if "games" in _in_only:
+        _ast_exc.append("games")
+    Loader(path="assistant").load(log=False, exclude=_ast_exc)
 
     # for addons
     if addons:
