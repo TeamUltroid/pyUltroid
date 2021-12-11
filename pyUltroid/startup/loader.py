@@ -109,11 +109,11 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         url = udB.get_key("ADDONS_URL")
         if url:
             os.system("git clone -q {} addons".format(url))
-        elif not os.path.exists("addons"):
+        if not os.path.exists("addons"):
             os.system(
                 f"git clone -q -b {Repo().active_branch} https://github.com/TeamUltroid/UltroidAddons.git addons"
             )
-        elif os.path.exists("addons/.git"):
+        else:
             os.system("cd addons && git pull -q && cd ..")
 
         if not os.path.exists("addons"):
