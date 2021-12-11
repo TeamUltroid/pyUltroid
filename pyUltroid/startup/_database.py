@@ -147,7 +147,7 @@ class DetaDB:
         return [a["key"] for a in self.run(self.db.fetch()).items]
 
     def set(self, key, value):
-        self._cache.update({str(value): str(key)})
+        self._cache.update({str(key): str(value)})
         if not self.get(str(key)):
             try:
                 self.run(self.db.insert(str(value), str(key)))
