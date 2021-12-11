@@ -111,7 +111,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         if url:
             os.system("git clone -q {} addons".format(url))
         if os.path.exists("addons") and not os.path.exists("addons/.git"):
-           os.rmdir("addons")
+            os.rmdir("addons")
         if not os.path.exists("addons"):
             os.system(
                 f"git clone -q -b {Repo().active_branch} https://github.com/TeamUltroid/UltroidAddons.git addons"
