@@ -256,7 +256,9 @@ class RedisConnection(Redis):
     def get_key(self, key):
         if key in self._cache:
             return self._cache[key]
-        return get_data(self, key)
+       _ = get_data(self, key)
+       self._cache.update({key:_})
+       return _
 
     def del_key(self, key):
         if key in self._cache:
