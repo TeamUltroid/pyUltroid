@@ -145,7 +145,7 @@ async def safeinstall(event):
                     f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{reply.file.name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
                 )
     try:
-        load_addons(dl.split("/")[-1].replace(".py",""))
+        load_addons(dl.split("/")[-1].replace(".py", ""))
     except BaseException:
         os.remove(dl)
         return await eor(ok, f"**ERROR**\n\n`{format_exc()}`", time=30)
