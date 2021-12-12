@@ -202,16 +202,19 @@ def format_btn(buttons: list):
 # @techierror
 
 
-async def saavn_dl(query: str):
-    query = query.replace(" ", "%20")
+async def saavn_search(query: str):
     try:
-        data = (
-            await async_searcher(
-                url=f"https://jostapi.herokuapp.com/saavn?query={query}", re_json=True
-            )
-        )[0]
-    except BaseException:
+        data = await async_searcher(url=f"https://jostapi.herokuapp.com/saavn?query={query.replace(' ', '%20')}", re_json=True)
+    except:
+        data = None
+    return data
+
+
+async def saavn_dl(query: str):
+    data = await saavn_search(query)
+    if not data:
         return None, None, None, None
+    data = data[0]
     try:
         title = data["song"]
         url = data["media_url"]
