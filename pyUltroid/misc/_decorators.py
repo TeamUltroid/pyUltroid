@@ -252,6 +252,13 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 try:
                     await dec(ult)
                 except Exception as er:
+                    if chat := udB.get_key("MANAGER_LOG"):
+                        text = f"**#MANAGER_LOG\n\nChat:** `{get_display_name(ult.chat)}` `{ult.chat_id}`"
+                        text += f"\n**Replied :** `{ult.is_reply}`\n**Command :** {ult.text}\n\n**Error :** `{er}`"
+                        try:
+                            return await asst.send_message(chat, text, link_preview=False)
+                        except Exception as er:
+                            LOGS.exception(er)
                     LOGS.info(f"• MANAGER [{ult.chat_id}]:")
                     LOGS.exception(er)
 
