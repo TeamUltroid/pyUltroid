@@ -202,6 +202,7 @@ class DetaDB:
 class SqlDB:
     def __init__(self, url):
         self._url = url
+        conn = None
         if not psycopg2:
             return False
         try:
