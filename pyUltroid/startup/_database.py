@@ -192,6 +192,26 @@ class DetaDB:
         return value
 
 
+class SqlDB:
+    def __init__(self, url):
+        pass
+
+    @property
+    def name(self):
+        return "SQL"
+
+    def get_key(self, variable):
+        pass
+
+    def set_key(self, key, value):
+        pass
+
+    def flushall(self):
+        pass
+
+    def rename(self, key1, key2):
+        pass
+
 # --------------------------------------------------------------------------------------------- #
 
 
