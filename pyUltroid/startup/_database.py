@@ -263,9 +263,7 @@ class SqlDB:
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-            cur.execute(
-                "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'Ultroid'"
-            )
+            cur.execute(f"INSERT INTO Ultroid ({key}) values ('{value}')")
             cur.fetchall()
             cur.close()
             conn.close()
@@ -282,7 +280,7 @@ class SqlDB:
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute(f"DROP DATABASE Ultroid")
-            cur.execute(f"INSERT INTO Ultroid ({key}) values ('{key}')")
+            cur.execute("CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))")
             cur.fetchall()
             cur.close()
             conn.close()
