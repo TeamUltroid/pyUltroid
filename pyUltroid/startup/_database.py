@@ -383,8 +383,8 @@ def UltroidDB():
         return DetaDB(Var.DETA_KEY)
     elif MongoClient and Var.MONGO_URI:
         return MongoDB(Var.MONGO_URI)
-    elif psycopg2 and Var.DATABASE_URI:
-        return SqlDB(Var.DATABASE_URI)
+    elif psycopg2 and Var.DATABASE_URL:
+        return SqlDB(Var.DATABASE_URL)
     from .. import HOSTED_ON
 
     return RedisConnection(
