@@ -263,7 +263,9 @@ class SqlDB:
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-            cur.execute("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'Ultroid'")
+            cur.execute(
+                "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'Ultroid'"
+            )
             cur.fetchall()
             cur.close()
             conn.close()
