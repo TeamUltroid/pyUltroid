@@ -25,6 +25,13 @@ try:
 except ImportError:
     MongoClient = None
 
+try:
+    import psycopg2
+except ImportError:
+    psycopg2 = None
+    if Var.DATABASE_URL:
+        LOGS.error("'psycopg2' not found!\nInstall psycopg2 to use sql database..")
+
 if Deta and Var.DETA_KEY:
     try:
         import nest_asyncio
@@ -193,18 +200,77 @@ class DetaDB:
 
 
 class SqlDB:
-    def __init__(self, url):
-        pass
+    def __init__(self):
+        try:
+            conn = psycopg2.connect(dsn=Var.DATABASE_URL)
+            conn.autocommit = True
+            cur = conn.cursor()
+            cur.execute("CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))")
+            data = cur.fetchall()
+            cur.close()
+            conn.close()
+            return True
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)  # for now
+            if conn is not None:
+                conn.close()
+            return False
 
     @property
     def name(self):
         return "SQL"
+    
+    def keys(self):
+        try:
+            conn = psycopg2.connect(dsn=Var.DATABASE_URL)
+            conn.autocommit = True
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'Ultroid'")
+            data = cur.fetchall()
+            cur.close()
+            conn.close()
+            return True
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)  # for now
+            if conn is not None:
+                conn.close()
+            return False
 
     def get_key(self, variable):
-        pass
+        try:
+            conn = psycopg2.connect(dsn=Var.DATABASE_URL)
+            conn.autocommit = True
+            cur = conn.cursor()
+            cur.execute(f"SELECT {variable} FROM Ultroid")
+            data = cur.fetchall()
+            cur.close()
+            conn.close()
+            if len(data) == 0:
+                return None
+            else:
+                return data[0]
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)  # for now
+            if conn is not None:
+                conn.close()
+            return False
 
     def set_key(self, key, value):
-        pass
+        try:
+            conn = psycopg2.connect(dsn=Var.DATABASE_URL)
+            conn.autocommit = True
+            cur = conn.cursor()
+            cur.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
+            cur.execute(f"INSERT INTO Ultroid ({key}) values ('{key}')")
+            data = cur.fetchall()
+            cur.close()
+            conn.close()
+            return True
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)  # for now
+            if conn is not None:
+                conn.close()
+            return False
 
     def flushall(self):
         pass
