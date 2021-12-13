@@ -200,11 +200,12 @@ class DetaDB:
 
 
 class SqlDB:
-    def __init__(self):
+    def __init__(self, url):
+        self._url = url
         if not psycopg2:
             return False
         try:
-            conn = psycopg2.connect(dsn=Var.DATABASE_URL)
+            conn = psycopg2.connect(dsn=url)
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute("CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))")
@@ -224,7 +225,7 @@ class SqlDB:
 
     def keys(self):
         try:
-            conn = psycopg2.connect(dsn=Var.DATABASE_URL)
+            conn = psycopg2.connect(dsn=self._url)
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute(
@@ -242,17 +243,16 @@ class SqlDB:
 
     def get_key(self, variable):
         try:
-            conn = psycopg2.connect(dsn=Var.DATABASE_URL)
+            conn = psycopg2.connect(dsn=self._url)
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute(f"SELECT {variable} FROM Ultroid")
             data = cur.fetchall()
             cur.close()
             conn.close()
-            if len(data) == 0:
+            if not data:
                 return None
-            else:
-                return data[0]
+            return data[0]
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)  # for now
             if conn is not None:
@@ -261,7 +261,7 @@ class SqlDB:
 
     def set_key(self, key, value):
         try:
-            conn = psycopg2.connect(dsn=Var.DATABASE_URL)
+            conn = psycopg2.connect(dsn=self._url)
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
@@ -278,7 +278,7 @@ class SqlDB:
 
     def flushall(self):
         try:
-            conn = psycopg2.connect(dsn=Var.DATABASE_URL)
+            conn = psycopg2.connect(dsn=self._url)
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute(f"DROP DATABASE Ultroid")
@@ -383,6 +383,8 @@ def UltroidDB():
         return DetaDB(Var.DETA_KEY)
     elif MongoClient and Var.MONGO_URI:
         return MongoDB(Var.MONGO_URI)
+    elif psycopg2 and Var.DATABASE_URI:
+        return SqlDB(Var.DATABASE_URI)
     from .. import HOSTED_ON
 
     return RedisConnection(
