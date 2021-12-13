@@ -210,15 +210,12 @@ class SqlDB:
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute("CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))")
-            cur.fetchall()
             cur.close()
             conn.close()
-            return True
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)  # for now
             if conn is not None:
                 conn.close()
-            return False
 
     @property
     def name(self):
@@ -267,7 +264,6 @@ class SqlDB:
             cur = conn.cursor()
             cur.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
             cur.execute(f"INSERT INTO Ultroid ({key}) values ('{value}')")
-            cur.fetchall()
             cur.close()
             conn.close()
             return True
@@ -284,7 +280,6 @@ class SqlDB:
             cur = conn.cursor()
             cur.execute(f"DROP DATABASE Ultroid")
             cur.execute("CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))")
-            cur.fetchall()
             cur.close()
             conn.close()
             return True
