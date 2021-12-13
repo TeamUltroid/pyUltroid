@@ -263,7 +263,7 @@ class SqlDB:
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-            cur.execute(f"INSERT INTO Ultroid ({key}) values ('{key}')")
+            cur.execute("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'Ultroid'")
             cur.fetchall()
             cur.close()
             conn.close()
@@ -275,7 +275,21 @@ class SqlDB:
             return False
 
     def flushall(self):
-        pass
+        try:
+            conn = psycopg2.connect(dsn=Var.DATABASE_URL)
+            conn.autocommit = True
+            cur = conn.cursor()
+            cur.execute(f"DROP DATABASE Ultroid")
+            cur.execute(f"INSERT INTO Ultroid ({key}) values ('{key}')")
+            cur.fetchall()
+            cur.close()
+            conn.close()
+            return True
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)  # for now
+            if conn is not None:
+                conn.close()
+            return False
 
     def rename(self, key1, key2):
         pass
