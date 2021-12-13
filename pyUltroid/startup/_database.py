@@ -206,7 +206,7 @@ class SqlDB:
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute("CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))")
-            data = cur.fetchall()
+            cur.fetchall()
             cur.close()
             conn.close()
             return True
@@ -219,14 +219,16 @@ class SqlDB:
     @property
     def name(self):
         return "SQL"
-    
+
     def keys(self):
         try:
             conn = psycopg2.connect(dsn=Var.DATABASE_URL)
             conn.autocommit = True
             cur = conn.cursor()
-            cur.execute("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'Ultroid'")
-            data = cur.fetchall()
+            cur.execute(
+                "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'Ultroid'"
+            )
+            cur.fetchall()
             cur.close()
             conn.close()
             return True
@@ -262,7 +264,7 @@ class SqlDB:
             cur = conn.cursor()
             cur.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
             cur.execute(f"INSERT INTO Ultroid ({key}) values ('{key}')")
-            data = cur.fetchall()
+            cur.fetchall()
             cur.close()
             conn.close()
             return True
