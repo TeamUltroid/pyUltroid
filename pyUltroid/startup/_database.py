@@ -203,8 +203,6 @@ class SqlDB:
     def __init__(self, url):
         self._url = url
         conn = None
-        if not psycopg2:
-            return None
         try:
             conn = psycopg2.connect(dsn=url)
             conn.autocommit = True
