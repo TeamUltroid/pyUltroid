@@ -15,6 +15,7 @@ load_dotenv(find_dotenv())
 
 class Var:
     # mandatory
+    DATABASE_URL = config("DATABASE_URL", default=None, cast=str)
     API_ID = (
         int(sys.argv[1]) if len(sys.argv) > 1 else config("API_ID", default=6, cast=int)
     )
