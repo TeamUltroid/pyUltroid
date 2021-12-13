@@ -1,7 +1,6 @@
 """
-For multiple database support!
-redis cant be remove completely
-since, it will be a breaking change
+For multiple database support !
+redis can't be removed completely since it will be a breaking change.
 """
 
 import ast
