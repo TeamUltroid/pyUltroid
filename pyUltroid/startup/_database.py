@@ -256,7 +256,7 @@ class SqlDB:
             print(error)  # for now
             if conn is not None:
                 conn.close()
-            return False
+            return None
 
     def set_key(self, key, value):
         try:
