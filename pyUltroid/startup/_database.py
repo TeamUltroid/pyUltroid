@@ -204,7 +204,7 @@ class SqlDB:
         self._url = url
         conn = None
         if not psycopg2:
-            return False
+            return None
         try:
             conn = psycopg2.connect(dsn=url)
             conn.autocommit = True
