@@ -9,6 +9,7 @@ requirements = [
     "aiofiles",
     "aiohttp[speedups]",
     "hiredis",
+    "psycopg2-binary",
 ]
 
 
