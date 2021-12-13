@@ -201,6 +201,8 @@ class DetaDB:
 
 class SqlDB:
     def __init__(self):
+        if not psycopg2:
+            return False
         try:
             conn = psycopg2.connect(dsn=Var.DATABASE_URL)
             conn.autocommit = True
