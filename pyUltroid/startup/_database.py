@@ -252,7 +252,10 @@ class SqlDB:
                 conn.close()
                 if len(data) == 0:
                     return None
-                return get_data(self, str(data[0][0]))
+                if len(data) > 1:
+                    for i in data[0]:
+                        if not i:
+                            return get_data(self, str(i))
             except (Exception, psycopg2.DatabaseError) as error:
                 print(f"{variable} dosen't esists !")
                 return None
