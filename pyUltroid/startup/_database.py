@@ -255,6 +255,7 @@ class SqlDB:
                 if len(data) > 1:
                     for i in data:
                         if i[0]:
+                            print(i[0])
                             return get_data(self, str(i[0]))
             except (Exception, psycopg2.DatabaseError) as error:
                 print(f"{variable} dosen't esists ! - {error}")
