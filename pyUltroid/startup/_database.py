@@ -1,7 +1,4 @@
-"""
-For multiple database support !
-redis can't be removed completely since it will be a breaking change.
-"""
+
 
 import ast
 import asyncio
@@ -198,6 +195,9 @@ class DetaDB:
         return value
 
 
+# Thanks to "Akaash Pattnaik" / @BLUE-DEVIL1134
+# for SQL Implementation in Ultroid.
+
 class SqlDB:
     def __init__(self, url):
         self._url = url
@@ -339,7 +339,12 @@ class SqlDB:
             return False
 
     def rename(self, key1, key2):
-        pass
+        _ = self.get_key(key1)
+        if _:
+            self.del_key(key1)
+            self.set_key(key2, _)
+            return 0
+        return 1
 
 
 # --------------------------------------------------------------------------------------------- #
