@@ -195,7 +195,7 @@ class DetaDB:
         return value
 
 
-# Thanks to "Akaash Pattnaik" / @BLUE-DEVIL1134
+# Thanks to "Akash Pattnaik" / @BLUE-DEVIL1134
 # for SQL Implementation in Ultroid.
 
 class SqlDB:
