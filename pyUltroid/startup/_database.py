@@ -247,15 +247,15 @@ class SqlDB:
             cur = conn.cursor()
             try:
                 cur.execute(f"SELECT {variable} FROM Ultroid")
+                data = cur.fetchall()
+                cur.close()
+                conn.close()
+                if len(data) == 0:
+                    return None
+                return str(data[0][0])
             except (Exception, psycopg2.DatabaseError) as error:
                 print(f"{variable} dosen't esists !")
                 return None
-            data = cur.fetchall()
-            cur.close()
-            conn.close()
-            if not data:
-                return None
-            return data[0][0]
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)  # for now
             if conn is not None:
