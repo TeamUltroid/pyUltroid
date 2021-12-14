@@ -247,21 +247,19 @@ class SqlDB:
             cur = conn.cursor()
             try:
                 cur.execute(f"SELECT {variable} FROM Ultroid")
+                data = cur.fetchall()
+                cur.close()
+                conn.close()
+                if len(data) == 0:
+                    return None
+                if len(data) >= 1:
+                    for i in data:
+                        if i[0]:
+                            print(i[0])
+                            return get_data(self, str(i[0]))
             except (Exception, psycopg2.DatabaseError) as error:
-                print(f"{variable} dosen't esists ! - {error}")
                 return None
-            data = cur.fetchall()
-            cur.close()
-            conn.close()
-            if len(data) == 0:
-                return None
-            if len(data) > 1:
-                for i in data:
-                    if i[0]:
-                        print(i[0])
-                        return get_data(self, str(i[0]))
         except (Exception, psycopg2.DatabaseError) as error:
-            print(error)  # for now
             if conn is not None:
                 conn.close()
             return None
@@ -284,10 +282,8 @@ class SqlDB:
                             print(i[0])
                             return get_data(self, str(i[0]))
             except (Exception, psycopg2.DatabaseError) as error:
-                print(f"{variable} dosen't esists ! - {error}")
                 return None
         except (Exception, psycopg2.DatabaseError) as error:
-            print(error)  # for now
             if conn is not None:
                 conn.close()
             return None
@@ -299,7 +295,7 @@ class SqlDB:
             cur = conn.cursor()
             try:
                 cur.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
-            except BaseException:
+            except:
                 pass
                 # dosen't exists
             cur.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
