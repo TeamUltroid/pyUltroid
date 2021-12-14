@@ -295,7 +295,7 @@ class SqlDB:
             cur = conn.cursor()
             try:
                 cur.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
-            except:
+            except BaseException:
                 pass
                 # dosen't exists
             cur.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
