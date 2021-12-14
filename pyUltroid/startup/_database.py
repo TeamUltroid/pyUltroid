@@ -277,6 +277,21 @@ class SqlDB:
             if conn is not None:
                 conn.close()
             return False
+    
+    def del_key(self, key):
+        try:
+            conn = psycopg2.connect(dsn=self._url)
+            conn.autocommit = True
+            cur = conn.cursor()
+            cur.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
+            cur.close()
+            conn.close()
+            return True
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)  # for now
+            if conn is not None:
+                conn.close()
+            return True
 
     def flushall(self):
         try:
