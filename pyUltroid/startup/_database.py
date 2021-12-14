@@ -253,11 +253,11 @@ class SqlDB:
                 if len(data) == 0:
                     return None
                 if len(data) > 1:
-                    for i in data[0]:
-                        if not i:
-                            return get_data(self, str(i))
+                    for i in data:
+                        if i[0]:
+                            return get_data(self, str(i[0]))
             except (Exception, psycopg2.DatabaseError) as error:
-                print(f"{variable} dosen't esists !")
+                print(f"{variable} dosen't esists ! - {error}")
                 return None
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)  # for now
