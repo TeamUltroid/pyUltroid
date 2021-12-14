@@ -278,7 +278,7 @@ class SqlDB:
                 conn.close()
                 if len(data) == 0:
                     return None
-                if len(data) > 1:
+                if len(data) >= 1:
                     for i in data:
                         if i[0]:
                             print(i[0])
