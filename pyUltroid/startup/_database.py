@@ -297,6 +297,11 @@ class SqlDB:
             conn = psycopg2.connect(dsn=self._url)
             conn.autocommit = True
             cur = conn.cursor()
+            try:
+                cur.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
+            except:
+                pass
+                # dosen't exists
             cur.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
             cur.execute(f"INSERT INTO Ultroid ({key}) values ('{value}')")
             cur.close()
