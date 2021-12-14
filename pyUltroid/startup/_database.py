@@ -277,7 +277,7 @@ class SqlDB:
             if conn is not None:
                 conn.close()
             return False
-    
+
     def del_key(self, key):
         try:
             conn = psycopg2.connect(dsn=self._url)
