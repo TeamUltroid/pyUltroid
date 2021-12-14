@@ -255,7 +255,6 @@ class SqlDB:
                 if len(data) >= 1:
                     for i in data:
                         if i[0]:
-                            print(i[0])
                             return eval(str(i[0]))
             except (Exception, psycopg2.DatabaseError) as error:
                 return None
@@ -279,7 +278,6 @@ class SqlDB:
                 if len(data) >= 1:
                     for i in data:
                         if i[0]:
-                            print(i[0])
                             return eval(str(i[0]))
             except (Exception, psycopg2.DatabaseError) as error:
                 return None
