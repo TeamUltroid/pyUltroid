@@ -239,8 +239,7 @@ class SqlDB:
     def ping(self):
         """They should really keep the `if uDB.ping():` in try/except."""
         return True
-    
-    
+
     def get_key(self, variable):
         try:
             conn = psycopg2.connect(dsn=self._url)
