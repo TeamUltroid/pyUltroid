@@ -223,7 +223,7 @@ class SqlDB:
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute(
-                "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name  = 'ultroid'"
+                "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name  = 'ultroid'"
             )  # case sensitive
             data = cur.fetchall()
             cur.close()
