@@ -239,8 +239,35 @@ class SqlDB:
     def ping(self):
         """They should really keep the `if uDB.ping():` in try/except."""
         return True
-
+    
+    
     def get_key(self, variable):
+        try:
+            conn = psycopg2.connect(dsn=self._url)
+            conn.autocommit = True
+            cur = conn.cursor()
+            try:
+                cur.execute(f"SELECT {variable} FROM Ultroid")
+                data = cur.fetchall()
+                cur.close()
+                conn.close()
+                if len(data) == 0:
+                    return None
+                if len(data) > 1:
+                    for i in data:
+                        if i[0]:
+                            print(i[0])
+                            return get_data(self, str(i[0]))
+            except (Exception, psycopg2.DatabaseError) as error:
+                print(f"{variable} dosen't esists ! - {error}")
+                return None
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)  # for now
+            if conn is not None:
+                conn.close()
+            return None
+
+    def get(self, variable):
         try:
             conn = psycopg2.connect(dsn=self._url)
             conn.autocommit = True
