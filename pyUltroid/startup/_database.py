@@ -224,12 +224,12 @@ class SqlDB:
             conn.autocommit = True
             cur = conn.cursor()
             cur.execute(
-                "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'Ultroid'"
-            )
-            cur.fetchall()
+                "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name  = 'ultroid'"
+            )  # case sensitive
+            data = cur.fetchall()
             cur.close()
             conn.close()
-            return True
+            return data
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)  # for now
             if conn is not None:
@@ -237,7 +237,7 @@ class SqlDB:
             return False
 
     def ping(self):
-        """They should really keep the `if uDB.ping():` in try/except."""
+        """They should really keep the `if udB.ping():` in try/except."""
         return True
 
     def get_key(self, variable):
@@ -256,7 +256,7 @@ class SqlDB:
                     for i in data:
                         if i[0]:
                             print(i[0])
-                            return get_data(self, str(i[0]))
+                            return eval(str(i[0]))
             except (Exception, psycopg2.DatabaseError) as error:
                 return None
         except (Exception, psycopg2.DatabaseError) as error:
@@ -280,7 +280,7 @@ class SqlDB:
                     for i in data:
                         if i[0]:
                             print(i[0])
-                            return get_data(self, str(i[0]))
+                            return eval(str(i[0]))
             except (Exception, psycopg2.DatabaseError) as error:
                 return None
         except (Exception, psycopg2.DatabaseError) as error:
