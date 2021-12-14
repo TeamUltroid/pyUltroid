@@ -1,5 +1,3 @@
-
-
 import ast
 import asyncio
 import os
@@ -197,6 +195,7 @@ class DetaDB:
 
 # Thanks to "Akash Pattnaik" / @BLUE-DEVIL1134
 # for SQL Implementation in Ultroid.
+
 
 class SqlDB:
     def __init__(self, url):
