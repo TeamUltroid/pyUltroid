@@ -15,7 +15,6 @@ load_dotenv(find_dotenv())
 
 class Var:
     # mandatory
-    DATABASE_URL = config("DATABASE_URL", default=None, cast=str)
     API_ID = (
         int(sys.argv[1]) if len(sys.argv) > 1 else config("API_ID", default=6, cast=int)
     )
@@ -44,6 +43,8 @@ class Var:
     REDISUSER = config("REDISUSER", default=None)
     # for deta base
     DETA_KEY = config("DETA_KEY", default=None)
+    # for sql
+    DATABASE_URL = config("DATABASE_URL", default=None)
     # for MONGODB users
     MONGO_URI = config("MONGO_URI", default=None)
     # for future
