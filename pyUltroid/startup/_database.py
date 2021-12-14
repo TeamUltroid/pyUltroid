@@ -245,13 +245,17 @@ class SqlDB:
             conn = psycopg2.connect(dsn=self._url)
             conn.autocommit = True
             cur = conn.cursor()
-            cur.execute(f"SELECT {variable} FROM Ultroid")
+            try:
+                cur.execute(f"SELECT {variable} FROM Ultroid")
+            except (Exception, psycopg2.DatabaseError) as error:
+                print(f"{variable} dosen't esists !")
+                return None
             data = cur.fetchall()
             cur.close()
             conn.close()
             if not data:
                 return None
-            return data[0]
+            return data[0][0]
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)  # for now
             if conn is not None:
