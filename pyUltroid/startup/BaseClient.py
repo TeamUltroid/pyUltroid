@@ -76,7 +76,10 @@ class UltroidClient(TelegramClient):
 
             sys.exit()
         except (AuthKeyDuplicatedError, EOFError):
-            self.logger.error("String session expired. Create new!")
+            if "bot_token" in kwargs:
+                self.logger.error("'BOT_TOKEN' not found or is expired. Create new!")
+            else:
+                self.logger.error("String session expired. Create new!")
             sys.exit()
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
