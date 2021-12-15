@@ -81,10 +81,18 @@ def inline_mention(user, custom=None, html=False):
         mention_text = get_display_name(user) or user
     else:
         mention_text = custom
-    if not isinstance(user, types.User):
-        return mention_text
+    user, channel = None, None
+    if isinstance(user, types.User):
+        user = True
+    elif isinstance(user, types.Channel):
+        channel = True
     if html:
-        return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
+        if user:
+            return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
+        elif channel and channel.username:
+            return f"<a href=https://t.me/{channel.username}>{mention_text}</a>"
+    if not user:
+        return mention_text
     return f"[{mention_text}](tg://user?id={user.id})"
 
 
