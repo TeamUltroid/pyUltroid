@@ -66,6 +66,9 @@ class UltroidClient(TelegramClient):
             self.run_in_loop(self.start_client(bot_token=bot_token))
         self.dc_id = self.session.dc_id
 
+    def __repr__(self):
+        return "<Ultroid.Client\n self:{}\n bot:{}\n>".format(self.full_name, self._bot)
+
     async def start_client(self, **kwargs):
         """function to start client"""
         self.logger.info("Trying to login.")
