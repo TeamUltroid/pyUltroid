@@ -11,9 +11,8 @@
 import math
 
 from telethon.tl import functions, types
-
+from telethon.utils import get_peer_id
 from .. import LOGS, ultroid_bot
-from ..misc._wrappers import eor
 
 # -----------
 # @buddhhu
@@ -28,7 +27,7 @@ async def get_user_id(ids, client=ultroid_bot):
         else:
             userid = int(ids)
     else:
-        userid = (await client.get_entity(ids)).id
+        userid = get_peer_id(await client.get_entity(ids))
     return userid
 
 
@@ -61,7 +60,7 @@ async def get_chat_info(chat, event):
     elif isinstance(chat, types.Chat):
         chat_info = await event.client(functions.messages.GetFullChatRequest(chat))
     else:
-        return await eor(event, "`Use this for Group/Channel.`")
+        return await event.eor("`Use this for Group/Channel.`")
     full = chat_info.full_chat
     broadcast = getattr(chat, "broadcast", False)
     chat_type = "Channel" if broadcast else "Group"
