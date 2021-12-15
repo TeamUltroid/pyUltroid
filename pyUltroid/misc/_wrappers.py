@@ -7,9 +7,10 @@
 
 from asyncio import sleep
 
-from .. import LOGS
-from telethon.tl.custom import Message
 from telethon.errors.rpcerrorlist import MessageDeleteForbiddenError
+from telethon.tl.custom import Message
+
+from .. import LOGS
 
 # edit or reply
 
@@ -48,6 +49,7 @@ async def _try_delete(event):
     except BaseException as er:
         LOGS.info("Error while Deleting Message..")
         LOGS.exception(er)
+
 
 setattr(Message, "eor", eor)
 setattr(Message, "try_delete", _try_delete)
