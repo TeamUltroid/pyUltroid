@@ -157,7 +157,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 ftext += "**Py-Ultroid Version:** `" + str(pyver)
                 ftext += "`\n**Ultroid Version:** `" + str(ult_ver)
                 ftext += "`\n**Telethon Version:** `" + str(telever)
-                ftext += f"\n**Hosted At:** `{HOSTED_ON}`\n\n"
+                ftext += f"`\n**Hosted At:** `{HOSTED_ON}`\n\n"
                 ftext += "--------START ULTROID CRASH LOG--------"
                 ftext += "\n**Date:** `" + date
                 ftext += "`\n**Group:** `" + str(ult.chat_id) + "` " + str(naam)
