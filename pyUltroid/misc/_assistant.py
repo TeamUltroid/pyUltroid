@@ -61,6 +61,7 @@ def callback(data=None, from_users=[], owner=False, **kwargs):
     if "me" in from_users:
         from_users.remove("me")
         from_users.append(ultroid_bot.uid)
+
     def ultr(func):
         async def wrapper(event):
             if from_users and event.sender_id not in from_users:
