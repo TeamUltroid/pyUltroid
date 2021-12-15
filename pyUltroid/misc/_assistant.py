@@ -56,9 +56,11 @@ def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
     return ult
 
 
-def callback(data=None, from_users=None, owner=False, **kwargs):
+def callback(data=None, from_users=[], owner=False, **kwargs):
     """Assistant's callback decorator"""
-
+    if "me" in from_users:
+        from_users.remove("me")
+        from_users.append(ultroid_bot.uid)
     def ultr(func):
         async def wrapper(event):
             if from_users and event.sender_id not in from_users:
