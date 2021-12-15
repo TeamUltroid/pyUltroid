@@ -76,7 +76,9 @@ def make_mention(user, custom=None):
 
 def inline_mention(user, custom=None, html=False):
     if not custom:
-        mention_text = get_display_name(user)
+        # "user" can be Channel, Chat or User.
+        # else parse as it is.
+        mention_text = get_display_name(user) or user
     else:
         mention_text = custom
     if not isinstance(user, types.User):
