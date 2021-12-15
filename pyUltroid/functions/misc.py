@@ -42,6 +42,15 @@ try:
 except ImportError:
     Image = None
 
+try:
+    import cv2
+except ImportError:
+    cv2 = None
+try:
+    import numpy as np
+except ImportError:
+    np = None
+
 
 async def randomchannel(
     tochat, channel, range1, range2, caption=None, client=ultroid_bot
@@ -488,3 +497,12 @@ def split_list(List, index):
         new_.extend([List[:index]])
         List = List[index:]
     return new_
+
+
+# https://stackoverflow.com/questions/9041681/opencv-python-rotate-image-by-x-degrees-around-specific-point
+
+def rotate_image(image, angle):
+  image_center = tuple(np.array(image.shape[1::-1]) / 2)
+  rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
+  result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
+  return result
