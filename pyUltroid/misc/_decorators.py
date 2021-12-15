@@ -33,7 +33,7 @@ from telethon.errors.rpcerrorlist import (
 from telethon.events import MessageEdited, NewMessage
 from telethon.utils import get_display_name
 
-from .. import DUAL_HNDLR, DUAL_MODE, HNDLR, LOGS, SUDO_HNDLR, asst, udB, ultroid_bot
+from .. import *
 from ..dB import DEVLIST
 from ..dB._core import LIST, LOADED
 from ..functions.admins import admin_check
@@ -156,7 +156,8 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 )
                 ftext += "**Py-Ultroid Version:** `" + str(pyver)
                 ftext += "`\n**Ultroid Version:** `" + str(ult_ver)
-                ftext += "`\n**Telethon Version:** `" + str(telever) + "`\n\n"
+                ftext += "`\n**Telethon Version:** `" + str(telever)
+                ftext += f"\n**Hosted At:** `{HOSTED_ON}`\n\n"
                 ftext += "--------START ULTROID CRASH LOG--------"
                 ftext += "\n**Date:** `" + date
                 ftext += "`\n**Group:** `" + str(ult.chat_id) + "` " + str(naam)
