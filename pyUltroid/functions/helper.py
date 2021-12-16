@@ -97,6 +97,7 @@ def inline_mention(user, custom=None, html=False):
         return f"[{mention_text}](https://t.me/{user.username})"
     return mention_text
 
+
 # ----------------- Load \\ Unloader ---------------- #
 
 
