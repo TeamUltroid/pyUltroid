@@ -90,7 +90,7 @@ def inline_mention(user, custom=None, html=False):
         if chat_type == "User":
             return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
         elif chat_type == "Channel" and user.username:
-            return f"<a href=https://t.me/{channel.username}>{mention_text}</a>"
+            return f"<a href=https://t.me/{user.username}>{mention_text}</a>"
     if chat_type == "User":
         return f"[{mention_text}](tg://user?id={user.id})"
     elif chat_type == "Channel" and user.username:
