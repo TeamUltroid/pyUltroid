@@ -233,9 +233,10 @@ async def saavn_dl(query: str):
 
 # --- webupload ------#
 # @buddhhu
+_webupload_cache = {}
 
-
-async def webuploader(file, uploader: str):
+async def webuploader(chat_id: int, msg_id: int, uploader: str):
+    file = _webupload_cache[chat_id][msg_id]
     sites = {
         "anonfiles": {"url": "https://api.anonfiles.com/upload", "json": True},
         "siasky": {"url": "https://siasky.net/skynet/skyfile", "json": True},
@@ -261,6 +262,7 @@ async def webuploader(file, uploader: str):
             except KeyError:
                 link = status["data"]["file"]["url"]["short"]
             return link
+    del _webupload_cache[chat_id][msg_id]
     return status
 
 
