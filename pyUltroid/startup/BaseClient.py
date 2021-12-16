@@ -13,9 +13,9 @@ from telethon import TelegramClient
 from telethon import utils as telethon_utils
 from telethon.errors import (
     AccessTokenExpiredError,
+    AccessTokenInvalidError,
     ApiIdInvalidError,
     AuthKeyDuplicatedError,
-    AccessTokenInvalidError
 )
 from telethon.network.connection import (
     ConnectionTcpMTProxyRandomizedIntermediate as MtProxy,
