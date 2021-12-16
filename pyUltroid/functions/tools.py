@@ -235,7 +235,7 @@ async def saavn_dl(query: str):
 # @buddhhu
 
 
-async def webuploader(file, uploader: str = None):
+async def webuploader(file, uploader: str):
     sites = {
         "anonfiles": {"url": "https://api.anonfiles.com/upload", "json": True},
         "siasky": {"url": "https://siasky.net/skynet/skyfile", "json": True},
