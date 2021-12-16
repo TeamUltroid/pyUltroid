@@ -15,6 +15,7 @@ from telethon.errors import (
     AccessTokenExpiredError,
     ApiIdInvalidError,
     AuthKeyDuplicatedError,
+    AccessTokenInvalidError
 )
 from telethon.network.connection import (
     ConnectionTcpMTProxyRandomizedIntermediate as MtProxy,
@@ -81,10 +82,7 @@ class UltroidClient(TelegramClient):
 
             sys.exit()
         except (AuthKeyDuplicatedError, EOFError):
-            if kwargs.get("bot_token"):
-                self.logger.error("'BOT_TOKEN' not found or is expired. Create new!")
-            else:
-                self.logger.error("String session expired. Create new!")
+            self.logger.error("String session expired. Create new!")
             sys.exit()
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
@@ -93,7 +91,10 @@ class UltroidClient(TelegramClient):
             self.logger.error(
                 "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
-
+            sys.exit()
+        except AccessTokenInvalidError:
+            self.udB.del_key("BOT_TOKEN")
+            self.logger.error("The provided bot token is not valid! Quitting...")
             sys.exit()
         # Save some stuff for later use...
         myself = self.udB.get_key("OWNER_ID")
