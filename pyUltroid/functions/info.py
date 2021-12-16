@@ -82,7 +82,8 @@ async def get_chat_info(chat, event):
         )
     except Exception as e:
         msg_info = None
-        LOGS.info("Exception:", e)
+        if not e.client._bot:
+            LOGS.exception(e)
     first_msg_valid = bool(
         msg_info and msg_info.messages and msg_info.messages[0].id == 1
     )
