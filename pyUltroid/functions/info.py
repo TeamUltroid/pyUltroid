@@ -11,12 +11,12 @@
 import math
 
 from telethon.tl import functions, types
-from telethon.utils import get_peer_id
 
-from .. import LOGS, ultroid_bot
+from .. import LOGS
 
 # -----------
 # @buddhhu
+
 
 async def get_uinfo(e):
     user, data = None, None
