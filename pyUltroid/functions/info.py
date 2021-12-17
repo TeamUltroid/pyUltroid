@@ -18,20 +18,6 @@ from .. import LOGS, ultroid_bot
 # -----------
 # @buddhhu
 
-
-async def get_user_id(ids, client=ultroid_bot):
-    if str(ids).isdigit() or str(ids).startswith("-"):
-        if str(ids).startswith("-100"):
-            userid = int(str(ids).replace("-100", ""))
-        elif str(ids).startswith("-"):
-            userid = int(str(ids).replace("-", ""))
-        else:
-            userid = int(ids)
-    else:
-        userid = get_peer_id(await client.get_entity(ids))
-    return userid
-
-
 async def get_uinfo(e):
     user, data = None, None
     reply = await e.get_reply_message()
