@@ -37,6 +37,7 @@ class UltroidClient(TelegramClient):
         **kwargs,
     ):
         self._cache = {}
+        self._dialogs = []
         self.logger = logger
         self.udB = udB
         self.proxy = proxy
