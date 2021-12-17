@@ -29,6 +29,8 @@ class UltroidClient(TelegramClient):
     def __init__(
         self,
         session,
+        api_id=None,
+        api_hash=None,
         proxy=None,
         bot_token=None,
         udB=None,
@@ -41,8 +43,8 @@ class UltroidClient(TelegramClient):
         self.logger = logger
         self.udB = udB
         self.proxy = proxy
-        kwargs["api_id"] = Var.API_ID
-        kwargs["api_hash"] = Var.API_HASH
+        kwargs["api_id"] = api_id or Var.API_ID
+        kwargs["api_hash"] = api_hash or Var.API_HASH
         kwargs["base_logger"] = TelethonLogger
         if proxy:
             try:
