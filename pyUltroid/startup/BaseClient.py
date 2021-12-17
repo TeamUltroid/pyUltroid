@@ -234,3 +234,10 @@ class UltroidClient(TelegramClient):
     def uid(self):
         """Client's user id"""
         return self.me.id
+
+    async def parse_id(self, text):
+        try:
+            text = int(text)
+        except ValueError:
+            pass
+        return await self.get_peer_id(text)
