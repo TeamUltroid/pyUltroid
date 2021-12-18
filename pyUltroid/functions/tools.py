@@ -246,7 +246,7 @@ async def webuploader(chat_id: int, msg_id: int, uploader: str):
         "x0.at": {"url": "https://x0.at/", "json": False},
         "transfer": {"url": "https://transfer.sh", "json": False},
     }
-    if uploader and uploader in sites.keys():
+    if uploader and uploader in sites:
         url = sites[uploader]["url"]
         json = sites[uploader]["json"]
     with open(file, "rb") as data:
@@ -285,7 +285,7 @@ def text_set(text):
             if len(line) <= 55:
                 lines.append(line)
             else:
-                k = int(len(line) / 55)
+                k = len(line) // 55
                 for z in range(1, k + 2):
                     lines.append(line[((z - 1) * 55) : (z * 55)])
     return lines[:25]

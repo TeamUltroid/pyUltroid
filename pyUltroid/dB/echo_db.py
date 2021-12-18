@@ -34,9 +34,8 @@ def rem_echo(chat, user):
 
 def check_echo(chat, user):
     x = get_stuff()
-    if k := x.get(chat):
-        if user in k:
-            return True
+    if (k := x.get(chat)) and user in k:
+        return True
 
 
 def list_echo(chat):

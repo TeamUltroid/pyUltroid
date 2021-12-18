@@ -75,27 +75,19 @@ def make_mention(user, custom=None):
 
 
 def inline_mention(user, custom=None, html=False):
-    if not custom:
-        # "user" can be Channel, Chat or User.
-        # else parse as it is.
-        mention_text = get_display_name(user) or user
-    else:
-        mention_text = custom
+    mention_text = get_display_name(user) or user if not custom else custom
     chat_type = None
     if isinstance(user, types.User):
         chat_type = "User"
     elif isinstance(user, types.Channel):
         chat_type = "Channel"
-    if html:
-        if chat_type == "User":
+    if chat_type == "User":
+        if html:
             return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
-        elif chat_type == "Channel" and user.username:
-            return f"<a href=https://t.me/{user.username}>{mention_text}</a>"
-    else:
-        if chat_type == "User":
+        else:
             return f"[{mention_text}](tg://user?id={user.id})"
-        elif chat_type == "Channel" and user.username:
-            return f"[{mention_text}](https://t.me/{user.username})"
+    elif chat_type == "Channel" and user.username:
+        return f"<a href=https://t.me/{user.username}>{mention_text}</a>"
     return mention_text
 
 

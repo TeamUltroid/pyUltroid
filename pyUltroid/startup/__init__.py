@@ -16,10 +16,7 @@ from telethon import __version__
 from ..version import __version__ as __pyUltroid__
 from ..version import ultroid_version
 
-file = "ultroid.log"
-if len(sys.argv) > 6:
-    file = f"ultroid{sys.argv[6]}.log"
-
+file = f"ultroid{sys.argv[6]}.log" if len(sys.argv) > 6 else "ultroid.log"
 if os.path.exists(file):
     os.remove(file)
 
