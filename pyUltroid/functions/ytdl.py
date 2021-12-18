@@ -125,7 +125,7 @@ def get_formats(type, id, data):
             if vid["vcodec"] is not "none":
                 _video = {}
                 _id = int(vid["format_id"])
-                _quality = str(vid["height"]) + "×" + str(vid["width"])
+                _quality = str(vid["width"]) + "×" + str(vid["height"])
                 _size = size + (vid["filesize"] if vid.get("filesize") else 0)
                 _ext = "mp4"
                 if vid["ext"] == "webm":
