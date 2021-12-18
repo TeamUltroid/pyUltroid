@@ -305,7 +305,7 @@ class SqlDB:
             conn = psycopg2.connect(dsn=self._url)
             conn.autocommit = True
             cur = conn.cursor()
-            cur.execute(f"DROP TABLE Ultroid")
+            cur.execute("DROP TABLE Ultroid")
             cur.execute("CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))")
             cur.close()
             conn.close()

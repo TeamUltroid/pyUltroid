@@ -116,10 +116,9 @@ async def admin_check(event, require=None):
     if not perms.is_admin:
         await eor(event, "Only Admins can use this command!", time=8)
         return
-    if require:
-        if not getattr(perms, require, False):
-            await eor(event, f"You are missing the right of `{require}`", time=8)
-            return False
+    if require and not getattr(perms, require, False):
+        await eor(event, f"You are missing the right of `{require}`", time=8)
+        return False
     return True
 
 

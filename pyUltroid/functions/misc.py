@@ -85,9 +85,10 @@ async def YtDataScraper(url: str):
         ]
     except (KeyError, IndexError):
         description_data = [{"text": "U hurrr from here"}]
-    description = ""
-    for desc in range(len(description_data)):
-        description += description_data[desc]["text"]
+    description = "".join(
+        description_datum["text"] for description_datum in description_data
+    )
+
     like_dislike = common_data["videoActions"]["menuRenderer"]["topLevelButtons"]
     to_return["title"] = common_data["title"]["runs"][0]["text"]
     to_return["views"] = (
@@ -292,7 +293,7 @@ async def _insta_login():
             udB.del_key("INSTA_SET")
             return await _insta_login()
         except Exception:
-            udB.del_key(key for key in ["INSTA_USERNAME", "INSTA_PASSWORD"])
+            udB.del_key(iter(["INSTA_USERNAME", "INSTA_PASSWORD"]))
             LOGS.exception(format_exc())
             return False
         udB.set_key("INSTA_SET", str(cl.get_settings()))
@@ -451,7 +452,7 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
                 )
             )[0]["src"]
         )
-        message.update({"media": {"url": uri}})
+        message["media"] = {"url": uri}
         os.remove(file_)
     return message
 
@@ -505,5 +506,4 @@ def split_list(List, index):
 def rotate_image(image, angle):
     image_center = tuple(np.array(image.shape[1::-1]) / 2)
     rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
-    result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
-    return result
+    return cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)

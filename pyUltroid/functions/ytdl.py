@@ -94,16 +94,16 @@ def get_formats(type, id, data):
                 _id = int(aud["format_id"])
                 _size = aud["filesize"] if aud.get("filesize") else 0
                 _ext = "mp3"
-                if _id == 249:
-                    _quality = f"64KBPS"
-                elif _id == 250:
-                    _quality = f"128KBPS"
-                elif _id == 140:
+                if _id == 140:
                     _ext = "m4a"
-                    _quality = f"256KBPS"
+                    _quality = "256KBPS"
+                elif _id == 249:
+                    _quality = "64KBPS"
+                elif _id == 250:
+                    _quality = "128KBPS"
                 elif _id == 251:
                     _ext = "opus"
-                    _quality = f"320KBPS"
+                    _quality = "320KBPS"
                 _audio.update(
                     {
                         "ytid": id,
@@ -123,14 +123,12 @@ def get_formats(type, id, data):
             if vid["format_id"] == "251":
                 size += vid["filesize"] if vid.get("filesize") else 0
             if vid["vcodec"] is not "none":
-                _video = {}
                 _id = int(vid["format_id"])
                 _quality = str(vid["width"]) + "×" + str(vid["height"])
                 _size = size + (vid["filesize"] if vid.get("filesize") else 0)
-                _ext = "mp4"
-                if vid["ext"] == "webm":
-                    _ext = "mkv"
+                _ext = "mkv" if vid["ext"] == "webm" else "mp4"
                 if _size < 2147483648:  # Telegram's Limit of 2GB
+                    _video = {}
                     _video.update(
                         {
                             "ytid": id,
