@@ -16,7 +16,7 @@ import ssl
 import sys
 import time  # Importing the time library to check the time of code execution
 import urllib.request
-from http.client import BadStatusLine, IncompleteRead
+from http.client import BadStatusLine
 from urllib.parse import quote
 from urllib.request import HTTPError, Request, URLError, urlopen
 

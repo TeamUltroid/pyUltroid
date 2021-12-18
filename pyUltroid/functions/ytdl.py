@@ -96,14 +96,14 @@ def get_formats(type, id, data):
                 _ext = "mp3"
                 if _id == 140:
                     _ext = "m4a"
-                    _quality = '256KBPS'
+                    _quality = "256KBPS"
                 elif _id == 249:
-                    _quality = '64KBPS'
+                    _quality = "64KBPS"
                 elif _id == 250:
-                    _quality = '128KBPS'
+                    _quality = "128KBPS"
                 elif _id == 251:
                     _ext = "opus"
-                    _quality = '320KBPS'
+                    _quality = "320KBPS"
                 _audio.update(
                     {
                         "ytid": id,
