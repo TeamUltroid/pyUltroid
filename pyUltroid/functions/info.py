@@ -29,7 +29,7 @@ async def get_uinfo(e):
         if len(ok) > 1:
             data = ok[1]
         try:
-            user = await e.client.get_entity(await get_user_id(ok[0], client=e.client))
+            user = await e.client.get_entity(await e.client.parse_id(ok[0]))
         except IndexError:
             pass
         except ValueError as er:
