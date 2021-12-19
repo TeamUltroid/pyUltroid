@@ -100,11 +100,11 @@ class GDriveManager:
                 uploaded = _progress.resumable_progress
                 total_size = _progress.total_size
                 progress(
-                        uploaded,
-                        total_size,
-                        event,
-                        start,
-                        f"Uploading {filename} on GDrive...",
+                    uploaded,
+                    total_size,
+                    event,
+                    start,
+                    f"Uploading {filename} on GDrive...",
                 )
         fileId = _status.get("id")
         try:
