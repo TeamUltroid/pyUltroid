@@ -12,7 +12,7 @@ from oauth2client.client import logger as _logger
 from oauth2client.file import Storage
 
 from .. import udB
-from .helper import progress
+from .helper import time_formatter, humanbytes
 
 _auth_flow = None
 
@@ -76,8 +76,8 @@ class GDriveManager:
             fileId=fileId, body=permissions, supportsAllDrives=True
         ).execute(http=self._http)
 
-    @asyncio.coroutine
-    def _upload_file(self, event, path: str, filename: str = None):
+    async def _upload_file(self, event, path: str, filename: str = None):
+        last_txt = ""
         if not filename:
             filename = path.split("/")[-1]
         mime_type = guess_type(path)[0] or "application/octet-stream"
@@ -97,15 +97,16 @@ class GDriveManager:
         while not _status:
             _progress, _status = upload.next_chunk(num_retries=3)
             if _progress:
-                uploaded = _progress.resumable_progress
+                diff = time.time() - start
+                completed = _progress.resumable_progress
                 total_size = _progress.total_size
-                progress(
-                    uploaded,
-                    total_size,
-                    event,
-                    start,
-                    f"Uploading {filename} on GDrive...",
-                )
+                percentage = round((completed / total_size) * 100, 2)
+                speed = round(completed / diff, 2)
+                eta = round((total_size - completed) / speed, 2) * 1000
+                crnt_txt = f"`✦ Uploading {filename} to GDrive...\n\n" + f"✦ {humanbytes(completed)} of {humanbytes(total_size)} » {percentage}%\n\n" + f"✦ Speed: {humanbytes(speed)}/s\n\n" + f"✦ ETA: {time_formatter(eta)}`"
+                if last_txt != crnt_txt:
+                    await event.edit(crnt_txt)
+                    last_txt = crnt_txt
         fileId = _status.get("id")
         try:
             self._set_permissions(fileId=fileId)
@@ -114,8 +115,8 @@ class GDriveManager:
         _url = self._build.files().get(fileId=fileId, supportsAllDrives=True).execute()
         return _url.get("webContentLink")
 
-    @asyncio.coroutine
-    def _download_file(self, event, fileId: str, filename: str = None):
+    async def _download_file(self, event, fileId: str, filename: str = None):
+        last_txt = ""
         if fileId.startswith("http"):
             if "=download" in fileId:
                 fileId = fileId.split("=")[1][:-7]
@@ -140,15 +141,16 @@ class GDriveManager:
             while not _status:
                 _progress, _status = download.next_chunk(num_retries=3)
                 if _progress:
-                    uploaded = _progress.resumable_progress
+                    diff = time.time() - start
+                    completed = _progress.resumable_progress
                     total_size = _progress.total_size
-                    progress(
-                        uploaded,
-                        total_size,
-                        event,
-                        start,
-                        f"Downloading {filename} from GDrive...",
-                    )
+                    percentage = round((completed / total_size) * 100, 2)
+                    speed = round(completed / diff, 2)
+                    eta = round((total_size - completed) / speed, 2) * 1000
+                    crnt_txt = f"`✦ Downloading {filename} from GDrive...\n\n" + f"✦ {humanbytes(completed)} of {humanbytes(total_size)} » {percentage}%\n\n" + f"✦ Speed: {humanbytes(speed)}/s\n\n" + f"✦ ETA: {time_formatter(eta)}`"
+                    if last_txt != crnt_txt:
+                        await event.edit(crnt_txt)
+                        last_txt = crnt_txt
         return True, filename
 
     @property
