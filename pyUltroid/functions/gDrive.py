@@ -103,10 +103,10 @@ class GDriveManager:
                 speed = round(completed / diff, 2)
                 eta = round((total_size - completed) / speed, 2) * 1000
                 crnt_txt = (
-                    f"`✦ Uploading {filename} to GDrive...\n\n"
-                    + f"✦ {humanbytes(completed)} of {humanbytes(total_size)} » {percentage}%\n\n"
-                    + f"✦ Speed: {humanbytes(speed)}/s\n\n"
-                    + f"✦ ETA: {time_formatter(eta)}`"
+                    f"`Uploading {filename} to GDrive...\n\n"
+                    + f"Status: {humanbytes(completed)}/{humanbytes(total_size)} »» {percentage}%\n"
+                    + f"Speed: {humanbytes(speed)}/s\n"
+                    + f"ETA: {time_formatter(eta)}`"
                 )
                 if last_txt != crnt_txt:
                     await event.edit(crnt_txt)
@@ -152,10 +152,10 @@ class GDriveManager:
                     speed = round(completed / diff, 2)
                     eta = round((total_size - completed) / speed, 2) * 1000
                     crnt_txt = (
-                        f"`✦ Downloading {filename} from GDrive...\n\n"
-                        + f"✦ {humanbytes(completed)} of {humanbytes(total_size)} » {percentage}%\n\n"
-                        + f"✦ Speed: {humanbytes(speed)}/s\n\n"
-                        + f"✦ ETA: {time_formatter(eta)}`"
+                        f"`Downloading {filename} from GDrive...\n\n"
+                        + f"Status: {humanbytes(completed)}/{humanbytes(total_size)} »» {percentage}%\n"
+                        + f"Speed: {humanbytes(speed)}/s\n"
+                        + f"ETA: {time_formatter(eta)}`"
                     )
                     if last_txt != crnt_txt:
                         await event.edit(crnt_txt)
