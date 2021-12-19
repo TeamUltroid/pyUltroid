@@ -76,7 +76,8 @@ class GDriveManager:
             fileId=fileId, body=permissions, supportsAllDrives=True
         ).execute(http=self._http)
 
-    async def _upload_file(self, event, path: str, filename: str = None):
+    @asyncio.coroutine
+    def _upload_file(self, event, path: str, filename: str = None):
         if not filename:
             filename = path.split("/")[-1]
         mime_type = guess_type(path)[0] or "application/octet-stream"
@@ -98,14 +99,12 @@ class GDriveManager:
             if _progress:
                 uploaded = _progress.resumable_progress
                 total_size = _progress.total_size
-                asyncio.get_event_loop().create_task(
-                    progress(
+                progress(
                         uploaded,
                         total_size,
                         event,
                         start,
                         f"Uploading {filename} on GDrive...",
-                    )
                 )
         fileId = _status.get("id")
         try:
@@ -115,7 +114,8 @@ class GDriveManager:
         _url = self._build.files().get(fileId=fileId, supportsAllDrives=True).execute()
         return _url.get("webContentLink")
 
-    async def _download_file(self, event, fileId: str, filename: str = None):
+    @asyncio.coroutine
+    def _download_file(self, event, fileId: str, filename: str = None):
         if fileId.startswith("http"):
             if "=download" in fileId:
                 fileId = fileId.split("=")[1][:-7]
@@ -142,7 +142,7 @@ class GDriveManager:
                 if _progress:
                     uploaded = _progress.resumable_progress
                     total_size = _progress.total_size
-                    await progress(
+                    progress(
                         uploaded,
                         total_size,
                         event,
