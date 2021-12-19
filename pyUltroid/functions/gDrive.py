@@ -1,4 +1,3 @@
-import asyncio
 import time
 from io import FileIO
 from logging import WARNING
@@ -12,7 +11,7 @@ from oauth2client.client import logger as _logger
 from oauth2client.file import Storage
 
 from .. import udB
-from .helper import time_formatter, humanbytes
+from .helper import humanbytes, time_formatter
 
 _auth_flow = None
 
@@ -103,7 +102,12 @@ class GDriveManager:
                 percentage = round((completed / total_size) * 100, 2)
                 speed = round(completed / diff, 2)
                 eta = round((total_size - completed) / speed, 2) * 1000
-                crnt_txt = f"`✦ Uploading {filename} to GDrive...\n\n" + f"✦ {humanbytes(completed)} of {humanbytes(total_size)} » {percentage}%\n\n" + f"✦ Speed: {humanbytes(speed)}/s\n\n" + f"✦ ETA: {time_formatter(eta)}`"
+                crnt_txt = (
+                    f"`✦ Uploading {filename} to GDrive...\n\n"
+                    + f"✦ {humanbytes(completed)} of {humanbytes(total_size)} » {percentage}%\n\n"
+                    + f"✦ Speed: {humanbytes(speed)}/s\n\n"
+                    + f"✦ ETA: {time_formatter(eta)}`"
+                )
                 if last_txt != crnt_txt:
                     await event.edit(crnt_txt)
                     last_txt = crnt_txt
@@ -147,7 +151,12 @@ class GDriveManager:
                     percentage = round((completed / total_size) * 100, 2)
                     speed = round(completed / diff, 2)
                     eta = round((total_size - completed) / speed, 2) * 1000
-                    crnt_txt = f"`✦ Downloading {filename} from GDrive...\n\n" + f"✦ {humanbytes(completed)} of {humanbytes(total_size)} » {percentage}%\n\n" + f"✦ Speed: {humanbytes(speed)}/s\n\n" + f"✦ ETA: {time_formatter(eta)}`"
+                    crnt_txt = (
+                        f"`✦ Downloading {filename} from GDrive...\n\n"
+                        + f"✦ {humanbytes(completed)} of {humanbytes(total_size)} » {percentage}%\n\n"
+                        + f"✦ Speed: {humanbytes(speed)}/s\n\n"
+                        + f"✦ ETA: {time_formatter(eta)}`"
+                    )
                     if last_txt != crnt_txt:
                         await event.edit(crnt_txt)
                         last_txt = crnt_txt
