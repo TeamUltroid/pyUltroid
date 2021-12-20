@@ -447,6 +447,8 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
             Image.open(file_).save(new, "PNG")
         elif file_.lower().endswith(".tgs"):
             await bash(f"lottie_convert.py '{file_}' '{new}'")
+        else:
+            new = file_
         os.remove(file_)
         files = {"file": open(new, "rb").read()}
         os.remove(new)
