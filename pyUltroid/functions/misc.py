@@ -20,7 +20,7 @@ from ..dB import DEVLIST
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
-from .helper import mediainfo
+from .helper import mediainfo, bash
 from .tools import async_searcher, check_filename, json_parser
 
 try:
@@ -437,13 +437,19 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         "text": event.raw_text,
         "replyMessage": reply,
     }
-    if event.media and mediainfo(event.media) in ["sticker", "pic"]:
-        file_ = await event.download_media()
+    if event.media and mediainfo(event.media) in ["sticker", "pic",  "sticker animated"]:
+        if event.document and event.document.thumbs:
+            file_ = await event.download_media(thumb=-1)
+        else:
+            file_ = await event.download_media()
+        new = file_ + ".png"
         if file_.lower().endswith(".webp"):
-            Image.open(file_).save(file_ + ".png", "PNG")
-            os.remove(file_)
-            file_ = file_ + ".png"
-        files = {"file": open(file_, "rb").read()}
+            Image.open(file_).save(new, "PNG")
+        elif file_.lower().endswith(".tgs"):
+            await bash(f"lottie_convert.py '{file_}' '{new}'")
+        os.remove(file_)
+        files = {"file": open(new, "rb").read()}
+        os.remove(new)
         uri = (
             "https://telegra.ph"
             + (
