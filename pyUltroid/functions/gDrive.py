@@ -182,7 +182,7 @@ class GDriveManager:
             _files[files["id"]] = files["title"]
         return _files
 
-    async def create_directory(self, directory):
+    def create_directory(self, directory):
         body = {
             "title": directory,
             "mimeType": self.gdrive_creds["dir_mimetype"],
@@ -194,7 +194,7 @@ class GDriveManager:
         self._set_permissions(fileId=fileId)
         return fileId
 
-    async def search(self, title):
+    def search(self, title):
         query = f'title contains """{title}"""'
         if self.folder_id:
             query = (
