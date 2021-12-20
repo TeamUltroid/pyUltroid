@@ -195,10 +195,10 @@ class GDriveManager:
         return fileId
 
     def search(self, title):
-        query = f'title contains """{title}"""'
+        query = f"title contains '{title}'"
         if self.folder_id:
             query = (
-                f'"""{self.folder_id}""" in parents and (title contains """{title}"""'
+                f"'{self.folder_id}' in parents and (title contains '{title}'"
             )
         _items = (
             self._build.files()
