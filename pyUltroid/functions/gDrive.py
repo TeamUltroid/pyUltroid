@@ -70,6 +70,8 @@ class GDriveManager:
         _permissions = {
             "role": "reader",
             "type": "anyone",
+            "value": None,
+            "withLink": True,
         }
         self._build.permissions().insert(
             fileId=fileId, body=permissions, supportsAllDrives=True
@@ -172,3 +174,15 @@ class GDriveManager:
             except KeyError:
                 pass
         return _files
+
+    async def create_directory(self, directory):
+        body = {
+            "title": directory,
+            "mimeType": self.gdrive_creds["dir_mimetype"],
+        }
+        if self.folder_id:
+            body["parents"] = [{"id": self.folder_id}]
+        file = self._build.files().insert(body=body, supportsAllDrives=True).execute()
+        fileId = file.get("id")
+        self._set_permissions(fileId=fileId)
+        return fileId
