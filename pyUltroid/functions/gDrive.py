@@ -179,10 +179,7 @@ class GDriveManager:
         )
         _files = {}
         for files in _items["items"]:
-            try:
-                _files[files["id"]] = files["title"]
-            except KeyError:
-                pass
+            _files[files["id"]] = files["title"]
         return _files
 
     async def create_directory(self, directory):
@@ -196,3 +193,13 @@ class GDriveManager:
         fileId = file.get("id")
         self._set_permissions(fileId=fileId)
         return fileId
+
+    async def search(self, title):
+        query = f'title contains """{title}"""'
+        if self.folder_id:
+            query = f'"""{self.folder_id}""" in parents and (title contains """{title}"""'
+        _items = self._build.files().list(supportsTeamDrives=True, includeTeamDriveItems=True, q=query, spaces="drive", fields="nextPageToken, items(id, title, mimeType)", pageToken=None).execute())
+        _files = {}
+        for files in _items["items"]:
+            _files[files["id"]] = files["title"]
+        return _files 
