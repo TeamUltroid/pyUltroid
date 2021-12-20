@@ -20,7 +20,7 @@ from ..dB import DEVLIST
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
-from .helper import mediainfo, bash
+from .helper import bash, mediainfo
 from .tools import async_searcher, check_filename, json_parser
 
 try:
@@ -437,7 +437,7 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         "text": event.raw_text,
         "replyMessage": reply,
     }
-    if event.media and mediainfo(event.media) in ["sticker", "pic",  "sticker animated"]:
+    if event.media and mediainfo(event.media) in ["sticker", "pic", "sticker animated"]:
         if event.document and event.document.thumbs:
             file_ = await event.download_media(thumb=-1)
         else:
