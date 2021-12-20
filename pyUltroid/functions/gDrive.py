@@ -198,7 +198,7 @@ class GDriveManager:
         query = f'title contains """{title}"""'
         if self.folder_id:
             query = f'"""{self.folder_id}""" in parents and (title contains """{title}"""'
-        _items = self._build.files().list(supportsTeamDrives=True, includeTeamDriveItems=True, q=query, spaces="drive", fields="nextPageToken, items(id, title, mimeType)", pageToken=None).execute())
+        _items = self._build.files().list(supportsTeamDrives=True, includeTeamDriveItems=True, q=query, spaces="drive", fields="nextPageToken, items(id, title, mimeType)", pageToken=None).execute()
         _files = {}
         for files in _items["items"]:
             _files[files["id"]] = files["title"]
