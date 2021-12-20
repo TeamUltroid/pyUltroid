@@ -166,11 +166,11 @@ class GDriveManager:
 
     @property
     def _list_files(self):
-        _items = self._build.files().get(fileId="", supportsAllDrives=True).execute()
+        _items = self._build.files().list(supportsTeamDrives=True, includeTeamDriveItems=True, spaces="drive", fields="nextPageToken, items(id, title, mimeType)", pageToken=None).execute()
         _files = {}
         for files in _items["items"]:
             try:
-                _files[files["webContentLink"]] = files["title"]
+                _files[files["id"]] = files["title"]
             except KeyError:
                 pass
         return _files
