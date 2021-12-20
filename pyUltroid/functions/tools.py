@@ -212,29 +212,10 @@ async def saavn_search(query: str):
         data = None
     return data
 
-
-async def saavn_dl(query: str):
-    data = await saavn_search(query)
-    if not data:
-        return None, None, None, None
-    data = data[0]
-    try:
-        title = data["song"]
-        url = data["media_url"]
-        img = data["image"]
-        duration = data["duration"]
-        performer = data["primary_artists"]
-    except BaseException:
-        return None, None, None, None
-    song, _ = await fast_download(url, filename=title + ".mp3")
-    thumb, _ = await fast_download(img, filename=title + ".jpg")
-    return song, duration, performer, thumb
-
-
 # --- webupload ------#
 # @buddhhu
-_webupload_cache = {}
 
+_webupload_cache = {}
 
 async def webuploader(chat_id: int, msg_id: int, uploader: str):
     file = _webupload_cache[int(chat_id)][int(msg_id)]
