@@ -34,6 +34,10 @@ class GDriveManager:
         self.folder_id = udB.get_key("GDRIVE_FOLDER_ID")
         self.token_file = "resources/auth/gdrive_creds.json"
 
+    @classmethod
+    def _create_download_link(fileId: str):
+        return f"https://drive.google.com/uc?id={fileId}&export=download"
+
     def _create_token_file(self, code: str = None):
         global _auth_flow
         if code and _auth_flow:
@@ -179,7 +183,7 @@ class GDriveManager:
         )
         _files = {}
         for files in _items["items"]:
-            _files[files["id"]] = files["title"]
+            _files[self._create_download_link(files["id"])] = files["title"]
         return _files
 
     def create_directory(self, directory):
@@ -212,5 +216,5 @@ class GDriveManager:
         )
         _files = {}
         for files in _items["items"]:
-            _files[files["id"]] = files["title"]
+            _files[self._create_download_link(files["id"])] = files["title"]
         return _files
