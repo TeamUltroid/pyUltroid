@@ -437,12 +437,8 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         "text": event.raw_text,
         "replyMessage": reply,
     }
-    if event.media and mediainfo(event.media) in ["sticker", "pic"]:
-        file_ = await event.download_media()
-        if file_.lower().endswith(".webp"):
-            Image.open(file_).save(file_ + ".png", "PNG")
-            os.remove(file_)
-            file_ = file_ + ".png"
+    if event.document and event.document.thumbs:
+        file_ = await event.download_media(thumb=-1)
         files = {"file": open(file_, "rb").read()}
         uri = (
             "https://telegra.ph"
