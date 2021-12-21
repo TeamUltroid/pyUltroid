@@ -35,13 +35,13 @@ class UltroidClient(TelegramClient):
         bot_token=None,
         udB=None,
         logger=LOGS,
-        handle_error=True
+        handle_auth_error=True,
         *args,
         **kwargs,
     ):
         self._cache = {}
         self._dialogs = []
-        self._handle_error = handle_error
+        self._handle_error = handle_auth_error
         self.logger = logger
         self.udB = udB
         self.proxy = proxy
