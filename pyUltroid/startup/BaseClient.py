@@ -112,7 +112,7 @@ class UltroidClient(TelegramClient):
         if self.me.bot:
             if self.udB:
                 myself = self.udB.get_key("OWNER_ID")
-                if myself and self.me.id != myself:
+                if myself and self.me.id == myself:
                     self.me = await self.get_entity(myself)
             me = f"@{self.me.username}"
         else:
