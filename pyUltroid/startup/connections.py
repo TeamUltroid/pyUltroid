@@ -42,7 +42,8 @@ def vc_connection(udB, ultroid_bot):
             )
             udB.del_key("VC_SESSION")
         except Exception as er:
-            LOGS.error("VC_SESSION: {}".format(str(er)))
+            LOGS.info("While creating Client for VC.")
+            LOGS.exception(er)
     return ultroid_bot
 
 
