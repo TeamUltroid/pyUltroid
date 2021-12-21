@@ -34,7 +34,9 @@ def vc_connection(udB, ultroid_bot):
     VC_SESSION = Var.VC_SESSION or udB.get_key("VC_SESSION")
     if VC_SESSION and VC_SESSION != Var.SESSION:
         try:
-            return UltroidClient(StringSession(VC_SESSION), log_attempt=False, handle_auth_error=False)
+            return UltroidClient(
+                StringSession(VC_SESSION), log_attempt=False, handle_auth_error=False
+            )
         except (AuthKeyDuplicatedError, EOFError):
             LOGS.info(
                 "Your VC_SESSION Expired. Deleting VC_SESSION from redis..."
