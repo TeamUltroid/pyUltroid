@@ -35,6 +35,7 @@ class UltroidClient(TelegramClient):
         bot_token=None,
         udB=None,
         logger=LOGS,
+        log_attempt=True,
         handle_auth_error=True,
         *args,
         **kwargs,
@@ -42,6 +43,7 @@ class UltroidClient(TelegramClient):
         self._cache = {}
         self._dialogs = []
         self._handle_error = handle_auth_error
+        self._log_at = log_attempt
         self.logger = logger
         self.udB = udB
         self.proxy = proxy
@@ -79,7 +81,8 @@ class UltroidClient(TelegramClient):
 
     async def start_client(self, **kwargs):
         """function to start client"""
-        self.logger.info("Trying to login.")
+        if self._log_at:
+            self.logger.info("Trying to login.")
         try:
             await self.start(**kwargs)
         except ApiIdInvalidError:
@@ -111,10 +114,12 @@ class UltroidClient(TelegramClient):
                 myself = self.udB.get_key("OWNER_ID")
                 if myself and self.me.id != myself:
                     self.me = await self.get_entity(myself)
-            self.logger.info(f"Logged in as @{self.me.username}")
+            me = f"@{self.me.username}"
         else:
             setattr(self.me, "phone", None)
-            self.logger.info(f"Logged in as {self.full_name}")
+            me = self.full_name
+        if self._log_at:
+            self.logger.info(f"Logged in as {me}")
 
     async def fast_uploader(self, file, **kwargs):
         """Upload files in a faster way"""
