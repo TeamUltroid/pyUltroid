@@ -12,7 +12,7 @@ from telethon.sessions import StringSession
 
 from ..configs import Var
 from . import *
-from ._BaseClient import UltroidClient
+from .BaseClient import UltroidClient
 
 
 def session_file(logger):
