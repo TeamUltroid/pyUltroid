@@ -12,6 +12,7 @@ from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
 
 from ..configs import Var
+from ._BaseClient import UltroidClient
 from . import *
 
 
@@ -34,9 +35,9 @@ def vc_connection(udB, ultroid_bot):
     VC_SESSION = Var.VC_SESSION or udB.get_key("VC_SESSION")
     if VC_SESSION and VC_SESSION != Var.SESSION:
         try:
-            return TelegramClient(
-                StringSession(VC_SESSION), api_id=Var.API_ID, api_hash=Var.API_HASH
-            ).start()
+            return UltroidClient(
+                StringSession(VC_SESSION)
+            )
         except (AuthKeyDuplicatedError, EOFError):
             LOGS.info(
                 "Your VC_SESSION Expired. Deleting VC_SESSION from redis..."
