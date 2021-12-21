@@ -103,12 +103,14 @@ class UltroidClient(TelegramClient):
             self.udB.del_key("BOT_TOKEN")
             self.logger.error("The provided bot token is not valid! Quitting...")
             sys.exit()
+
         # Save some stuff for later use...
-        myself = self.udB.get_key("OWNER_ID")
         self.me = await self.get_me()
         if self.me.bot:
-            if myself and self.me.id == int(myself):
-                self.me = await self.get_entity(int(myself))
+            if self.udB:
+                myself = self.udB.get_key("OWNER_ID")
+                if myself and self.me.id != myself:
+                    self.me = await self.get_entity(myself)
             self.logger.info(f"Logged in as @{self.me.username}")
         else:
             setattr(self.me, "phone", None)
