@@ -20,7 +20,6 @@ from ..dB import DEVLIST
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
-from .helper import mediainfo
 from .tools import async_searcher, check_filename, json_parser
 
 try:
