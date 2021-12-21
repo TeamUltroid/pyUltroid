@@ -35,11 +35,13 @@ class UltroidClient(TelegramClient):
         bot_token=None,
         udB=None,
         logger=LOGS,
+        handle_error=True
         *args,
         **kwargs,
     ):
         self._cache = {}
         self._dialogs = []
+        self._handle_error = handle_error
         self.logger = logger
         self.udB = udB
         self.proxy = proxy
@@ -84,9 +86,11 @@ class UltroidClient(TelegramClient):
             self.logger.error("API ID and API_HASH combination does not match!")
 
             sys.exit()
-        except (AuthKeyDuplicatedError, EOFError):
-            self.logger.error("String session expired. Create new!")
-            sys.exit()
+        except (AuthKeyDuplicatedError, EOFError) as er:
+            if self._handle_error:
+                self.logger.error("String session expired. Create new!")
+                return sys.exit()
+            raise er
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
             # And at Early Process, Its saved in Redis.
