@@ -275,7 +275,7 @@ def text_set(text):
 
 
 # ------------------Logo Gen Helpers----------------
-# Add ur usernames who created
+# @TechiError
 
 
 def get_text_size(text, image, font):
