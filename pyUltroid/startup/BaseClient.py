@@ -152,6 +152,11 @@ class UltroidClient(TelegramClient):
                     and files["name"] == filename
                     and files["by_bot"] == by_bot
                 ):
+                    if to_delete:
+                        try:
+                            os.remove(file)
+                        except FileNotFoundError:
+                            pass
                     return files["raw_file"], time.time() - start_time
         from pyUltroid.functions.FastTelethon import upload_file
         from pyUltroid.functions.helper import progress
@@ -183,7 +188,10 @@ class UltroidClient(TelegramClient):
         else:
             self._cache.update({"upload_cache": [cache]})
         if to_delete:
-            os.remove(file)
+            try:
+                os.remove(file)
+            except FileNotFoundError:
+                pass
         return raw_file, time.time() - start_time
 
     async def fast_downloader(self, file, filename, **kwargs):
