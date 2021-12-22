@@ -99,12 +99,10 @@ async def autobot():
     await ultroid_bot(UnblockRequest(bf))
     await ultroid_bot.send_message(bf, "/cancel")
     await asyncio.sleep(1)
-    await ultroid_bot.send_message(bf, "/start")
-    await asyncio.sleep(1)
     await ultroid_bot.send_message(bf, "/newbot")
     await asyncio.sleep(1)
     isdone = (await ultroid_bot.get_messages(bf, limit=1))[0].text
-    if isdone.startswith("That I cannot do."):
+    if isdone.startswith("That I cannot do.") or "20 bots" in isdone:
         LOGS.info(
             "Please make a Bot from @BotFather and add it's token in BOT_TOKEN, as an env var and restart me."
         )
