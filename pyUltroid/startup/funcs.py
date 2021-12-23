@@ -9,6 +9,7 @@ import asyncio
 import os
 import time
 from random import randint
+import logging
 from urllib.request import urlretrieve
 
 from pytz import timezone
@@ -179,7 +180,7 @@ async def autopilot():
         try:
             chat = await ultroid_bot.get_entity(channel)
         except BaseException as er:
-            LOGS.error(er)
+            logging.exception("message")
             udB.del_key("LOG_CHANNEL")
             channel = None
     if not channel:
