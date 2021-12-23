@@ -6,10 +6,10 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import asyncio
+import logging
 import os
 import time
 from random import randint
-import logging
 from urllib.request import urlretrieve
 
 from pytz import timezone
@@ -179,7 +179,7 @@ async def autopilot():
     if channel:
         try:
             chat = await ultroid_bot.get_entity(channel)
-        except BaseException as er:
+        except BaseException:
             logging.exception("message")
             udB.del_key("LOG_CHANNEL")
             channel = None
