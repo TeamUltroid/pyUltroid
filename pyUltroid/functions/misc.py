@@ -7,15 +7,16 @@
 
 import base64
 import os
-from logging import WARNING
 import random
+import string
+from logging import WARNING
 from random import choice, randrange, shuffle
 from traceback import format_exc
 
 from bs4 import BeautifulSoup
 from telethon.tl import types
 from telethon.utils import get_display_name, get_peer_id
-import string
+
 from .. import *
 from ..dB import DEVLIST
 from ..dB._core import LIST
@@ -510,5 +511,6 @@ def rotate_image(image, angle):
 def random_string(length=3):
     """Generate random string of 'n' Length"""
     return "".join(random.choices(string.ascii_uppercase, k=length))
+
 
 setattr(random, "random_string", "random_string")
