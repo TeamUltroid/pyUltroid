@@ -8,13 +8,14 @@
 import base64
 import os
 from logging import WARNING
+import random
 from random import choice, randrange, shuffle
 from traceback import format_exc
 
 from bs4 import BeautifulSoup
 from telethon.tl import types
 from telethon.utils import get_display_name, get_peer_id
-
+import string
 from .. import *
 from ..dB import DEVLIST
 from ..dB._core import LIST
@@ -504,3 +505,10 @@ def rotate_image(image, angle):
     image_center = tuple(np.array(image.shape[1::-1]) / 2)
     rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
     return cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
+
+
+def random_string(length=3):
+    """Generate random string of 'n' Length"""
+    return "".join(random.choices(string.ascii_uppercase, k=length))
+
+setattr(random, "random_string", "random_string")
