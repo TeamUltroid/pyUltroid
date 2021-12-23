@@ -205,9 +205,11 @@ class UltroidClient(TelegramClient):
         if file.size < 10 * 2 ** 20:
             show_progress = False
         import mimetypes
+
+        from telethon.tl.types import DocumentAttributeFilename
+
         from pyUltroid.functions.FastTelethon import download_file
         from pyUltroid.functions.helper import progress
-        from telethon.tl.types import DocumentAttributeFilename
 
         start_time = time.time()
         # Auto-generate Filename
@@ -217,7 +219,12 @@ class UltroidClient(TelegramClient):
                     filename = file.attributes[-1].file_name
             except IndexError:
                 mimetype = file.mime_type
-                filename = mimetype.split("/")[0]+"-"+str(round(start_time))+mimetypes.guess_extension(mimytype)
+                filename = (
+                    mimetype.split("/")[0]
+                    + "-"
+                    + str(round(start_time))
+                    + mimetypes.guess_extension(mimytype)
+                )
 
         raw_file = None
         while not raw_file:
