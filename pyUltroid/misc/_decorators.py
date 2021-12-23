@@ -193,7 +193,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
 
         cmd = None
         blacklist_chats = False
-        chats = []
+        chats = None
         if black_list_chats:
             blacklist_chats = True
             chats = list(black_list_chats)
