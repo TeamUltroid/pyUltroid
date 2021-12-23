@@ -513,4 +513,4 @@ def random_string(length=3):
     return "".join(random.choices(string.ascii_uppercase, k=length))
 
 
-setattr(random, "random_string", "random_string")
+setattr(random, "random_string", random_string)
