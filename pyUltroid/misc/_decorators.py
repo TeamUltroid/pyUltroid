@@ -306,9 +306,3 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
         return wrapp
 
     return decor
-
-
-# decorator
-
-# Inspiration of ultroid_cmd decor is from RaphielGang/Telegram-Paperlane
-# https://github.com/RaphielGang/Telegram-Paperplane/blob/625875a9ecdfd267a53067b3c1580000f5006973/userbot/events.py#L22
