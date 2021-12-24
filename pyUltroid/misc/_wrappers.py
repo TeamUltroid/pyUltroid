@@ -22,6 +22,8 @@ async def eor(event, text=None, **args):
         del args["edit_time"]
     if "time" in args:
         del args["time"]
+    if "link_preview" not in args:
+        args.update({"link_preview":False})
     if event.out:
         if edit_time:
             await sleep(edit_time)
