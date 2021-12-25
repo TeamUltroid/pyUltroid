@@ -8,7 +8,7 @@
 import os
 import sys
 import time
-from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
+from logging import DEBUG, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
 
 from safety.tools import *
 from telethon import __version__
@@ -26,7 +26,7 @@ TelethonLogger.setLevel(INFO)
 
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] : %(message)s",
-    level=INFO,
+    level=DEBUG,
     datefmt="%m/%d/%Y, %H:%M:%S",
     handlers=[FileHandler(file), StreamHandler()],
 )
