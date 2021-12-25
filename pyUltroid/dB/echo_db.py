@@ -14,30 +14,30 @@ def get_stuff():
 
 def add_echo(chat, user):
     x = get_stuff()
-    if k := x.get(chat):
+    if k := x.get(int(chat)(:
         if user not in k:
-            k.append(user)
-        x.update({chat: k})
+            k.append(int(user))
+        x.update({int(chat): k})
     else:
-        x.update({chat: [user]})
+        x.update({int(chat): [int(user)]})
     return udB.set_key("ECHO", x)
 
 
 def rem_echo(chat, user):
     x = get_stuff()
-    if k := x.get(chat):
+    if k := x.get(int(chat)):
         if user in k:
-            k.remove(user)
-        x.update({chat: k})
+            k.remove(int(user))
+        x.update({int(chat): k})
     return udB.set_key("ECHO", x)
 
 
 def check_echo(chat, user):
     x = get_stuff()
-    if (k := x.get(chat)) and user in k:
+    if (k := x.get(int(chat))) and int(user) in k:
         return True
 
 
 def list_echo(chat):
     x = get_stuff()
-    return x.get(chat)
+    return x.get(int(chat))
