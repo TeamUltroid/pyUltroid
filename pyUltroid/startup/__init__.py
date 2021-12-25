@@ -6,9 +6,18 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
+import platform
 import sys
-import time, platform
-from logging import DEBUG, INFO, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
+import time
+from logging import (
+    DEBUG,
+    INFO,
+    WARNING,
+    FileHandler,
+    StreamHandler,
+    basicConfig,
+    getLogger,
+)
 
 from safety.tools import *
 from telethon import __version__
