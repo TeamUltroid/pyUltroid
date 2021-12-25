@@ -73,7 +73,6 @@ class MongoDB:
 
     def set_key(self, key, value):
         if key in self.keys():
-            self._cache.update({key: value})
             self.db[key].replace_one({"_id": key}, {"value": str(value)})
         else:
             self.db[key].insert_one({"_id": key, "value": str(value)})
@@ -94,12 +93,12 @@ class MongoDB:
             return self._cache[key]
         if key in self.keys():
             value = self.get(key)
-            self._cache.update({key: value})
-            if value:
+            if value is not None:
                 try:
                     value = eval(value)
                 except BaseException:
                     pass
+                self._cache.update({key: value})
                 return value
         return None
 
