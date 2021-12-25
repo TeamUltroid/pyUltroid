@@ -60,16 +60,16 @@ if BOT_MODE:
 
 vcClient = vc_connection(udB, ultroid_bot)
 
-if not udB.get_key("SUDO"):
-    udB.set_key("SUDO", "False")
+#if not udB.get_key("SUDO"):
+#    udB.set_key("SUDO", "False")
 
 _version_changes(udB)
 
-if udB.get_key("SUDOS") is None:
+"""if udB.get_key("SUDOS") is None:
     udB.set_key("SUDOS", "")
 
 if not udB.get_key("BLACKLIST_CHATS"):
-    udB.set_key("BLACKLIST_CHATS", "[]")
+    udB.set_key("BLACKLIST_CHATS", "[]")"""
 
 HNDLR = udB.get_key("HNDLR") or "."
 DUAL_HNDLR = udB.get_key("DUAL_HNDLR") or "/"
