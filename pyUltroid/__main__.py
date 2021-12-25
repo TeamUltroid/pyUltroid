@@ -36,7 +36,7 @@ if not ultroid_bot.me.bot:
 LOGS.info("Initialising...")
 
 
-ultroid_bot.run_in_loop(autopilot())
+ultroid_bot.run_in_loop(autopilot(), debug=True)
 
 pmbot = udB.get_key("PMBOT")
 manager = udB.get_key("MANAGER")
@@ -55,15 +55,15 @@ suc_msg = """
 plugin_channels = udB.get_key("PLUGIN_CHANNEL")
 
 # Customize Ultroid Assistant...
-ultroid_bot.run_in_loop(customize())
+ultroid_bot.run_in_loop(customize(), debug=True)
 
 # Load Addons from Plugin Channels.
 if plugin_channels:
-    ultroid_bot.run_in_loop(plug(plugin_channels))
+    ultroid_bot.run_in_loop(plug(plugin_channels), debug=True)
 
 # Send/Ignore Deploy Message..
 if not udB.get_key("LOG_OFF"):
-    ultroid_bot.run_in_loop(ready())
+    ultroid_bot.run_in_loop(ready(), debug=True)
 
 cleanup_cache()
 
