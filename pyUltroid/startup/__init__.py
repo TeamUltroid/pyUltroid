@@ -7,7 +7,7 @@
 
 import os
 import sys
-import time
+import time, platform
 from logging import DEBUG, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
 
 from safety.tools import *
@@ -39,7 +39,7 @@ LOGS.info(
 """
 )
 
-
+LOGS.info(f"Python version - {platform.python_version()}")
 LOGS.info(f"py-Ultroid Version - {__pyUltroid__}")
 LOGS.info(f"Telethon Version - {__version__}")
 LOGS.info(f"Ultroid Version - {ultroid_version}")
