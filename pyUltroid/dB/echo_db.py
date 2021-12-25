@@ -14,7 +14,7 @@ def get_stuff():
 
 def add_echo(chat, user):
     x = get_stuff()
-    if k := x.get(int(chat)(:
+    if k := x.get(int(chat)):
         if user not in k:
             k.append(int(user))
         x.update({int(chat): k})
