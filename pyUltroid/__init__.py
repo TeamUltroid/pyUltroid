@@ -60,7 +60,7 @@ if BOT_MODE:
 
 vcClient = vc_connection(udB, ultroid_bot)
 
-#if not udB.get_key("SUDO"):
+# if not udB.get_key("SUDO"):
 #    udB.set_key("SUDO", "False")
 
 _version_changes(udB)
