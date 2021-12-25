@@ -24,7 +24,7 @@ def add_note(chat, word, msg, media, button):
 def rem_note(chat, word):
     ok = get_stuff()
     if ok.get(int(chat)) and ok[int(chat)].get(word):
-        ok[int(chat]).pop(word)
+        ok[int(chat)].pop(word)
         return udB.set_key("NOTE", ok)
 
 
