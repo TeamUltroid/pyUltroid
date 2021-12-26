@@ -138,7 +138,7 @@ class DetaDB:
     def __getitem__(self, item):
         return self.get(item)
 
-    def __repr__(self);
+    def __repr__(self):
         return "<Ultroid.DetaDB>"
 
     @property
