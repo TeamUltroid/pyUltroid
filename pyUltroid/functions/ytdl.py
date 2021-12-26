@@ -93,28 +93,15 @@ def get_formats(type, id, data):
                 _audio = {}
                 _id = int(aud["format_id"])
                 _size = aud["filesize"] if aud.get("filesize") else 0
-                _ext = "mp3"
-                if _id == 140:
-                    _ext = "m4a"
-                    _quality = "256KBPS"
-                elif _id == 249:
-                    _quality = "64KBPS"
-                elif _id == 250:
-                    _quality = "128KBPS"
-                elif _id == 251:
-                    _ext = "opus"
-                    _quality = "320KBPS"
-                elif _id == 139:
-                    _ext = "m4a"
-                    _quality = "😐"
+                _quality = {139: 48, 249: 64, 250: 128, 140: 256, 251: 320}
                 _audio.update(
                     {
                         "ytid": id,
                         "type": "audio",
                         "id": str(_id),
-                        "quality": _quality,
+                        "quality": str(_quality[_id])+"KBPS",
                         "size": _size,
-                        "ext": _ext,
+                        "ext": "m4a",
                     }
                 )
                 audio.append(_audio)
