@@ -1,5 +1,3 @@
-import ast
-import asyncio
 import os
 
 from redis import Redis
