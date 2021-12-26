@@ -55,6 +55,9 @@ class MongoDB:
         self.db = self.dB.UltroidDB
         self.re_cache()
 
+    def __repr__(self):
+        return f"<Ultroid.MonGoDB\n -total_keys: {len(self.keys())}\n>"
+
     @property
     def name(self):
         return "MongoDB"
@@ -134,6 +137,9 @@ class DetaDB:
 
     def __getitem__(self, item):
         return self.get(item)
+
+    def __repr__(self);
+        return "<Ultroid.DetaDB>"
 
     @property
     def run(self):
