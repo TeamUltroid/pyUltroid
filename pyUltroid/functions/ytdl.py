@@ -99,7 +99,7 @@ def get_formats(type, id, data):
                         "ytid": id,
                         "type": "audio",
                         "id": str(_id),
-                        "quality": str(_quality[_id])+"KBPS",
+                        "quality": str(_quality[_id]) + "KBPS",
                         "size": _size,
                         "ext": "m4a",
                     }
