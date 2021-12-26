@@ -104,6 +104,8 @@ def get_formats(type, id, data):
                 elif _id == 251:
                     _ext = "opus"
                     _quality = "320KBPS"
+                else:
+                    _quality = "Unknown"
                 _audio.update(
                     {
                         "ytid": id,
