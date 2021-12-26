@@ -8,13 +8,6 @@ from ..configs import Var
 from . import LOGS
 
 try:
-    from deta import Deta
-except ImportError:
-    Deta = None
-    if Var.DETA_KEY:
-        LOGS.error("'deta' not found!\nInstall deta to use deta base..")
-
-try:
     from pymongo import MongoClient
 except ImportError:
     MongoClient = None
@@ -26,13 +19,6 @@ except ImportError:
     if Var.DATABASE_URL:
         LOGS.error("'psycopg2' not found!\nInstall psycopg2 to use sql database..")
 
-if Deta and Var.DETA_KEY:
-    try:
-        import nest_asyncio
-
-        nest_asyncio.apply()
-    except ImportError:
-        pass
 # --------------------------------------------------------------------------------------------- #
 
 
@@ -116,87 +102,6 @@ class MongoDB:
 
 
 # --------------------------------------------------------------------------------------------- #
-
-
-class DetaDB:
-    def __init__(self, key):
-        try:
-            self._cache = {}
-            self.db = Deta(key).AsyncBase("Ultroid")
-            self.loop = asyncio.get_event_loop()
-            for key in self.run(self.db.fetch()).items:
-                if key.get("value"):
-                    new = key["value"]
-                    try:
-                        new = ast.literal_eval(new)
-                    except BaseException:
-                        pass
-                    self._cache.update({key["key"]: new})
-        except Exception as er:
-            LOGS.exception(er)
-
-    def __getitem__(self, item):
-        return self.get(item)
-
-    def __repr__(self):
-        return "<Ultroid.DetaDB>"
-
-    @property
-    def run(self):
-        return self.loop.run_until_complete
-
-    @property
-    def name(self):
-        return "DetaDB"
-
-    def keys(self):
-        return [a["key"] for a in self.run(self.db.fetch()).items]
-
-    def set(self, key, value):
-        self._cache.update({str(key): str(value)})
-        if not self.get(str(key)):
-            try:
-                self.run(self.db.insert(str(value), str(key)))
-                return True
-            except BaseException:
-                pass
-        params = {"value": str(value)}
-        self.run(self.db.update(params, str(key)))
-        return True
-
-    def get(self, key, cast=str):
-        if key in self._cache:
-            return self._cache[key]
-        _get = self.run(self.db.get(key))
-        self._cache.update({key: None if not _get else _get["value"]})
-        if _get is not None:
-            return cast(_get["value"])
-
-    def delete(self, key):
-        if key in self._cache:
-            del self._cache[key]
-        self.run(self.db.delete(key))
-        return True
-
-    def rename(self, key1, key2):
-        get_ = self.get(key1)
-        self.delete(key1)
-        self.set(key2, get_)
-
-    def ping(self):
-        """Deta dont have ping endpoint, while Redis have.."""
-        return True
-
-    set_key = set
-    del_key = delete
-
-    def get_key(self, key):
-        if key in self._cache:
-            return self._cache[key]
-        value = get_data(self, key)
-        self._cache.update({key: value})
-        return value
-
 
 # Thanks to "Akash Pattnaik" / @BLUE-DEVIL1134
 # for SQL Implementation in Ultroid.
@@ -412,9 +317,7 @@ class RedisConnection(Redis):
 
 
 def UltroidDB():
-    if Deta and Var.DETA_KEY:
-        return DetaDB(Var.DETA_KEY)
-    elif MongoClient and Var.MONGO_URI:
+    if MongoClient and Var.MONGO_URI:
         return MongoDB(Var.MONGO_URI)
     elif psycopg2 and Var.DATABASE_URL:
         return SqlDB(Var.DATABASE_URL)
