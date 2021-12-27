@@ -81,6 +81,11 @@ class UltroidClient(TelegramClient):
         )
 
     @property
+    def __dict__(self):
+        if self.me:
+            return self.me.to_dict()
+
+    @property
     def __getattr__(self, item):
         if item in self.__dict__:
             return self.__dict__[item]
