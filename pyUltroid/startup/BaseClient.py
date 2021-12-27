@@ -40,16 +40,6 @@ class UltroidClient(TelegramClient):
         *args,
         **kwargs,
     ):
-        self.__slots__ = [
-            "_cache",
-            "_dialogs",
-            "_handle_error",
-            "_log_at",
-            "logger",
-            "udB",
-            "proxy",
-            "me",
-        ]
         self._cache = {}
         self._dialogs = []
         self._handle_error = handle_auth_error
@@ -88,6 +78,11 @@ class UltroidClient(TelegramClient):
         return "<Ultroid.Client :\n self: {}\n bot: {}\n>".format(
             self.full_name, self._bot
         )
+
+    @property
+    def __dict__(self):
+        if me:
+            return self.me.to_dict()
 
     async def start_client(self, **kwargs):
         """function to start client"""
