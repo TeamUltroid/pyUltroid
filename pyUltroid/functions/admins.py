@@ -99,6 +99,10 @@ async def admin_check(event, require=None, silent: bool = False):
             return False
         callback = True
     if callback:
+        if silent:
+            # work silently, same check is used for antiflood
+            # and should not ask for Button Verification.
+            return
         get_ = await _callback_check(event)
         if not get_:
             return
