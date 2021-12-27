@@ -26,7 +26,6 @@ from . import *
 
 
 class UltroidClient(TelegramClient):
-
     def __init__(
         self,
         session,
