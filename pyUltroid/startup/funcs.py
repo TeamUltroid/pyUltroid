@@ -276,6 +276,7 @@ async def autopilot():
 
 async def customize():
     from .. import asst, udB, ultroid_bot
+
     rem = None
     try:
         chat_id = udB.get_key("LOG_CHANNEL")
@@ -287,7 +288,13 @@ async def customize():
             sir = ultroid_bot.me.first_name
         else:
             sir = f"@{ultroid_bot.me.username}"
-        file = random.choice(["https://telegra.ph/file/92cd6dbd34b0d1d73a0da.jpg","https://telegra.ph/file/a97973ee0425b523cdc28.jpg","resources/extras/ultroid_assistant.jpg"])
+        file = random.choice(
+            [
+                "https://telegra.ph/file/92cd6dbd34b0d1d73a0da.jpg",
+                "https://telegra.ph/file/a97973ee0425b523cdc28.jpg",
+                "resources/extras/ultroid_assistant.jpg",
+            ]
+        )
         if not os.path.exists(file):
             file = await download_file(file, "profile.jpg")
             rem = True
