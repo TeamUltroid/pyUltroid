@@ -65,7 +65,7 @@ async def _callback_check(event):
     return key
 
 
-async def admin_check(event, require=None):
+async def admin_check(event, require=None, silent:bool=False):
     if event.sender_id in SUDO_M.owner_and_sudos():
         return True
     callback = None
@@ -111,13 +111,16 @@ async def admin_check(event, require=None):
         try:
             perms = await event.client.get_permissions(event.chat_id, user.id)
         except UserNotParticipantError:
-            await event.reply("You need to join this chat First!")
+            if not silent:
+                await event.reply("You need to join this chat First!")
             return False
     if not perms.is_admin:
-        await eor(event, "Only Admins can use this command!", time=8)
+        if not silent:
+            await event.eor("Only Admins can use this command!", time=8)
         return
     if require and not getattr(perms, require, False):
-        await eor(event, f"You are missing the right of `{require}`", time=8)
+        if not silent:
+            await event.eor(f"You are missing the right of `{require}`", time=8)
         return False
     return True
 
