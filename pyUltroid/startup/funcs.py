@@ -276,7 +276,7 @@ async def autopilot():
 
 async def customize():
     from .. import asst, udB, ultroid_bot
-
+    rem = None
     try:
         chat_id = udB.get_key("LOG_CHANNEL")
         if asst.me.photo:
@@ -287,12 +287,10 @@ async def customize():
             sir = ultroid_bot.me.first_name
         else:
             sir = f"@{ultroid_bot.me.username}"
-        file = (
-            "https://telegra.ph/file/"
-            + random.choice(["a97973ee0425b523cdc28", "92cd6dbd34b0d1d73a0da"])
-            + ".jpg"
-        )
-        file = await download_file(file, "profile.jpg")
+        file = random.choice(["https://telegra.ph/file/92cd6dbd34b0d1d73a0da.jpg","https://telegra.ph/file/a97973ee0425b523cdc28.jpg","resources/extras/ultroid_assistant.jpg"])
+        if not os.path.exists(file):
+            file = await download_file(file, "profile.jpg")
+            rem = True
         msg = await asst.send_message(
             chat_id, "**Auto Customisation** Started on @Botfather"
         )
@@ -325,7 +323,8 @@ async def customize():
         )
         await asyncio.sleep(2)
         await msg.edit("Completed **Auto Customisation** at @BotFather.")
-        os.remove(file)
+        if rem:
+            os.remove(file)
         LOGS.info("Customisation Done")
     except Exception as e:
         LOGS.exception(e)
