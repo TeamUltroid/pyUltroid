@@ -81,7 +81,7 @@ class UltroidClient(TelegramClient):
 
     @property
     def __dict__(self):
-        if me:
+        if self.me:
             return self.me.to_dict()
 
     async def start_client(self, **kwargs):
