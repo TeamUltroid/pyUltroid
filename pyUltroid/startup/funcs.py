@@ -8,7 +8,8 @@
 import asyncio
 import logging
 import os
-import time, random
+import random
+import time
 from random import randint
 from urllib.request import urlretrieve
 
@@ -286,7 +287,11 @@ async def customize():
             sir = ultroid_bot.me.first_name
         else:
             sir = f"@{ultroid_bot.me.username}"
-        file = "https://telegra.ph/file/" + random.choice(["a97973ee0425b523cdc28","92cd6dbd34b0d1d73a0da"]) + ".jpg"
+        file = (
+            "https://telegra.ph/file/"
+            + random.choice(["a97973ee0425b523cdc28", "92cd6dbd34b0d1d73a0da"])
+            + ".jpg"
+        )
         await ultroid_bot.send_message(
             chat_id, "Auto Customisation Started on @botfather"
         )
@@ -299,9 +304,7 @@ async def customize():
         await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", UL)
         await asyncio.sleep(1)
-        await ultroid_bot.send_file(
-            "botfather", file
-        )
+        await ultroid_bot.send_file("botfather", file)
         await asyncio.sleep(2)
         await ultroid_bot.send_message("botfather", "/setabouttext")
         await asyncio.sleep(1)
