@@ -147,6 +147,7 @@ class ParallelTransferrer:
 
     def __init__(self, client: TelegramClient, dc_id: Optional[int] = None) -> None:
         self.client = client
+        self.client.refresh_auth(client)
         self.loop = self.client.loop
         self.dc_id = dc_id or self.client.session.dc_id
         self.auth_key = (
@@ -156,6 +157,7 @@ class ParallelTransferrer:
         )
         self.senders = None
         self.upload_ticker = 0
+        self.client.clear_auth(self.client)
 
     async def _cleanup(self) -> None:
         await asyncio.gather(*[sender.disconnect() for sender in self.senders])
