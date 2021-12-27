@@ -292,7 +292,8 @@ async def customize():
             + random.choice(["a97973ee0425b523cdc28", "92cd6dbd34b0d1d73a0da"])
             + ".jpg"
         )
-        await ultroid_bot.send_message(
+        file = await download_file(file, "profile.jpg")
+        await asst.send_message(
             chat_id, "Auto Customisation Started on @botfather"
         )
         await asyncio.sleep(1)
@@ -324,6 +325,7 @@ async def customize():
         )
         await asyncio.sleep(2)
         await asst.send_message(chat_id, "**Auto Customisation** Done at @BotFather")
+        os.remove(file)
         LOGS.info("Customisation Done")
     except Exception as e:
         LOGS.exception(e)
