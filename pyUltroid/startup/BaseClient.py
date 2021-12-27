@@ -5,9 +5,9 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+import inspect
 import sys
 import time
-import inspect
 from re import findall
 
 from telethon import TelegramClient
@@ -86,7 +86,9 @@ class UltroidClient(TelegramClient):
             return self.__dict__[item]
         if item in self.to_dict():
             return self.to_dict()[item]
-        raise AttributeError(f'"{self.__class__.__name__}" object has no attribute "{item}"')
+        raise AttributeError(
+            f'"{self.__class__.__name__}" object has no attribute "{item}"'
+        )
 
     async def start_client(self, **kwargs):
         """function to start client"""
