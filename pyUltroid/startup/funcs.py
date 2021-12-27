@@ -293,9 +293,7 @@ async def customize():
             + ".jpg"
         )
         file = await download_file(file, "profile.jpg")
-        await asst.send_message(
-            chat_id, "Auto Customisation Started on @botfather"
-        )
+        await asst.send_message(chat_id, "Auto Customisation Started on @botfather")
         await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", "/cancel")
         await asyncio.sleep(1)
