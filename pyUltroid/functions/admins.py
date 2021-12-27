@@ -15,7 +15,6 @@ from telethon.tl import functions, types
 
 from .. import _ult_cache
 from ..misc import SUDO_M
-from ..misc._wrappers import eor
 
 
 async def ban_time(event, time_str):
@@ -65,7 +64,7 @@ async def _callback_check(event):
     return key
 
 
-async def admin_check(event, require=None, silent:bool=False):
+async def admin_check(event, require=None, silent: bool = False):
     if event.sender_id in SUDO_M.owner_and_sudos():
         return True
     callback = None
