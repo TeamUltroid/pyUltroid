@@ -89,7 +89,7 @@ class UltroidClient(TelegramClient):
     def __getattr__(self, item):
         if item in self.__dict__:
             return self.__dict__[item]
-        if item in self.to_dict():
+        if item in list(self.to_dict().keys()):
             return self.to_dict()[item]
         raise AttributeError(
             f'"{self.__class__.__name__}" object has no attribute "{item}"'
