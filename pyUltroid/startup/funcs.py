@@ -304,8 +304,6 @@ async def customize():
         await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", "/cancel")
         await asyncio.sleep(1)
-        await ultroid_bot.send_message("botfather", "/start")
-        await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", "/setuserpic")
         await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", UL)
