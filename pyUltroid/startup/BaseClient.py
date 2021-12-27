@@ -85,16 +85,6 @@ class UltroidClient(TelegramClient):
         if self.me:
             return self.me.to_dict()
 
-    @property
-    def __getattr__(self, item):
-        if item in self.__dict__:
-            return self.__dict__[item]
-        if item in list(self.to_dict().keys()):
-            return self.to_dict()[item]
-        raise AttributeError(
-            f'"{self.__class__.__name__}" object has no attribute "{item}"'
-        )
-
     async def start_client(self, **kwargs):
         """function to start client"""
         if self._log_at:
