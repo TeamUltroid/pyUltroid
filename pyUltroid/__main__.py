@@ -65,7 +65,11 @@ if plugin_channels:
 if not udB.get_key("LOG_OFF"):
     ultroid_bot.run_in_loop(ready())
 
-cleanup_cache()
+try:
+    cleanup_cache()
+except SystemExit:
+    print("System Exited!")
+    os._exit(0)
 
 if __name__ == "__main__":
     LOGS.info(
