@@ -26,6 +26,7 @@ from . import *
 
 
 class UltroidClient(TelegramClient):
+    __slots__ = ["_cache","_dialogs","_handle_error","_log_at","logger","udB","proxy", "me"]
     def __init__(
         self,
         session,
