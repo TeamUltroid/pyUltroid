@@ -293,7 +293,7 @@ async def customize():
             + ".jpg"
         )
         file = await download_file(file, "profile.jpg")
-        await asst.send_message(chat_id, "Auto Customisation Started on @botfather")
+        msg = await asst.send_message(chat_id, "**Auto Customisation** Started on @Botfather")
         await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", "/cancel")
         await asyncio.sleep(1)
@@ -322,7 +322,7 @@ async def customize():
             f"✨ PowerFul Ultroid Assistant Bot ✨\n✨ Master ~ {sir} ✨\n\n✨ Powered By ~ @TeamUltroid ✨",
         )
         await asyncio.sleep(2)
-        await asst.send_message(chat_id, "**Auto Customisation** Done at @BotFather")
+        await msg.edit("Completed **Auto Customisation** at @BotFather.")
         os.remove(file)
         LOGS.info("Customisation Done")
     except Exception as e:
