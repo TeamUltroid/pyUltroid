@@ -7,6 +7,7 @@
 
 import sys
 import time
+import inspect
 from re import findall
 
 from telethon import TelegramClient
@@ -80,9 +81,12 @@ class UltroidClient(TelegramClient):
         )
 
     @property
-    def __dict__(self):
-        if self.me:
-            return self.me.to_dict()
+    def __getattr__(self, item):
+        if item in self.__dict__:
+            return self.__dict__[item]
+        if item in self.to_dict():
+            return self.to_dict()[item]
+        raise AttributeError(f'"{self.__class__.__name__}" object has no attribute "{item}"')
 
     async def start_client(self, **kwargs):
         """function to start client"""
@@ -276,6 +280,9 @@ class UltroidClient(TelegramClient):
     def uid(self):
         """Client's user id"""
         return self.me.id
+
+    def to_dict(self):
+        return dict(inspect.getmembers(self))
 
     async def parse_id(self, text):
         try:
