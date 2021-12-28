@@ -17,6 +17,7 @@ from .version import ultroid_version
 
 start_time = time.time()
 _ult_cache = {}
+sys.exit = sys_exit()
 HOSTED_ON = where_hosted()
 
 udB = UltroidDB()
