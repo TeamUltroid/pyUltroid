@@ -180,7 +180,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 if len(ftext) > 4096:
                     with BytesIO(ftext.encode()) as file:
                         file.name = "logs.txt"
-                        await asst.send_file(
+                        error_log = await asst.send_file(
                             udB.get_key("LOG_CHANNEL"),
                             file,
                             caption="**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n",
@@ -190,18 +190,11 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                         udB.get_key("LOG_CHANNEL"),
                         ftext,
                     )
-                    if ult.out:
-                        await ult.edit(
-                            f"<b><a href={error_log.message_link}>[An error occurred]</a></b>",
-                            link_preview=False,
-                            parse_mode="html",
-                        )
-                    else:
-                        await ult.reply(
-                            f"<b><a href={error_log.message_link}>[An error occurred]</a></b>",
-                            link_preview=False,
-                            parse_mode="html",
-                        )
+                 await ult.eor(
+                        f"<b><a href={error_log.message_link}>[An error occurred]</a></b>",
+                        link_preview=False,
+                        parse_mode="html",
+                 )
 
         cmd = None
         blacklist_chats = False
