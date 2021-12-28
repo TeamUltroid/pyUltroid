@@ -7,6 +7,8 @@
 
 import inspect
 import time
+import logging
+
 from re import findall
 
 from telethon import TelegramClient
@@ -257,6 +259,8 @@ class UltroidClient(TelegramClient):
         try:
             self.run_until_disconnected()
         except SystemExit:
+            logging.shutdown()
+            self.logger = None
             self.loop.create_task(self.loop.run_in_executor(None, sys_exit()))
             self.loop.run_until_complete(self.loop.shutdown_asyncgens())
             self.loop.close()
