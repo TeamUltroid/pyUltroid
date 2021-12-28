@@ -257,8 +257,8 @@ class UltroidClient(TelegramClient):
         try:
             self.run_until_disconnected()
         except SystemExit:
-            self.loop.stop()
-            #            self.loop.run_until_complete(self.loop.shutdown_asyncgens())
+            self.loop.run_until_complete(self.loop.shutdown_asyncgens())
+            self.loop.close()
             sys_exit()
 
     def add_handler(self, func, *args, **kwargs):
