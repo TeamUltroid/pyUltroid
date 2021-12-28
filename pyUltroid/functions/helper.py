@@ -14,7 +14,7 @@ import time
 from traceback import format_exc
 from urllib.parse import unquote
 
-from safety.tools import *
+from safety.tools import sys_exit
 
 try:
     import aiofiles
