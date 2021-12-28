@@ -123,6 +123,7 @@ class SqlDB:
             print("Invaid SQL Database")
             if self._connection is not None:
                 self._connection.close()
+            sys_exit()
 
     @property
     def name(self):
@@ -138,6 +139,7 @@ class SqlDB:
             print("Invaid SQL Database")
             if self._connection is not None:
                 self._connection.close()
+            sys_exit()
             return 0
 
     def keys(self):
@@ -151,6 +153,7 @@ class SqlDB:
             print("Invaid SQL Database")
             if self._connection is not None:
                 self._connection.close()
+            sys_exit()
             return False
 
     def ping(self):
@@ -175,6 +178,7 @@ class SqlDB:
         except (Exception, psycopg2.DatabaseError) as error:
             if self._connection is not None:
                 self._connection.close()
+            sys_exit()
             return None
 
     def set_key(self, key, value):
@@ -190,6 +194,7 @@ class SqlDB:
             print("Invaid SQL Database")
             if self._connection is not None:
                 self._connection.close()
+            sys_exit()
             return False
 
     def del_key(self, key):
@@ -200,6 +205,7 @@ class SqlDB:
             print("Invaid SQL Database")
             if self._connection is not None:
                 self._connection.close()
+            sys_exit()
             return True
 
     def flushall(self):
@@ -211,6 +217,7 @@ class SqlDB:
             print("Invaid SQL Database")
             if self._connection is not None:
                 self._connection.close()
+            sys_exit()
             return False
 
     def rename(self, key1, key2):
