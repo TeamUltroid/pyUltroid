@@ -190,11 +190,18 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                         udB.get_key("LOG_CHANNEL"),
                         ftext,
                     )
-                    await ult.edit(
-                        f"<b><a href={error_log.message_link}>[An error occurred]</a></b>",
-                        link_preview=False,
-                        parse_mode="html",
-                    )
+                    if ult.out:
+                        await ult.edit(
+                            f"<b><a href={error_log.message_link}>[An error occurred]</a></b>",
+                            link_preview=False,
+                            parse_mode="html",
+                        )
+                    else:
+                        await ult.reply(
+                            f"<b><a href={error_log.message_link}>[An error occurred]</a></b>",
+                            link_preview=False,
+                            parse_mode="html",
+                        )
 
         cmd = None
         blacklist_chats = False
