@@ -129,7 +129,7 @@ class SqlDB:
     def name(self):
         return "SQLDB"
 
-    @rpoperty
+    @property
     def usage(self):
         try:
             conn = psycopg2.connect(dsn=self._url)
