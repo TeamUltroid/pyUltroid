@@ -121,7 +121,7 @@ class SqlDB:
             cur.close()
             conn.close()
         except (Exception, psycopg2.DatabaseError) as error:
-            print('Invaid SQL Database')
+            print("Invaid SQL Database")
             if conn is not None:
                 conn.close()
 
@@ -141,7 +141,7 @@ class SqlDB:
             conn.close()
             return int(data[0][0].split()[0])
         except (Exception, psycopg2.DatabaseError) as error:
-            print('Invaid SQL Database')
+            print("Invaid SQL Database")
             if conn is not None:
                 conn.close()
             return 0
@@ -159,7 +159,7 @@ class SqlDB:
             conn.close()
             return data
         except (Exception, psycopg2.DatabaseError) as error:
-            print('Invaid SQL Database')
+            print("Invaid SQL Database")
             if conn is not None:
                 conn.close()
             return False
@@ -209,7 +209,7 @@ class SqlDB:
             conn.close()
             return True
         except (Exception, psycopg2.DatabaseError) as error:
-            print('Invaid SQL Database')
+            print("Invaid SQL Database")
             if conn is not None:
                 conn.close()
             return False
@@ -224,7 +224,7 @@ class SqlDB:
             conn.close()
             return True
         except (Exception, psycopg2.DatabaseError) as error:
-            print('Invaid SQL Database')
+            print("Invaid SQL Database")
             if conn is not None:
                 conn.close()
             return True
@@ -240,7 +240,7 @@ class SqlDB:
             conn.close()
             return True
         except (Exception, psycopg2.DatabaseError) as error:
-            print('Invaid SQL Database')
+            print("Invaid SQL Database")
             if conn is not None:
                 conn.close()
             return False
