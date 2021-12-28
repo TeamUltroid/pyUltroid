@@ -191,8 +191,9 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                         ftext,
                     )
                     await ult.edit(
-                        f"[An error occurred]({error_log.message_link})",
+                        f"<b><a href={error_log.message_link}>[An error occurred]</a></b>",
                         link_preview=False,
+                        parse_mode="html",
                     )
 
         cmd = None
