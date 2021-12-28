@@ -58,7 +58,7 @@ def where_hosted():
         return "qovery"
     if os.getenv("WINDOW") and os.getenv("WINDOW") != "0":
         return "windows"
-    if os.getenv("HOSTNAME"):
+    if os.getenv("RUNNER_USER") or os.getenv("HOSTNAME"):
         return "github actions"
     if os.getenv("ANDROID_ROOT"):
         return "termux"
