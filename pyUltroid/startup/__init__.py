@@ -25,6 +25,12 @@ LOGS = getLogger("pyUltLogs")
 TelethonLogger = getLogger("Telethon")
 TelethonLogger.setLevel(INFO)
 
+_, v, __ = platform.python_version_tuple()
+
+if int(v) < 10:
+    from ._extra import _fix_logging
+    _fix_logging(FileHandler)
+
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] : %(message)s",
     level=INFO,
