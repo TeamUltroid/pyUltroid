@@ -22,7 +22,7 @@ def ungban(user):
     ok = list_gbanned()
     if ok.get(int(user)):
         del ok[int(user)]
-        return udB.set_key("GBAN", str(ok))
+        return udB.set_key("GBAN", ok)
 
 
 def is_gbanned(user):
