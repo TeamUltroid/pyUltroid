@@ -257,12 +257,8 @@ class UltroidClient(TelegramClient):
         try:
             self.run_until_disconnected()
         except SystemExit:
-            LOGS.handlers.clear()
-            TeleLogger.handlers.clear()
-            self.logger = None
-            self.loop.create_task(self.loop.run_in_executor(None, sys_exit()))
-            self.loop.run_until_complete(self.loop.shutdown_asyncgens())
-            self.loop.close()
+            print("Exited Ultroid!")
+            sys_exit()
 
     def add_handler(self, func, *args, **kwargs):
         """Add new event handler, ignoring if exists"""
