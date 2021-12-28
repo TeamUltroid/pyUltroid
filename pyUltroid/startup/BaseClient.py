@@ -9,6 +9,7 @@ import inspect
 import time
 from re import findall
 
+from safety.tools import *
 from telethon import TelegramClient
 from telethon import utils as telethon_utils
 from telethon.errors import (
@@ -23,7 +24,7 @@ from telethon.network.connection import (
 
 from ..configs import Var
 from . import *
-from safety.tools import *
+
 
 class UltroidClient(TelegramClient):
     def __init__(
