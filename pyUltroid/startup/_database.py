@@ -121,7 +121,7 @@ class SqlDB:
             cur.close()
             conn.close()
         except (Exception, psycopg2.DatabaseError) as error:
-            print(error)  # for now
+            print('Invaid SQL Database')
             if conn is not None:
                 conn.close()
 
@@ -131,7 +131,20 @@ class SqlDB:
 
     @rpoperty
     def usage(self):
-        return 0
+        try:
+            conn = psycopg2.connect(dsn=self._url)
+            conn.autocommit = True
+            cur = conn.cursor()
+            cur.execute("SELECT pg_size_pretty(pg_relation_size('Ultroid')) AS size")
+            data = cur.fetchall()
+            cur.close()
+            conn.close()
+            return int(data[0][0].split()[0])
+        except (Exception, psycopg2.DatabaseError) as error:
+            print('Invaid SQL Database')
+            if conn is not None:
+                conn.close()
+            return 0
 
     def keys(self):
         try:
@@ -146,7 +159,7 @@ class SqlDB:
             conn.close()
             return data
         except (Exception, psycopg2.DatabaseError) as error:
-            print(error)  # for now
+            print('Invaid SQL Database')
             if conn is not None:
                 conn.close()
             return False
@@ -196,7 +209,7 @@ class SqlDB:
             conn.close()
             return True
         except (Exception, psycopg2.DatabaseError) as error:
-            print(error)  # for now
+            print('Invaid SQL Database')
             if conn is not None:
                 conn.close()
             return False
@@ -211,7 +224,7 @@ class SqlDB:
             conn.close()
             return True
         except (Exception, psycopg2.DatabaseError) as error:
-            print(error)  # for now
+            print('Invaid SQL Database')
             if conn is not None:
                 conn.close()
             return True
@@ -227,7 +240,7 @@ class SqlDB:
             conn.close()
             return True
         except (Exception, psycopg2.DatabaseError) as error:
-            print(error)  # for now
+            print('Invaid SQL Database')
             if conn is not None:
                 conn.close()
             return False
