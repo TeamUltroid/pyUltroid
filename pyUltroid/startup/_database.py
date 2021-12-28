@@ -107,6 +107,8 @@ class MongoDB:
 
 # Thanks to "Akash Pattnaik" / @BLUE-DEVIL1134
 # for SQL Implementation in Ultroid.
+# 
+# Please use https://elephantsql.com/ !
 
 
 class SqlDB:
