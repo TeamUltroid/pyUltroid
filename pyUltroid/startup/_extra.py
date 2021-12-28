@@ -9,6 +9,7 @@
 # 'open' not defined has been fixed in Python3.10
 # for other older versions, something need to be done.
 
+
 def _fix_logging(handler):
     handler._builtin_open = open
 
