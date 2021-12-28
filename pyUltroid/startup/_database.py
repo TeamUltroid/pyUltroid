@@ -46,6 +46,10 @@ class MongoDB:
     def name(self):
         return "MongoDB"
 
+    @property
+    def usage(self):
+        return 0
+
     def re_cache(self):
         self._cache = {}
         for key in self.keys():
@@ -123,7 +127,11 @@ class SqlDB:
 
     @property
     def name(self):
-        return "SQL"
+        return "SQLDB"
+
+    @rpoperty
+    def usage(self):
+        return 0
 
     def keys(self):
         try:
@@ -285,6 +293,14 @@ class RedisConnection(Redis):
         for keys in self.keys():
             self._cache.update({keys: self.get_key(keys)})
 
+    @property
+    def name(self):
+        return "RedisDB"
+
+    @property
+    def usage(self):
+        return sum(self.memory_usage(x) for x in self.keys())
+
     def set_key(self, key, value):
         value = str(value)
         try:
@@ -305,10 +321,6 @@ class RedisConnection(Redis):
         if key in self._cache:
             del self._cache[key]
         return bool(self.delete(str(key)))
-
-    @property
-    def name(self):
-        return "Redis"
 
 
 # --------------------------------------------------------------------------------------------- #
