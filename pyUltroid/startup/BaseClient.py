@@ -6,7 +6,6 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import inspect
-import sys
 import time
 from re import findall
 
@@ -259,7 +258,7 @@ class UltroidClient(TelegramClient):
             self.run_until_disconnected()
         except SystemExit:
             self.loop.stop()
-#            self.loop.run_until_complete(self.loop.shutdown_asyncgens())
+            #            self.loop.run_until_complete(self.loop.shutdown_asyncgens())
             sys_exit()
 
     def add_handler(self, func, *args, **kwargs):
