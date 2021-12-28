@@ -40,7 +40,7 @@ pip3 install -U py-Ultroid
     pattern="start"
 )   
 async def _(e):   
-    await eor(e, "Ultroid Started.")   
+    await e.eor("Ultroid Started!")   
 ```
 
 - ### To work only in groups
