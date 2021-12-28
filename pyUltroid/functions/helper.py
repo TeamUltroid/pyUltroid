@@ -11,9 +11,10 @@ import os
 import re
 import sys
 import time
-from safety.tools import *
 from traceback import format_exc
 from urllib.parse import unquote
+
+from safety.tools import *
 
 try:
     import aiofiles
