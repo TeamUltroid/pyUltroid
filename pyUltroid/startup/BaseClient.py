@@ -6,9 +6,8 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import inspect
-import time
 import logging
-
+import time
 from re import findall
 
 from telethon import TelegramClient
