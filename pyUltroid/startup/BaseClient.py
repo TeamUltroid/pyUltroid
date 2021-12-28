@@ -6,7 +6,6 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import inspect
-import logging
 import time
 from re import findall
 
