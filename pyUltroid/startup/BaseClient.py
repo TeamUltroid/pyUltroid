@@ -23,7 +23,7 @@ from telethon.network.connection import (
 
 from ..configs import Var
 from . import *
-
+from safety.tools import *
 
 class UltroidClient(TelegramClient):
     def __init__(
