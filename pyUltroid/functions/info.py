@@ -66,10 +66,10 @@ async def get_chat_info(chat, event):
                 hash=0,
             )
         )
-    except Exception as e:
+    except Exception as er:
         msg_info = None
         if not e.client._bot:
-            LOGS.exception(e)
+            LOGS.exception(er)
     first_msg_valid = bool(
         msg_info and msg_info.messages and msg_info.messages[0].id == 1
     )
@@ -96,7 +96,7 @@ async def get_chat_info(chat, event):
         and msg_info.messages[0].action.title != chat_title
         else None
     )
-    if chat.photo and not isinstance(chat.photo, types.ChatPhotoEmpty):
+    if not isinstance(chat.photo, types.ChatPhotoEmpty):
         dc_id = chat.photo.dc_id
     else:
         dc_id = "Null"
@@ -149,7 +149,7 @@ async def get_chat_info(chat, event):
     if created:
         caption += f"<b>Created:</b> <code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
     else:
-        caption += f"<b>Created:</b> <code>{chat.date.date().strftime('%b %d, %Y')} - {chat.date.time()}</code> {warn_emoji}\n"
+        caption += f"<b>Created:</b> <code>{chat.date.date().strftime('%b %d, %Y')} - {chat.date.time()}</code> ⚠\n"
     caption += f"<b>Data Centre ID:</b> {dc_id}\n"
     if exp_count is not None:
         chat_level = int((1 + math.sqrt(1 + 7 * exp_count / 14)) / 2)
@@ -185,9 +185,10 @@ async def get_chat_info(chat, event):
     if hasattr(chat, "restricted"):
         caption += f"<b>Restricted:</b> {restricted}\n"
         if chat.restricted:
-            caption += f"> Platform: {chat.restriction_reason[0].platform}\n"
-            caption += f"> Reason: {chat.restriction_reason[0].reason}\n"
-            caption += f"> Text: {chat.restriction_reason[0].text}\n\n"
+            rist = chat.restriction_reason[0]
+            caption += f"> Platform: {rist.platform}\n"
+            caption += f"> Reason: {rist.reason}\n"
+            caption += f"> Text: {rist.text}\n\n"
         else:
             caption += "\n"
     if getattr(chat, "scam", None):
