@@ -134,7 +134,7 @@ class SqlDB:
     def encrypt(data):
         return base64.b64encode(str(data).encode("utf-8")).decode("utf-8")
 
-    def decrpyt(data):
+    def decrypt(data):
         return base64.b64decode(str(data).encode("utf-8")).decode("utf-8")
 
     @property
@@ -191,7 +191,7 @@ class SqlDB:
         if len(data) >= 1:
             for i in data:
                 if i[0]:
-                    return decrpyt(i[0])
+                    return self.decrypt(i[0])
 
     #            except (Exception, psycopg2.DatabaseError) as error:
     #                return None
