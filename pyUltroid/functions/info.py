@@ -49,6 +49,7 @@ async def get_chat_info(chat, event):
     else:
         return await event.eor("`Use this for Group/Channel.`")
     full = chat_info.full_chat
+    chat_photo = full.chat_photo
     broadcast = getattr(chat, "broadcast", False)
     chat_type = "Channel" if broadcast else "Group"
     chat_title = chat.title
@@ -216,4 +217,4 @@ async def get_chat_info(chat, event):
         caption += f"Verified by Telegram: {verified}\n\n"
     if description:
         caption += f"Description: \n<code>{description}</code>\n"
-    return caption
+    return chat_photo, caption
