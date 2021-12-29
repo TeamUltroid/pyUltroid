@@ -158,53 +158,53 @@ async def get_chat_info(chat, event):
         caption += f"Former name: {former_title}\n"
     if username is not None:
         caption += f"{chat_type} type: Public\n"
-        caption += f"Link: {username}\n"
+        caption += f"<b>Link:</b> {username}\n"
     else:
-        caption += f"{chat_type} type: Private\n"
+        caption += f"<b>{chat_type}</b> type: Private\n"
     if creator_username is not None:
-        caption += f"Creator: {creator_username}\n"
+        caption += f"<b>Creator:</b> {creator_username}\n"
     elif creator_valid:
         caption += (
-            f'Creator: <a href="tg://user?id={creator_id}">{creator_firstname}</a>\n'
+            f'<b>Creator:</b> <a href="tg://user?id={creator_id}">{creator_firstname}</a>\n'
         )
     if created is not None:
-        caption += f"Created: <code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
+        caption += f"<b>Created:</b> <code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
     else:
-        caption += f"Created: <code>{chat.date.date().strftime('%b %d, %Y')} - {chat.date.time()}</code> {warn_emoji}\n"
-    caption += f"Data Centre ID: {dc_id}\n"
+        caption += f"<b>Created:</b> <code>{chat.date.date().strftime('%b %d, %Y')} - {chat.date.time()}</code> {warn_emoji}\n"
+    caption += f"<b>Data Centre ID:</b> {dc_id}\n"
     if exp_count is not None:
         chat_level = int((1 + math.sqrt(1 + 7 * exp_count / 14)) / 2)
-        caption += f"{chat_type} level: <code>{chat_level}</code>\n"
+        caption += f"<b>{chat_type} level:</b> <code>{chat_level}</code>\n"
     if messages_viewable is not None:
-        caption += f"Viewable messages: <code>{messages_viewable}</code>\n"
+        caption += f"<b>Viewable messages:</b> <code>{messages_viewable}</code>\n"
     if messages_sent:
-        caption += f"Messages sent: <code>{messages_sent}</code>\n"
+        caption += f"<b>Messages sent:</b> <code>{messages_sent}</code>\n"
     elif messages_sent_alt:
-        caption += f"Messages sent: <code>{messages_sent_alt}</code> {warn_emoji}\n"
+        caption += f"<b>Messages sent:</b> <code>{messages_sent_alt}</code> {warn_emoji}\n"
     if members is not None:
-        caption += f"Members: <code>{members}</code>\n"
+        caption += f"<b>Members:</b> <code>{members}</code>\n"
     if admins is not None:
-        caption += f"Administrators: <code>{admins}</code>\n"
+        caption += f"<b>Administrators:</b> <code>{admins}</code>\n"
     if bots_list:
-        caption += f"Bots: <code>{bots}</code>\n"
+        caption += f"<b>Bots:</b> <code>{bots}</code>\n"
     if members_online:
-        caption += f"Currently online: <code>{members_online}</code>\n"
+        caption += f"<b>Currently online:</b> <code>{members_online}</code>\n"
     if restricted_users is not None:
-        caption += f"Restricted users: <code>{restricted_users}</code>\n"
+        caption += f"<b>Restricted users:</b> <code>{restricted_users}</code>\n"
     if banned_users is not None:
-        caption += f"Banned users: <code>{banned_users}</code>\n"
+        caption += f"<b>Banned users:</b> <code>{banned_users}</code>\n"
     if group_stickers is not None:
-        caption += f'{chat_type} stickers: <a href="t.me/addstickers/{full.stickerset.short_name}">{group_stickers}</a>\n'
+        caption += f'<b>{chat_type} stickers:</b> <a href="t.me/addstickers/{full.stickerset.short_name}">{group_stickers}</a>\n'
     caption += "\n"
     if not broadcast:
-        caption += f"Slow mode: {slowmode}"
+        caption += f"<b>Slow mode:</b> {slowmode}"
         if hasattr(chat, "slowmode_enabled") and chat.slowmode_enabled:
             caption += f", <code>{slowmode_time}s</code>\n\n"
         else:
             caption += "\n\n"
-        caption += f"Supergroup: {supergroup}\n\n"
+        caption += f"<b>Supergroup:</b> {supergroup}\n\n"
     if hasattr(chat, "restricted"):
-        caption += f"Restricted: {restricted}\n"
+        caption += f"<b>Restricted:</b> {restricted}\n"
         if chat.restricted:
             caption += f"> Platform: {chat.restriction_reason[0].platform}\n"
             caption += f"> Reason: {chat.restriction_reason[0].reason}\n"
@@ -212,9 +212,9 @@ async def get_chat_info(chat, event):
         else:
             caption += "\n"
     if getattr(chat, "scam", None):
-        caption += "Scam: <b>Yes</b>\n\n"
+        caption += "<b>Scam:</b> <b>Yes</b>\n\n"
     if hasattr(chat, "verified"):
-        caption += f"Verified by Telegram: {verified}\n\n"
+        caption += f"<b>Verified by Telegram:</b> {verified}\n\n"
     if description:
-        caption += f"Description: \n<code>{description}</code>\n"
+        caption += f"<b>Description:</b> \n<code>{description}</code>\n"
     return chat_photo, caption
