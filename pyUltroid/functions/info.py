@@ -164,15 +164,15 @@ async def get_chat_info(chat, event):
         caption += f"<b>Members:</b> <code>{members}</code>\n"
     if admins is not None:
         caption += f"<b>Administrators:</b> <code>{admins}</code>\n"
-    if bots_list:
+    if full.bot_info:
         caption += f"<b>Bots:</b> <code>{len(full.bot_info)}</code>\n"
     if members_online:
         caption += f"<b>Currently online:</b> <code>{members_online}</code>\n"
     if restricted_users is not None:
         caption += f"<b>Restricted users:</b> <code>{restricted_users}</code>\n"
-    if banned_users is not None:
+    if banned_users:
         caption += f"<b>Banned users:</b> <code>{banned_users}</code>\n"
-    if group_stickers is not None:
+    if group_stickers:
         caption += f'<b>{chat_type} stickers:</b> <a href="t.me/addstickers/{full.stickerset.short_name}">{group_stickers}</a>\n'
     caption += "\n"
     if not broadcast:
@@ -181,16 +181,13 @@ async def get_chat_info(chat, event):
             caption += f", <code>{full.slowmode_seconds}s</code>\n"
         else:
             caption += "\n\n"
-        caption += f"<b>Supergroup:</b> {supergroup}\n"
-    if hasattr(chat, "restricted"):
-        caption += f"<b>Restricted:</b> {restricted}\n"
-        if chat.restricted:
-            rist = chat.restriction_reason[0]
-            caption += f"> Platform: {rist.platform}\n"
-            caption += f"> Reason: {rist.reason}\n"
-            caption += f"> Text: {rist.text}\n\n"
-        else:
-            caption += "\n"
+            caption += f"<b>Supergroup:</b> {supergroup}\n"
+    if getattr(chat, "restricted", None):
+        caption += f"<b>Restricted:</b> {chat.restricted}\n"
+        rist = chat.restriction_reason[0]
+        caption += f"> Platform: {rist.platform}\n"
+        caption += f"> Reason: {rist.reason}\n"
+        caption += f"> Text: {rist.text}\n\n"
     if getattr(chat, "scam", None):
         caption += "⚠ <b>Scam:</b> <b>Yes</b>\n"
     if getattr(chat, "verified", None):
