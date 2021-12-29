@@ -1,4 +1,5 @@
 import os
+import base64
 
 from redis import Redis
 
@@ -127,6 +128,15 @@ class SqlDB:
                 self._connection.close()
             sys_exit()
 
+
+    def encrypt(data):
+        return base64.b64encode(str(data).encode('utf-8')).decode('utf-8')
+    
+
+    def decrpyt(data):
+        return base64.b64decode(str(data).encode('utf-8')).decode('utf-8')
+
+
     @property
     def name(self):
         return "SQLDB"
@@ -174,7 +184,7 @@ class SqlDB:
                 if len(data) >= 1:
                     for i in data:
                         if i[0]:
-                            return i[0]
+                            return decrpyt(i[0])
             except (Exception, psycopg2.DatabaseError) as error:
                 return None
         except (Exception, psycopg2.DatabaseError) as error:
@@ -190,7 +200,7 @@ class SqlDB:
             except BaseException:
                 pass  # doesn't exists
             self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-            self._cursor.execute(f"INSERT INTO Ultroid ({key}) values ('{value}')")
+            self._cursor.execute(f"INSERT INTO Ultroid ({key}) values ('{encrypt(value)}')")
             return True
         except (Exception, psycopg2.DatabaseError) as error:
             print("Invaid SQL Database")
