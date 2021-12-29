@@ -159,9 +159,7 @@ async def get_chat_info(chat, event):
     if messages_sent:
         caption += f"<b>Messages sent:</b> <code>{messages_sent}</code>\n"
     elif messages_sent_alt:
-        caption += (
-            f"<b>Messages sent:</b> <code>{messages_sent_alt}</code> ⚠\n"
-        )
+        caption += f"<b>Messages sent:</b> <code>{messages_sent_alt}</code> ⚠\n"
     if members is not None:
         caption += f"<b>Members:</b> <code>{members}</code>\n"
     if admins is not None:
