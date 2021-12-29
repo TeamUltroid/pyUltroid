@@ -131,10 +131,10 @@ class SqlDB:
                 self._connection.close()
             sys_exit()
 
-    def encrypt(data):
+    def encrypt(self, data):
         return base64.b64encode(str(data).encode("utf-8")).decode("utf-8")
 
-    def decrypt(data):
+    def decrypt(self, data):
         return base64.b64decode(str(data).encode("utf-8")).decode("utf-8")
 
     @property
@@ -207,7 +207,7 @@ class SqlDB:
             self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
         except BaseException:
             self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-        self._cursor.execute(f"INSERT INTO Ultroid ({key}) values ('{encrypt(value)}')")
+        self._cursor.execute(f"INSERT INTO Ultroid ({key}) values ('{self.encrypt(value)}')")
         return True
 
     #        except (Exception, psycopg2.DatabaseError) as error:
