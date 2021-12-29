@@ -87,15 +87,6 @@ async def get_chat_info(chat, event):
         else None
     )
     created = msg_info.messages[0].date if first_msg_valid else None
-    former_title = (
-        msg_info.messages[0].action.title
-        if first_msg_valid
-        and isinstance(
-            msg_info.messages[0].action, types.MessageActionChannelMigrateFrom
-        )
-        and msg_info.messages[0].action.title != chat_title
-        else None
-    )
     if not isinstance(chat.photo, types.ChatPhotoEmpty):
         dc_id = chat.photo.dc_id
     else:
@@ -134,9 +125,7 @@ async def get_chat_info(chat, event):
     caption = "ℹ️ <b>[<u>CHAT INFO</u>]</b>\n"
     caption += f"🆔 <b>ID:</b> <code>{chat.id}</code>\n"
     if chat_title is not None:
-        caption += f"📛 <chat>{chat_type} name:</b> {chat_title}\n"
-    if former_title is not None:
-        caption += f"📛 Former name: {former_title}\n"
+        caption += f"📛 <chat>{chat_type} name:</b> <code>{chat_title}</code>\n"
     if chat.username:
         caption += f"🔗 <b>Link:</b> @{chat.username}\n"
     else:
