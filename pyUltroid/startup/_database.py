@@ -83,14 +83,9 @@ class MongoDB:
         if key in self._cache:
             return self._cache[key]
         if key in self.keys():
-            value = self.get(key)
-            if value is not None:
-                try:
-                    value = eval(value)
-                except BaseException:
-                    pass
-                self._cache.update({key: value})
-                return value
+            value = get_data(self, key)
+            self._cache.update({key: value})
+            return value
         return None
 
     def get(self, key):
@@ -136,7 +131,6 @@ class SqlDB:
 
     @property
     def usage(self):
-        #        try:
         self._cursor.execute(
             "SELECT pg_size_pretty(pg_relation_size('Ultroid')) AS size"
         )
@@ -144,7 +138,6 @@ class SqlDB:
         return int(data[0][0].split()[0])
 
     def keys(self):
-        #        try:
         self._cursor.execute(
             "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name  = 'ultroid'"
         )  # case sensitive
@@ -173,6 +166,8 @@ class SqlDB:
     def set_key(self, key, value):
         try:
             self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
+        except psycopg2.errors.UndefinedColumn:
+            pass
         except BaseException as er:
             LOGS.exception(er)
         self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
@@ -180,8 +175,10 @@ class SqlDB:
         return True
 
     def del_key(self, key):
-        #        try:
-        self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
+        try:
+            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
+        except psycopg2.errors.UndefinedColumn:
+            return False
         return True
 
     delete = del_key
