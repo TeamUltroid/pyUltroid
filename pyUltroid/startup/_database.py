@@ -120,14 +120,14 @@ class SqlDB:
         try:
             self._connection = psycopg2.connect(dsn=url)
             self._connection.autocommit = True
-            self._cursor = conn.cursor()
+            self._cursor = self._connection.cursor()
             self._cursor.execute(
                 "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))"
             )
         except Exception as error:
             LOGS.exception(error)
             LOGS.info("Invaid SQL Database")
-            if self._connection is not None:
+            if self._connection:
                 self._connection.close()
             sys_exit()
 
