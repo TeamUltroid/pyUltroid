@@ -162,7 +162,7 @@ class SqlDB:
             "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name  = 'ultroid'"
         )  # case sensitive
         data = self._cursor.fetchall()
-        return data
+        return [_[0] for _ in data]
 
     #        except (Exception, psycopg2.DatabaseError) as error:
     #            LOGS.info("Invaid SQL Database")
@@ -204,8 +204,9 @@ class SqlDB:
         #        try:
         try:
             self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
-        except BaseException:
-            self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
+        except BaseException as er:
+            LOGS.exception(er)
+        self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
         self._cursor.execute(f"INSERT INTO Ultroid ({key}) values ('{value}')")
         return True
 
@@ -227,6 +228,8 @@ class SqlDB:
     #                self._connection.close()
     #            sys_exit()
     #            return True
+
+    delete = del_key
 
     def flushall(self):
         #        try:
