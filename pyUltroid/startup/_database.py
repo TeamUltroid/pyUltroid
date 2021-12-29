@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
+import sys
 
 from redis import Redis
 
@@ -130,7 +131,7 @@ class SqlDB:
             LOGS.info("Invaid SQL Database")
             if self._connection:
                 self._connection.close()
-            sys_exit()
+            sys.exit()
 
     @property
     def name(self):
