@@ -68,7 +68,7 @@ async def get_chat_info(chat, event):
         )
     except Exception as er:
         msg_info = None
-        if not e.client._bot:
+        if not event.client._bot:
             LOGS.exception(er)
     first_msg_valid = bool(
         msg_info and msg_info.messages and msg_info.messages[0].id == 1
@@ -131,17 +131,17 @@ async def get_chat_info(chat, event):
             admins = participants_admins.count if participants_admins else None
         except Exception as e:
             LOGS.info(f"Exception: {e}")
-    caption = "<b>[ <u>CHAT INFO</u> ]</b>\n"
-    caption += f"<b>ID:</b> <code>{chat.id}</code>\n"
+    caption = "ℹ️<b>[ <u>CHAT INFO</u> ]</b>\n"
+    caption += f"🆔 <b>ID:</b> <code>{chat.id}</code>\n"
     if chat_title is not None:
-        caption += f"<chat>{chat_type} name:</b> {chat_title}\n"
+        caption += f"📛 <chat>{chat_type} name:</b> {chat_title}\n"
     if former_title is not None:
-        caption += f"Former name: {former_title}\n"
+        caption += f"📛 Former name: {former_title}\n"
     if chat.username:
         caption += f"<b>{chat_type} type:</b> Public\n"
-        caption += f"<b>Link:</b> @{chat.username}\n"
+        caption += f"🔗 <b>Link:</b> @{chat.username}\n"
     else:
-        caption += f"<b>{chat_type} type:</b> Private\n"
+        caption += f"🗳 <b>{chat_type} type:</b> Private\n"
     if creator_username:
         caption += f"<b>Creator:</b> {creator_username}\n"
     elif creator_valid:
@@ -150,7 +150,7 @@ async def get_chat_info(chat, event):
         caption += f"<b>Created:</b> <code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
     else:
         caption += f"<b>Created:</b> <code>{chat.date.date().strftime('%b %d, %Y')} - {chat.date.time()}</code> ⚠\n"
-    caption += f"<b>Data Centre ID:</b> {dc_id}\n"
+    caption += f"🗡 <b>Data Centre ID:</b> {dc_id}\n"
     if exp_count is not None:
         chat_level = int((1 + math.sqrt(1 + 7 * exp_count / 14)) / 2)
         caption += f"<b>{chat_type} level:</b> <code>{chat_level}</code>\n"
@@ -161,26 +161,24 @@ async def get_chat_info(chat, event):
     elif messages_sent_alt:
         caption += f"<b>Messages sent:</b> <code>{messages_sent_alt}</code> ⚠\n"
     if members is not None:
-        caption += f"<b>Members:</b> <code>{members}</code>\n"
-    if admins is not None:
-        caption += f"<b>Administrators:</b> <code>{admins}</code>\n"
+        caption += f"👥 <b>Members:</b> <code>{members}</code>\n"
+    if admins:
+        caption += f"👮 <b>Administrators:</b> <code>{admins}</code>\n"
     if full.bot_info:
-        caption += f"<b>Bots:</b> <code>{len(full.bot_info)}</code>\n"
+        caption += f"🤖 <b>Bots:</b> <code>{len(full.bot_info)}</code>\n"
     if members_online:
         caption += f"<b>Currently online:</b> <code>{members_online}</code>\n"
     if restricted_users is not None:
-        caption += f"<b>Restricted users:</b> <code>{restricted_users}</code>\n"
+        caption += f"🔕 <b>Restricted users:</b> <code>{restricted_users}</code>\n"
     if banned_users:
-        caption += f"<b>Banned users:</b> <code>{banned_users}</code>\n"
+        caption += f"📨 <b>Banned users:</b> <code>{banned_users}</code>\n"
     if group_stickers:
-        caption += f'<b>{chat_type} stickers:</b> <a href="t.me/addstickers/{full.stickerset.short_name}">{group_stickers}</a>\n'
-    caption += "\n"
+        caption += f'📹 <b>{chat_type} stickers:</b> <a href="t.me/addstickers/{full.stickerset.short_name}">{group_stickers}</a>\n'
     if not broadcast:
         if getattr(chat, "slowmode_enabled", None):
-            caption += f"<b>Slow mode:</b> {slowmode}"
-            caption += f", <code>{full.slowmode_seconds}s</code>\n"
+            caption += f"👉 <b>Slow mode:</b> {slowmode}"
+            caption += f", 🕐 <code>{full.slowmode_seconds}s</code>\n"
         else:
-            caption += "\n\n"
             caption += f"<b>Supergroup:</b> {supergroup}\n"
     if getattr(chat, "restricted", None):
         caption += f"<b>Restricted:</b> {chat.restricted}\n"
@@ -191,7 +189,7 @@ async def get_chat_info(chat, event):
     if getattr(chat, "scam", None):
         caption += "⚠ <b>Scam:</b> <b>Yes</b>\n"
     if getattr(chat, "verified", None):
-        caption += f"<b>Verified by Telegram:</b> <code>Yes</code>\n\n"
+        caption += f"✅ <b>Verified by Telegram:</b> <code>Yes</code>\n\n"
     if full.about:
-        caption += f"<b>Description:</b> \n<code>{full.about}</code>\n"
+        caption += f"🗒 <b>Description:</b> \n<code>{full.about}</code>\n"
     return chat_photo, caption
