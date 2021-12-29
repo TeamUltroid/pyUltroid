@@ -1,5 +1,5 @@
-import os
 import base64
+import os
 
 from redis import Redis
 
@@ -108,7 +108,7 @@ class MongoDB:
 
 # Thanks to "Akash Pattnaik" / @BLUE-DEVIL1134
 # for SQL Implementation in Ultroid.
-# 
+#
 # Please use https://elephantsql.com/ !
 
 
@@ -121,21 +121,20 @@ class SqlDB:
             self._connection = psycopg2.connect(dsn=url)
             self._connection.autocommit = True
             self._cursor = conn.cursor()
-            self._cursor.execute("CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))")
+            self._cursor.execute(
+                "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))"
+            )
         except (Exception, psycopg2.DatabaseError) as error:
             print("Invaid SQL Database")
             if self._connection is not None:
                 self._connection.close()
             sys_exit()
 
-
     def encrypt(data):
-        return base64.b64encode(str(data).encode('utf-8')).decode('utf-8')
-    
+        return base64.b64encode(str(data).encode("utf-8")).decode("utf-8")
 
     def decrpyt(data):
-        return base64.b64decode(str(data).encode('utf-8')).decode('utf-8')
-
+        return base64.b64decode(str(data).encode("utf-8")).decode("utf-8")
 
     @property
     def name(self):
@@ -144,7 +143,9 @@ class SqlDB:
     @property
     def usage(self):
         try:
-            self._cursor.execute("SELECT pg_size_pretty(pg_relation_size('Ultroid')) AS size")
+            self._cursor.execute(
+                "SELECT pg_size_pretty(pg_relation_size('Ultroid')) AS size"
+            )
             data = self._cursor.fetchall()
             return int(data[0][0].split()[0])
         except (Exception, psycopg2.DatabaseError) as error:
@@ -200,7 +201,9 @@ class SqlDB:
             except BaseException:
                 pass  # doesn't exists
             self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-            self._cursor.execute(f"INSERT INTO Ultroid ({key}) values ('{encrypt(value)}')")
+            self._cursor.execute(
+                f"INSERT INTO Ultroid ({key}) values ('{encrypt(value)}')"
+            )
             return True
         except (Exception, psycopg2.DatabaseError) as error:
             print("Invaid SQL Database")
@@ -223,7 +226,9 @@ class SqlDB:
     def flushall(self):
         try:
             self._cursor.execute("DROP TABLE Ultroid")
-            self._cursor.execute("CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))")
+            self._cursor.execute(
+                "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))"
+            )
             return True
         except (Exception, psycopg2.DatabaseError) as error:
             print("Invaid SQL Database")
