@@ -143,32 +143,34 @@ class SqlDB:
 
     @property
     def usage(self):
-#        try:
+        #        try:
         self._cursor.execute(
-                "SELECT pg_size_pretty(pg_relation_size('Ultroid')) AS size"
+            "SELECT pg_size_pretty(pg_relation_size('Ultroid')) AS size"
         )
         data = self._cursor.fetchall()
         return int(data[0][0].split()[0])
-#        except (Exception, psycopg2.DatabaseError) as error:
-#            print("Invaid SQL Database")
-#            if self._connection is not None:
-#                self._connection.close()
-#            sys_exit()
-#            return 0
+
+    #        except (Exception, psycopg2.DatabaseError) as error:
+    #            print("Invaid SQL Database")
+    #            if self._connection is not None:
+    #                self._connection.close()
+    #            sys_exit()
+    #            return 0
 
     def keys(self):
-#        try:
+        #        try:
         self._cursor.execute(
             "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name  = 'ultroid'"
         )  # case sensitive
         data = self._cursor.fetchall()
         return data
-#        except (Exception, psycopg2.DatabaseError) as error:
-#            LOGS.info("Invaid SQL Database")
-#            if self._connection is not None:
-#                self._connection.close()
-#            sys_exit()
-#            return False
+
+    #        except (Exception, psycopg2.DatabaseError) as error:
+    #            LOGS.info("Invaid SQL Database")
+    #            if self._connection is not None:
+    #                self._connection.close()
+    #            sys_exit()
+    #            return False
 
     def ping(self):
         """They should really keep the `if udB.ping():` in try/except."""
@@ -177,65 +179,67 @@ class SqlDB:
     get_key = get_data
 
     def get(self, variable):
-#        try:
-#            try:
+        #        try:
+        #            try:
         self._cursor.execute(f"SELECT {variable} FROM Ultroid")
         data = self._cursor.fetchall()
         if not data:
             return None
         if len(data) >= 1:
             for i in data:
-               if i[0]:
-                   return decrpyt(i[0])
-#            except (Exception, psycopg2.DatabaseError) as error:
-#                return None
-#        except (Exception, psycopg2.DatabaseError) as error:
-#            if self._connection is not None:
-#                self._connection.close()
-#            sys_exit()
-#            return None
+                if i[0]:
+                    return decrpyt(i[0])
+
+    #            except (Exception, psycopg2.DatabaseError) as error:
+    #                return None
+    #        except (Exception, psycopg2.DatabaseError) as error:
+    #            if self._connection is not None:
+    #                self._connection.close()
+    #            sys_exit()
+    #            return None
 
     def set_key(self, key, value):
-#        try:
+        #        try:
         try:
             self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
         except BaseException:
             self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-        self._cursor.execute(
-            f"INSERT INTO Ultroid ({key}) values ('{encrypt(value)}')"
-        )
+        self._cursor.execute(f"INSERT INTO Ultroid ({key}) values ('{encrypt(value)}')")
         return True
-#        except (Exception, psycopg2.DatabaseError) as error:
-#            print("Invaid SQL Database")
-#            if self._connection is not None:
-#                self._connection.close()
-#            sys_exit()
-#            return False
+
+    #        except (Exception, psycopg2.DatabaseError) as error:
+    #            print("Invaid SQL Database")
+    #            if self._connection is not None:
+    #                self._connection.close()
+    #            sys_exit()
+    #            return False
 
     def del_key(self, key):
-#        try:
+        #        try:
         self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
         return True
-#        except (Exception, psycopg2.DatabaseError) as error:
-#            print("Invaid SQL Database")
-#            if self._connection is not None:
-#                self._connection.close()
-#            sys_exit()
-#            return True
+
+    #        except (Exception, psycopg2.DatabaseError) as error:
+    #            print("Invaid SQL Database")
+    #            if self._connection is not None:
+    #                self._connection.close()
+    #            sys_exit()
+    #            return True
 
     def flushall(self):
-#        try:
+        #        try:
         self._cursor.execute("DROP TABLE Ultroid")
         self._cursor.execute(
-                "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))"
+            "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))"
         )
         return True
- #       except (Exception, psycopg2.DatabaseError) as error:
-#            print("Invaid SQL Database")
-#            if self._connection is not None:
-#                self._connection.close()
-#            sys_exit()
-#            return False
+
+    #       except (Exception, psycopg2.DatabaseError) as error:
+    #            print("Invaid SQL Database")
+    #            if self._connection is not None:
+    #                self._connection.close()
+    #            sys_exit()
+    #            return False
 
     def rename(self, key1, key2):
         _ = self.get_key(key1)
