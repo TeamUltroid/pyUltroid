@@ -164,9 +164,7 @@ async def get_chat_info(chat, event):
     if creator_username is not None:
         caption += f"<b>Creator:</b> {creator_username}\n"
     elif creator_valid:
-        caption += (
-            f'<b>Creator:</b> <a href="tg://user?id={creator_id}">{creator_firstname}</a>\n'
-        )
+        caption += f'<b>Creator:</b> <a href="tg://user?id={creator_id}">{creator_firstname}</a>\n'
     if created is not None:
         caption += f"<b>Created:</b> <code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
     else:
@@ -180,7 +178,9 @@ async def get_chat_info(chat, event):
     if messages_sent:
         caption += f"<b>Messages sent:</b> <code>{messages_sent}</code>\n"
     elif messages_sent_alt:
-        caption += f"<b>Messages sent:</b> <code>{messages_sent_alt}</code> {warn_emoji}\n"
+        caption += (
+            f"<b>Messages sent:</b> <code>{messages_sent_alt}</code> {warn_emoji}\n"
+        )
     if members is not None:
         caption += f"<b>Members:</b> <code>{members}</code>\n"
     if admins is not None:
