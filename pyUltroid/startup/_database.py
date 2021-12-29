@@ -181,7 +181,10 @@ class SqlDB:
     def get(self, variable):
         #        try:
         #            try:
-        self._cursor.execute(f"SELECT {variable} FROM Ultroid")
+        try:
+            self._cursor.execute(f"SELECT {variable} FROM Ultroid")
+        except psycopg2.errors.UndefinedColumn:
+            return None
         data = self._cursor.fetchall()
         if not data:
             return None
