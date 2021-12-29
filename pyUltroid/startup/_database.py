@@ -179,14 +179,14 @@ class SqlDB:
     def get(self, variable):
 #        try:
 #            try:
-         self._cursor.execute(f"SELECT {variable} FROM Ultroid")
-         data = self._cursor.fetchall()
-         if not data:
-             return None
-         if len(data) >= 1:
-             for i in data:
-                if i[0]:
-                    return decrpyt(i[0])
+        self._cursor.execute(f"SELECT {variable} FROM Ultroid")
+        data = self._cursor.fetchall()
+        if not data:
+            return None
+        if len(data) >= 1:
+            for i in data:
+               if i[0]:
+                   return decrpyt(i[0])
 #            except (Exception, psycopg2.DatabaseError) as error:
 #                return None
 #        except (Exception, psycopg2.DatabaseError) as error:
@@ -197,13 +197,13 @@ class SqlDB:
 
     def set_key(self, key, value):
 #        try:
-         try:
-             self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
-         except BaseException:
+        try:
+            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
+        except BaseException:
             self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-         self._cursor.execute(
+        self._cursor.execute(
             f"INSERT INTO Ultroid ({key}) values ('{encrypt(value)}')"
-         )
+        )
         return True
 #        except (Exception, psycopg2.DatabaseError) as error:
 #            print("Invaid SQL Database")
