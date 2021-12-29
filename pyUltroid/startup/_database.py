@@ -153,7 +153,7 @@ class SqlDB:
 #            print("Invaid SQL Database")
 #            if self._connection is not None:
 #                self._connection.close()
-@            sys_exit()
+#            sys_exit()
 #            return 0
 
     def keys(self):
