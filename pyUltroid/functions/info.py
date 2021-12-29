@@ -53,7 +53,6 @@ async def get_chat_info(chat, event):
     broadcast = getattr(chat, "broadcast", False)
     chat_type = "Channel" if broadcast else "Group"
     chat_title = chat.title
-    warn_emoji = "⚠"
     try:
         msg_info = await event.client(
             functions.messages.GetHistoryRequest(
@@ -115,12 +114,7 @@ async def get_chat_info(chat, event):
     messages_sent_alt = getattr(full, "read_outbox_max_id", None)
     exp_count = getattr(full, "pts", None)
     supergroup = "<b>Yes</b>" if getattr(chat, "megagroup", None) else "No"
-    slowmode = "<b>Yes</b>" if getattr(chat, "slowmode_enabled", None) else "No"
-    slowmode_time = (
-        full.slowmode_seconds if getattr(chat, "slowmode_enabled", None) else None
-    )
     restricted = "<b>Yes</b>" if getattr(chat, "restricted", None) else "No"
-    verified = "<b>Yes</b>" if getattr(chat, "verified", None) else "No"
     creator_username = "@{}".format(creator_username) if creator_username else None
 
     if admins is None:
@@ -148,7 +142,7 @@ async def get_chat_info(chat, event):
         caption += f"<b>Link:</b> @{chat.username}\n"
     else:
         caption += f"<b>{chat_type} type:</b> Private\n"
-    if creator_username is not None:
+    if creator_username:
         caption += f"<b>Creator:</b> {creator_username}\n"
     elif creator_valid:
         caption += f'<b>Creator:</b> <a href="tg://user?id={creator_id}">{creator_firstname}</a>\n'
@@ -166,7 +160,7 @@ async def get_chat_info(chat, event):
         caption += f"<b>Messages sent:</b> <code>{messages_sent}</code>\n"
     elif messages_sent_alt:
         caption += (
-            f"<b>Messages sent:</b> <code>{messages_sent_alt}</code> {warn_emoji}\n"
+            f"<b>Messages sent:</b> <code>{messages_sent_alt}</code> ⚠\n"
         )
     if members is not None:
         caption += f"<b>Members:</b> <code>{members}</code>\n"
@@ -184,9 +178,9 @@ async def get_chat_info(chat, event):
         caption += f'<b>{chat_type} stickers:</b> <a href="t.me/addstickers/{full.stickerset.short_name}">{group_stickers}</a>\n'
     caption += "\n"
     if not broadcast:
-        caption += f"<b>Slow mode:</b> {slowmode}"
         if getattr(chat, "slowmode_enabled", None):
-            caption += f", <code>{slowmode_time}s</code>\n"
+            caption += f"<b>Slow mode:</b> {slowmode}"
+            caption += f", <code>{full.slowmode_seconds}s</code>\n"
         else:
             caption += "\n\n"
         caption += f"<b>Supergroup:</b> {supergroup}\n"
@@ -199,9 +193,9 @@ async def get_chat_info(chat, event):
         else:
             caption += "\n"
     if getattr(chat, "scam", None):
-        caption += "<b>Scam:</b> <b>Yes</b>\n"
-    if hasattr(chat, "verified"):
-        caption += f"<b>Verified by Telegram:</b> {verified}\n\n"
+        caption += "⚠ <b>Scam:</b> <b>Yes</b>\n"
+    if getattr(chat, "verified", None):
+        caption += f"<b>Verified by Telegram:</b> <code>Yes</code>\n\n"
     if full.about:
         caption += f"<b>Description:</b> \n<code>{full.about}</code>\n"
     return chat_photo, caption
