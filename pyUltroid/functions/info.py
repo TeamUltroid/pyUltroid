@@ -102,34 +102,25 @@ async def get_chat_info(chat, event):
     else:
         dc_id = "Null"
 
-    description = full.about
     restricted_users = getattr(full, "banned_count", None)
     members = getattr(full, "participants_count", chat.participants_count)
     admins = getattr(full, "admins_count", None)
     banned_users = getattr(full, "kicked_count", None)
     members_online = getattr(full, "online_count", 0)
-    group_stickers = (
-        full.stickerset.title
-        if (hasattr(full, "stickerset") and full.stickerset)
-        else None
-    )
+    group_stickers = full.stickerset.title if getattr(full, "stickerset", None) else None
     messages_viewable = msg_info.count if msg_info else None
     messages_sent = getattr(full, "read_inbox_max_id", None)
     messages_sent_alt = getattr(full, "read_outbox_max_id", None)
     exp_count = getattr(full, "pts", None)
-    username = getattr(chat, "username", None)
-    bots_list = full.bot_info  # this is a list
-    bots = 0
-    supergroup = "<b>Yes</b>" if hasattr(chat, "megagroup") and chat.megagroup else "No"
+    supergroup = "<b>Yes</b>" if getattr(chat, "megagroup", None) else "No"
     slowmode = "<b>Yes</b>" if getattr(chat, "slowmode_enabled", None) else "No"
     slowmode_time = (
         full.slowmode_seconds if getattr(chat, "slowmode_enabled", None) else None
     )
     restricted = (
-        "<b>Yes</b>" if hasattr(chat, "restricted") and chat.restricted else "No"
+        "<b>Yes</b>" if getattr(chat, "restricted", None) else "No"
     )
-    verified = "<b>Yes</b>" if hasattr(chat, "verified") and chat.verified else "No"
-    username = "@{}".format(username) if username else None
+    verified = "<b>Yes</b>" if getattr(chat, "verified", None) else "No"
     creator_username = "@{}".format(creator_username) if creator_username else None
 
     if admins is None:
@@ -146,26 +137,22 @@ async def get_chat_info(chat, event):
             admins = participants_admins.count if participants_admins else None
         except Exception as e:
             LOGS.info(f"Exception: {e}")
-    if bots_list:
-        for _ in bots_list:
-            bots += 1
-
-    caption = "<b>CHAT INFO:</b>\n"
-    caption += f"ID: <code>{chat.id}</code>\n"
+    caption = "<b>[ <u>CHAT INFO</u> ]</b>\n"
+    caption += f"<b>ID:</b> <code>{chat.id}</code>\n"
     if chat_title is not None:
-        caption += f"{chat_type} name: {chat_title}\n"
+        caption += f"<chat>{chat_type} name:</b> {chat_title}\n"
     if former_title is not None:
         caption += f"Former name: {former_title}\n"
-    if username is not None:
-        caption += f"{chat_type} type: Public\n"
-        caption += f"<b>Link:</b> {username}\n"
+    if chat.username:
+        caption += f"<b>{chat_type} type:</b> Public\n"
+        caption += f"<b>Link:</b> @{chat.username}\n"
     else:
-        caption += f"<b>{chat_type}</b> type: Private\n"
+        caption += f"<b>{chat_type} type:</b> Private\n"
     if creator_username is not None:
         caption += f"<b>Creator:</b> {creator_username}\n"
     elif creator_valid:
         caption += f'<b>Creator:</b> <a href="tg://user?id={creator_id}">{creator_firstname}</a>\n'
-    if created is not None:
+    if created:
         caption += f"<b>Created:</b> <code>{created.date().strftime('%b %d, %Y')} - {created.time()}</code>\n"
     else:
         caption += f"<b>Created:</b> <code>{chat.date.date().strftime('%b %d, %Y')} - {chat.date.time()}</code> {warn_emoji}\n"
@@ -186,7 +173,7 @@ async def get_chat_info(chat, event):
     if admins is not None:
         caption += f"<b>Administrators:</b> <code>{admins}</code>\n"
     if bots_list:
-        caption += f"<b>Bots:</b> <code>{bots}</code>\n"
+        caption += f"<b>Bots:</b> <code>{len(full.bot_info)}</code>\n"
     if members_online:
         caption += f"<b>Currently online:</b> <code>{members_online}</code>\n"
     if restricted_users is not None:
@@ -198,11 +185,11 @@ async def get_chat_info(chat, event):
     caption += "\n"
     if not broadcast:
         caption += f"<b>Slow mode:</b> {slowmode}"
-        if hasattr(chat, "slowmode_enabled") and chat.slowmode_enabled:
-            caption += f", <code>{slowmode_time}s</code>\n\n"
+        if getattr(chat, "slowmode_enabled", None):
+            caption += f", <code>{slowmode_time}s</code>\n"
         else:
             caption += "\n\n"
-        caption += f"<b>Supergroup:</b> {supergroup}\n\n"
+        caption += f"<b>Supergroup:</b> {supergroup}\n"
     if hasattr(chat, "restricted"):
         caption += f"<b>Restricted:</b> {restricted}\n"
         if chat.restricted:
@@ -212,9 +199,9 @@ async def get_chat_info(chat, event):
         else:
             caption += "\n"
     if getattr(chat, "scam", None):
-        caption += "<b>Scam:</b> <b>Yes</b>\n\n"
+        caption += "<b>Scam:</b> <b>Yes</b>\n"
     if hasattr(chat, "verified"):
         caption += f"<b>Verified by Telegram:</b> {verified}\n\n"
-    if description:
-        caption += f"<b>Description:</b> \n<code>{description}</code>\n"
+    if full.about:
+        caption += f"<b>Description:</b> \n<code>{full.about}</code>\n"
     return chat_photo, caption
