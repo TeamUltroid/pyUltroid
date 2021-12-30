@@ -6,7 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import inspect
-import time
+import time, sys
 from re import findall
 
 from telethon import TelegramClient
@@ -97,7 +97,7 @@ class UltroidClient(TelegramClient):
         except (AuthKeyDuplicatedError, EOFError) as er:
             if self._handle_error:
                 self.logger.error("String session expired. Create new!")
-                return sys_exit()
+                return sys.exit()
             raise er
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
