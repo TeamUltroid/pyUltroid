@@ -35,7 +35,10 @@ async def download_yt(event, link, ytd):
     duration = info["duration"]
     ext = "." + ytd["outtmpl"].split(".")[-1]
     file = title + ext
-    os.rename(id_ + ext, file)
+    try:
+        os.rename(id_ + ext, file)
+    except FileNotFoundError:
+        os.rename(id_ + ext*2, file)
     res = await uploader(file, file, time.time(), event, "Uploading...")
     if file.endswith(("mp4", "mkv", "webm")):
         height, width = info["height"], info["width"]
