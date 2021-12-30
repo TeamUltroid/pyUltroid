@@ -5,8 +5,6 @@
 ###### Searching and Downloading Google Images to the local disk ######
 
 
-# Import Libraries
-from .. import LOGS
 import codecs
 import datetime
 import http.client
@@ -20,6 +18,9 @@ import urllib.request
 from http.client import BadStatusLine
 from urllib.parse import quote
 from urllib.request import HTTPError, Request, URLError, urlopen
+
+# Import Libraries
+from .. import LOGS
 
 http.client._MAXHEADERS = 1000
 
@@ -77,9 +78,9 @@ class googleimagesdownload:
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
             }
 
-            #req = urllib.request.Request(url, headers=headers)
-            #resp = urllib.request.urlopen(req)
-            #return str(resp.read())
+            # req = urllib.request.Request(url, headers=headers)
+            # resp = urllib.request.urlopen(req)
+            # return str(resp.read())
             resp = await async_searcher(url, re_content=True, headers=headers)
             return str(resp)
         except Exception as er:
@@ -768,7 +769,6 @@ class googleimagesdownload:
                 )
                 return_image_name = prefix + str(count) + "." + image_name
 
-
             except UnicodeEncodeError as e:
                 download_status = "fail"
                 download_message = (
@@ -1112,7 +1112,8 @@ class googleimagesdownload:
                     )  # building main search url
 
                     if limit < 101:
-                        raw_html = await self.download_page(url)  # download page
+                        # download page
+                        raw_html = await self.download_page(url)
                     else:
                         raw_html = self.download_extended_page(
                             url, arguments["chromedriver"]
