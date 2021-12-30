@@ -382,7 +382,6 @@ _entities = {
 
 
 async def _format_quote(event, reply=None, sender=None, type_="private"):
-
     async def telegraph(file_):
         file = file_ + ".png"
         Image.open(file_).save(file, "PNG")
@@ -408,7 +407,7 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         if reply.document and reply.document.thumbs:
             file = await reply.download_media(thumb=-1)
             uri = await telegraph(file)
-            reply_["media"] = {"url":uri}
+            reply_["media"] = {"url": uri}
         reply = reply_
     else:
         reply = {}
@@ -462,9 +461,9 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
     }
     if event.document and event.document.thumbs:
         file_ = await event.download_media(thumb=-1)
-        url = await telegraph(file_)
+        await telegraph(file_)
         message["media"] = {"url": uri}
-        
+
     return message
 
 
