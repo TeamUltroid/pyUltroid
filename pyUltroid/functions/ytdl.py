@@ -38,7 +38,7 @@ async def download_yt(event, link, ytd):
     try:
         os.rename(id_ + ext, file)
     except FileNotFoundError:
-        os.rename(id_ + ext*2, file)
+        os.rename(id_ + ext * 2, file)
     res = await uploader(file, file, time.time(), event, "Uploading...")
     if file.endswith(("mp4", "mkv", "webm")):
         height, width = info["height"], info["width"]
