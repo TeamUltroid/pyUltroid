@@ -7,7 +7,6 @@
 
 import os
 import re
-import time
 
 from telethon import Button
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
@@ -15,7 +14,7 @@ from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
 from .. import LOGS
-from .helper import download_file, humanbytes, run_async, uploader
+from .helper import download_file, humanbytes, run_async
 from .tools import async_searcher
 
 
@@ -39,7 +38,9 @@ async def download_yt(event, link, ytd):
         os.rename(id_ + ext, file)
     except FileNotFoundError:
         os.rename(id_ + ext * 2, file)
-    res = await event.client.fast_uploader(file, show_progress=True, event=event, to_delete=True)
+    res = await event.client.fast_uploader(
+        file, show_progress=True, event=event, to_delete=True
+    )
     if file.endswith(("mp4", "mkv", "webm")):
         height, width = info["height"], info["width"]
         caption = f"`{title}`\n\n`From YouTube Official`"
@@ -137,8 +138,12 @@ def get_buttons(listt):
     id = listt[0]["ytid"]
     butts = [
         Button.inline(
-            text=f"[{x['quality']}" + f" {humanbytes(x['size'])}]" if x.get("size") else "",
-            data=f"ytdownload:{x['type']}:{x['id']}:{x['ytid']}" + f":{x['ext']}" if x.get("ext") else "",
+            text=f"[{x['quality']}" + f" {humanbytes(x['size'])}]"
+            if x.get("size")
+            else "",
+            data=f"ytdownload:{x['type']}:{x['id']}:{x['ytid']}" + f":{x['ext']}"
+            if x.get("ext")
+            else "",
         )
         for x in listt
     ]
