@@ -881,16 +881,13 @@ class googleimagesdownload:
                 # format the item for readability
                 try:
                     object = self.format_object(image_objects[i])
-                except TypeError as er:
-                    LOGS.debug(er)
-
-                # download the images
-                (
+                    # download the images
+                    (
                     download_status,
                     download_message,
                     return_image_name,
                     absolute_path,
-                ) = self.download_image(
+                    ) = self.download_image(
                     object["image_link"],
                     object["image_format"],
                     main_directory,
@@ -905,7 +902,11 @@ class googleimagesdownload:
                     arguments["thumbnail_only"],
                     arguments["format"],
                     arguments["ignore_urls"],
-                )
+                    )
+                except TypeError as er:
+                    LOGS.debug(er)
+                    download_status = None
+
                 if download_status == "success":
 
                     # download image_thumbnails
