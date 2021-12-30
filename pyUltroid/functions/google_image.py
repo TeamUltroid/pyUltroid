@@ -883,25 +883,25 @@ class googleimagesdownload:
                     object = self.format_object(image_objects[i])
                     # download the images
                     (
-                    download_status,
-                    download_message,
-                    return_image_name,
-                    absolute_path,
+                        download_status,
+                        download_message,
+                        return_image_name,
+                        absolute_path,
                     ) = self.download_image(
-                    object["image_link"],
-                    object["image_format"],
-                    main_directory,
-                    dir_name,
-                    count,
-                    arguments["socket_timeout"],
-                    arguments["prefix"],
-                    arguments["no_numbering"],
-                    arguments["no_download"],
-                    arguments["save_source"],
-                    object["image_source"],
-                    arguments["thumbnail_only"],
-                    arguments["format"],
-                    arguments["ignore_urls"],
+                        object["image_link"],
+                        object["image_format"],
+                        main_directory,
+                        dir_name,
+                        count,
+                        arguments["socket_timeout"],
+                        arguments["prefix"],
+                        arguments["no_numbering"],
+                        arguments["no_download"],
+                        arguments["save_source"],
+                        object["image_source"],
+                        arguments["thumbnail_only"],
+                        arguments["format"],
+                        arguments["ignore_urls"],
                     )
                 except TypeError as er:
                     LOGS.debug(er)
