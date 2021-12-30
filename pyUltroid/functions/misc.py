@@ -399,16 +399,11 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         return uri
 
     if reply:
-        reply_ = {
+        reply = {
             "name": get_display_name(reply.sender) or "Deleted Account",
             "text": reply.raw_text,
             "chatId": reply.chat_id,
         }
-        if reply.document and reply.document.thumbs:
-            file = await reply.download_media(thumb=-1)
-            uri = await telegraph(file)
-            reply_["media"] = {"url": uri}
-        reply = reply_
     else:
         reply = {}
     is_fwd = event.fwd_from
