@@ -92,10 +92,8 @@ async def download_yt(event, link, ytd):
 def get_formats(type, id, data):
     if type == "audio":
         audio = []
-        for aud in data["formats"]:
-            if aud["vcodec"] is "none":
-                _audio = {}
-                for _quality in ["64", "128", "256", "320"]:
+        _audio = {}
+        for _quality in ["64", "128", "256", "320"]:
                     _audio.update(
                         {
                             "ytid": id,
@@ -104,7 +102,7 @@ def get_formats(type, id, data):
                             "quality": _quality + "KBPS",
                         }
                     )
-                audio.append(_audio)
+                    audio.append(_audio)
         return audio
     elif type == "video":
         video = []
