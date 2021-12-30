@@ -179,7 +179,7 @@ class SqlDB:
         except BaseException as er:
             LOGS.exception(er)
         self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-        self._cursor.execute(f"INSERT INTO Ultroid ({key}) values ('{value}')")
+        self._cursor.execute(f"INSERT INTO Ultroid ({key}) values (%s)", str(value))
         return True
 
     def del_key(self, key):
