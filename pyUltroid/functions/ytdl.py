@@ -91,8 +91,8 @@ async def download_yt(event, link, ytd):
 def get_formats(type, id, data):
     if type == "audio":
         audio = []
-        _audio = {}
         for _quality in ["64", "128", "256", "320"]:
+            _audio = {}
             _audio.update(
                 {
                     "ytid": id,
