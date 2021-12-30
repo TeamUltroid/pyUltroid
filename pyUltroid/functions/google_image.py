@@ -18,9 +18,10 @@ import urllib.request
 from http.client import BadStatusLine
 from urllib.parse import quote
 from urllib.request import HTTPError, Request, URLError, urlopen
-from .tools import async_searcher
+
 # Import Libraries
 from .. import LOGS
+from .tools import async_searcher
 
 http.client._MAXHEADERS = 1000
 
