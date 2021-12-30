@@ -18,8 +18,8 @@ from telethon.errors import (
     BotMethodInvalidError,
     ChannelPrivateError,
     ChannelsTooMuchError,
+    ChatAdminRequiredError,
     UserNotParticipantError,
-    ChatAdminRequiredError
 )
 from telethon.tl.custom import Button
 from telethon.tl.functions.channels import (
@@ -256,7 +256,9 @@ async def autopilot():
                     )
                 )
             except ChatAdminRequiredError:
-                LOGS.info("Failed to promote 'Assistant Bot' in 'Log Channel' due to 'Admin Privileges'")
+                LOGS.info(
+                    "Failed to promote 'Assistant Bot' in 'Log Channel' due to 'Admin Privileges'"
+                )
             except BaseException as er:
                 LOGS.info("Error while promoting assistant in Log Channel..")
                 LOGS.exception(er)
