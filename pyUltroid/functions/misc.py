@@ -382,12 +382,34 @@ _entities = {
 
 
 async def _format_quote(event, reply=None, sender=None, type_="private"):
+
+    async def telegraph(file_):
+        file = file_ + ".png"
+        Image.open(file_).save(file, "PNG")
+        files = {"file": open(file, "rb").read()}
+        uri = (
+            "https://telegra.ph"
+            + (
+                await async_searcher(
+                    "https://telegra.ph/upload", post=True, data=files, re_json=True
+                )
+            )[0]["src"]
+        )
+        os.remove(file)
+        os.remove(file_)
+        return uri
+
     if reply:
-        reply = {
+        reply_ = {
             "name": get_display_name(reply.sender) or "Deleted Account",
             "text": reply.raw_text,
             "chatId": reply.chat_id,
         }
+        if reply.document and reply.document.thumbs:
+            file = await reply.download_media(thumb=-1)
+            uri = await telegraph(file)
+            reply_["media"] = {"url":uri}
+        reply = reply_
     else:
         reply = {}
     is_fwd = event.fwd_from
@@ -440,25 +462,15 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
     }
     if event.document and event.document.thumbs:
         file_ = await event.download_media(thumb=-1)
-        file = file_ + ".png"
-        Image.open(file_).save(file, "PNG")
-        files = {"file": open(file, "rb").read()}
-        uri = (
-            "https://telegra.ph"
-            + (
-                await async_searcher(
-                    "https://telegra.ph/upload", post=True, data=files, re_json=True
-                )
-            )[0]["src"]
-        )
+        url = await telegraph(file_)
         message["media"] = {"url": uri}
-        os.remove(file_)
+        
     return message
 
 
 async def create_quotly(
     event,
-    url="https://bot.lyo.su/quote/generate",
+    url="https://qoute-api-akashpattnaik.koyeb.app/generate",
     reply={},
     bg=None,
     sender=None,
