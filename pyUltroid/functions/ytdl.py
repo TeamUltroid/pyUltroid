@@ -94,15 +94,15 @@ def get_formats(type, id, data):
         audio = []
         _audio = {}
         for _quality in ["64", "128", "256", "320"]:
-                    _audio.update(
-                        {
-                            "ytid": id,
-                            "type": "audio",
-                            "id": _quality,
-                            "quality": _quality + "KBPS",
-                        }
-                    )
-                    audio.append(_audio)
+            _audio.update(
+                {
+                    "ytid": id,
+                    "type": "audio",
+                    "id": _quality,
+                    "quality": _quality + "KBPS",
+                }
+            )
+            audio.append(_audio)
         return audio
     elif type == "video":
         video = []
