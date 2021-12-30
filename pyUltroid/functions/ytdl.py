@@ -80,7 +80,6 @@ async def download_yt(event, link, ytd):
                 )
             ],
         )
-    os.remove(file)
     os.remove(thumb)
     await event.delete()
 
