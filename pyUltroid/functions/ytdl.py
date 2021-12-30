@@ -39,7 +39,7 @@ async def download_yt(event, link, ytd):
         os.rename(id_ + ext, file)
     except FileNotFoundError:
         os.rename(id_ + ext * 2, file)
-    res = await uploader(file, file, time.time(), event, "Uploading...")
+    res = await event.client.fast_uploader(file, show_progress=True, event=event, to_delete=True)
     if file.endswith(("mp4", "mkv", "webm")):
         height, width = info["height"], info["width"]
         caption = f"`{title}`\n\n`From YouTube Official`"
@@ -137,10 +137,9 @@ def get_buttons(listt):
     id = listt[0]["ytid"]
     butts = [
         Button.inline(
-            text=f'[{x["quality"]} {humanbytes(x["size"])}]'
-            if x.get("size")
-            else f'[{x["quality"]}]',
-            data=f"ytdownload:{x['type']}:{x['id']}:{x['ytid']}:{x['ext']}",
+            text=f"[{x['quality']}" + " {humanbytes(x['size'])}]"
+            if x.get("size"),
+            data=f"ytdownload:{x['type']}:{x['id']}:{x['ytid']}" + f":{x['ext']}" if x.get("ext"),
         )
         for x in listt
     ]
