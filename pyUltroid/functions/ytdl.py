@@ -137,7 +137,7 @@ def get_buttons(listt):
     id = listt[0]["ytid"]
     butts = [
         Button.inline(
-            text=f"[{x['quality']}" + " {humanbytes(x['size'])}]" if x.get("size") else "",
+            text=f"[{x['quality']}" + f" {humanbytes(x['size'])}]" if x.get("size") else "",
             data=f"ytdownload:{x['type']}:{x['id']}:{x['ytid']}" + f":{x['ext']}" if x.get("ext") else "",
         )
         for x in listt
