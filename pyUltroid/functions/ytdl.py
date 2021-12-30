@@ -91,19 +91,15 @@ def get_formats(type, id, data):
         for aud in data["formats"]:
             if aud["vcodec"] is "none":
                 _audio = {}
-                _id = int(aud["format_id"])
-                _size = aud["filesize"] if aud.get("filesize") else 0
-                _quality = {139: 48, 249: 64, 250: 128, 140: 256, 251: 320}
-                _audio.update(
-                    {
-                        "ytid": id,
-                        "type": "audio",
-                        "id": str(_id),
-                        "quality": str(_quality[_id]) + "KBPS",
-                        "size": _size,
-                        "ext": "m4a",
-                    }
-                )
+                for _quality in ["64", "128", "256", "320"]:
+                    _audio.update(
+                        {
+                            "ytid": id,
+                            "type": "audio",
+                            "id": _quality,
+                            "quality": _quality + "KBPS",
+                        }
+                    )
                 audio.append(_audio)
         return audio
     elif type == "video":
