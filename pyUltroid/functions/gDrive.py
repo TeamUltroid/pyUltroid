@@ -81,7 +81,9 @@ class GDriveManager:
             fileId=fileId, body=permissions, supportsAllDrives=True
         ).execute(http=self._http)
 
-    async def _upload_file(self, event, path: str, filename: str = None, folder_id: str = None):
+    async def _upload_file(
+        self, event, path: str, filename: str = None, folder_id: str = None
+    ):
         last_txt = ""
         if not filename:
             filename = path.split("/")[-1]
