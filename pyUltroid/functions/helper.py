@@ -1,18 +1,20 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import asyncio
-import glob
 import math
 import os
 import re
 import sys
 import time
 from traceback import format_exc
+from urllib.parse import unquote
+
+from safety.tools import sys_exit
 
 try:
     import aiofiles
@@ -36,6 +38,11 @@ try:
     from html_telegraph_poster import TelegraphPoster
 except ImportError:
     TelegraphPoster = None
+import asyncio
+import multiprocessing
+from concurrent.futures import ThreadPoolExecutor
+from functools import partial, wraps
+
 from telethon.helpers import _maybe_await
 from telethon.tl import types
 from telethon.utils import get_display_name
@@ -48,23 +55,44 @@ from ..version import ultroid_version
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
 
+
+def run_async(function):
+    @wraps(function)
+    async def wrapper(*args, **kwargs):
+        return await asyncio.get_event_loop().run_in_executor(
+            ThreadPoolExecutor(max_workers=multiprocessing.cpu_count() * 5),
+            partial(function, *args, **kwargs),
+        )
+
+    return wrapper
+
+
 # ~~~~~~~~~~~~~~~~~~~~ small funcs ~~~~~~~~~~~~~~~~~~~~ #
 
 
-def make_mention(user):
+def make_mention(user, custom=None):
     if user.username:
         return f"@{user.username}"
-    return inline_mention(user)
+    return inline_mention(user, custom=custom)
 
 
-def inline_mention(user):
-    full_name = user_full_name(user)
-    if not isinstance(user, types.User):
-        return full_name
-    return f"[{full_name}](tg://user?id={user.id})"
+def inline_mention(user, custom=None, html=False):
+    mention_text = get_display_name(user) or user if not custom else custom
+    chat_type = None
+    if isinstance(user, types.User):
+        chat_type = "User"
+    elif isinstance(user, types.Channel):
+        chat_type = "Channel"
+    if chat_type == "User":
+        if html:
+            return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
+        return f"[{mention_text}](tg://user?id={user.id})"
+    elif chat_type == "Channel" and user.username:
+        if html:
+            return f"<a href=https://t.me/{user.username}>{mention_text}</a>"
+        return f"[{mention_text}](https://t.me/{user.username})"
+    return mention_text
 
-
-user_full_name = get_display_name
 
 # ----------------- Load \\ Unloader ---------------- #
 
@@ -73,15 +101,14 @@ def un_plug(shortname):
     from .. import asst, ultroid_bot
 
     try:
+        all_func = LOADED[shortname]
         for client in [ultroid_bot, asst]:
-            for i in LOADED[shortname]:
-                client.remove_event_handler(i)
-            try:
-                del LOADED[shortname]
-                del LIST[shortname]
-                ADDONS.remove(shortname)
-            except (ValueError, KeyError):
-                pass
+            for x, _ in client.list_event_handlers():
+                if x in all_func:
+                    client.remove_event_handler(x)
+        del LOADED[shortname]
+        del LIST[shortname]
+        ADDONS.remove(shortname)
     except (ValueError, KeyError):
         name = f"addons.{shortname}"
         for client in [ultroid_bot, asst]:
@@ -102,7 +129,7 @@ async def safeinstall(event):
     from ..startup.utils import load_addons
 
     if not event.reply_to:
-        return await eod(ok, f"Please use `{HNDLR}install` as reply to a .py file.")
+        return await eod(event, f"Please use `{HNDLR}install` as reply to a .py file.")
     ok = await eor(event, "`Installing...`")
     reply = await event.get_reply_message()
     if not (
@@ -112,9 +139,11 @@ async def safeinstall(event):
         and reply.file.name.endswith(".py")
     ):
         return await eod(ok, "`Please reply to any python plugin`")
-    if reply.file.name in [x.split("/")[-1] for x in glob.glob("*s/*.py")]:
-        return await eod(ok, f"Plugin `{reply.file.name}` is already installed.")
-    dl = await reply.download_media(f"addons/{reply.file.name}")
+    plug = reply.file.name.replace(".py", "")
+    if plug in list(LOADED):
+        return await eod(ok, f"Plugin `{plug}` is already installed.")
+    sm = reply.file.name.replace("_", "-").replace("|", "-")
+    dl = await reply.download_media(f"addons/{sm}")
     if event.text[9:] != "f":
         read = open(dl).read()
         for dan in KEEP_SAFE().All:
@@ -123,11 +152,12 @@ async def safeinstall(event):
                 return await ok.edit(
                     f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{reply.file.name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
                 )
-    plug = reply.file.name.replace(".py", "")
     try:
-        load_addons(plug)
+        load_addons(dl.split("/")[-1].replace(".py", ""))
     except BaseException:
-        return await eor(ok, f"**ERROR**\n\n`{format_exc()}`", time=10)
+        os.remove(dl)
+        return await eor(ok, f"**ERROR**\n\n`{format_exc()}`", time=30)
+    plug = sm.replace(".py", "")
     if plug in HELP:
         output = "**Plugin** - `{}`\n".format(plug)
         for i in HELP[plug]:
@@ -176,6 +206,7 @@ async def updateme_requirements():
         return format_exc()
 
 
+@run_async
 def gen_chlog(repo, diff):
     UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
     ac_br = repo.active_branch.name
@@ -191,10 +222,14 @@ def gen_chlog(repo, diff):
     return ch_log, tldr_log
 
 
-def updater():
+async def updater():
     from .. import LOGS
 
-    off_repo = Repo().remotes[0].config_reader.get("url").replace(".git", "")
+    try:
+        off_repo = Repo().remotes[0].config_reader.get("url").replace(".git", "")
+    except Exception as er:
+        LOGS.exception(er)
+        return
     try:
         repo = Repo()
     except NoSuchPathError as error:
@@ -219,7 +254,7 @@ def updater():
         LOGS.info(er)
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
-    changelog, tl_chnglog = gen_chlog(repo, f"HEAD..upstream/{ac_br}")
+    changelog, tl_chnglog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
     return bool(changelog)
 
 
@@ -286,24 +321,26 @@ async def fast_download(download_url, filename=None, progress_callback=None):
     async with aiohttp.ClientSession() as session:
         async with session.get(download_url, timeout=None) as response:
             if not filename:
-                filename = download_url.rpartition("/")[-1]
+                filename = unquote(download_url.rpartition("/")[-1])
             total_size = int(response.headers.get("content-length", 0)) or None
             downloaded_size = 0
+            start_time = time.time()
             with open(filename, "wb") as f:
                 async for chunk in response.content.iter_chunked(1024):
                     if chunk:
                         f.write(chunk)
                         downloaded_size += len(chunk)
-                    if progress_callback:
+                    if progress_callback and total_size:
                         await _maybe_await(
                             progress_callback(downloaded_size, total_size)
                         )
-            return filename
+            return filename, time.time() - start_time
 
 
 # --------------------------Media Funcs-------------------------------- #
 
 
+@run_async
 def make_html_telegraph(title, author, text):
     client = TelegraphPoster(use_api=True)
     client.create_api_token(title)
@@ -366,34 +403,55 @@ def time_formatter(milliseconds):
         + ((str(minutes) + "m:") if minutes else "")
         + ((str(seconds) + "s") if seconds else "")
     )
-    if tmp != "":
-        if tmp.endswith(":"):
-            return tmp[:-1]
-        else:
-            return tmp
-    else:
+    if not tmp:
         return "0 s"
+
+    if tmp.endswith(":"):
+        return tmp[:-1]
+    return tmp
 
 
 def humanbytes(size):
-    if size in [None, ""]:
+    if not size:
         return "0 B"
-    for unit in ["B", "KB", "MB", "GB"]:
+    for unit in ["", "K", "M", "G", "T"]:
         if size < 1024:
             break
         size /= 1024
-    return f"{size:.2f} {unit}"
+    if isinstance(size, int):
+        size = f"{size}{unit}B"
+    elif isinstance(size, float):
+        size = f"{size:.2f}{unit}B"
+    return size
 
 
 def numerize(number):
+    if not number:
+        return None
     for unit in ["", "K", "M", "B", "T"]:
         if number < 1000:
             break
         number /= 1000
-    return f"{number:.2f} {unit}"
+    if isinstance(number, int):
+        number = f"{number}{unit}"
+    elif isinstance(number, float):
+        number = f"{number:.2f}{unit}"
+    return number
+
+
+No_Flood = {}
 
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
+    now = time.time()
+    if No_Flood.get(event.chat_id):
+        if No_Flood[event.chat_id].get(event.id):
+            if (now - No_Flood[event.chat_id][event.id]) < 1.1:
+                return
+        else:
+            No_Flood[event.chat_id].update({event.id: now})
+    else:
+        No_Flood.update({event.chat_id: {event.id: now}})
     diff = time.time() - start
     if round(diff % 10.00) == 0 or current == total:
         percentage = current * 100 / total
@@ -442,11 +500,14 @@ async def restart(ult):
         os.execl(sys.executable, sys.executable, "-m", "pyUltroid")
 
 
-async def shutdown(ult, dynotype="ultroid"):
-    from .. import LOGS
+async def shutdown(ult):
+    from .. import HOSTED_ON, LOGS
 
     ult = await eor(ult, "Shutting Down")
-    if Var.HEROKU_APP_NAME and Var.HEROKU_API:
+    if HOSTED_ON == "heroku":
+        if not (Var.HEROKU_APP_NAME and Var.HEROKU_API):
+            return await ult.edit("Please Fill `HEROKU_APP_NAME` and `HEROKU_API`")
+        dynotype = os.getenv("DYNO").split(".")[0]
         try:
             Heroku = heroku3.from_key(Var.HEROKU_API)
             app = Heroku.apps()[Var.HEROKU_APP_NAME]
@@ -458,7 +519,7 @@ async def shutdown(ult, dynotype="ultroid"):
                 "`HEROKU_API` and `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars."
             )
     else:
-        exit(1)
+        sys_exit()
 
 
 async def heroku_logs(event):
@@ -489,10 +550,10 @@ async def heroku_logs(event):
     await xx.delete()
 
 
-async def def_logs(ult):
+async def def_logs(ult, file):
     await ult.client.send_file(
         ult.chat_id,
-        file="ultroid.log",
+        file=file,
         thumb="resources/extras/ultroid.jpg",
         caption="**Ultroid Logs.**",
     )

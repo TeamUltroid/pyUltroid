@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -8,95 +8,31 @@
 from .. import udB
 
 
-def str_to_list(text):  # Returns List
-    return text.split(" ")
+def get_all_users(key):
+    return udB.get_key(key) or []
 
 
-def list_to_str(list):  # Returns String
-    str = "".join(f"{x} " for x in list)
-    return str.strip()
+def is_added(id_):
+    return id_ in get_all_users("BOT_USERS")
 
 
-def is_added(id):  # Take int or str with numbers only , Returns Boolean
-    if not str(id).isdigit():
-        return False
-    users = get_all_users()
-    return str(id) in users
+def add_user(id_):
+    users = get_all_users("BOT_USERS")
+    users.append(id_)
+    return udB.set_key("BOT_USERS", users)
 
 
-def add_user(id):  # Take int or str with numbers only , Returns Boolean
-    id = str(id)
-    if not id.isdigit():
-        return False
-    try:
-        users = get_all_users()
-        users.append(id)
-        udB.set("BOT_USERS", list_to_str(users))
-        return True
-    except Exception as e:
-        print(f"Ultroid LOG : // functions/pmbot/add_user : {e}")
-        return False
+def is_blacklisted(id_):
+    return id_ in get_all_users("BOT_BLS")
 
 
-def del_user(id):  # Take int or str with numbers only , Returns Boolean
-    id = str(id)
-    if not id.isdigit():
-        return False
-    try:
-        users = get_all_users()
-        users.remove(id)
-        udB.set("BOT_USERS", list_to_str(users))
-        return True
-    except Exception as e:
-        print(f"Ultroid LOG : // functions/pmbot/del_user : {e}")
-        return False
+def blacklist_user(id_):
+    users = get_all_users("BOT_BLS")
+    users.append(id_)
+    return udB.set_key("BOT_BLS", users)
 
 
-def get_all_users():  # Returns List
-    users = udB.get("BOT_USERS")
-    if users is None or users == "":
-        return [""]
-    else:
-        return str_to_list(users)
-
-
-def is_blacklisted(id):  # Take int or str with numbers only , Returns Boolean
-    if not str(id).isdigit():
-        return False
-    users = get_all_bl_users()
-    return str(id) in users
-
-
-def blacklist_user(id):  # Take int or str with numbers only , Returns Boolean
-    id = str(id)
-    if not id.isdigit():
-        return False
-    try:
-        users = get_all_bl_users()
-        users.append(id)
-        udB.set("BOT_BLS", list_to_str(users))
-        return True
-    except Exception as e:
-        print(f"Ultroid LOG : // functions/pmbot/blacklist_user : {e}")
-        return False
-
-
-def rem_blacklist(id):  # Take int or str with numbers only , Returns Boolean
-    id = str(id)
-    if not id.isdigit():
-        return False
-    try:
-        users = get_all_bl_users()
-        users.remove(id)
-        udB.set("BOT_BLS", list_to_str(users))
-        return True
-    except Exception as e:
-        print(f"Ultroid LOG : // functions/pmbot/rem_blacklist : {e}")
-        return False
-
-
-def get_all_bl_users():  # Returns List
-    users = udB.get("BOT_BLS")
-    if users is None or users == "":
-        return [""]
-    return str_to_list(users)
+def rem_blacklist(id_):
+    users = get_all_users("BOT_BLS")
+    users.remove(id_)
+    return udB.set_key("BOT_BLS", users)

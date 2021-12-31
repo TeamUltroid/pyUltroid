@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -9,54 +9,35 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("ECHO")
-    if not a:
-        return {}
-    try:
-        return eval(a)
-    except BaseException:
-        udB.delete("ECHO")
-    return {}
+    return udB.get_key("ECHO") or {}
 
 
 def add_echo(chat, user):
     x = get_stuff()
-    try:
-        k = x[chat]
+    if k := x.get(int(chat)):
         if user not in k:
-            k.append(user)
-        x.update({chat: k})
-    except BaseException:
-        x.update({chat: [user]})
-    return udB.set("ECHO", str(x))
+            k.append(int(user))
+        x.update({int(chat): k})
+    else:
+        x.update({int(chat): [int(user)]})
+    return udB.set_key("ECHO", x)
 
 
 def rem_echo(chat, user):
     x = get_stuff()
-    try:
-        k = x[chat]
+    if k := x.get(int(chat)):
         if user in k:
-            k.remove(user)
-        x.update({chat: k})
-    except BaseException:
-        pass
-    return udB.set("ECHO", str(x))
+            k.remove(int(user))
+        x.update({int(chat): k})
+    return udB.set_key("ECHO", x)
 
 
 def check_echo(chat, user):
     x = get_stuff()
-    try:
-        k = x[chat]
-        if user in k:
-            return True
-        return
-    except BaseException:
-        return
+    if (k := x.get(int(chat))) and int(user) in k:
+        return True
 
 
 def list_echo(chat):
     x = get_stuff()
-    try:
-        return x[chat]
-    except BaseException:
-        return
+    return x.get(int(chat))

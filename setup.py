@@ -7,7 +7,9 @@ requirements = [
     "python-decouple==3.3",
     "python-dotenv==0.15.0",
     "aiofiles",
-    "aiohttp",
+    "aiohttp[speedups]",
+    "hiredis",
+    "psycopg2-binary",
 ]
 
 
@@ -21,7 +23,7 @@ name = "py-Ultroid"
 author = "TeamUltroid"
 author_email = "teamultroid@protonmail.ch"
 description = "A Secure and Powerful Python-Telethon Based Library For Ultroid Userbot."
-license = "GNU AFFERO GENERAL PUBLIC LICENSE (v3)"
+license_ = "GNU AFFERO GENERAL PUBLIC LICENSE (v3)"
 url = "https://github.com/TeamUltroid/pyUltroid"
 project_urls = {
     "Bug Tracker": "https://github.com/TeamUltroid/pyUltroid/issues",
@@ -30,7 +32,6 @@ project_urls = {
 }
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -48,9 +49,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url=url,
     project_urls=project_urls,
-    license=license,
+    license=license_,
     packages=setuptools.find_packages(),
     install_requires=requirements,
     classifiers=classifiers,
-    python_requires=">=3.6",
+    python_requires=">3.6, <3.10",
 )

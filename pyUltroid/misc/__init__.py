@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -12,28 +12,55 @@ CMD_HELP = {}
 # ----------------------------------------------#
 
 
-def sudoers():
-    from .. import udB
+class _SudoManager:
+    def __init__(self):
+        self.db = None
+        self.owner = None
+        self._owner_sudos = []
 
-    if udB.get("SUDOS"):
-        return udB["SUDOS"].split()
-    return []
+    def _init_db(self):
+        if not self.db:
+            from .. import udB
+
+            self.db = udB
+        return self.db
+
+    def get_sudos(self):
+        db = self._init_db()
+        SUDOS = db.get_key("SUDOS")
+        return SUDOS or []
+
+    @property
+    def should_allow_sudo(self):
+        db = self._init_db()
+        return db.get_key("SUDO")
+
+    def owner_and_sudos(self):
+        if not self.owner:
+            db = self._init_db()
+            self.owner = db.get_key("OWNER_ID")
+        return [self.owner, *self.get_sudos()]
+
+    @property
+    def fullsudos(self):
+        db = self._init_db()
+        fsudos = db.get("FULLSUDO")
+        if not self.owner:
+            self.owner = db.get_key("OWNER_ID")
+        if not fsudos:
+            return [self.owner]
+        fsudos = fsudos.split()
+        fsudos.append(self.owner)
+        return [int(_) for _ in fsudos]
+
+    def is_sudo(self, id_):
+        return bool(id_ in self.get_sudos())
 
 
-def should_allow_sudo():
-    from .. import udB
-
-    return udB.get("SUDO") == "True"
-
-
-def owner_and_sudos(castint=False):
-    from .. import udB, ultroid_bot
-
-    data = [str(ultroid_bot.uid), *sudoers()]
-    if castint:
-        return [int(a) for a in data]
-    return data
-
+SUDO_M = _SudoManager()
+owner_and_sudos = SUDO_M.owner_and_sudos
+sudoers = SUDO_M.get_sudos
+is_sudo = SUDO_M.is_sudo
 
 # ------------------------------------------------ #
 

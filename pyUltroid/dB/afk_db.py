@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -11,19 +11,12 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("AFK_DB")
-    if not a:
-        return []
-    try:
-        return eval(a)
-    except BaseException:
-        udB.delete("AFK_DB")
-    return []
+    return udB.get_key("AFK_DB") or []
 
 
 def add_afk(msg, media_type, media):
     time = dt.now().strftime("%b %d %Y %I:%M:%S%p")
-    udB.set("AFK_DB", str([msg, media_type, media, time]))
+    udB.set_key("AFK_DB", [msg, media_type, media, time])
     return
 
 
@@ -37,4 +30,4 @@ def is_afk():
 
 
 def del_afk():
-    return udB.set("AFK_DB", "[]")
+    return udB.del_key("AFK_DB")

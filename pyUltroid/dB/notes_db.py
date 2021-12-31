@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -9,48 +9,39 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("NOTE")
-    if not a:
-        return {}
-    try:
-        return eval(a)
-    except BaseException:
-        udB.delete("NOTE")
-    return {}
+    return udB.get_key("NOTE") or {}
 
 
 def add_note(chat, word, msg, media, button):
     ok = get_stuff()
-    if ok.get(chat):
-        ok[chat].update({word: {"msg": msg, "media": media, "button": button}})
+    if ok.get(int(chat)):
+        ok[int(chat)].update({word: {"msg": msg, "media": media, "button": button}})
     else:
-        ok.update({chat: {word: {"msg": msg, "media": media, "button": button}}})
-    udB.set("NOTE", str(ok))
+        ok.update({int(chat): {word: {"msg": msg, "media": media, "button": button}}})
+    udB.set_key("NOTE", ok)
 
 
 def rem_note(chat, word):
     ok = get_stuff()
-    if ok.get(chat) and ok[chat].get(word):
-        ok[chat].pop(word)
-        udB.set("NOTE", str(ok))
+    if ok.get(int(chat)) and ok[int(chat)].get(word):
+        ok[int(chat)].pop(word)
+        return udB.set_key("NOTE", ok)
 
 
 def rem_all_note(chat):
     ok = get_stuff()
-    if ok.get(chat):
-        ok.pop(chat)
-        udB.set("NOTE", str(ok))
+    if ok.get(int(chat)):
+        ok.pop(int(chat))
+        return udB.set_key("NOTE", ok)
 
 
 def get_notes(chat, word):
     ok = get_stuff()
-    if ok.get(chat) and ok[chat].get(word):
-        return ok[chat][word]
-    return False
+    if ok.get(int(chat)) and ok[int(chat)].get(word):
+        return ok[int(chat)][word]
 
 
 def list_note(chat):
     ok = get_stuff()
-    if ok.get(chat):
+    if ok.get(int(chat)):
         return "".join(f"👉 #{z}\n" for z in ok[chat])
-    return False

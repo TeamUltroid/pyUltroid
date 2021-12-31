@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -8,15 +8,8 @@
 from .. import udB
 
 
-def get_stuff(key="WARNS"):
-    kk = udB.get(key)
-    if not kk:
-        return {}
-    try:
-        return eval(kk)
-    except BaseException:
-        udB.delete(key)
-    return {}
+def get_stuff():
+    return udB.get_key("WARNS") or {}
 
 
 def add_warn(chat, user, count, reason):
@@ -25,7 +18,7 @@ def add_warn(chat, user, count, reason):
         x[chat].update({user: [count, reason]})
     except BaseException:
         x.update({chat: {user: [count, reason]}})
-    return udB.set("WARNS", str(x))
+    return udB.set_key("WARNS", x)
 
 
 def warns(chat, user):
@@ -41,6 +34,6 @@ def reset_warn(chat, user):
     x = get_stuff()
     try:
         x[chat].pop(user)
-        return udB.set("WARNS", str(x))
+        return udB.set_key("WARNS", x)
     except BaseException:
         return

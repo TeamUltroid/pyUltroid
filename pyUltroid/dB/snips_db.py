@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -8,37 +8,29 @@
 from .. import udB
 
 
-def get_stuff():
-    a = udB.get("SNIP")
-    if not a:
-        return {}
-    try:
-        return eval(a)
-    except BaseException:
-        udB.delete("SNIP")
-    return {}
+def get_all_snips():
+    return udB.get_key("SNIP") or {}
 
 
 def add_snip(word, msg, media, button):
-    ok = get_stuff()
+    ok = get_all_snips()
     ok.update({word: {"msg": msg, "media": media, "button": button}})
-    udB.set("SNIP", str(ok))
+    udB.set_key("SNIP", ok)
 
 
 def rem_snip(word):
-    ok = get_stuff()
+    ok = get_all_snips()
     if ok.get(word):
         ok.pop(word)
-        udB.set("SNIP", str(ok))
+        udB.set_key("SNIP", ok)
 
 
 def get_snips(word):
-    ok = get_stuff()
+    ok = get_all_snips()
     if ok.get(word):
         return ok[word]
     return False
 
 
 def list_snip():
-    ok = get_stuff()
-    return "".join(f"👉 ${z}\n" for z in ok)
+    return "".join(f"👉 ${z}\n" for z in get_all_snips())

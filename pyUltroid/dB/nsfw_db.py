@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -9,54 +9,43 @@
 from .. import udB
 
 
-def get_stuff(key=None):
-    kk = udB.get(key)
-    if not kk:
-        return {}
-    try:
-        return eval(kk)
-    except BaseException:
-        udB.delete(key)
-    return {}
+def get_stuff(key="NSFW"):
+    return udB.get_key(key) or {}
 
 
 def nsfw_chat(chat, action):
-    x = get_stuff("NSFW")
+    x = get_stuff()
     x.update({chat: action})
-    return udB.set("NSFW", str(x))
+    return udB.set_key("NSFW", x)
 
 
 def rem_nsfw(chat):
-    x = get_stuff("NSFW")
+    x = get_stuff()
     if x.get(chat):
         x.pop(chat)
-        return udB.set("NSFW", str(x))
-    return
+        return udB.set_key("NSFW", x)
 
 
 def is_nsfw(chat):
-    x = get_stuff("NSFW")
+    x = get_stuff()
     if x.get(chat):
         return x[chat]
-    return
 
 
 def profan_chat(chat, action):
     x = get_stuff("PROFANITY")
     x.update({chat: action})
-    return udB.set("PROFANITY", str(x))
+    return udB.set_key("PROFANITY", x)
 
 
 def rem_profan(chat):
     x = get_stuff("PROFANITY")
     if x.get(chat):
         x.pop(chat)
-        return udB.set("PROFANITY", str(x))
-    return
+        return udB.set_key("PROFANITY", x)
 
 
 def is_profan(chat):
     x = get_stuff("PROFANITY")
     if x.get(chat):
         return x[chat]
-    return

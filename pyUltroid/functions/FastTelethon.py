@@ -1,5 +1,5 @@
 # copied from https://github.com/tulir/mautrix-telegram/blob/master/mautrix_telegram/util/parallel_file_transfer.py
-# Copyright (C) 2021 Tulir Asokan
+# Copyright (C) 2021-2022 Tulir Asokan
 
 import asyncio
 import hashlib
@@ -147,6 +147,7 @@ class ParallelTransferrer:
 
     def __init__(self, client: TelegramClient, dc_id: Optional[int] = None) -> None:
         self.client = client
+        self.client.refresh_auth(client)
         self.loop = self.client.loop
         self.dc_id = dc_id or self.client.session.dc_id
         self.auth_key = (
@@ -156,6 +157,7 @@ class ParallelTransferrer:
         )
         self.senders = None
         self.upload_ticker = 0
+        self.client.clear_auth(self.client)
 
     async def _cleanup(self) -> None:
         await asyncio.gather(*[sender.disconnect() for sender in self.senders])
@@ -361,8 +363,7 @@ async def _internal_transfer_to_telegram(
     await uploader.finish_upload()
     if is_large:
         return InputFileBig(file_id, part_count, filename), file_size
-    else:
-        return InputFile(file_id, part_count, filename, hash_md5.hexdigest()), file_size
+    return InputFile(file_id, part_count, filename, hash_md5.hexdigest()), file_size
 
 
 async def download_file(

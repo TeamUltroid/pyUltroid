@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -9,79 +9,58 @@ from .. import udB
 
 
 def get_stuff(key=None):
-    kk = udB.get(key)
-    if not kk:
-        return {}
-    try:
-        return eval(kk)
-    except BaseException:
-        udB.delete(key)
-    return {}
+    return udB.get_key(key) or {}
 
 
 def add_welcome(chat, msg, media, button):
     ok = get_stuff("WELCOME")
     ok.update({chat: {"welcome": msg, "media": media, "button": button}})
-    return udB.set("WELCOME", str(ok))
+    return udB.set_key("WELCOME", ok)
 
 
 def get_welcome(chat):
     ok = get_stuff("WELCOME")
-    wl = ok.get(chat)
-    if wl:
-        return wl
-    return
+    return ok.get(chat)
 
 
 def delete_welcome(chat):
     ok = get_stuff("WELCOME")
-    wl = ok.get(chat)
-    if wl:
+    if ok.get(chat):
         ok.pop(chat)
-        return udB.set("WELCOME", str(ok))
-    return
+        return udB.set_key("WELCOME", ok)
 
 
 def add_goodbye(chat, msg, media, button):
     ok = get_stuff("GOODBYE")
     ok.update({chat: {"goodbye": msg, "media": media, "button": button}})
-    return udB.set("GOODBYE", str(ok))
+    return udB.set_key("GOODBYE", ok)
 
 
 def get_goodbye(chat):
     ok = get_stuff("GOODBYE")
-    wl = ok.get(chat)
-    if wl:
-        return wl
-    return
+    return ok.get(chat)
 
 
 def delete_goodbye(chat):
     ok = get_stuff("GOODBYE")
-    wl = ok.get(chat)
-    if wl:
+    if ok.get(chat):
         ok.pop(chat)
-        return udB.set("GOODBYE", str(ok))
-    return
+        return udB.set_key("GOODBYE", ok)
 
 
 def add_thanks(chat):
     x = get_stuff("THANK_MEMBERS")
     x.update({chat: True})
-    return udB.set("THANK_MEMBERS", str(x))
+    return udB.set_key("THANK_MEMBERS", x)
 
 
 def remove_thanks(chat):
     x = get_stuff("THANK_MEMBERS")
     if x.get(chat):
         x.pop(chat)
-        return udB.set("THANK_MEMBERS", str(x))
-    return
+        return udB.set_key("THANK_MEMBERS", x)
 
 
 def must_thank(chat):
     x = get_stuff("THANK_MEMBERS")
-    try:
-        return x[chat]
-    except KeyError:
-        return False
+    return x.get(chat)

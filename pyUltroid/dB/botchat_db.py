@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -10,26 +10,19 @@ from .. import udB
 
 
 def get_stuff():
-    a = udB.get("BOTCHAT")
-    if a:
-        try:
-            return eval(a)
-        except BaseException:
-            udB.delete("BOTCHAT")
-    return {}
+    return udB.get_key("BOTCHAT") or {}
 
 
 def add_stuff(msg_id, user_id):
     ok = get_stuff()
     ok.update({msg_id: user_id})
-    udB.set("BOTCHAT", str(ok))
+    return udB.set_key("BOTCHAT", ok)
 
 
 def get_who(msg_id):
     ok = get_stuff()
     if ok.get(msg_id):
         return ok[msg_id]
-    return
 
 
 def tag_add(msg, chat, user):
@@ -38,7 +31,7 @@ def tag_add(msg, chat, user):
         ok.update({"TAG": {msg: [chat, user]}})
     else:
         ok["TAG"].update({msg: [chat, user]})
-    udB.set("BOTCHAT", str(ok))
+    return udB.set_key("BOTCHAT", ok)
 
 
 def who_tag(msg):

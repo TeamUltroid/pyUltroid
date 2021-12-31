@@ -1,16 +1,20 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+import base64
 import json
 import math
 import os
+import random
 import re
 import ssl
+import string
 import subprocess
+from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
 
@@ -20,10 +24,10 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
 from telethon import Button
-from telethon.utils import get_display_name
 
 from .. import *
-from .helper import bash, fast_download
+from ..dB.filestore_db import get_stored_msg, store_msg
+from .helper import bash
 
 try:
     import cv2
@@ -59,12 +63,12 @@ async def get_ofox(codename):
 
 
 async def async_searcher(
-    url,
-    post=None,
-    headers=None,
-    params=None,
-    json=None,
-    data=None,
+    url: str,
+    post: bool = None,
+    headers: dict = None,
+    params: dict = None,
+    json: dict = None,
+    data: dict = None,
     ssl=None,
     re_json: bool = False,
     re_content: bool = False,
@@ -128,16 +132,20 @@ async def metadata(file):
         info = info["media"]["track"]
         data["title"] = info[0].get("Title") or file.split("/")[-1].split(".")[0]
         data["duration"] = (
-            int(float(info[0]["Duration"])) if info[0].get("Duration") else 0
+            int(float(info[0]["Duration"])) if info[0].get("Duration") else 69
         )
         data["performer"] = (
-            info[0].get("Performer") or udB.get("artist") or ultroid_bot.me.first_name
+            info[0].get("Performer")
+            or udB.get_key("artist")
+            or ultroid_bot.me.first_name
         )
         if len(info) >= 2:
             data["height"] = int(info[1]["Height"]) if info[1].get("Height") else 720
             data["width"] = int(info[1]["Width"]) if info[1].get("Width") else 1280
     except BaseException:
-        pass
+        data["title"] = file.split("/")[-1].split(".")[0]
+        data["duration"] = 69
+        data["performer"] = udB.get_key("artist") or ultroid_bot.me.first_name
     return data
 
 
@@ -167,10 +175,8 @@ def get_msg_button(texts: str):
 def create_tl_btn(button: list):
     btn = []
     for z in button:
-        kk = []
         if len(z) > 1:
-            for x, y in z:
-                kk.append(Button.url(x, y.strip()))
+            kk = [Button.url(x, y.strip()) for x, y in z]
             btn.append(kk)
         else:
             btn.append([Button.url(z[0][0], z[0][1].strip())])
@@ -196,54 +202,52 @@ def format_btn(buttons: list):
 # @techierror
 
 
-async def saavn_dl(query: str):
-    query = query.replace(" ", "%20")
+async def saavn_search(query: str):
     try:
-        data = (
-            await async_searcher(
-                url=f"https://jostapi.herokuapp.com/saavn?query={query}", re_json=True
-            )
-        )[0]
+        data = await async_searcher(
+            url=f"https://jostapi.herokuapp.com/saavn?query={query.replace(' ', '%20')}",
+            re_json=True,
+        )
     except BaseException:
-        return None, None, None, None
-    try:
-        title = data["song"]
-        url = data["media_url"]
-        img = data["image"]
-        duration = data["duration"]
-        performer = data["primary_artists"]
-    except BaseException:
-        return None, None, None, None
-    song = await fast_download(url, filename=title + ".mp3")
-    thumb = await fast_download(img, filename=title + ".jpg")
-    return song, duration, performer, thumb
+        data = None
+    return data
 
 
 # --- webupload ------#
 # @buddhhu
 
-CMD_WEB = {
-    "anonfiles": 'curl -F "file=@{}" https://api.anonfiles.com/upload',
-    "transfer": 'curl --upload-file "{}" https://transfer.sh/',
-    "bayfiles": 'curl -F "file=@{}" https://api.bayfiles.com/upload',
-    "x0": 'curl -F "file=@{}" https://x0.at/',
-    "file.io": 'curl -F "file=@{}" https://file.io',
-    "siasky": 'curl -X POST "https://siasky.net/skynet/skyfile" -F "file=@{}"',
-}
+_webupload_cache = {}
 
 
-async def dloader(e, host, file):
-    selected = CMD_WEB[host].format(file)
-    dn, er = await bash(selected)
-    if er:
-        text = f"**Error :** `{er}`"
-    else:
-        text = ""
-        keys = json_parser(dn)
-        for i in keys.keys():
-            text += f"• **{i}** : `{keys[i]}`"
-    os.remove(file)
-    return await e.edit(text)
+async def webuploader(chat_id: int, msg_id: int, uploader: str):
+    file = _webupload_cache[int(chat_id)][int(msg_id)]
+    sites = {
+        "anonfiles": {"url": "https://api.anonfiles.com/upload", "json": True},
+        "siasky": {"url": "https://siasky.net/skynet/skyfile", "json": True},
+        "file.io": {"url": "https://file.io", "json": True},
+        "bayfiles": {"url": "https://api.bayfiles.com/upload", "json": True},
+        "x0.at": {"url": "https://x0.at/", "json": False},
+        "transfer": {"url": "https://transfer.sh", "json": False},
+    }
+    if uploader and uploader in sites:
+        url = sites[uploader]["url"]
+        json = sites[uploader]["json"]
+    with open(file, "rb") as data:
+        # todo: add progress bar
+        status = await async_searcher(
+            url, data={"file": data.read()}, post=True, re_json=json
+        )
+    if isinstance(status, dict):
+        if "skylink" in status:
+            return f"https://siasky.net/{status['skylink']}"
+        if status["status"] == 200 or status["status"] is True:
+            try:
+                link = status["link"]
+            except KeyError:
+                link = status["data"]["file"]["url"]["short"]
+            return link
+    del _webupload_cache[int(chat_id)][int(msg_id)]
+    return status
 
 
 def get_all_files(path):
@@ -264,14 +268,14 @@ def text_set(text):
             if len(line) <= 55:
                 lines.append(line)
             else:
-                k = int(len(line) / 55)
+                k = len(line) // 55
                 for z in range(1, k + 2):
                     lines.append(line[((z - 1) * 55) : (z * 55)])
     return lines[:25]
 
 
 # ------------------Logo Gen Helpers----------------
-# Add ur usernames who created
+# @TechiError
 
 
 def get_text_size(text, image, font):
@@ -354,7 +358,7 @@ async def get_chatbot_reply(message):
         LOGS.info(f"**ERROR:**`{format_exc()}`")
 
 
-async def resize_photo(photo):
+def resize_photo(photo):
     """Resize the given photo to 512x512"""
     image = Image.open(photo)
     if (image.width and image.height) < 512:
@@ -465,8 +469,7 @@ def four_point_transform(image, pts):
         dtype="float32",
     )
     M = cv2.getPerspectiveTransform(rect, dst)
-    warped = cv2.warpPerspective(image, M, (maxWidth, maxHeight))
-    return warped
+    return cv2.warpPerspective(image, M, (maxWidth, maxHeight))
 
 
 # ------------------------------------- Telegraph ---------------------------------- #
@@ -479,13 +482,13 @@ def telegraph_client():
 
     from .. import udB
 
-    token = udB.get("_TELEGRAPH_TOKEN")
+    token = udB.get_key("_TELEGRAPH_TOKEN")
     TelegraphClient = Telegraph(token)
     if token:
         TELEGRAPH.append(TelegraphClient)
         return TelegraphClient
-    gd_name = get_display_name(ultroid_bot.me)
-    short_name = gd_name if len(gd_name) < 32 else "Ultroid"
+    gd_name = ultroid_bot.full_name
+    short_name = gd_name[:30]
     profile_url = (
         f"https://t.me/{ultroid_bot.me.username}" if ultroid_bot.me.username else None
     )
@@ -494,11 +497,70 @@ def telegraph_client():
             short_name=short_name, author_name=gd_name, author_url=profile_url
         )
     except Exception as er:
-        LOGS.exception(er)
-        return
-    udB.set("_TELEGRAPH_TOKEN", TelegraphClient.get_access_token())
+        if "SHORT_NAME_TOO_LONG" in str(er):
+            TelegraphClient.create_account(
+                short_name="ultroiduser", author_name=gd_name, author_url=profile_url
+            )
+        else:
+            LOGS.exception(er)
+            return
+    udB.set_key("_TELEGRAPH_TOKEN", TelegraphClient.get_access_token())
     TELEGRAPH.append(TelegraphClient)
     return TelegraphClient
+
+
+async def Carbon(
+    code,
+    base_url="https://carbonara-42.herokuapp.com/api/cook",
+    file_name="ultroid",
+    **kwargs,
+):
+    kwargs["code"] = code
+    con = await async_searcher(base_url, post=True, json=kwargs, re_content=True)
+    file = BytesIO(con)
+    file.name = file_name + ".jpg"
+    return file
+
+
+async def get_file_link(msg):
+    from .. import udB
+
+    msg_id = await msg.forward_to(udB.get_key("LOG_CHANNEL"))
+    await msg_id.reply(
+        "**Message has been stored to generate a shareable link. Do not delete it.**"
+    )
+    msg_id = msg_id.id
+    msg_hash = (
+        (
+            base64.b64encode(
+                "".join(
+                    random.choices(string.ascii_letters + string.digits, k=10)
+                ).encode("ascii")
+            )
+        )
+        .decode("ascii")
+        .replace("=", "")
+    )
+    store_msg(msg_hash, msg_id)
+    return msg_hash
+
+
+async def get_stored_file(event, hash):
+    from .. import udB
+
+    # hash = (base64.b64decode(hash.encode("ascii"))).decode("ascii")
+    msg_id = get_stored_msg(hash)
+    try:
+        msg = await asst.get_messages(udB.get_key("LOG_CHANNEL"), ids=msg_id)
+    except Exception as er:
+        LOGS.warning(f"FileStore, Error: {er}")
+        return
+    if msg is None:
+        await asst.send_message(
+            event.chat_id, "__Message was deleted by owner!__", reply_to=event.id
+        )
+        return
+    await asst.send_message(event.chat_id, msg.text, file=msg.media, reply_to=event.id)
 
 
 # --------- END --------- #

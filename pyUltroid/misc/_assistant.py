@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -11,13 +11,11 @@ import re
 from telethon import Button
 from telethon.events import CallbackQuery, InlineQuery, NewMessage
 from telethon.tl.types import InputWebDocument
-from telethon.utils import get_display_name
 
 from .. import LOGS, asst, ultroid_bot
 from . import append_or_update, owner_and_sudos
 
-ULTROID_PIC = "https://telegra.ph/file/11245cacbffe92e5d5b14.jpg"
-OWNER = get_display_name(ultroid_bot.me)
+OWNER = ultroid_bot.full_name
 
 MSG = f"""
 **Ultroid - UserBot**
@@ -41,13 +39,16 @@ IN_BTTS = [
 # decorator for assistant
 
 
-def asst_cmd(pattern=None, load=None, **kwargs):
+def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
     """Decorator for assistant's command"""
     name = inspect.stack()[1].filename.split("/")[-1].replace(".py", "")
+    kwargs["forwards"] = False
 
     def ult(func):
         if pattern:
             kwargs["pattern"] = re.compile("^/" + pattern)
+        if owner:
+            kwargs["from_users"] = owner_and_sudos
         asst.add_event_handler(func, NewMessage(**kwargs))
         if load is not None:
             append_or_update(load, func, name, kwargs)
@@ -55,12 +56,17 @@ def asst_cmd(pattern=None, load=None, **kwargs):
     return ult
 
 
-def callback(data=None, owner=False, **kwargs):
+def callback(data=None, from_users=[], owner=False, **kwargs):
     """Assistant's callback decorator"""
+    if "me" in from_users:
+        from_users.remove("me")
+        from_users.append(ultroid_bot.uid)
 
     def ultr(func):
         async def wrapper(event):
-            if owner and not str(event.sender_id) in owner_and_sudos():
+            if from_users and event.sender_id not in from_users:
+                return await event.answer("Not for You!", alert=True)
+            elif owner and event.sender_id not in owner_and_sudos():
                 return await event.answer(f"This is {OWNER}'s bot!!")
             try:
                 await func(event)
@@ -77,14 +83,19 @@ def in_pattern(pattern=None, owner=False, **kwargs):
 
     def don(func):
         async def wrapper(event):
-            if owner and not str(event.sender_id) in owner_and_sudos():
+            if owner and event.sender_id not in owner_and_sudos():
                 res = [
                     await event.builder.article(
                         title="Ultroid Userbot",
                         url="https://t.me/TheUltroid",
                         description="(c) TeamUltroid",
                         text=MSG,
-                        thumb=InputWebDocument(ULTROID_PIC, 0, "image/jpeg", []),
+                        thumb=InputWebDocument(
+                            "https://telegra.ph/file/dde85d441fa051a0d7d1d.jpg",
+                            0,
+                            "image/jpeg",
+                            [],
+                        ),
                         buttons=IN_BTTS,
                     )
                 ]

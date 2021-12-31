@@ -1,72 +1,68 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-
 import time
 
 from .configs import Var
 from .startup import *
+from .startup._database import UltroidDB
 from .startup.BaseClient import UltroidClient
-from .startup.connections import (
-    RedisConnection,
-    session_file,
-    vc_connection,
-    where_hosted,
-)
-from .startup.exceptions import RedisError
-from .startup.funcs import autobot
+from .startup.connections import session_file, vc_connection, where_hosted
+from .startup.funcs import _version_changes, autobot
+from .version import ultroid_version
 
 start_time = time.time()
-
+_ult_cache = {}
+# sys.exit = sys_exit()
 HOSTED_ON = where_hosted()
 
-udB = RedisConnection(
-    host=Var.REDIS_URI or Var.REDISHOST,
-    password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
-    port=Var.REDISPORT,
-    platform=HOSTED_ON,
-    decode_responses=True,
-    socket_timeout=5,
-    retry_on_timeout=True,
-)
+udB = UltroidDB()
+
+LOGS.info(f"Connecting to {udB.name}...")
 if udB.ping():
-    LOGS.info("Connected to Redis Database")
+    LOGS.info(f"Connected to {udB.name} Successfully!")
 
+BOT_MODE = udB.get_key("BOTMODE")
+DUAL_MODE = udB.get_key("DUAL_MODE")
 
-ultroid_bot = UltroidClient(
-    session_file(),
-    api_id=Var.API_ID,
-    api_hash=Var.API_HASH,
-    udB=udB,
-    base_logger=TeleLogger,
-)
+if BOT_MODE:
+    if DUAL_MODE:
+        udB.del_key("DUAL_MODE")
+        DUAL_MODE = False
+    ultroid_bot = None
+else:
+    ultroid_bot = UltroidClient(
+        session_file(LOGS),
+        udB=udB,
+        app_version=ultroid_version,
+        device_model="Ultroid",
+        proxy=udB.get_key("TG_PROXY"),
+    )
 
-ultroid_bot.run_in_loop(autobot())
+if not BOT_MODE:
+    ultroid_bot.run_in_loop(autobot())
+else:
+    if not udB.get_key("BOT_TOKEN") and Var.BOT_TOKEN:
+        udB.set_key("BOT_TOKEN", Var.BOT_TOKEN)
+    if not udB.get_key("BOT_TOKEN"):
+        LOGS.info('"BOT_TOKEN" not Found! Please add it, in order to use "BOTMODE"')
+        import sys
 
-asst = UltroidClient(
-    None,
-    api_id=Var.API_ID,
-    api_hash=Var.API_HASH,
-    bot_token=udB.get("BOT_TOKEN"),
-    udB=udB,
-    base_logger=TeleLogger,
-)
+        sys_exit()
+
+asst = UltroidClient(None, bot_token=udB.get_key("BOT_TOKEN"), udB=udB)
+
+if BOT_MODE:
+    ultroid_bot = asst
 
 vcClient = vc_connection(udB, ultroid_bot)
 
-if not udB.get("SUDO"):
-    udB.set("SUDO", "False")
+_version_changes(udB)
 
-if not udB.get("SUDOS"):
-    udB.set("SUDOS", "")
-
-if not udB.get("BLACKLIST_CHATS"):
-    udB.set("BLACKLIST_CHATS", "[]")
-
-HNDLR = udB.get("HNDLR") or "."
-DUAL_HNDLR = udB.get("DUAL_HNDLR") or "/"
-SUDO_HNDLR = udB.get("SUDO_HNDLR") or HNDLR
+HNDLR = udB.get_key("HNDLR") or "."
+DUAL_HNDLR = udB.get_key("DUAL_HNDLR") or "/"
+SUDO_HNDLR = udB.get_key("SUDO_HNDLR") or HNDLR

@@ -1,5 +1,5 @@
 # Ultroid - UserBot
-# Copyright (C) 2021 TeamUltroid
+# Copyright (C) 2021-2022 TeamUltroid
 #
 # This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
 # PLease read the GNU Affero General Public License in
@@ -23,18 +23,30 @@ class Loader:
         self.key = key
         self._logger = logger
 
-    def load(self, log=True, func=import_module, cmd_help=HELP, exclude=[]):
-        files = sorted(glob.glob(self.path + "/*.py"))
+    def load(self, log=True, func=import_module, cmd_help=HELP, include=[], exclude=[]):
+        if include:
+            files = glob.glob(f"{self.path}/_*.py")
+            for file in include:
+                path = f"{self.path}/{file}.py"
+                if os.path.exists(path):
+                    files.append(path)
+        else:
+            files = glob.glob(f"{self.path}/*.py")
+            if exclude:
+                for path in exclude:
+                    if not path.startswith("_"):
+                        try:
+                            files.remove(f"{self.path}/{path}.py")
+                        except ValueError:
+                            pass
         if log:
             self._logger.info(
                 f"• Installing {self.key}'s Plugins || Count : {len(files)} •"
             )
-        if exclude:
-            [files.remove(path) for path in exclude]
-        for plugin in files:
+        for plugin in sorted(files):
             plugin = plugin.replace(".py", "")
             if func == import_module:
-                plugin = plugin.replace("/", ".")
+                plugin = plugin.replace("/", ".").replace("\\", ".")
             else:
                 plugin = plugin.split("/")[-1]
             try:
@@ -78,39 +90,55 @@ class Loader:
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for official
-    Loader(path="plugins", key="Official").load()
+    _exclude = udB.get_key("EXCLUDE_OFFICIAL")
+    _exclude = _exclude.split() if _exclude else []
+
+    # "INCLUDE_ONLY" was added to reduce Big List in "EXCLUDE_OFFICIAL" Plugin
+    _in_only = udB.get_key("INCLUDE_ONLY")
+    _in_only = _in_only.split() if _in_only else []
+    Loader().load(include=_in_only, exclude=_exclude)
 
     # for assistant
-    Loader(path="assistant", key="Assistant").load(
-        log=False, cmd_help=None, exclude=["assistant/pmbot.py"]
-    )
+    if not udB.get_key("DISABLE_AST_PLUGINS"):
+        _ast_exc = ["pmbot"]
+        if _in_only and "games" not in _in_only:
+            _ast_exc.append("games")
+        Loader(path="assistant").load(log=False, exclude=_ast_exc)
 
     # for addons
-    if addons == "True" or not addons:
-        if not os.path.exists("addons/.git"):
-            os.system("rm -rf addons")
-        url = udB.get("ADDONS_URL")
+    if addons:
+        url = udB.get_key("ADDONS_URL")
         if url:
             os.system("git clone -q {} addons".format(url))
-        elif not os.path.exists("addons"):
+        if os.path.exists("addons") and not os.path.exists("addons/.git"):
+            os.rmdir("addons")
+        if not os.path.exists("addons"):
             os.system(
                 f"git clone -q -b {Repo().active_branch} https://github.com/TeamUltroid/UltroidAddons.git addons"
             )
-        elif os.path.exists("addons/.git"):
+        else:
             os.system("cd addons && git pull -q && cd ..")
+
+        if not os.path.exists("addons"):
+            os.system(
+                "git clone -q https://github.com/TeamUltroid/UltroidAddons.git addons"
+            )
         if os.path.exists("addons/addons.txt"):
             # generally addons req already there so it won't take much time
+            os.system(
+                "rm -rf /usr/local/lib/python3.9/site-packages/pip/_vendor/.wh.appdirs.py"
+            )
             os.system("pip3 install --no-cache-dir -q -r ./addons/addons.txt")
         Loader(path="addons", key="Addons").load(func=load_addons)
 
     # group manager
-    if manager == "True":
+    if manager:
         Loader(path="assistant/manager", key="Group Manager").load(cmd_help=None)
 
     # chat via assistant
-    if pmbot == "True":
+    if pmbot:
         Loader(path="assistant/pmbot.py").load_single(log=False)
 
     # vc bot
-    if vcbot == "True":
+    if vcbot and not vcClient._bot:
         Loader(path="vcbot", key="VCBot").load()
