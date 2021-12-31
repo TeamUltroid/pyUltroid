@@ -78,7 +78,7 @@ class GDriveManager:
             "withLink": True,
         }
         self._build.permissions().insert(
-            fileId=fileId, body=permissions, supportsAllDrives=True
+            fileId=fileId, body=_permissions, supportsAllDrives=True
         ).execute(http=self._http)
 
     async def _upload_file(
