@@ -124,7 +124,7 @@ class SqlDB:
             self._connection.autocommit = True
             self._cursor = self._connection.cursor()
             self._cursor.execute(
-                "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))"
+                "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCli varchar(70))"
             )
         except Exception as error:
             LOGS.exception(error)
@@ -173,8 +173,7 @@ class SqlDB:
 
     def set_key(self, key, value):
         try:
-            print(key, value)
-            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS {key if key else 'x'}")
+            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS {key}")
         except (psycopg2.errors.UndefinedColumn, psycopg2.errors.SyntaxError):
             pass
         except BaseException as er:
@@ -195,7 +194,7 @@ class SqlDB:
     def flushall(self):
         self._cursor.execute("DROP TABLE Ultroid")
         self._cursor.execute(
-            "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCLi varchar(70))"
+            "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCli varchar(70))"
         )
         return True
 
