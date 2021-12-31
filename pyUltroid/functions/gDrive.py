@@ -81,7 +81,7 @@ class GDriveManager:
             fileId=fileId, body=permissions, supportsAllDrives=True
         ).execute(http=self._http)
 
-    async def _upload_file(self, event, path: str, filename: str = None):
+    async def _upload_file(self, event, path: str, filename: str = None, folder_id: str = None):
         last_txt = ""
         if not filename:
             filename = path.split("/")[-1]
@@ -92,7 +92,9 @@ class GDriveManager:
             "description": "Uploaded using Ultroid Userbot",
             "mimeType": mime_type,
         }
-        if self.folder_id:
+        if folder_id:
+            body["parents"] = [{"id": folder_id}]
+        elif self.folder_id:
             body["parents"] = [{"id": self.folder_id}]
         upload = self._build.files().insert(
             body=body, media_body=media_body, supportsAllDrives=True
