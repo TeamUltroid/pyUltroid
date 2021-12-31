@@ -118,7 +118,7 @@ class GDriveManager:
                     + f"Speed: {humanbytes(speed)}/s\n"
                     + f"ETA: {time_formatter(eta)}`"
                 )
-                if last_txt != crnt_txt:
+                if round((diff % 10.00) == 0) or last_txt != crnt_txt:
                     await event.edit(crnt_txt)
                     last_txt = crnt_txt
         fileId = _status.get("id")
@@ -167,7 +167,7 @@ class GDriveManager:
                         + f"Speed: {humanbytes(speed)}/s\n"
                         + f"ETA: {time_formatter(eta)}`"
                     )
-                    if last_txt != crnt_txt:
+                    if round((diff % 10.00) == 0) or last_txt != crnt_txt:
                         await event.edit(crnt_txt)
                         last_txt = crnt_txt
         return True, filename
