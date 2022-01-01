@@ -903,7 +903,7 @@ class googleimagesdownload:
                         arguments["format"],
                         arguments["ignore_urls"],
                     )
-                except TypeError as er:
+                except (TypeError, IndexError) as er:
                     LOGS.debug(er)
                     download_status = None
 
