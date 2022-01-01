@@ -32,7 +32,7 @@ def rem_source_channel(id_):
     channels = get_source_channels()
     if id_ in channels:
         channels.remove(id_)
-        udB.set_key("CH_SOURCE", list_to_str(channels))
+        udB.set_key("CH_SOURCE", channels)
     return True
 
 #########################
@@ -56,7 +56,7 @@ def add_destination(id_):  # Take int or str with numbers only , Returns Boolean
     channels = get_destinations()
     if id_ not in channels:
         channels.append(id_)
-        udB.set_key("CH_DESTINATION", list_to_str(channels))
+        udB.set_key("CH_DESTINATION", channels)
     return True
 
 
@@ -64,5 +64,5 @@ def rem_destination(id_):
     channels = get_destinations()
     if id_ in channels:
         channels.remove(id_)
-        udB.set_key("CH_DESTINATION", list_to_str(channels))
+        udB.set_key("CH_DESTINATION", channels)
     return True
