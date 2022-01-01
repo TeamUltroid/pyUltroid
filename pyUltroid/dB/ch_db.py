@@ -7,6 +7,7 @@
 
 from .. import udB
 
+
 def get_source_channels():  # Returns List
     return udB.get_key("CH_SOURCE") or []
 
@@ -28,12 +29,14 @@ def add_source_channel(id_):  # Take int or str with numbers only , Returns Bool
         udB.set_key("CH_SOURCE", channels)
     return True
 
+
 def rem_source_channel(id_):
     channels = get_source_channels()
     if id_ in channels:
         channels.remove(id_)
         udB.set_key("CH_SOURCE", channels)
     return True
+
 
 #########################
 
