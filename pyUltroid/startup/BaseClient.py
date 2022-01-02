@@ -94,7 +94,7 @@ class UltroidClient(TelegramClient):
         except ApiIdInvalidError:
             self.logger.error("API ID and API_HASH combination does not match!")
 
-            sys_exit()
+            sys.exit()
         except (AuthKeyDuplicatedError, EOFError) as er:
             if self._handle_error:
                 self.logger.error("String session expired. Create new!")
@@ -107,11 +107,11 @@ class UltroidClient(TelegramClient):
             self.logger.error(
                 "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
-            sys_exit()
+            sys.exit()
         except AccessTokenInvalidError:
             self.udB.del_key("BOT_TOKEN")
             self.logger.error("The provided bot token is not valid! Quitting...")
-            sys_exit()
+            sys.exit()
 
         # Save some stuff for later use...
         self.me = await self.get_me()
