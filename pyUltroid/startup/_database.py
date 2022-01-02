@@ -132,6 +132,7 @@ class SqlDB:
             if self._connection:
                 self._connection.close()
             sys.exit()
+       self.re_cache()
 
     @property
     def name(self):
@@ -145,6 +146,11 @@ class SqlDB:
         data = self._cursor.fetchall()
         return int(data[0][0].split()[0])
 
+    def re_cache(self):
+        self._cache = {}
+        for key in self.keys():
+            self._cache.update({key:self.get_key(key)})
+
     def keys(self):
         self._cursor.execute(
             "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name  = 'ultroid'"
@@ -153,10 +159,14 @@ class SqlDB:
         return [_[0] for _ in data]
 
     def ping(self):
-        """They should really keep the `if udB.ping():` in try/except."""
         return True
 
-    get_key = get_data
+    def get_key(self, variable):
+        if variable in self._cache:
+            return self._cache[variable]
+        get_ = get_data(self, variable)
+        self._cache.update({variable:get_})
+        return get_
 
     def get(self, variable):
         try:
@@ -178,11 +188,14 @@ class SqlDB:
             pass
         except BaseException as er:
             LOGS.exception(er)
+        self._cache.update({key:value})
         self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
         self._cursor.execute(f"INSERT INTO Ultroid ({key}) values (%s)", (str(value),))
         return True
 
     def del_key(self, key):
+        if key in self._cache:
+            del self._cache[key]
         try:
             self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
         except psycopg2.errors.UndefinedColumn:
@@ -192,6 +205,7 @@ class SqlDB:
     delete = del_key
 
     def flushall(self):
+        self._cache.clear()
         self._cursor.execute("DROP TABLE Ultroid")
         self._cursor.execute(
             "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCli varchar(70))"
