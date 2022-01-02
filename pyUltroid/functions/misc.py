@@ -378,7 +378,7 @@ _entities = {
     types.MessageEntityBotCommand: "bot_command",
     types.MessageEntityCode: "code",
     types.MessageEntityPre: "pre",
-    types.MessageEntitySpoiler: "spoiler"
+    types.MessageEntitySpoiler: "spoiler",
 }
 
 

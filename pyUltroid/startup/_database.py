@@ -149,7 +149,7 @@ class SqlDB:
     def re_cache(self):
         self._cache = {}
         for key in self.keys():
-            self._cache.update({key:self.get_key(key)})
+            self._cache.update({key: self.get_key(key)})
 
     def keys(self):
         self._cursor.execute(
@@ -165,7 +165,7 @@ class SqlDB:
         if variable in self._cache:
             return self._cache[variable]
         get_ = get_data(self, variable)
-        self._cache.update({variable:get_})
+        self._cache.update({variable: get_})
         return get_
 
     def get(self, variable):
@@ -188,7 +188,7 @@ class SqlDB:
             pass
         except BaseException as er:
             LOGS.exception(er)
-        self._cache.update({key:value})
+        self._cache.update({key: value})
         self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
         self._cursor.execute(f"INSERT INTO Ultroid ({key}) values (%s)", (str(value),))
         return True
