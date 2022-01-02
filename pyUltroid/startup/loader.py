@@ -25,6 +25,8 @@ class Loader:
 
     def load(self, log=True, func=import_module, cmd_help=HELP, include=[], exclude=[]):
         if include:
+            if log:
+                self._logger.info("Including:{}".format("".join(f"• {name}" for name in include)))
             files = glob.glob(f"{self.path}/_*.py")
             for file in include:
                 path = f"{self.path}/{file}.py"
