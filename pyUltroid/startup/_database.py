@@ -132,7 +132,7 @@ class SqlDB:
             if self._connection:
                 self._connection.close()
             sys.exit()
-       self.re_cache()
+        self.re_cache()
 
     @property
     def name(self):
