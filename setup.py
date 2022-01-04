@@ -8,8 +8,7 @@ requirements = [
     "python-dotenv==0.15.0",
     "aiofiles",
     "aiohttp[speedups]",
-    "hiredis",
-    "psycopg2-binary",
+    "hiredis"
 ]
 
 
@@ -32,9 +31,9 @@ project_urls = {
 }
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
 ]
@@ -53,5 +52,5 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=requirements,
     classifiers=classifiers,
-    python_requires=">3.6, <3.10",
+    python_requires=">3.6, <=3.10",
 )
