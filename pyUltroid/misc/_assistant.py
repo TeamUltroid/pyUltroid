@@ -46,9 +46,7 @@ def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
 
     def ult(func):
         if pattern:
-            kwargs["pattern"] = re.compile(
-                "^/" + pattern
-            )
+            kwargs["pattern"] = re.compile("^/" + pattern)
         if owner:
             kwargs["from_users"] = owner_and_sudos
         asst.add_event_handler(func, NewMessage(**kwargs))
