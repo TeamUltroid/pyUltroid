@@ -28,7 +28,8 @@ ALIVE_NAME = ultroid_bot.me.first_name
 BOTLOG_CHATID = BOTLOG = udB.get_key("LOG_CHANNEL")
 
 
-bot = borg = friday = ultroid_bot
+bot = borg = catub = friday = ultroid_bot
+catub.cat_cmd = ultroid_cmd
 
 hndlr = "\\" + HNDLR
 black_list_chats = udB.get_key("BLACKLIST_CHATS")
