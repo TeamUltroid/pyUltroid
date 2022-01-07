@@ -57,6 +57,8 @@ def load_addons(plugin_name):
     mod.Redis = udB.get_key
     mod.admin_cmd = admin_cmd
     mod.sudo_cmd = sudo_cmd
+    mod.HELP = HELP.get("Addons", {})
+    mod.CMD_HELP = HELP.get("Addons", {})
     modules["ub"] = xxx
     modules["var"] = xxx
     modules["jarvis"] = xxx
