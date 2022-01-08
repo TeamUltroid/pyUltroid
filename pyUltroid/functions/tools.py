@@ -136,7 +136,9 @@ async def metadata(file):
         data["performer"] = (
             info.get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
         )
+        data["type"] = "audio"
         if info.get("VideoCount"):
+            data["type"] = "video"
             data["height"] = int(_info[1].get("Height", 720))
             data["width"] = int(_info[1].get("Width", 1280))
     except BaseException:
@@ -151,6 +153,8 @@ async def metadata(file):
 
 async def set_attributes(file):
     data = await metadata(file)
+    if "type" not in data:
+        return None
     if "width" in data:
         return [
             DocumentAttributeVideo(
