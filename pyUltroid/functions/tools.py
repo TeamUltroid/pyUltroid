@@ -153,7 +153,10 @@ async def set_attributes(file):
     if "width" in data:
         return [
             DocumentAttributeVideo(
-                duration=data["duration"], w=data["width"], h=data["height"], supports_streaming=True
+                duration=data["duration"],
+                w=data["width"],
+                h=data["height"],
+                supports_streaming=True,
             )
         ]
     return [
