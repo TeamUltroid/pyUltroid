@@ -24,6 +24,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 from requests.exceptions import MissingSchema
 from telethon import Button
+from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 
 from .. import *
 from ..dB.filestore_db import get_stored_msg, store_msg
@@ -128,26 +129,32 @@ async def metadata(file):
     out, _ = await bash(f"mediainfo '''{file}''' --Output=JSON")
     data = {}
     try:
-        info = json.loads(out)
-        info = info["media"]["track"]
-        data["title"] = info[0].get("Title") or file.split("/")[-1].split(".")[0]
-        data["duration"] = (
-            int(float(info[0]["Duration"])) if info[0].get("Duration") else 69
-        )
+        _info = json.loads(out)
+        info = _info["media"]["track"][0]
+        data["title"] = info.get("Title", file.split("/")[-1].split(".")[0])
+        data["duration"] = int(info.get("Duration", 0))
         data["performer"] = (
-            info[0].get("Performer")
+            info.get("Performer")
             or udB.get_key("artist")
             or ultroid_bot.me.first_name
         )
-        if len(info) >= 2:
-            data["height"] = int(info[1]["Height"]) if info[1].get("Height") else 720
-            data["width"] = int(info[1]["Width"]) if info[1].get("Width") else 1280
+        if info.get("VideoCount"):
+            data["height"] = int(_info[1].get("Height", 720))
+            data["width"] = int(_info[1].get("Width", 1280))
     except BaseException:
         data["title"] = file.split("/")[-1].split(".")[0]
-        data["duration"] = 69
+        data["duration"] = 0
         data["performer"] = udB.get_key("artist") or ultroid_bot.me.first_name
     return data
 
+
+# ~~~~~~~~~~~~~~~~ Attributes ~~~~~~~~~~~~~~~~
+
+async def set_attributes(file):
+    data = await metadata(file)
+    if "width" in data:
+        return [DocumentAttributeVideo(duration=data["duration"], w=data["width"], h=data["height"])]
+    return [DocumentAttributeAudio(duration=data["duration"], title=data["title"], performer=data["performer"])]
 
 # ~~~~~~~~~~~~~~~~ Button stuffs ~~~~~~~~~~~~~~~
 
