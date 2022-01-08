@@ -128,8 +128,8 @@ def is_url_ok(url: str):
 async def metadata(file):
     out, _ = await bash(f"mediainfo '''{file}''' --Output=JSON")
     data = {}
-    _info = json.loads(out)
-    info = _info["media"]["track"][0]
+    _info = json.loads(out)["media"]["track"]
+    info = _info[0]
     if info.get("VideoCount") or info.get("AudioCount"):
         data["title"] = info.get("Title", file.split("/")[-1].split(".")[0])
         data["duration"] = int(float(info.get("Duration", 0)))
