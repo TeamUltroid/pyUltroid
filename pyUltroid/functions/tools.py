@@ -134,9 +134,7 @@ async def metadata(file):
         data["title"] = info.get("Title", file.split("/")[-1].split(".")[0])
         data["duration"] = int(info.get("Duration", 0))
         data["performer"] = (
-            info.get("Performer")
-            or udB.get_key("artist")
-            or ultroid_bot.me.first_name
+            info.get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
         )
         if info.get("VideoCount"):
             data["height"] = int(_info[1].get("Height", 720))
@@ -150,11 +148,21 @@ async def metadata(file):
 
 # ~~~~~~~~~~~~~~~~ Attributes ~~~~~~~~~~~~~~~~
 
+
 async def set_attributes(file):
     data = await metadata(file)
     if "width" in data:
-        return [DocumentAttributeVideo(duration=data["duration"], w=data["width"], h=data["height"])]
-    return [DocumentAttributeAudio(duration=data["duration"], title=data["title"], performer=data["performer"])]
+        return [
+            DocumentAttributeVideo(
+                duration=data["duration"], w=data["width"], h=data["height"]
+            )
+        ]
+    return [
+        DocumentAttributeAudio(
+            duration=data["duration"], title=data["title"], performer=data["performer"]
+        )
+    ]
+
 
 # ~~~~~~~~~~~~~~~~ Button stuffs ~~~~~~~~~~~~~~~
 
