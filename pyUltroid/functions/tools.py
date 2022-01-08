@@ -128,24 +128,19 @@ def is_url_ok(url: str):
 async def metadata(file):
     out, _ = await bash(f"mediainfo '''{file}''' --Output=JSON")
     data = {}
-    try:
-        _info = json.loads(out)
-        info = _info["media"]["track"][0]
+    _info = json.loads(out)
+    info = _info["media"]["track"][0]
+    if info.get("VideoCount") or info.get("AudioCount"):
         data["title"] = info.get("Title", file.split("/")[-1].split(".")[0])
         data["duration"] = int(info.get("Duration", 0))
         data["performer"] = (
             info.get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
         )
-        data["type"] = "audio"
         if info.get("VideoCount"):
-            data["type"] = "video"
             data["height"] = int(_info[1].get("Height", 720))
             data["width"] = int(_info[1].get("Width", 1280))
-    except BaseException:
-        data["title"] = file.split("/")[-1].split(".")[0]
-        data["duration"] = 0
-        data["performer"] = udB.get_key("artist") or ultroid_bot.me.first_name
-    return data
+        return data
+    return None
 
 
 # ~~~~~~~~~~~~~~~~ Attributes ~~~~~~~~~~~~~~~~
@@ -153,7 +148,7 @@ async def metadata(file):
 
 async def set_attributes(file):
     data = await metadata(file)
-    if "type" not in data:
+    if not data:
         return None
     if "width" in data:
         return [
