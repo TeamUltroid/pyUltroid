@@ -17,11 +17,11 @@ from .BaseClient import UltroidClient
 
 def session_file(logger):
     if Var.SESSION:
-        if len(Var.SESSION.strip()) not in [353, 369]:
-            logger.exception("Wrong string session. Copy paste correctly!")
-            import sys
+#        if len(Var.SESSION.strip()) not in [353, 369]:
+#            logger.exception("Wrong string session. Copy paste correctly!")
+#            import sys
 
-            sys.exit()
+#            sys.exit()
         return StringSession(Var.SESSION)
     else:
         logger.exception("No String Session found. Quitting...")
