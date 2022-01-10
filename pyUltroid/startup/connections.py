@@ -17,7 +17,7 @@ from .BaseClient import UltroidClient
 
 def session_file(logger):
     if Var.SESSION:
-        if len(Var.SESSION.strip()) != 353:
+        if len(Var.SESSION.strip()) not in [353, 369]:
             logger.exception("Wrong string session. Copy paste correctly!")
             import sys
 
