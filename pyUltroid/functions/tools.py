@@ -579,6 +579,7 @@ async def get_stored_file(event, hash):
         return
     await asst.send_message(event.chat_id, msg.text, file=msg.media, reply_to=event.id)
 
+
 def cmd_regex_replace(cmd):
     return (
         cmd.replace("$", "")
@@ -593,5 +594,6 @@ def cmd_regex_replace(cmd):
         .replace(")", "")
         .replace("?(\\d+)", "")
     )
+
 
 # --------- END --------- #
