@@ -9,8 +9,8 @@ import glob
 import os
 from importlib import import_module
 
-from git import Repo
 from decouple import config
+from git import Repo
 
 from .. import *
 from ..dB._core import HELP
