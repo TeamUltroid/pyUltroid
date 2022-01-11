@@ -95,11 +95,11 @@ class Loader:
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for official
-    _exclude = udB.get_key("EXCLUDE_OFFICIAL") or config("EXCLUDE_OFFICIAL")
+    _exclude = udB.get_key("EXCLUDE_OFFICIAL") or config("EXCLUDE_OFFICIAL", None)
     _exclude = _exclude.split() if _exclude else []
 
     # "INCLUDE_ONLY" was added to reduce Big List in "EXCLUDE_OFFICIAL" Plugin
-    _in_only = udB.get_key("INCLUDE_ONLY") or config("INCLUDE_ONLY")
+    _in_only = udB.get_key("INCLUDE_ONLY") or config("INCLUDE_ONLY", None)
     _in_only = _in_only.split() if _in_only else []
     Loader().load(include=_in_only, exclude=_exclude)
 
