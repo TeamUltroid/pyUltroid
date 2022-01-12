@@ -362,6 +362,8 @@ async def plug(plugin_channels):
                 plugin = x.file.name.replace("_", "-").replace("|", "-")
                 if not os.path.exists(f"addons/{plugin}"):
                     await asyncio.sleep(0.6)
+                    if x.text == "#IGNORE":
+                        continue
                     plugin = await x.download_media(f"addons/{plugin}")
                 try:
                     load_addons(plugin.split("/")[-1].replace(".py", ""))
