@@ -17,7 +17,7 @@ def is_channel_added(id_):
 
 def add_channel(id_):
     channels = get_channels()
-    if id_ not in channels;
+    if id_ not in channels:
         channels.append(id_)
         udB.set_key("BROADCAST", channels)
     return True
