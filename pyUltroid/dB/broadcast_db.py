@@ -15,6 +15,7 @@ def get_channels():  # Returns List
 def is_channel_added(id_):
     return id_ in get_channels()
 
+
 def add_channel(id_):
     channels = get_channels()
     if id_ not in channels:
