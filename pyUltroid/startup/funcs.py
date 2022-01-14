@@ -447,6 +447,7 @@ def _version_changes(udb):
         "PLUGIN_CHANNEL",
         "CH_SOURCE",
         "CH_DESTINATION",
+        "BROADCAST",
     ]:
         key = udb.get_key(_)
         if key and str(key)[0] != "[":
