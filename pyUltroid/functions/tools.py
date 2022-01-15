@@ -17,11 +17,21 @@ import subprocess
 from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
-
+from .. import LOGS
 import aiohttp
-import certifi
+try:
+    import certifi
+except ImportError:
+    certifi = None
+    LOGS.info("'certifi' not installed!")
+
 import requests
-from PIL import Image, ImageDraw, ImageFont
+try:
+    from PIL import Image, ImageDraw, ImageFont
+except ImportError:
+    Image, ImageDraw, ImageFont = None, None, None
+    LOGS.info("PIL not installed!")
+
 from requests.exceptions import MissingSchema
 from telethon import Button
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
