@@ -147,7 +147,8 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     # vc bot
     if vcbot and not vcClient._bot:
         try:
-            import pytgcalls #ignore: pylint
+            import pytgcalls  # ignore: pylint
+
             Loader(path="vcbot", key="VCBot").load()
         except ModuleNotFoundError:
             LOGS.info("'pytgcalls' not installed!\nSkipping load of VcBot.")
