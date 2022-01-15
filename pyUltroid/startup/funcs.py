@@ -44,7 +44,7 @@ from ..functions.helper import download_file, updater
 
 
 def startup_stuff():
-    from .. import udB
+    from .. import udB, LOGS
 
     x = ["resources/auth", "resources/downloads", "vcbot/downloads"]
     for x in x:
@@ -75,6 +75,8 @@ def startup_stuff():
             timezone(TZ)
             os.environ["TZ"] = TZ
             time.tzset()
+        except AttributeError as er:
+            LOGS.exception(er)
         except BaseException:
             LOGS.info(
                 "Incorrect Timezone ,\nCheck Available Timezone From Here https://telegra.ph/Ultroid-06-18-2\nSo Time is Default UTC"
