@@ -44,7 +44,7 @@ from ..functions.helper import download_file, updater
 
 
 def startup_stuff():
-    from .. import udB, LOGS
+    from .. import LOGS, udB
 
     x = ["resources/auth", "resources/downloads", "vcbot/downloads"]
     for x in x:
