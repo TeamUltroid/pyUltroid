@@ -13,7 +13,6 @@ from logging import WARNING
 from random import choice, randrange, shuffle
 from traceback import format_exc
 
-from bs4 import BeautifulSoup
 from telethon.tl import types
 from telethon.utils import get_display_name, get_peer_id
 
@@ -51,7 +50,11 @@ try:
     import numpy as np
 except ImportError:
     np = None
-
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    LOGS.info("'bs4' not installed.")
+    BeautifulSoup = None
 
 async def randomchannel(
     tochat, channel, range1, range2, caption=None, client=ultroid_bot
