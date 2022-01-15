@@ -17,8 +17,11 @@ import subprocess
 from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
-from .. import LOGS
+
 import aiohttp
+
+from .. import LOGS
+
 try:
     import certifi
 except ImportError:
@@ -26,6 +29,7 @@ except ImportError:
     LOGS.info("'certifi' not installed!")
 
 import requests
+
 try:
     from PIL import Image, ImageDraw, ImageFont
 except ImportError:
