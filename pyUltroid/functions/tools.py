@@ -508,6 +508,9 @@ TELEGRAPH = []
 
 
 def telegraph_client():
+    if not Telegraph:
+        LOGS.info("'Telegraph' is not Installed!")
+        return
     if TELEGRAPH:
         return TELEGRAPH[0]
 
