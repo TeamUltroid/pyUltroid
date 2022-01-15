@@ -56,6 +56,7 @@ except ImportError:
     LOGS.info("'bs4' not installed.")
     BeautifulSoup = None
 
+
 async def randomchannel(
     tochat, channel, range1, range2, caption=None, client=ultroid_bot
 ):
