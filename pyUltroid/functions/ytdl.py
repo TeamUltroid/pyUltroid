@@ -42,17 +42,19 @@ async def download_yt(event, link, ytd):
     )
     caption = f"`{title}`\n\n`From YouTube`"
     await event.client.send_file(
-            event.chat_id,
-            file=res,
-            caption=caption,
-            attributes=await set_attributes(file),
-            supports_streaming=True,
-            thumb=thumb,
-            reply_to=reply_to,
+        event.chat_id,
+        file=res,
+        caption=caption,
+        attributes=await set_attributes(file),
+        supports_streaming=True,
+        thumb=thumb,
+        reply_to=reply_to,
     )
     os.remove(thumb)
-    try: await event.delete()
-    except: pass
+    try:
+        await event.delete()
+    except BaseException:
+        pass
 
 
 # ---------------YouTube Downloader Inline---------------
