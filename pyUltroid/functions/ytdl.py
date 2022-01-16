@@ -37,6 +37,7 @@ async def download_yt(event, link, ytd):
         os.rename(id_ + ext, file)
     except FileNotFoundError:
         os.rename(id_ + ext * 2, file)
+    attributes = await set_attributes(file)
     res, _ = await event.client.fast_uploader(
         file, show_progress=True, event=event, to_delete=True
     )
@@ -45,7 +46,7 @@ async def download_yt(event, link, ytd):
         event.chat_id,
         file=res,
         caption=caption,
-        attributes=await set_attributes(file),
+        attributes=attributes,
         supports_streaming=True,
         thumb=thumb,
         reply_to=reply_to,
