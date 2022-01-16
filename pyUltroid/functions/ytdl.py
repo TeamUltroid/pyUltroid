@@ -15,7 +15,7 @@ from youtubesearchpython import VideosSearch
 
 from .. import LOGS
 from .helper import download_file, humanbytes, run_async
-from .tools import async_searcher
+from .tools import async_searcher, set_attributes
 
 
 def get_yt_link(query):
@@ -24,6 +24,7 @@ def get_yt_link(query):
 
 
 async def download_yt(event, link, ytd):
+    reply_to = event.reply_to_msg_id or event
     info = await dler(event, link, ytd, download=True)
     if not info:
         return
@@ -41,44 +42,25 @@ async def download_yt(event, link, ytd):
     res, _ = await event.client.fast_uploader(
         file, show_progress=True, event=event, to_delete=True
     )
+    caption = f"`{title}`\n\n`From YouTube`"
     if file.endswith(("mp4", "mkv", "webm")):
-        height, width = info["height"], info["width"]
-        caption = f"`{title}`\n\n`From YouTube Official`"
         await event.client.send_file(
             event.chat_id,
             file=res,
             caption=caption,
-            attributes=[
-                DocumentAttributeVideo(
-                    duration=duration,
-                    w=width,
-                    h=height,
-                    supports_streaming=True,
-                )
-            ],
+            attributes=set_attributes(file),
             thumb=thumb,
+            reply_to=reply_to
         )
     else:
-        if info.get("artist"):
-            author = info["artist"]
-        elif info.get("creator"):
-            author = info["creator"]
-        elif info.get("channel"):
-            author = info["channel"]
-        caption = f"`{title}`\n\n`From YouTubeMusic`"
         await event.client.send_file(
             event.chat_id,
             file=res,
             caption=caption,
             supports_streaming=True,
             thumb=thumb,
-            attributes=[
-                DocumentAttributeAudio(
-                    duration=duration,
-                    title=title,
-                    performer=author,
-                )
-            ],
+            attributes=set_attributes(file),
+            reply_to=reply_to
         )
     os.remove(thumb)
     await event.delete()
