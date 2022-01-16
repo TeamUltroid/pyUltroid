@@ -9,7 +9,6 @@ import os
 import re
 
 from telethon import Button
-from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
@@ -32,7 +31,7 @@ async def download_yt(event, link, ytd):
     id_ = info["id"]
     thumb = id_ + ".jpg"
     await download_file(f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg", thumb)
-    duration = info["duration"]
+    info["duration"]
     ext = "." + ytd["outtmpl"].split(".")[-1]
     file = title + ext
     try:
@@ -50,7 +49,7 @@ async def download_yt(event, link, ytd):
             caption=caption,
             attributes=set_attributes(file),
             thumb=thumb,
-            reply_to=reply_to
+            reply_to=reply_to,
         )
     else:
         await event.client.send_file(
@@ -60,7 +59,7 @@ async def download_yt(event, link, ytd):
             supports_streaming=True,
             thumb=thumb,
             attributes=set_attributes(file),
-            reply_to=reply_to
+            reply_to=reply_to,
         )
     os.remove(thumb)
     await event.delete()
