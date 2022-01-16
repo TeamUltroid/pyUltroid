@@ -32,6 +32,8 @@ async def download_yt(event, link, ytd):
     thumb = id_ + ".jpg"
     await download_file(f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg", thumb)
     ext = "." + ytd["outtmpl"].split(".")[-1]
+    if ext == ".m4a":
+        ext = ".mp3"
     file = title + ext
     try:
         os.rename(id_ + ext, file)
