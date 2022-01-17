@@ -452,7 +452,7 @@ async def WasItRestart(udb):
         )
     except Exception as er:
         LOGS.exception(er)
-    udb.delete_key("_RESTART")
+    udb.del_key("_RESTART")
 
 
 def _version_changes(udb):
