@@ -224,7 +224,7 @@ class SqlDB:
 # --------------------------------------------------------------------------------------------- #
 
 
-class RedisConnection(Redis):
+class RedisConnection:
     def __init__(
         self,
         host,
@@ -264,7 +264,11 @@ class RedisConnection(Redis):
                 kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash_}_HOST")
                 kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash_}_PORT")
                 kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash_}_PASSWORD")
-        super().__init__(**kwargs)
+        self.db = Redis(**kwargs)
+        self.set = self.db.set
+        self.get = self.db.get
+        self.keys = self.db.keys
+        self.delete = self.db.delete
         self.re_cache()
 
     # dict is faster than Redis
@@ -279,7 +283,7 @@ class RedisConnection(Redis):
 
     @property
     def usage(self):
-        return sum(self.memory_usage(x) for x in self.keys())
+        return sum(self.db.memory_usage(x) for x in self.keys())
 
     def set_key(self, key, value):
         value = str(value)
