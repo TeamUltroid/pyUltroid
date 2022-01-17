@@ -11,7 +11,7 @@ import time
 
 from . import *
 from .functions.helper import time_formatter, updater
-from .startup.funcs import autopilot, customize, plug, ready, startup_stuff
+from .startup.funcs import autopilot, customize, plug, ready, startup_stuff, WasItRestart
 from .startup.loader import load_other_plugins
 
 # Option to Auto Update On Restarts..
@@ -64,6 +64,9 @@ if plugin_channels:
 # Send/Ignore Deploy Message..
 if not udB.get_key("LOG_OFF"):
     ultroid_bot.run_in_loop(ready())
+
+# Edit Restarting Message (if It's restarting)
+ultroid_bot.run_in_loop(WasItRestart(udB))
 
 cleanup_cache()
 
