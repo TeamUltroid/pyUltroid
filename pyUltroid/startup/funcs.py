@@ -437,15 +437,19 @@ async def ready():
     except Exception as er:
         LOGS.exception(er)
 
+
 async def WasItRestart(udb):
     key = udb.get_key("_RESTART")
     if not key:
         return
-    from .. import ultroid_bot, asst
+    from .. import asst, ultroid_bot
+
     try:
         data = key.split("_")
         who = asst if data[0] == "bot" else ultroid_bot
-        await who.edit_message(int(data[1]), int(data[2]), "__Restarted Successfully.__")
+        await who.edit_message(
+            int(data[1]), int(data[2]), "__Restarted Successfully.__"
+        )
     except Exception as er:
         LOGS.exception(er)
     udb.delete_key("_RESTART")
