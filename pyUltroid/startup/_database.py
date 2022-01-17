@@ -268,6 +268,7 @@ class RedisConnection:
         self.set = self.db.set
         self.get = self.db.get
         self.keys = self.db.keys
+        self.ping = self.db.ping
         self.delete = self.db.delete
         self.re_cache()
 
