@@ -478,6 +478,7 @@ async def create_quotly(
     if not isinstance(event, list):
         event = [event]
     from .. import udB
+
     if udB.get_key("OQAPI"):
         url = "https://bot.lyo.su/quote/generate"
     if not bg:
