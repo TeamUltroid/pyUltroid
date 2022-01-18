@@ -54,7 +54,7 @@ def update_envs():
 
 
 def startup_stuff():
-    from .. import LOGS, udB
+    from .. import LOGS, udB, ultroid_bot
 
     x = ["resources/auth", "resources/downloads", "vcbot/downloads"]
     for x in x:
@@ -93,6 +93,13 @@ def startup_stuff():
             )
             os.environ["TZ"] = "UTC"
             time.tzset()
+    if udB.get_key("RESTART_EDITOR"):
+        try:
+            chat, msg = udB.get_key("RESTART_EDITOR").split("|")
+            await ultroid_bot.edit_message(int(chat), int(msg), "**__Restart Completed!__**")
+        except Exception as e:
+            LOGS.exception("Error: %s", e)
+        udB.delete("RESTART_EDITOR")
 
 
 async def autobot():
