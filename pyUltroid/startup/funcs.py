@@ -93,15 +93,6 @@ def startup_stuff():
             )
             os.environ["TZ"] = "UTC"
             time.tzset()
-    if udB.get_key("_RESTART"):
-        try:
-            who, chat, msg = udB.get_key("_RESTART").split("_")
-            await ultroid_bot.edit_message(
-                int(chat), int(msg), "**__Restart Completed!__**"
-            )
-        except Exception as e:
-            LOGS.exception("Error: %s", e)
-        udB.delete("_RESTART")
 
 
 async def autobot():
