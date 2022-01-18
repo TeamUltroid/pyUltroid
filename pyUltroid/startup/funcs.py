@@ -54,7 +54,7 @@ def update_envs():
 
 
 def startup_stuff():
-    from .. import LOGS, udB, ultroid_bot
+    from .. import LOGS, udB
 
     x = ["resources/auth", "resources/downloads", "vcbot/downloads"]
     for x in x:
