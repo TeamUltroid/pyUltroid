@@ -96,7 +96,9 @@ def startup_stuff():
     if udB.get_key("RESTART_EDITOR"):
         try:
             chat, msg = udB.get_key("RESTART_EDITOR").split("|")
-            await ultroid_bot.edit_message(int(chat), int(msg), "**__Restart Completed!__**")
+            await ultroid_bot.edit_message(
+                int(chat), int(msg), "**__Restart Completed!__**"
+            )
         except Exception as e:
             LOGS.exception("Error: %s", e)
         udB.delete("RESTART_EDITOR")
