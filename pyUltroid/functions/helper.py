@@ -497,7 +497,10 @@ async def restart(ult):
                 "`HEROKU_API` or `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars.",
             )
     else:
-        os.execl(sys.executable, sys.executable, "startup")
+        if len(sys.argv) == 1:
+            os.execl(sys.executable, sys.executable, "-m", "pyUltroid")
+        else:
+            os.execl(sys.executable, sys.executable, "main.py")
 
 
 async def shutdown(ult):
