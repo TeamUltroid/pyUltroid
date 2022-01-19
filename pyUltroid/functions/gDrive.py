@@ -38,6 +38,10 @@ class GDriveManager:
     def _create_download_link(fileId: str):
         return f"https://drive.google.com/uc?id={fileId}&export=download"
 
+    @staticmethod
+    def _create_folder_link(folderId: str):
+        return f"https://drive.google.com/folderview?id={folderId}"
+
     def _create_token_file(self, code: str = None):
         global _auth_flow
         if code and _auth_flow:
@@ -187,7 +191,10 @@ class GDriveManager:
         )
         _files = {}
         for files in _items["items"]:
-            _files[self._create_download_link(files["id"])] = files["title"]
+            if files["mimeType"] == self.gdrive_creds["dir_mimetype"]:
+                _files[self._create_folder_link(files["id"]) = files["title"]
+            else:
+                _files[self._create_download_link(files["id"])] = files["title"]
         return _files
 
     def create_directory(self, directory):
