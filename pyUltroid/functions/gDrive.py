@@ -192,7 +192,7 @@ class GDriveManager:
         _files = {}
         for files in _items["items"]:
             if files["mimeType"] == self.gdrive_creds["dir_mimetype"]:
-                _files[self._create_folder_link(files["id"]) = files["title"]
+                _files[self._create_folder_link(files["id"])] = files["title"]
             else:
                 _files[self._create_download_link(files["id"])] = files["title"]
         return _files
