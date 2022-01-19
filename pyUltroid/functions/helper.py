@@ -198,13 +198,7 @@ async def bash(cmd):
 
 
 async def updateme_requirements():
-    """To Update requirements"""
-    reqs = "resources/startup/optional-requirements.txt"
-    try:
-        _, __ = await bash(f"{sys.executable} -m pip install --no-cache-dir -r {reqs}")
-    except Exception:
-        return format_exc()
-
+    await bash(f"{sys.executable} -m pip install --no-cache-dir -r requirements.txt")
 
 @run_async
 def gen_chlog(repo, diff):
