@@ -200,6 +200,7 @@ async def bash(cmd):
 async def updateme_requirements():
     await bash(f"{sys.executable} -m pip install --no-cache-dir -r requirements.txt")
 
+
 @run_async
 def gen_chlog(repo, diff):
     UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
