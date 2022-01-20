@@ -52,7 +52,7 @@ def vc_connection(udB, ultroid_bot):
 def where_hosted():
     if os.getenv("DYNO"):
         return "heroku"
-    if os.getenv("RAILWAY_GIT_REPO_NAME"):
+    if os.getenv("RAILWAY_STATIC_URL"):
         return "railway"
     if os.getenv("KUBERNETES_PORT"):
         return "qovery"
