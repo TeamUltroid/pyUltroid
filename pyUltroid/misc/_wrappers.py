@@ -9,6 +9,7 @@ from asyncio import sleep
 
 from telethon.errors.rpcerrorlist import MessageDeleteForbiddenError
 from telethon.tl.custom import Message
+from telethon.tl.types import MessageService
 
 from .. import LOGS
 
@@ -24,7 +25,7 @@ async def eor(event, text=None, **args):
         del args["time"]
     if "link_preview" not in args:
         args.update({"link_preview": False})
-    if event.out:
+    if event.out and not isinstance(event, MessageService):
         if edit_time:
             await sleep(edit_time)
         ok = await event.edit(text, **args)
