@@ -584,16 +584,19 @@ async def get_stored_file(event, hash):
 
     # hash = (base64.b64decode(hash.encode("ascii"))).decode("ascii")
     msg_id = get_stored_msg(hash)
-    try:
-        msg = await asst.get_messages(udB.get_key("LOG_CHANNEL"), ids=msg_id)
-    except Exception as er:
-        LOGS.warning(f"FileStore, Error: {er}")
-        return
-    if msg is None:
-        await asst.send_message(
+    if not msg_id:
+        return await asst.send_message(
             event.chat_id, "__Message was deleted by owner!__", reply_to=event.id
         )
-        return
+    try:
+            msg = await asst.get_messages(udB.get_key("LOG_CHANNEL"), ids=msg_id)
+    except Exception as er:
+            LOGS.warning(f"FileStore, Error: {er}")
+            return
+    if not msg_id:
+        return await asst.send_message(
+            event.chat_id, "__Message was deleted by owner!__", reply_to=event.id
+        )
     await asst.send_message(event.chat_id, msg.text, file=msg.media, reply_to=event.id)
 
 
