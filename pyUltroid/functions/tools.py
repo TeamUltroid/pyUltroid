@@ -589,10 +589,10 @@ async def get_stored_file(event, hash):
             event.chat_id, "__Message was deleted by owner!__", reply_to=event.id
         )
     try:
-            msg = await asst.get_messages(udB.get_key("LOG_CHANNEL"), ids=msg_id)
+        msg = await asst.get_messages(udB.get_key("LOG_CHANNEL"), ids=msg_id)
     except Exception as er:
-            LOGS.warning(f"FileStore, Error: {er}")
-            return
+        LOGS.warning(f"FileStore, Error: {er}")
+        return
     if not msg_id:
         return await asst.send_message(
             event.chat_id, "__Message was deleted by owner!__", reply_to=event.id
