@@ -28,6 +28,7 @@ def get_stored_msg(hash):
     if all.get(hash):
         return all[hash]
 
+
 def del_stored(hash):
     all = get_stored()
     all.pop(hash)
