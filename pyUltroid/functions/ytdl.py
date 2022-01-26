@@ -21,6 +21,7 @@ def get_yt_link(query):
     search = VideosSearch(query, limit=1).result()
     return search["result"][0]["link"]
 
+
 # todo
 """
 async def ytdl_progress(d, event):
