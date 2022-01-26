@@ -9,7 +9,7 @@ import os
 import re
 
 from telethon import Button
-from youtube_dl import YoutubeDL
+from yt_dlp import YoutubeDL
 from youtubesearchpython import VideosSearch
 
 from .. import LOGS
