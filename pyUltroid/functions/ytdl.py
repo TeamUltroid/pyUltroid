@@ -22,7 +22,6 @@ def get_yt_link(query):
     return search["result"][0]["link"]
 
 
-
 async def download_yt(event, link, ytd):
     reply_to = event.reply_to_msg_id or event
     info = await dler(event, link, ytd, download=True)
