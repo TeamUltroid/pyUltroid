@@ -14,7 +14,7 @@ from youtubesearchpython import VideosSearch
 from yt_dlp import YoutubeDL
 
 from .. import LOGS
-from .helper import download_file, humanbytes, run_async, time_formatter
+from .helper import download_file, humanbytes, time_formatter
 from .tools import async_searcher, set_attributes
 
 
