@@ -5,7 +5,6 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import asyncio
 import os
 import re
 import time
@@ -146,7 +145,7 @@ def get_buttons(listt):
 
 
 async def dler(event, url, opts: dict = {}, download=False):
-    start_time = time.time()
+    time.time()
     await event.edit("`Getting Data from YouTube..`")
     if "quiet" not in opts:
         opts["quiet"] = True
