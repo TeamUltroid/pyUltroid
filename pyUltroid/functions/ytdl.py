@@ -5,17 +5,17 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+import asyncio
 import os
 import re
 import time
-import asyncio
 
 from telethon import Button
 from youtubesearchpython import VideosSearch
 from yt_dlp import YoutubeDL
 
 from .. import LOGS
-from .helper import download_file, humanbytes, time_formatter, run_async
+from .helper import download_file, humanbytes, run_async, time_formatter
 from .tools import async_searcher, set_attributes
 
 
@@ -151,7 +151,11 @@ async def dler(event, url, opts: dict = {}, download=False):
     if "quiet" not in opts:
         opts["quiet"] = True
     if "progress_hooks" not in opts:
-        opts["progress_hooks"] = [lambda k: asyncio.get_event_loop().create_task(ytdl_progress(k, start_time, event))]
+        opts["progress_hooks"] = [
+            lambda k: asyncio.get_event_loop().create_task(
+                ytdl_progress(k, start_time, event)
+            )
+        ]
     if download:
         await ytdownload(url, opts)
     try:
