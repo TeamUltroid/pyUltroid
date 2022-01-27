@@ -8,13 +8,14 @@
 import os
 import re
 import time
+import asyncio
 
 from telethon import Button
 from youtubesearchpython import VideosSearch
 from yt_dlp import YoutubeDL
 
 from .. import LOGS
-from .helper import download_file, humanbytes, time_formatter
+from .helper import download_file, humanbytes, time_formatter, run_async
 from .tools import async_searcher, set_attributes
 
 
@@ -46,7 +47,6 @@ async def download_yt(event, link, ytd):
     info = await dler(event, link, ytd, download=True)
     if not info:
         return
-    LOGS.error(info)
     title = info["title"]
     id_ = info["id"]
     thumb = id_ + ".jpg"
@@ -151,7 +151,7 @@ async def dler(event, url, opts: dict = {}, download=False):
     if "quiet" not in opts:
         opts["quiet"] = True
     if "progress_hooks" not in opts:
-        opts["progress_hooks"] = [lambda k: await ytdl_progress(k, start_time, event)]
+        opts["progress_hooks"] = [lambda k: asyncio.get_event_loop().create_task(ytdl_progress(k, start_time, event))]
     if download:
         await ytdownload(url, opts)
     try:
@@ -161,7 +161,8 @@ async def dler(event, url, opts: dict = {}, download=False):
         return
 
 
-async def ytdownload(url, opts):
+@run_async
+def ytdownload(url, opts):
     try:
         YoutubeDL(opts).download([url])
     except Exception as ex:
