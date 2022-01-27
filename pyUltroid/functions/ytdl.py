@@ -153,9 +153,7 @@ async def dler(event, url, opts: dict = {}, download=False):
         opts["quiet"] = True
     if "progress_hooks" not in opts:
         opts["progress_hooks"] = [
-            lambda k: asyncio.get_event_loop().create_task(
-                ytdl_progress(k, start_time, event)
-            )
+            lambda k: await ytdl_progress(k, start_time, event)
         ]
     if download:
         await ytdownload(url, opts)
