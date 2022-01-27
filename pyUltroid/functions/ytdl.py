@@ -5,7 +5,6 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import asyncio
 import os
 import re
 import time
@@ -152,9 +151,7 @@ async def dler(event, url, opts: dict = {}, download=False):
     if "quiet" not in opts:
         opts["quiet"] = True
     if "progress_hooks" not in opts:
-        opts["progress_hooks"] = [
-            lambda k: await ytdl_progress(k, start_time, event)
-        ]
+        opts["progress_hooks"] = [lambda k: await ytdl_progress(k, start_time, event)]
     if download:
         await ytdownload(url, opts)
     try:
