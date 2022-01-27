@@ -21,6 +21,8 @@ from .tools import async_searcher, set_attributes
 
 async def ytdl_progress(k, start_time, event):
     last_text = ""
+    if k["status"] == "error":
+        return await event.edit("error")
     while k["status"] == "downloading":
         text = (
             f"`Downloading: {k['filename']}\n"
