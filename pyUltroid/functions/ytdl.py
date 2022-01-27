@@ -13,7 +13,7 @@ from telethon import Button
 from youtubesearchpython import VideosSearch
 from yt_dlp import YoutubeDL
 
-from .. import LOGS
+from .. import LOGS, udB
 from .helper import download_file, humanbytes, run_async, time_formatter
 from .tools import async_searcher, set_attributes
 
@@ -149,6 +149,8 @@ async def dler(event, url, opts: dict = {}, download=False):
     await event.edit("`Getting Data from YouTube..`")
     if "quiet" not in opts:
         opts["quiet"] = True
+    opts["username"] = udB.get_key("YT_USERNAME")
+    opts["password"] = udB.get_key("YT_PASSWORD")
     """
     if "progress_hooks" not in opts:
         opts["progress_hooks"] = [
