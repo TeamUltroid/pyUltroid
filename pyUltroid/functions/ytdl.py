@@ -21,7 +21,7 @@ from .tools import async_searcher, set_attributes
 
 async def ytdl_progress(k, start_time, event):
     last_text = ""
-    if k["status"] == "downloading":
+    while k["status"] == "downloading":
         text = (
             f"`Downloading: {k['filename']}\n"
             + f"Total Size: {humanbytes(k['total_bytes'])}\n"
@@ -29,16 +29,12 @@ async def ytdl_progress(k, start_time, event):
             + f"Speed: {humanbytes(k['speed'])}/s\n"
             + f"ETA: {time_formatter(k['eta']*1000)}`"
         )
-    elif k["status"] == "finished":
-        text = f"`{k['filename']} downloaded.`"
-    else:
-        text = "`Error`"
-    if ((time.time() - start_time) // 10) == 0 or text != last_text:
-        try:
-            await event.edit(text)
-            last_text = text
-        except Exception as ex:
-            LOGS.error(f"ytdl_progress: {ex}")
+        if ((time.time() - start_time) // 10) == 0 or text != last_text:
+            try:
+                await event.edit(text)
+                last_text = text
+            except Exception as ex:
+                LOGS.error(f"ytdl_progress: {ex}")
 
 
 def get_yt_link(query):
