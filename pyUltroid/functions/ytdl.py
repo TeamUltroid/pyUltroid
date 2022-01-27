@@ -20,7 +20,6 @@ from .tools import async_searcher, set_attributes
 
 
 async def ytdl_progress(k, start_time, event):
-    last_text = ""
     if k["status"] == "error":
         return await event.edit("error")
     while k["status"] == "downloading":
@@ -34,7 +33,6 @@ async def ytdl_progress(k, start_time, event):
         if round((time.time() - start_time) % 10) == 0:
             try:
                 await event.edit(text)
-                last_text = text
             except Exception as ex:
                 LOGS.error(f"ytdl_progress: {ex}")
 
