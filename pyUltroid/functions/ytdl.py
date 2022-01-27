@@ -161,8 +161,7 @@ async def dler(event, url, opts: dict = {}, download=False):
         return
 
 
-@run_async
-def ytdownload(url, opts):
+async def ytdownload(url, opts):
     try:
         YoutubeDL(opts).download([url])
     except Exception as ex:
