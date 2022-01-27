@@ -31,7 +31,7 @@ async def ytdl_progress(k, start_time, event):
             + f"Speed: {humanbytes(k['speed'])}/s\n"
             + f"ETA: {time_formatter(k['eta']*1000)}`"
         )
-        if ((time.time() - start_time) // 10) == 0 or text != last_text:
+        if round((time.time() - start_time) % 10) == 0:
             try:
                 await event.edit(text)
                 last_text = text
@@ -49,6 +49,7 @@ async def download_yt(event, link, ytd):
     info = await dler(event, link, ytd, download=True)
     if not info:
         return
+    LOGS.error(info)
     title = info["title"]
     id_ = info["id"]
     thumb = id_ + ".jpg"
