@@ -6,15 +6,37 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-import re
+import re, asyncio, time
 
 from telethon import Button
 from youtubesearchpython import VideosSearch
 from yt_dlp import YoutubeDL
 
 from .. import LOGS
-from .helper import download_file, humanbytes, run_async
+from .helper import download_file, humanbytes, run_async, time_formatter
 from .tools import async_searcher, set_attributes
+
+async def ytdl_progress(k, start_time, event):
+    last_text = ""
+    if k["status"] == "downloading":
+        text = (
+            f"`Downloading: {k['filename']}\n"
+            + f"Total Size: {humanbytes(k['total_bytes'])}\n"
+            + f"Downloaded: {humanbytes(k['downloaded_bytes'])}\n"
+            + f"Speed: {humanbytes(k['speed'])}/s\n
+            + f"ETA: {time_formatter(k['eta']*1000)}`"
+        )
+    elif k["status"] == "finished":
+        text = f"`{k['filename']} downloaded.`"
+    else:
+        text = "`Error`"
+    if ((time.time() - start_time) // 10) == 0 or text != last_text:
+        try:
+            await event.edit(text)
+            last_text = text
+        except Exception as ex:
+            LOGS.error(f"ytdl_progress: {ex}")
+
 
 
 def get_yt_link(query):
@@ -126,9 +148,12 @@ def get_buttons(listt):
 
 
 async def dler(event, url, opts: dict = {}, download=False):
+    start_time = time.time()
     await event.edit("`Getting Data from YouTube..`")
     if "quiet" not in opts:
         opts["quiet"] = True
+    if "progress_hooks" not in opts:
+        opts["progress_hooks"] = [lambda k: asyncio.get_event_loop().create_task(ytdl_progress(k, start_time, event))]
     if download:
         await ytdownload(url, opts)
     try:
