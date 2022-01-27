@@ -30,7 +30,7 @@ async def ytdl_progress(k, start_time, event):
             + f"Speed: {humanbytes(k['speed'])}/s\n"
             + f"ETA: {time_formatter(k['eta']*1000)}`"
         )
-        if round((time.time() - start_time) % 10) == 0:
+        if round((time.time() - start_time) % 10.0) == 0:
             try:
                 await event.edit(text)
             except Exception as ex:
