@@ -23,7 +23,7 @@ async def ytdl_progress(k, start_time, event):
             f"`Downloading: {k['filename']}\n"
             + f"Total Size: {humanbytes(k['total_bytes'])}\n"
             + f"Downloaded: {humanbytes(k['downloaded_bytes'])}\n"
-            + f"Speed: {humanbytes(k['speed'])}/s\n
+            + f"Speed: {humanbytes(k['speed'])}/s\n"
             + f"ETA: {time_formatter(k['eta']*1000)}`"
         )
     elif k["status"] == "finished":
