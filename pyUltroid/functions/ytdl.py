@@ -10,7 +10,7 @@ import re
 import time
 
 from telethon import Button
-from youtubesearchpython import VideosSearch
+from youtubesearchpython import VideosSearch, Playlist
 from yt_dlp import YoutubeDL
 
 from .. import LOGS, udB
@@ -175,18 +175,15 @@ def ytdownload(url, opts):
     except Exception as ex:
         LOGS.error(ex)
 
-
-async def get_videos_link(url):
-    id_ = url[url.index("=") + 1 :]
-    try:
-        html = await async_searcher(url)
-    except BaseException:
-        return []
-    pattern = re.compile(r"watch\?v=\S+?list=" + id_)
-    v_ids = re.findall(pattern, html)
-    links = []
-    if v_ids:
-        for z in v_ids:
-            idd = re.search(r"=(.*)\\", str(z)).group(1)
-            links.append(f"https://www.youtube.com/watch?v={idd}")
-    return links
+@run_async
+def get_videos_link(url):
+    to_return = []
+    regex = re.search(r"\?link=(\w+)", url)
+    if not regex:
+        return to_return
+    playlist_id = regex.group(1)
+    videos = Playlist(playlist_id)
+    for vid in videos.videos:
+        link = re.search(r"\?v=([(\w+)\-]*)", vid["link"]).group(1))
+        to_return.append(f"https://youtube.com/watch?v={link}")
+    return to_return
