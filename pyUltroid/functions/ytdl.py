@@ -179,7 +179,7 @@ def ytdownload(url, opts):
 @run_async
 def get_videos_link(url):
     to_return = []
-    regex = re.search(r"\?link=(\w+)", url)
+    regex = re.search(r"\?list=(\w+)", url)
     if not regex:
         return to_return
     playlist_id = regex.group(1)
