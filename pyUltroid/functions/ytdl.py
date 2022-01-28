@@ -184,6 +184,6 @@ def get_videos_link(url):
     playlist_id = regex.group(1)
     videos = Playlist(playlist_id)
     for vid in videos.videos:
-        link = re.search(r"\?v=([(\w+)\-]*)", vid["link"]).group(1))
+        link = re.search(r"\?v=([(\w+)\-]*)", vid["link"]).group(1)
         to_return.append(f"https://youtube.com/watch?v={link}")
     return to_return
