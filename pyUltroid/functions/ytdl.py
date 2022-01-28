@@ -10,12 +10,12 @@ import re
 import time
 
 from telethon import Button
-from youtubesearchpython import VideosSearch, Playlist
+from youtubesearchpython import Playlist, VideosSearch
 from yt_dlp import YoutubeDL
 
 from .. import LOGS, udB
 from .helper import download_file, humanbytes, run_async, time_formatter
-from .tools import async_searcher, set_attributes
+from .tools import set_attributes
 
 
 async def ytdl_progress(k, start_time, event):
@@ -174,6 +174,7 @@ def ytdownload(url, opts):
         YoutubeDL(opts).download([url])
     except Exception as ex:
         LOGS.error(ex)
+
 
 @run_async
 def get_videos_link(url):
