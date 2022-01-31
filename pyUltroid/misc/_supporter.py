@@ -12,12 +12,11 @@
 
 import inspect
 import os
-import re
 from pathlib import Path
 
 from telethon import events, types
 
-from pyUltroid.misc._decorators import ultroid_cmd, compile_pattern
+from pyUltroid.misc._decorators import compile_pattern, ultroid_cmd
 from pyUltroid.misc._wrappers import eod, eor
 
 from .. import *
