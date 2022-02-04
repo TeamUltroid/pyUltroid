@@ -140,7 +140,8 @@ def is_url_ok(url: str):
 
 
 async def metadata(file):
-    out, _ = await bash(f"mediainfo '''{file}''' --Output=JSON")
+    file = file.replace("'", "\'").replace('"', '\"')
+    out, _ = await bash(f"mediainfo '{file}' --Output=JSON")
     data = {}
     _info = json.loads(out)["media"]["track"]
     info = _info[0]
