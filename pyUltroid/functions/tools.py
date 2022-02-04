@@ -140,7 +140,7 @@ def is_url_ok(url: str):
 
 
 async def metadata(file):
-    file = file.replace("'", "'").replace('"', '"')
+    file = file.replace("'", "\'").replace('"', '\"') # pylint: disable=quotation escape
     out, _ = await bash(f"mediainfo '{file}' --Output=JSON")
     data = {}
     _info = json.loads(out)["media"]["track"]
