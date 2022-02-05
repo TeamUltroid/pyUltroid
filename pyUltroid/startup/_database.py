@@ -61,7 +61,7 @@ class MongoDB:
 
     @property
     def usage(self):
-        return 0
+        return self.db.command("dbstats")["dataSize"]
 
     def re_cache(self):
         self._cache = {}
