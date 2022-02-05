@@ -18,7 +18,9 @@ try:
 except ImportError:
     MongoClient = None
     if Var.MONGO_URI:
-        LOGS.warning("'pymongo' not found!\nInstall pymongo[srv] to use Mongo database..")
+        LOGS.warning(
+            "'pymongo' not found!\nInstall pymongo[srv] to use Mongo database.."
+        )
 
 
 try:
