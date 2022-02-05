@@ -17,13 +17,16 @@ try:
     from pymongo import MongoClient
 except ImportError:
     MongoClient = None
+    if Var.MONGO_URI:
+        LOGS.warning("'pymongo' not found!\nInstall pymongo[srv] to use Mongo database..")
+
 
 try:
     import psycopg2
 except ImportError:
     psycopg2 = None
     if Var.DATABASE_URL:
-        LOGS.error("'psycopg2' not found!\nInstall psycopg2 to use sql database..")
+        LOGS.warning("'psycopg2' not found!\nInstall psycopg2 to use sql database..")
 
 # --------------------------------------------------------------------------------------------- #
 
