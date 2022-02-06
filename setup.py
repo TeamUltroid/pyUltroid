@@ -2,7 +2,15 @@ import re
 
 import setuptools
 
-requirements = ["redis", "python-decouple", "python-dotenv", "aiofiles", "aiohttp", "hiredis", "pytz"]
+requirements = [
+    "redis",
+    "python-decouple",
+    "python-dotenv",
+    "aiofiles",
+    "aiohttp",
+    "hiredis",
+    "pytz",
+]
 
 
 with open("pyUltroid/version.py", "rt", encoding="utf8") as x:
