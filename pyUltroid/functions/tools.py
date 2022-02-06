@@ -106,8 +106,10 @@ async def async_searcher(
 # ~~~~~~~~~~~~~~~JSON Parser~~~~~~~~~~~~~~~
 # @buddhhu
 
+
 def _unquote_text(text):
     return text.replace("'", "\\'").replace('"', '\\"')
+
 
 def json_parser(data, indent=None):
     parsed = {}
@@ -612,7 +614,9 @@ class TgConverter:
     @staticmethod
     async def animated_to_gif(file, out_path="gif.gif"):
         """Convert animated sticker to gif."""
-        await bash(f"lottie_convert.py '{_unquote_text(file)}' '{_unquote_text(out_path)}'")
+        await bash(
+            f"lottie_convert.py '{_unquote_text(file)}' '{_unquote_text(out_path)}'"
+        )
         return out_path
 
     @staticmethod
