@@ -352,7 +352,6 @@ class LogoHelper:
         )
         file_name = "Logo.png"
         img.save(f"./{file_name}", "PNG")
-        img.show()
         return f"{file_name} Generated Successfully!"
 
 
@@ -602,7 +601,7 @@ class TgConverter:
     """Convert files related to Telegram"""
 
     @staticmethod
-    async def to_animated_sticker(file, out_path="sticker.tgs"):
+    async def animated_sticker(file, out_path="sticker.tgs"):
         """Convert to animated sticker."""
         await bash(f"lottie_convert.py '{file}' '{out_path}'")
         if os.path.exists(out_path):
