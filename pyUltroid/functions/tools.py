@@ -632,8 +632,18 @@ class TgConverter:
         return image
 
     @staticmethod
-    def create_webm():
-        pass
-
+    async def create_webm(file):
+        file = file.replace("'", "\\'").replace('"', '\\"')
+        _ = await metadata(file)
+        h, w = _["height"], _["width"]
+        if h == w and h != 512:
+            h, w = 512, 512
+        if h != 512 or w != 512:
+            if h > w:
+                h, w = 512, -1
+            if w > h:
+                h, w = -1, 512
+        await bash(f'ffmpeg -i "{file}" -to 00:00:02.95 -vf scale={w}:{h} -c:v libvpx-vp9 video.webm -y')
+        return "video.webm"
 
 # --------- END --------- #
