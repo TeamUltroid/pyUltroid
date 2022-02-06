@@ -16,7 +16,6 @@ import string
 import subprocess
 from io import BytesIO
 from json.decoder import JSONDecodeError
-from telnetlib import STATUS
 from traceback import format_exc
 
 import aiohttp
@@ -312,18 +311,19 @@ def text_set(text):
 
 
 class LogoHelper:
-
     @staticmethod
     def get_text_size(text, image, font):
-       im = Image.new("RGB", (image.width, image.height))
-       draw = ImageDraw.Draw(im)
-       return draw.textsize(text, font)
+        im = Image.new("RGB", (image.width, image.height))
+        draw = ImageDraw.Draw(im)
+        return draw.textsize(text, font)
 
     @staticmethod
     def find_font_size(text, font, image, target_width_ratio):
         tested_font_size = 100
         tested_font = ImageFont.truetype(font, tested_font_size)
-        observed_width, observed_height = LogoHelper.get_text_size(text, image, tested_font)
+        observed_width, observed_height = LogoHelper.get_text_size(
+            text, image, tested_font
+        )
         estimated_font_size = (
             tested_font_size / (observed_width / image.width) * target_width_ratio
         )
@@ -343,13 +343,13 @@ class LogoHelper:
         font = ImageFont.truetype(funt, font_size)
         w, h = draw.textsize(text, font=font)
         draw.text(
-        ((width - w) / 2, (height - h) / 2),
-        text,
-        font=font,
-        fill=fill,
-        stroke_width=stroke_width,
-        stroke_fill=stroke_fill,
-    )
+            ((width - w) / 2, (height - h) / 2),
+            text,
+            font=font,
+            fill=fill,
+            stroke_width=stroke_width,
+            stroke_fill=stroke_fill,
+        )
         file_name = "Logo.png"
         img.save(f"./{file_name}", "PNG")
         img.show()
@@ -597,6 +597,7 @@ def cmd_regex_replace(cmd):
 
 # ------------------------#
 
+
 class TgConverter:
     """Convert files related to Telegram"""
 
@@ -634,5 +635,6 @@ class TgConverter:
     @staticmethod
     def create_webm():
         pass
+
 
 # --------- END --------- #
