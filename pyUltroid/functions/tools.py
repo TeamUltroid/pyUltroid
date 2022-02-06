@@ -157,11 +157,10 @@ async def metadata(file):
         data["performer"] = (
             info.get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
         )
-        if info.get("VideoCount"):
-            data["height"] = int(float(_info[1].get("Height", 720)))
-            data["width"] = int(float(_info[1].get("Width", 1280)))
-        return data
-    return None
+    if info.get("VideoCount"):
+        data["height"] = int(float(_info[1].get("Height", 720)))
+        data["width"] = int(float(_info[1].get("Width", 1280)))
+    return data
 
 
 # ~~~~~~~~~~~~~~~~ Attributes ~~~~~~~~~~~~~~~~
@@ -645,10 +644,9 @@ class TgConverter:
             image.thumbnail(maxsize)
         return image
 
-    async def create_webm(self, file):
+    @staticmethod
+    async def create_webm(file):
         _ = await metadata(file)
-        if not _:
-            return await self.create_webm(await self.animated_to_gif(file))
         h, w = _["height"], _["width"]
         if h == w and h != 512:
             h, w = 512, 512
