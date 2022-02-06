@@ -149,7 +149,9 @@ async def metadata(file):
     data = {}
     _info = json.loads(out)["media"]["track"]
     info = _info[0]
-    if info.get("VideoCount") or info.get("AudioCount"):
+    if info["Format"] == "GIF":
+        return {"height": _info[1]["Height"], "width": _info[1]["Windth"]}
+    if info.get("AudioCount"):
         data["title"] = info.get("Title", file.split("/")[-1].split(".")[0])
         data["duration"] = int(float(info.get("Duration", 0)))
         data["performer"] = (
