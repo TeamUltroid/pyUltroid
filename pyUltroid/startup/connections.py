@@ -5,7 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import os
+import os, sys
 
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
 from telethon.sessions import StringSession
@@ -17,16 +17,12 @@ from .BaseClient import UltroidClient
 
 def session_file(logger):
     if Var.SESSION:
-        #        if len(Var.SESSION.strip()) not in [353, 369]:
-        #            logger.exception("Wrong string session. Copy paste correctly!")
-        #            import sys
-
-        #            sys.exit()
+        if len(Var.SESSION.strip()) != 353:
+            logger.exception("Wrong string session. Copy paste correctly!")
+            sys.exit()
         return StringSession(Var.SESSION)
     else:
         logger.exception("No String Session found. Quitting...")
-        import sys
-
         sys.exit()
 
 

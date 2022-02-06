@@ -16,6 +16,7 @@ import string
 import subprocess
 from io import BytesIO
 from json.decoder import JSONDecodeError
+from telnetlib import STATUS
 from traceback import format_exc
 
 import aiohttp
@@ -310,35 +311,38 @@ def text_set(text):
 # @TechiError
 
 
-def get_text_size(text, image, font):
-    im = Image.new("RGB", (image.width, image.height))
-    draw = ImageDraw.Draw(im)
-    return draw.textsize(text, font)
+class LogoHelper:
 
+    @staticmethod
+    def get_text_size(text, image, font):
+       im = Image.new("RGB", (image.width, image.height))
+       draw = ImageDraw.Draw(im)
+       return draw.textsize(text, font)
 
-def find_font_size(text, font, image, target_width_ratio):
-    tested_font_size = 100
-    tested_font = ImageFont.truetype(font, tested_font_size)
-    observed_width, observed_height = get_text_size(text, image, tested_font)
-    estimated_font_size = (
-        tested_font_size / (observed_width / image.width) * target_width_ratio
-    )
-    return round(estimated_font_size)
+    @staticmethod
+    def find_font_size(text, font, image, target_width_ratio):
+        tested_font_size = 100
+        tested_font = ImageFont.truetype(font, tested_font_size)
+        observed_width, observed_height = LogoHelper.get_text_size(text, image, tested_font)
+        estimated_font_size = (
+            tested_font_size / (observed_width / image.width) * target_width_ratio
+        )
+        return round(estimated_font_size)
 
+    @staticmethod
+    def make_logo(imgpath, text, funt, **args):
+        fill = args.get("fill")
+        width_ratio = args.get("width_ratio") or 0.7
+        stroke_width = int(args.get("stroke_width"))
+        stroke_fill = args.get("stroke_fill")
 
-def make_logo(imgpath, text, funt, **args):
-    fill = args.get("fill")
-    width_ratio = args.get("width_ratio") or 0.7
-    stroke_width = int(args.get("stroke_width"))
-    stroke_fill = args.get("stroke_fill")
-
-    img = Image.open(imgpath)
-    width, height = img.size
-    draw = ImageDraw.Draw(img)
-    font_size = find_font_size(text, funt, img, width_ratio)
-    font = ImageFont.truetype(funt, font_size)
-    w, h = draw.textsize(text, font=font)
-    draw.text(
+        img = Image.open(imgpath)
+        width, height = img.size
+        draw = ImageDraw.Draw(img)
+        font_size = LogoHelper.find_font_size(text, funt, img, width_ratio)
+        font = ImageFont.truetype(funt, font_size)
+        w, h = draw.textsize(text, font=font)
+        draw.text(
         ((width - w) / 2, (height - h) / 2),
         text,
         font=font,
@@ -346,10 +350,10 @@ def make_logo(imgpath, text, funt, **args):
         stroke_width=stroke_width,
         stroke_fill=stroke_fill,
     )
-    file_name = "Logo.png"
-    img.save(f"./{file_name}", "PNG")
-    img.show()
-    return f"{file_name} Generated Successfully!"
+        file_name = "Logo.png"
+        img.save(f"./{file_name}", "PNG")
+        img.show()
+        return f"{file_name} Generated Successfully!"
 
 
 # --------------------------------------
@@ -388,30 +392,6 @@ async def get_chatbot_reply(message):
         return (await async_searcher(req_link, re_json=True)).get("reply")
     except Exception:
         LOGS.info(f"**ERROR:**`{format_exc()}`")
-
-
-def resize_photo(photo):
-    """Resize the given photo to 512x512"""
-    image = Image.open(photo)
-    if (image.width and image.height) < 512:
-        size1 = image.width
-        size2 = image.height
-        if image.width > image.height:
-            scale = 512 / size1
-            size1new = 512
-            size2new = size2 * scale
-        else:
-            scale = 512 / size2
-            size1new = size1 * scale
-            size2new = 512
-        size1new = math.floor(size1new)
-        size2new = math.floor(size2new)
-        sizenew = (size1new, size2new)
-        image = image.resize(sizenew)
-    else:
-        maxsize = (512, 512)
-        image.thumbnail(maxsize)
-    return image
 
 
 def check_filename(filroid):
@@ -614,5 +594,45 @@ def cmd_regex_replace(cmd):
         .replace("?(\\d+)", "")
     )
 
+
+# ------------------------#
+
+class TgConverter:
+    """Convert files related to Telegram"""
+
+    @staticmethod
+    async def to_animated_sticker(file, out_path="sticker.tgs"):
+        """Convert to animated sticker."""
+        await bash(f"lottie_convert.py '{file}' '{out_path}'")
+        if os.path.exists(out_path):
+            return out_path
+
+    @staticmethod
+    def resize_photo_sticker(photo):
+        """Resize the given photo to 512x512 (for creating telegram sticker)."""
+        image = Image.open(photo)
+        if (image.width and image.height) < 512:
+            size1 = image.width
+            size2 = image.height
+            if image.width > image.height:
+                scale = 512 / size1
+                size1new = 512
+                size2new = size2 * scale
+            else:
+                scale = 512 / size2
+                size1new = size1 * scale
+                size2new = 512
+            size1new = math.floor(size1new)
+            size2new = math.floor(size2new)
+            sizenew = (size1new, size2new)
+            image = image.resize(sizenew)
+        else:
+            maxsize = (512, 512)
+            image.thumbnail(maxsize)
+        return image
+
+    @staticmethod
+    def create_webm():
+        pass
 
 # --------- END --------- #
