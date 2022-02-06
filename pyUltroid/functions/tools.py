@@ -106,6 +106,8 @@ async def async_searcher(
 # ~~~~~~~~~~~~~~~JSON Parser~~~~~~~~~~~~~~~
 # @buddhhu
 
+def _unquote_text(text):
+    return text.replace("'", "\\'").replace('"', '\\"')
 
 def json_parser(data, indent=None):
     parsed = {}
@@ -140,7 +142,7 @@ def is_url_ok(url: str):
 
 
 async def metadata(file):
-    file = file.replace("'", "\\'").replace('"', '\\"')
+    file = _unquote_text(file)
     out, _ = await bash(f"mediainfo '{file}' --Output=JSON")
     data = {}
     _info = json.loads(out)["media"]["track"]
@@ -608,6 +610,12 @@ class TgConverter:
             return out_path
 
     @staticmethod
+    async def animated_to_gif(file, out_path="gif.gif"):
+        """Convert animated sticker to gif."""
+        await bash(f"lottie_convert.py '{_unquote_text(file)}' '{_unquote_text(out_path)}'")
+        return out_path
+
+    @staticmethod
     def resize_photo_sticker(photo):
         """Resize the given photo to 512x512 (for creating telegram sticker)."""
         image = Image.open(photo)
@@ -631,10 +639,10 @@ class TgConverter:
             image.thumbnail(maxsize)
         return image
 
-    @staticmethod
-    async def create_webm(file):
-        file = file.replace("'", "\\'").replace('"', '\\"')
+    async def create_webm(self, file):
         _ = await metadata(file)
+        if not _:
+            return await self.create_webm(await self.animated_to_gif(file))
         h, w = _["height"], _["width"]
         if h == w and h != 512:
             h, w = 512, 512
