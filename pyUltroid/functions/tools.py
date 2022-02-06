@@ -656,7 +656,7 @@ class TgConverter:
             if w > h:
                 h, w = -1, 512
         await bash(
-            f'ffmpeg -i "{file}" -to 00:00:02.95 -vf scale={w}:{h} -c:v libvpx-vp9 video.webm -y'
+            f'ffmpeg -i "{file}" -an -to 00:00:02.95 -vf scale={w}:{h} -c:v libvpx-vp9 -bufsize 256k video.webm -y'
         )
         return "video.webm"
 
