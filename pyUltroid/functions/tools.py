@@ -606,7 +606,10 @@ class TgConverter:
     @staticmethod
     async def animated_sticker(file, out_path="sticker.tgs", remove=False):
         """Convert to animated sticker."""
-        await bash(f"lottie_convert.py '{file}' '{out_path}'")
+        if out_path.endswith("webp"):
+            await bash(f'lottie_convert.py --webp-skip-frames 100 "{file}" "{out_path}"')
+        else:
+            await bash(f"lottie_convert.py '{file}' '{out_path}'")
         if remove:
             os.remove(file)
         if os.path.exists(out_path):
@@ -708,11 +711,6 @@ class TgConverter:
             for extn in ["webp", "json", "png", "mp4", "gif"]:
                 if recycle_type(extn):
                     name = outname + "." + extn
-                    if extn == "webp":
-                        input_file = await TgConverter.convert(
-                            input_file, convert_to="png", remove_old=remove_old
-                        )
-                        return TgConverter.to_image(input_file, name, remove=True)
                     return await TgConverter.animated_sticker(
                         input_file, name, remove=remove_old
                     )
