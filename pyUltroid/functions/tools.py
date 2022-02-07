@@ -173,15 +173,17 @@ async def set_attributes(file):
     if "width" in data:
         return [
             DocumentAttributeVideo(
-                duration=data["duration"],
-                w=data["width"],
-                h=data["height"],
+                duration=data.get("duration", 0),
+                w=data.get("width", 512),
+                h=data.get("height", 512),
                 supports_streaming=True,
             )
         ]
+    ext = title.split(".")[-1]
+    title = data.get("title", title.split("/")[-1].replace(f".{ext}",""))
     return [
         DocumentAttributeAudio(
-            duration=data["duration"], title=data["title"], performer=data["performer"]
+            duration=data.get("duration", 0), title=title, performer=data.get("performer")
         )
     ]
 
