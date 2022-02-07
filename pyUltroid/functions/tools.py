@@ -108,8 +108,8 @@ async def async_searcher(
 
 
 def _unquote_text(text):
-    return text.replace("'", "\'").replace( # pylint: disable
-        '"', '\"' # pylint: disable
+    return text.replace("'", "'").replace(  # pylint: disable
+        '"', '"'  # pylint: disable
     )
 
 
