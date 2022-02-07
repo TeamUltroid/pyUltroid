@@ -700,7 +700,7 @@ class TgConverter:
         outname="converted",
         convert_to=None,
         allowed_formats=[],
-        remove_old=False,
+        remove_old=True,
     ):
         if "." in input_file:
             ext = input_file.split(".")[-1].lower()
@@ -725,7 +725,7 @@ class TgConverter:
                     )
             if recycle_type("webm"):
                 input_file = await TgConverter.convert(
-                    input_file, convert_to="mp4", remove_old=remove_old
+                    input_file, convert_to="gif", remove_old=remove_old
                 )
                 return await TgConverter.create_webm(input_file, outname, remove=True)
         # Json -> Tgs
