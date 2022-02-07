@@ -709,7 +709,9 @@ class TgConverter:
         elif ext == "json":
             if recycle_type("tgs"):
                 name = outname + ".tgs"
-                return await TgConverter.animated_sticker(input_file, name, remove=remove_old)
+                return await TgConverter.animated_sticker(
+                    input_file, name, remove=remove_old
+                )
         # Video to Something
         elif ext in ["webm", "mp4", "gif"]:
             for exte in ["webm", "mp4", "gif"]:
@@ -737,5 +739,6 @@ class TgConverter:
                     if remove_old:
                         os.remove(input_file)
                     return name
+
 
 # --------- END --------- #
