@@ -699,7 +699,7 @@ class TgConverter:
 
         # Sticker to Something
         if ext == "tgs":
-            for extn in ["webp", "json", "png", "gif"]:
+            for extn in ["webp", "json", "png", "mp4", "gif"]:
                 if recycle_type(extn):
                     name = outname + "." + extn
                     return await TgConverter.animated_sticker(
@@ -713,6 +713,15 @@ class TgConverter:
                     return await TgConverter.ffmpeg_convert(
                         input_file, name, remove=remove_old
                     )
+            for exte in ["png", "jpg","jpeg", "webp"]:
+                if recycle_type(exte):
+                    name = outname + "." + exte
+                    img = cv2.VideoCapture(input_file)
+                    ult, roid = img.read()
+                    cv2.imwrite(name, roid)
+                    if remove_old:
+                        os.remove(input_file)
+                    return name
         # Image to Something
         elif ext in ["jpg", "jpeg", "png", "webp"]:
             for extn in ["jpeg", "jpg", "png", "webp", "ico"]:
