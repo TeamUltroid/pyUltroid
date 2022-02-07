@@ -656,6 +656,8 @@ class TgConverter:
 
     @staticmethod
     async def ffmpeg_convert(input_, output, remove=False):
+        if output.endswith(".webm"):
+            return await TgConverter.create_webm(input_, name=output[:-5], remove=remove)
         await bash(f"ffmpeg -i '{input_}' '{output}' -y")
         if remove:
             os.remove(input_)
@@ -663,8 +665,9 @@ class TgConverter:
             return output
 
     @staticmethod
-    async def create_webm(file):
+    async def create_webm(file, name="video", remove=False):
         _ = await metadata(file)
+        name += ".webm"
         h, w = _["height"], _["width"]
         if h == w and h != 512:
             h, w = 512, 512
@@ -674,9 +677,11 @@ class TgConverter:
             if w > h:
                 h, w = -1, 512
         await bash(
-            f'ffmpeg -i "{file}" -preset fast -an -to 00:00:02.95 -crf 30 -bufsize 256k -b:v {_["bitrate"]} -vf scale={w}:{h} -c:v libvpx-vp9 video.webm -y'
+            f'ffmpeg -i "{file}" -preset fast -an -to 00:00:02.95 -crf 30 -bufsize 256k -b:v {_["bitrate"]} -vf scale={w}:{h} -c:v libvpx-vp9 "{name}" -y'
         )
-        return "video.webm"
+        if remove:
+            os.remove(file)
+        return name 
 
     @staticmethod
     async def convert(
@@ -739,6 +744,9 @@ class TgConverter:
                     if remove_old:
                         os.remove(input_file)
                     return name
-
+            for extn in ["webm", "gif", "mp4"]:
+                if recycle_type(extn):
+                    name = outname + "." + extn
+                    return await TgConverter.ffmpeg_convert(input_file, name, remove=remove_old)
 
 # --------- END --------- #
