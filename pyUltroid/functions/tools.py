@@ -744,7 +744,7 @@ class TgConverter:
                     return TgConverter.to_image(input_file, name, remove=remove_old)
         # Image to Something
         elif ext in ["jpg", "jpeg", "png", "webp"]:
-            for extn in ["jpeg", "jpg", "png", "webp", "ico"]:
+            for extn in ["png", "webp", "ico"]:
                 if recycle_type(extn):
                     img = Image.open(input_file)
                     name = outname + "." + extn
@@ -759,7 +759,6 @@ class TgConverter:
                         input_file = await TgConverter.convert(
                             input_file,
                             convert_to="png",
-                            allowed_formats=["jpg", "png", "jpeg"],
                             remove_old=remove_old,
                         )
                     return await TgConverter.ffmpeg_convert(
