@@ -607,7 +607,9 @@ class TgConverter:
     async def animated_sticker(file, out_path="sticker.tgs", remove=False):
         """Convert to animated sticker."""
         if out_path.endswith("webp"):
-            await bash(f'lottie_convert.py --webp-skip-frames 100 "{file}" "{out_path}"')
+            await bash(
+                f'lottie_convert.py --webp-skip-frames 100 "{file}" "{out_path}"'
+            )
         else:
             await bash(f"lottie_convert.py '{file}' '{out_path}'")
         if remove:
