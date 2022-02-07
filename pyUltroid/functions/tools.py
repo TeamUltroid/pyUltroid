@@ -108,9 +108,9 @@ async def async_searcher(
 
 
 def _unquote_text(text):
-    return text.replace("'", "'").replace(
-        '"', '"'
-    )  # pylint:disable=E0265,E0231,E0721,W0601,W0603,W0604,W0690
+    return text.replace("'", "\'").replace( # pylint: disable
+        '"', '\"' # pylint: disable
+    )
 
 
 def json_parser(data, indent=None):
