@@ -180,10 +180,12 @@ async def set_attributes(file):
             )
         ]
     ext = title.split(".")[-1]
-    title = data.get("title", title.split("/")[-1].replace(f".{ext}",""))
+    title = data.get("title", title.split("/")[-1].replace(f".{ext}", ""))
     return [
         DocumentAttributeAudio(
-            duration=data.get("duration", 0), title=title, performer=data.get("performer")
+            duration=data.get("duration", 0),
+            title=title,
+            performer=data.get("performer"),
         )
     ]
 
