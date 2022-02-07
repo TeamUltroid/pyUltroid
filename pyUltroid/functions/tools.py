@@ -614,9 +614,11 @@ class TgConverter:
     """Convert files related to Telegram"""
 
     @staticmethod
-    async def animated_sticker(file, out_path="sticker.tgs"):
+    async def animated_sticker(file, out_path="sticker.tgs", remove=False):
         """Convert to animated sticker."""
         await bash(f"lottie_convert.py '{file}' '{out_path}'")
+        if remove:
+            os.remove(file)
         if os.path.exists(out_path):
             return out_path
 
@@ -675,6 +677,35 @@ class TgConverter:
             f'ffmpeg -i "{file}" -preset fast -an -to 00:00:02.95 -crf 30 -bufsize 256k -b:v {_["bitrate"]} -vf scale={w}:{h} -c:v libvpx-vp9 video.webm -y'
         )
         return "video.webm"
+
+     @staticmethod
+     async def convert(input_file, outname="converted", convert_to=None, allowed_formats=[], remove_old=False):
+         if "." in input_file:
+             ext = input_file.split(".")[-1].lower()
+         else:
+             return input_file
+
+         if ext in allowed_formats or not (convert_to or allowed_formats):
+             return input_file
+
+         def recycle_type(exte):
+              return convert_to == exte or exte in allowed_formats
+
+         # Sticker to Something
+         if ext == "tgs":
+             for extn in ["webp", "json", "png", "gif"]:
+                 if recycle_type(extn):
+                     name = outname + "." + extn
+                     return await TgConverter.animated_sticker(input_file, name, remove=remove_old)
+         # Video to Something
+         elif ext in ["webm", "mp4", "gif"]:
+             for exte in ["webm", "mp4", "gif"]:
+                 if recycle_type(exte):
+                     name = outname + "." + exte
+                     return await TgConverter.ffmpeg_convert(input_file, name, remove=remove_old)
+         # Image to Something
+         elif ext in ["jpg", "png", "webp"]:
+             pass
 
 
 # --------- END --------- #
