@@ -424,21 +424,12 @@ def check_filename(filroid):
 # https://github.com/1Danish-00/CompressorBot/blob/main/helper/funcn.py#L104
 
 
-def genss(file):
-    process = subprocess.Popen(
-        ["mediainfo", file, "--Output=JSON"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-    )
-    stdout, stderr = process.communicate()
-    out = stdout.decode().strip()
-    z = json.loads(out)
-    p = z["media"]["track"][0]["Duration"]
-    return int(p.split(".")[-2])
+async def genss(file):
+    return (await metadata(file)).get("duration")
 
 
-def duration_s(file, stime):
-    tsec = genss(file)
+async def duration_s(file, stime):
+    tsec = await genss(file)
     x = round(tsec / 5)
     y = round(tsec / 5 + int(stime))
     pin = stdr(x)
