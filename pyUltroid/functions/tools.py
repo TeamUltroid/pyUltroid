@@ -156,7 +156,7 @@ async def metadata(file):
             "bitrate": _info[1].get("BitRate", 320),
         }
     if info.get("AudioCount"):
-        data["title"] = info.get("Title", file.split("/")[-1].split(".")[0])
+        data["title"] = info.get("Title", file)
         data["duration"] = int(float(info.get("Duration", 0)))
         data["performer"] = (
             info.get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
@@ -188,7 +188,7 @@ async def set_attributes(file):
     return [
         DocumentAttributeAudio(
             duration=data.get("duration", 0),
-            title=data.get("title", title.split("/")[-1].replace(ext, "")),
+            title=data.get("title", file.split("/")[-1].replace(ext, "")),
             performer=data.get("performer"),
         )
     ]
