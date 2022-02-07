@@ -107,7 +107,7 @@ async def async_searcher(
 
 
 def _unquote_text(text):
-    return text.replace("'", "\\'").replace('"', '\\"')
+    return text.replace("'", "\'").replace('"', '\"')
 
 
 def json_parser(data, indent=None):
@@ -708,6 +708,9 @@ class TgConverter:
             for extn in ["webp", "json", "png", "mp4", "gif"]:
                 if recycle_type(extn):
                     name = outname + "." + extn
+                    if extn == "webp":
+                        input_file = await TgConverter.convert(input_file, convert_to="png", remove_old=remove_old)
+                        return TgConverter.to_image(input_file, name, remove=True)
                     return await TgConverter.animated_sticker(
                         input_file, name, remove=remove_old
                     )
