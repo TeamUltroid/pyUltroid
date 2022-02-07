@@ -653,8 +653,10 @@ class TgConverter:
         return image
 
     @staticmethod
-    async def ffmpeg_convert(input_, output):
+    async def ffmpeg_convert(input_, output, remove=False):
         await bash(f"ffmpeg -i '{input_}' '{output}' -y")
+        if remove:
+            os.remove(input_)
         if os.path.exists(output):
             return output
 
