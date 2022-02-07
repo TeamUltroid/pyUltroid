@@ -679,7 +679,13 @@ class TgConverter:
         return "video.webm"
 
     @staticmethod
-    async def convert(input_file, outname="converted", convert_to=None, allowed_formats=[], remove_old=False):
+    async def convert(
+        input_file,
+        outname="converted",
+        convert_to=None,
+        allowed_formats=[],
+        remove_old=False,
+    ):
         if "." in input_file:
             ext = input_file.split(".")[-1].lower()
         else:
@@ -689,20 +695,24 @@ class TgConverter:
             return input_file
 
         def recycle_type(exte):
-             return convert_to == exte or exte in allowed_formats
+            return convert_to == exte or exte in allowed_formats
 
         # Sticker to Something
         if ext == "tgs":
             for extn in ["webp", "json", "png", "gif"]:
                 if recycle_type(extn):
                     name = outname + "." + extn
-                    return await TgConverter.animated_sticker(input_file, name, remove=remove_old)
+                    return await TgConverter.animated_sticker(
+                        input_file, name, remove=remove_old
+                    )
         # Video to Something
         elif ext in ["webm", "mp4", "gif"]:
             for exte in ["webm", "mp4", "gif"]:
                 if recycle_type(exte):
                     name = outname + "." + exte
-                    return await TgConverter.ffmpeg_convert(input_file, name, remove=remove_old)
+                    return await TgConverter.ffmpeg_convert(
+                        input_file, name, remove=remove_old
+                    )
         # Image to Something
         elif ext in ["jpg", "jpeg", "png", "webp"]:
             for extn in ["jpeg", "jpg", "png", "webp", "ico"]:
@@ -713,5 +723,6 @@ class TgConverter:
                     if remove_old:
                         os.remove(input_file)
                     return name
+
 
 # --------- END --------- #
