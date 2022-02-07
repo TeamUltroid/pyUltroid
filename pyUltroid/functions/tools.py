@@ -150,7 +150,7 @@ async def metadata(file):
     _info = json.loads(out)["media"]["track"]
     info = _info[0]
     if info["Format"] == "GIF":
-        return {"height": _info[1]["Height"], "width": _info[1]["Width"]}
+        return {"height": _info[1]["Height"], "width": _info[1]["Width"], "bitrate": _info[1].get("BitRate", 320)}
     if info.get("AudioCount"):
         data["title"] = info.get("Title", file.split("/")[-1].split(".")[0])
         data["duration"] = int(float(info.get("Duration", 0)))
@@ -160,6 +160,7 @@ async def metadata(file):
     if info.get("VideoCount"):
         data["height"] = int(float(_info[1].get("Height", 720)))
         data["width"] = int(float(_info[1].get("Width", 1280)))
+        data["bitrate"] = int(_info[1].get("BitRate", 320))
     return data
 
 
@@ -179,12 +180,11 @@ async def set_attributes(file):
                 supports_streaming=True,
             )
         ]
-    ext = title.split(".")[-1]
-    title = data.get("title", title.split("/")[-1].replace(f".{ext}", ""))
+    ext = "." + file.split(".")[-1]
     return [
         DocumentAttributeAudio(
             duration=data.get("duration", 0),
-            title=title,
+            title=data.get("title", title.split("/")[-1].replace(ext, "")),
             performer=data.get("performer"),
         )
     ]
@@ -660,7 +660,7 @@ class TgConverter:
             if w > h:
                 h, w = -1, 512
         await bash(
-            f'ffmpeg -i "{file}" -an -to 00:00:02.95 -vf scale={w}:{h} -c:v libvpx-vp9 -bufsize 256k video.webm -y'
+            f'ffmpeg -i "{file}" -preset fast -an -to 00:00:02.95 -crf 30 -bufsize 256k -b:v 192k -vf scale={w}:{h} -c:v libvpx-vp9 video.webm -y'
         )
         return "video.webm"
 
