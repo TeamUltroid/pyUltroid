@@ -678,34 +678,40 @@ class TgConverter:
         )
         return "video.webm"
 
-     @staticmethod
-     async def convert(input_file, outname="converted", convert_to=None, allowed_formats=[], remove_old=False):
-         if "." in input_file:
-             ext = input_file.split(".")[-1].lower()
-         else:
-             return input_file
+    @staticmethod
+    async def convert(input_file, outname="converted", convert_to=None, allowed_formats=[], remove_old=False):
+        if "." in input_file:
+            ext = input_file.split(".")[-1].lower()
+        else:
+            return input_file
 
-         if ext in allowed_formats or not (convert_to or allowed_formats):
-             return input_file
+        if ext in allowed_formats or not (convert_to or allowed_formats):
+            return input_file
 
-         def recycle_type(exte):
-              return convert_to == exte or exte in allowed_formats
+        def recycle_type(exte):
+             return convert_to == exte or exte in allowed_formats
 
-         # Sticker to Something
-         if ext == "tgs":
-             for extn in ["webp", "json", "png", "gif"]:
-                 if recycle_type(extn):
-                     name = outname + "." + extn
-                     return await TgConverter.animated_sticker(input_file, name, remove=remove_old)
-         # Video to Something
-         elif ext in ["webm", "mp4", "gif"]:
-             for exte in ["webm", "mp4", "gif"]:
-                 if recycle_type(exte):
-                     name = outname + "." + exte
-                     return await TgConverter.ffmpeg_convert(input_file, name, remove=remove_old)
-         # Image to Something
-         elif ext in ["jpg", "png", "webp"]:
-             pass
-
+        # Sticker to Something
+        if ext == "tgs":
+            for extn in ["webp", "json", "png", "gif"]:
+                if recycle_type(extn):
+                    name = outname + "." + extn
+                    return await TgConverter.animated_sticker(input_file, name, remove=remove_old)
+        # Video to Something
+        elif ext in ["webm", "mp4", "gif"]:
+            for exte in ["webm", "mp4", "gif"]:
+                if recycle_type(exte):
+                    name = outname + "." + exte
+                    return await TgConverter.ffmpeg_convert(input_file, name, remove=remove_old)
+        # Image to Something
+        elif ext in ["jpg", "jpeg", "png", "webp"]:
+            for extn in ["jpeg", "jpg", "png", "webp", "ico"]:
+                if recycle_type(extn):
+                    img = Image.open(input_file)
+                    name = outname + "." + extn
+                    img.save(name, extn.upper())
+                    if remove_old:
+                        os.remove(input_file)
+                    return name
 
 # --------- END --------- #
