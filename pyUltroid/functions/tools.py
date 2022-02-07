@@ -653,6 +653,12 @@ class TgConverter:
         return image
 
     @staticmethod
+    async def ffmpeg_convert(input_, output):
+        await bash(f"ffmpeg -i '{input_}' '{output}' -y")
+        if os.path.exists(output):
+            return output
+
+    @staticmethod
     async def create_webm(file):
         _ = await metadata(file)
         h, w = _["height"], _["width"]
