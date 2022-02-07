@@ -108,7 +108,10 @@ async def async_searcher(
 
 
 def _unquote_text(text):
-    return text.replace("'", "\\'").replace('"', '\\"')
+    text = ""
+    for n in ["'", '"']:
+        text = text.replace(n, "")
+    return text
 
 
 def json_parser(data, indent=None):
