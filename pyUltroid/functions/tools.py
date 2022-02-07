@@ -708,8 +708,6 @@ class TgConverter:
             for extn in ["webp", "json", "png", "mp4", "gif"]:
                 if recycle_type(extn):
                     name = outname + "." + extn
-                    if extn == "webp":
-                        return TgConverter.to_image(input_file, name, remove=remove_old)
                     return await TgConverter.animated_sticker(
                         input_file, name, remove=remove_old
                     )
