@@ -713,7 +713,7 @@ class TgConverter:
                     return await TgConverter.ffmpeg_convert(
                         input_file, name, remove=remove_old
                     )
-            for exte in ["png", "jpg","jpeg", "webp"]:
+            for exte in ["png", "jpg", "jpeg", "webp"]:
                 if recycle_type(exte):
                     name = outname + "." + exte
                     img = cv2.VideoCapture(input_file)
