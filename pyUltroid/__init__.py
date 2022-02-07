@@ -7,7 +7,6 @@
 
 import time
 
-
 from .configs import Var
 from .startup import *
 from .startup._database import UltroidDB
