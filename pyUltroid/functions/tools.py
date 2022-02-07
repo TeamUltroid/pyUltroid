@@ -657,7 +657,9 @@ class TgConverter:
     @staticmethod
     async def ffmpeg_convert(input_, output, remove=False):
         if output.endswith(".webm"):
-            return await TgConverter.create_webm(input_, name=output[:-5], remove=remove)
+            return await TgConverter.create_webm(
+                input_, name=output[:-5], remove=remove
+            )
         await bash(f"ffmpeg -i '{input_}' '{output}' -y")
         if remove:
             os.remove(input_)
@@ -681,7 +683,7 @@ class TgConverter:
         )
         if remove:
             os.remove(file)
-        return name 
+        return name
 
     @staticmethod
     async def convert(
@@ -747,6 +749,9 @@ class TgConverter:
             for extn in ["webm", "gif", "mp4"]:
                 if recycle_type(extn):
                     name = outname + "." + extn
-                    return await TgConverter.ffmpeg_convert(input_file, name, remove=remove_old)
+                    return await TgConverter.ffmpeg_convert(
+                        input_file, name, remove=remove_old
+                    )
+
 
 # --------- END --------- #
