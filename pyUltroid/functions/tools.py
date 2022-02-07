@@ -756,7 +756,12 @@ class TgConverter:
                 if recycle_type(extn):
                     name = outname + "." + extn
                     if extn == "webm":
-                        input_file = await TgConverter.convert(input_file, convert_to="png", allowed_formats=["jpg","png","jpeg"], remove_old=remove_old)
+                        input_file = await TgConverter.convert(
+                            input_file,
+                            convert_to="png",
+                            allowed_formats=["jpg", "png", "jpeg"],
+                            remove_old=remove_old,
+                        )
                     return await TgConverter.ffmpeg_convert(
                         input_file, name, remove=True if extn == "webm" else remove_old
                     )
