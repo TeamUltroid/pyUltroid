@@ -82,6 +82,10 @@ async def download_yt(event, link, ytd):
                 reply_to=reply_to,
             )
             os.remove(thumb)
+        try:
+            await event.delete()
+        except BaseException:
+            pass
         return
     title = info["title"]
     if len(title) > 20:
