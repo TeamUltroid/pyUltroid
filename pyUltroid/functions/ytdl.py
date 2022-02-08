@@ -46,6 +46,7 @@ async def download_yt(event, link, ytd):
     info = await dler(event, link, ytd, download=True)
     if not info:
         return
+    LOGS.info(info)
     title = info["title"]
     id_ = info["id"]
     thumb = id_ + ".jpg"
