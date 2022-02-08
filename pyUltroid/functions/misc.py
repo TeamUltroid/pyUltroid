@@ -468,6 +468,8 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
 
 
 O_API = "https://bot.lyo.su/quote/generate"
+
+
 async def create_quotly(
     event,
     url="https://qoute-api-akashpattnaik.koyeb.app/generate",

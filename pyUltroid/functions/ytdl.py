@@ -5,9 +5,10 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+import glob
 import os
 import re
-import time, glob
+import time
 
 from telethon import Button
 from youtubesearchpython import Playlist, VideosSearch
@@ -15,7 +16,7 @@ from yt_dlp import YoutubeDL
 
 from .. import LOGS, udB
 from .helper import download_file, humanbytes, run_async, time_formatter
-from .tools import json_parser, set_attributes
+from .tools import set_attributes
 
 
 async def ytdl_progress(k, start_time, event):
@@ -53,7 +54,9 @@ async def download_yt(event, link, ytd):
             id_ = file["id"]
             thumb = id_ + ".jpg"
             title = file["title"]
-            await download_file(file.get("thumbnail", None) or file["thumbnails"][-1]["url"], thumb)
+            await download_file(
+                file.get("thumbnail", None) or file["thumbnails"][-1]["url"], thumb
+            )
             ext = "." + ytd["outtmpl"].split(".")[-1]
             if ext == ".m4a":
                 ext = ".mp3"
@@ -78,7 +81,10 @@ async def download_yt(event, link, ytd):
             if file.endswith(".part"):
                 os.remove(file)
                 os.remove(thumb)
-                await event.client.send_message(event.chat_id, f"`[{num}/{total}]` `Invalid Video format.\nIgnoring that...`")
+                await event.client.send_message(
+                    event.chat_id,
+                    f"`[{num}/{total}]` `Invalid Video format.\nIgnoring that...`",
+                )
                 return
             attributes = await set_attributes(file)
             res, _ = await event.client.fast_uploader(
@@ -106,7 +112,10 @@ async def download_yt(event, link, ytd):
         title = title[:17] + "..."
     id_ = info["id"]
     thumb = id_ + ".jpg"
-    await download_file(info.get("thumbnail", None) or f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg", thumb)
+    await download_file(
+        info.get("thumbnail", None) or f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg",
+        thumb,
+    )
     ext = "." + ytd["outtmpl"].split(".")[-1]
     if ext == ".m4a":
         ext = ".mp3"
@@ -239,9 +248,11 @@ def ytdownload(url, opts):
     except Exception as ex:
         LOGS.error(ex)
 
+
 @run_async
 def extract_info(url):
     return YoutubeDL({}).extract_info(url=url, download=False)
+
 
 @run_async
 def get_videos_link(url):

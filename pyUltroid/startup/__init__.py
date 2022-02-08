@@ -13,12 +13,14 @@ from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getL
 
 from safety.tools import *
 from telethon import __version__
+
 from ..version import __version__ as __pyUltroid__
 from ..version import ultroid_version
 
 file = f"ultroid{sys.argv[6]}.log" if len(sys.argv) > 6 else "ultroid.log"
 if os.path.exists(file):
     os.remove(file)
+
 
 def where_hosted():
     if os.getenv("DYNO"):
@@ -35,6 +37,7 @@ def where_hosted():
         return "termux"
     return "local"
 
+
 HOSTED_ON = where_hosted()
 LOGS = getLogger("pyUltLogs")
 TelethonLogger = getLogger("Telethon")
@@ -49,6 +52,7 @@ if int(v) < 10:
 
 if HOSTED_ON == "local":
     from ._extra import _ask_input
+
     _ask_input()
 
 basicConfig(

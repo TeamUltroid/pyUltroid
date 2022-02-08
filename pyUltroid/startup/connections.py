@@ -5,7 +5,6 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import os
 import sys
 
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError

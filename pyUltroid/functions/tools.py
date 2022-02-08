@@ -107,7 +107,7 @@ async def async_searcher(
 
 
 def _unquote_text(text):
-    return text.replace("'", "\'").replace('"', '\"')
+    return text.replace("'", "'").replace('"', '"')
 
 
 def json_parser(data, indent=None):
@@ -707,7 +707,11 @@ class TgConverter:
         else:
             return input_file
 
-        if (ext in allowed_formats or ext == convert_to or not (convert_to or allowed_formats)):
+        if (
+            ext in allowed_formats
+            or ext == convert_to
+            or not (convert_to or allowed_formats)
+        ):
             return input_file
 
         def recycle_type(exte):
