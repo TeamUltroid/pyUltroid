@@ -68,7 +68,7 @@ async def download_yt(event, link, ytd):
                 file, show_progress=True, event=event, to_delete=True
             )
             from_ = info["extractor"].split(":")[0]
-            caption = f"`[{num}/{total}]` `{title}`\n\n`From {_from}`"
+            caption = f"`[{num}/{total}]` `{title}`\n\n`From {from_}`"
             await event.client.send_file(
                 event.chat_id,
                 file=res,
