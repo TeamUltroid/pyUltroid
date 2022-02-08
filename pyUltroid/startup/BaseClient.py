@@ -232,7 +232,7 @@ class UltroidClient(TelegramClient):
                     + mimetypes.guess_extension(mimytype)
                 )
         message = kwargs.get("message", f"Uploading {filename}...")
-        
+
         raw_file = None
         while not raw_file:
             with open(filename, "wb") as f:
