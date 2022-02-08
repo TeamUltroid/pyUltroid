@@ -15,7 +15,7 @@ from yt_dlp import YoutubeDL
 
 from .. import LOGS, udB
 from .helper import download_file, humanbytes, run_async, time_formatter
-from .tools import set_attributes, json_parser
+from .tools import json_parser, set_attributes
 
 
 async def ytdl_progress(k, start_time, event):
