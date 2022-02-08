@@ -47,6 +47,10 @@ if int(v) < 10:
 
     _fix_logging(FileHandler)
 
+if HOSTED_ON == "local":
+    from ._extra import _ask_input
+    _ask_input()
+
 basicConfig(
     format="%(asctime)s || %(name)s [%(levelname)s] : %(message)s",
     level=INFO,
