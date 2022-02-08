@@ -13,7 +13,7 @@ from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getL
 
 from safety.tools import *
 from telethon import __version__
-
+from .funcs import where_hosted
 from ..version import __version__ as __pyUltroid__
 from ..version import ultroid_version
 
@@ -21,6 +21,7 @@ file = f"ultroid{sys.argv[6]}.log" if len(sys.argv) > 6 else "ultroid.log"
 if os.path.exists(file):
     os.remove(file)
 
+HOSTED_ON = where_hosted()
 LOGS = getLogger("pyUltLogs")
 TelethonLogger = getLogger("Telethon")
 TelethonLogger.setLevel(INFO)
