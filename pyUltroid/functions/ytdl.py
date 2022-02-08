@@ -48,7 +48,7 @@ async def download_yt(event, link, ytd):
         return
     try:
         open("data.json", "w").write(json_parser(info, indent=1))
-    except:
+    except BaseException:
         LOGS.info(info)
     if info["_type"] == "playlist":
         total = info["playlist_count"]
