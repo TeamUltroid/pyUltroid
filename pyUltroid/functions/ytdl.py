@@ -84,6 +84,8 @@ async def download_yt(event, link, ytd):
             os.remove(thumb)
         return
     title = info["title"]
+    if len(title) > 20:
+        title = title[:17] + "..."
     id_ = info["id"]
     thumb = id_ + ".jpg"
     await download_file(info.get("thumbnail", None) or f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg", thumb)
@@ -99,7 +101,7 @@ async def download_yt(event, link, ytd):
     res, _ = await event.client.fast_uploader(
         file, show_progress=True, event=event, to_delete=True
     )
-    caption = f"`{title}`"
+    caption = f"`{info['title']}`"
     await event.client.send_file(
         event.chat_id,
         file=res,
