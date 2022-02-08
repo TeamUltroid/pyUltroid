@@ -183,7 +183,7 @@ def get_buttons(listt):
 
 async def dler(event, url, opts: dict = {}, download=False):
     time.time()
-    await event.edit("`Getting Data from YouTube..`")
+    await event.edit("`Getting Data...`")
     if "quiet" not in opts:
         opts["quiet"] = True
     opts["username"] = udB.get_key("YT_USERNAME")
