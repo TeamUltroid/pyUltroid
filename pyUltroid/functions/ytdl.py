@@ -46,7 +46,10 @@ async def download_yt(event, link, ytd):
     info = await dler(event, link, ytd, download=True)
     if not info:
         return
-    open("data.json", "w").write(json_parser(info, indent=1))
+    try:
+        open("data.json", "w").write(json_parser(info, indent=1))
+    except:
+        LOGS.info(info)
     if info["_type"] == "playlist":
         total = info["playlist_count"]
         for num, file in enumerate(info["entries"]):
