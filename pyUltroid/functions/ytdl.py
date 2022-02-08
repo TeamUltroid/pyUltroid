@@ -72,7 +72,13 @@ async def download_yt(event, link, ytd):
             try:
                 os.rename(id, file)
             except FileNotFoundError:
-                os.rename(id + ext, file)
+                try:
+                    os.rename(id + ext, file)
+                except FileNotFoundError as er:
+                    if os.path.exists(id):
+                        file = id
+                    else:
+                        raise er
             attributes = await set_attributes(file)
             res, _ = await event.client.fast_uploader(
                 file, show_progress=True, event=event, to_delete=True
