@@ -599,19 +599,23 @@ def cmd_regex_replace(cmd):
 
 # ------------------------#
 
+class LottieException(Exception):
+    ...
 
 class TgConverter:
     """Convert files related to Telegram"""
 
     @staticmethod
-    async def animated_sticker(file, out_path="sticker.tgs", remove=False):
-        """Convert to animated sticker."""
+    async def animated_sticker(file, out_path="sticker.tgs", throw=False, remove=False):
+        """Convert to/from animated sticker."""
         if out_path.endswith("webp"):
-            await bash(
-                f'lottie_convert.py --webp-quality 100 --webp-skip-frames 100 "{file}" "{out_path}"'
+            er, out = await bash(
+                f"lottie_convert.py --webp-quality 100 --webp-skip-frames 100 '{file}' '{out_path}'"
             )
         else:
-            await bash(f"lottie_convert.py '{file}' '{out_path}'")
+            er, out = await bash(f"lottie_convert.py '{file}' '{out_path}'")
+        if er and throw:
+            raise LottieException(er)
         if remove:
             os.remove(file)
         if os.path.exists(out_path):
