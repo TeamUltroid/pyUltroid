@@ -599,8 +599,10 @@ def cmd_regex_replace(cmd):
 
 # ------------------------#
 
+
 class LottieException(Exception):
     ...
+
 
 class TgConverter:
     """Convert files related to Telegram"""
