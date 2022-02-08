@@ -47,6 +47,14 @@ async def download_yt(event, link, ytd):
     if not info:
         return
     open("data.json", "w").write(json_parser(info, indent=1))
+    if info["_type"] == "playlist":
+        total = info["playlist_count"]
+        for file in info["entries"]:
+            id_ = file["id"]
+            thumb = id + ".jpg"
+            await download_file(file["thumbnails"][-1]["url"], thumb)
+            
+        return
     title = info["title"]
     id_ = info["id"]
     thumb = id_ + ".jpg"
