@@ -46,10 +46,6 @@ async def download_yt(event, link, ytd):
     info = await dler(event, link, ytd, download=True)
     if not info:
         return
-    try:
-        open("data.json", "w").write(json_parser(info, indent=1))
-    except BaseException:
-        LOGS.info(info)
     if info.get("_type", None) == "playlist":
         total = info["playlist_count"]
         for num, file in enumerate(info["entries"]):
@@ -230,7 +226,7 @@ async def dler(event, url, opts: dict = {}, download=False):
     if download:
         await ytdownload(url, opts)
     try:
-        return YoutubeDL({}).extract_info(url=url, download=False)
+        await extract_info(url)
     except Exception as e:
         await event.edit(f"{type(e)}: {e}")
         return
@@ -243,6 +239,9 @@ def ytdownload(url, opts):
     except Exception as ex:
         LOGS.error(ex)
 
+@run_async
+def extract_info(url):
+    return YoutubeDL({}).extract_info(url=url, download=False)
 
 @run_async
 def get_videos_link(url):
