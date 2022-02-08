@@ -83,7 +83,6 @@ async def download_yt(event, link, ytd):
                 reply_to=reply_to,
             )
             os.remove(thumb)
-            os.remove(file)
         return
     title = info["title"]
     id_ = info["id"]
@@ -113,7 +112,6 @@ async def download_yt(event, link, ytd):
     )
     os.remove(thumb)
     try:
-        os.remove(file)
         await event.delete()
     except BaseException:
         pass
