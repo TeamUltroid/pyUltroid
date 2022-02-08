@@ -50,7 +50,7 @@ async def download_yt(event, link, ytd):
         open("data.json", "w").write(json_parser(info, indent=1))
     except BaseException:
         LOGS.info(info)
-    if info["_type"] == "playlist":
+    if info.get("_type", None) == "playlist":
         total = info["playlist_count"]
         for num, file in enumerate(info["entries"]):
             num += 1
@@ -86,7 +86,7 @@ async def download_yt(event, link, ytd):
     title = info["title"]
     id_ = info["id"]
     thumb = id_ + ".jpg"
-    await download_file(f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg", thumb)
+    await download_file(info.get("thumbnail", None) or f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg", thumb)
     ext = "." + ytd["outtmpl"].split(".")[-1]
     if ext == ".m4a":
         ext = ".mp3"
@@ -99,7 +99,7 @@ async def download_yt(event, link, ytd):
     res, _ = await event.client.fast_uploader(
         file, show_progress=True, event=event, to_delete=True
     )
-    caption = f"`{title}`\n\n`From YouTube`"
+    caption = f"`{title}`"
     await event.client.send_file(
         event.chat_id,
         file=res,
