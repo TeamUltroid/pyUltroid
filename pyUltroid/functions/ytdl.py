@@ -15,7 +15,7 @@ from yt_dlp import YoutubeDL
 
 from .. import LOGS, udB
 from .helper import download_file, humanbytes, run_async, time_formatter
-from .tools import set_attributes
+from .tools import set_attributes, json_parser
 
 
 async def ytdl_progress(k, start_time, event):
@@ -46,7 +46,7 @@ async def download_yt(event, link, ytd):
     info = await dler(event, link, ytd, download=True)
     if not info:
         return
-    LOGS.info(info)
+    open("data.json", "w").write(json_parser(info))
     title = info["title"]
     id_ = info["id"]
     thumb = id_ + ".jpg"
