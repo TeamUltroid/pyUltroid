@@ -61,11 +61,15 @@ async def download_yt(event, link, ytd):
             ext = "." + ytd["outtmpl"].split(".")[-1]
             if ext == ".m4a":
                 ext = ".mp3"
+            for x in glob.glob(f"{id_}*"):
+                if not x.endswith("jpg"):
+                    id = x
+            ext = "." + id.split(".")[-1]
             file = title + ext
             try:
-                os.rename(id_ + ext, file)
+                os.rename(id, file)
             except FileNotFoundError:
-                os.rename(id_ + ext * 2, file)
+                os.rename(id + ext, file)
             attributes = await set_attributes(file)
             res, _ = await event.client.fast_uploader(
                 file, show_progress=True, event=event, to_delete=True
@@ -96,14 +100,15 @@ async def download_yt(event, link, ytd):
     ext = "." + ytd["outtmpl"].split(".")[-1]
     if ext == ".m4a":
         ext = ".mp3"
-    file = ""
     for x in glob.glob(f"{id_}*"):
-        if not x.endswith("jpg")
-            file = x
+                if not x.endswith("jpg"):
+                    id = x
+    ext = "." + id.split(".")[-1]
+    file = title + ext
     try:
-        os.rename(id_ + ext, file)
+                os.rename(id, file)
     except FileNotFoundError:
-        os.rename(id_ + ext * 2, file)
+                os.rename(id + ext, file)
     attributes = await set_attributes(file)
     res, _ = await event.client.fast_uploader(
         file, show_progress=True, event=event, to_delete=True
