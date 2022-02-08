@@ -7,7 +7,7 @@
 
 import os
 import re
-import time
+import time, glob
 
 from telethon import Button
 from youtubesearchpython import Playlist, VideosSearch
@@ -96,7 +96,10 @@ async def download_yt(event, link, ytd):
     ext = "." + ytd["outtmpl"].split(".")[-1]
     if ext == ".m4a":
         ext = ".mp3"
-    file = title + ext
+    file = ""
+    for x in glob.glob(f"{id_}*"):
+        if not x.endswith("jpg")
+            file = x
     try:
         os.rename(id_ + ext, file)
     except FileNotFoundError:
