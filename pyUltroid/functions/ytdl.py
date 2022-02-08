@@ -57,7 +57,7 @@ async def download_yt(event, link, ytd):
             id_ = file["id"]
             thumb = id_ + ".jpg"
             title = file["title"]
-            await download_file(file["thumbnails"][-1]["url"], thumb)
+            await download_file(file.get("thumbnail", None) or file["thumbnails"][-1]["url"], thumb)
             ext = "." + ytd["outtmpl"].split(".")[-1]
             if ext == ".m4a":
                 ext = ".mp3"
