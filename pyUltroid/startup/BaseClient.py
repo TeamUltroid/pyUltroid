@@ -200,11 +200,11 @@ class UltroidClient(TelegramClient):
                 pass
         return raw_file, time.time() - start_time
 
-    async def fast_downloader(self, file, filename, **kwargs):
+    async def fast_downloader(self, file, **kwargs):
         """Download files in a faster way"""
         # Set to True and pass event to show progress bar.
         show_progress = kwargs.get("show_progress", False)
-        message = kwargs.get("message", f"Uploading {filename}...")
+        filename = kwargs.get("filename", None)
         if show_progress:
             event = kwargs["event"]
         # Don't show progress bar when file size is less than 10MB.
@@ -231,7 +231,8 @@ class UltroidClient(TelegramClient):
                     + str(round(start_time))
                     + mimetypes.guess_extension(mimytype)
                 )
-
+        message = kwargs.get("message", f"Uploading {filename}...")
+        
         raw_file = None
         while not raw_file:
             with open(filename, "wb") as f:
