@@ -48,12 +48,42 @@ async def download_yt(event, link, ytd):
         return
     open("data.json", "w").write(json_parser(info, indent=1))
     if info["_type"] == "playlist":
-        info["playlist_count"]
-        for file in info["entries"]:
+        total = info["playlist_count"]
+        for num, file in enumerate(info["entries"]):
+            num += 1
             id_ = file["id"]
-            thumb = id + ".jpg"
+            thumb = id_ + ".jpg"
+            title = file["title"]
+            desc = file["description"]
             await download_file(file["thumbnails"][-1]["url"], thumb)
-
+            ext = "." + ytd["outtmpl"].split(".")[-1]
+            if ext == ".m4a":
+                ext = ".mp3"
+            file = title + ext
+            try:
+                os.rename(id_ + ext, file)
+            except FileNotFoundError:
+                os.rename(id_ + ext * 2, file)
+            attributes = await set_attributes(file)
+            res, _ = await event.client.fast_uploader(
+                file, show_progress=True, event=event, to_delete=True
+            )
+            from_ = info["extractor"].split(":")[0]
+            caption = f"({num}/{total}) `{title}`\n"
+            if desc:
+                caption += f"**Description :** `{desc}`\n"
+            caption += "\n`From {from_}`"
+            await event.client.send_file(
+                event.chat_id,
+                file=res,
+                caption=caption,
+                attributes=attributes,
+                supports_streaming=True,
+                thumb=thumb,
+                reply_to=reply_to,
+            )
+            os.remove(thumb)
+            os.remove(file)
         return
     title = info["title"]
     id_ = info["id"]
@@ -83,6 +113,7 @@ async def download_yt(event, link, ytd):
     )
     os.remove(thumb)
     try:
+        os.remove(file)
         await event.delete()
     except BaseException:
         pass
