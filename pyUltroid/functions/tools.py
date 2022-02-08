@@ -156,7 +156,6 @@ async def metadata(file):
         }
     if info.get("AudioCount"):
         data["title"] = info.get("Title", file)
-        data["duration"] = int(float(info.get("Duration", 0)))
         data["performer"] = (
             info.get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
         )
@@ -164,6 +163,7 @@ async def metadata(file):
         data["height"] = int(float(_info[1].get("Height", 720)))
         data["width"] = int(float(_info[1].get("Width", 1280)))
         data["bitrate"] = int(_info[1].get("BitRate", 320))
+    data["duration"] = int(float(info.get("Duration", 0)))
     return data
 
 
