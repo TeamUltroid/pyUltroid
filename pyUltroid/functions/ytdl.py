@@ -79,6 +79,11 @@ async def download_yt(event, link, ytd):
                         file = id
                     else:
                         raise er
+            if file.endswith(".part"):
+                os.remove(file)
+                os.remove(thumb)
+                await event.client.send_message(event.chat_id, f"`[{num}/{total}]` `Invalid Video format.\nIgnoring that...`")
+                return
             attributes = await set_attributes(file)
             res, _ = await event.client.fast_uploader(
                 file, show_progress=True, event=event, to_delete=True
