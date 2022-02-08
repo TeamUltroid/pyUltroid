@@ -148,7 +148,7 @@ async def metadata(file):
     data = {}
     _info = json.loads(out)["media"]["track"]
     info = _info[0]
-    if info["Format"] in ["GIF", "PNG"]:
+    if info.get("Format") in ["GIF", "PNG"]:
         return {
             "height": _info[1]["Height"],
             "width": _info[1]["Width"],
