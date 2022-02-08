@@ -54,7 +54,6 @@ async def download_yt(event, link, ytd):
             id_ = file["id"]
             thumb = id_ + ".jpg"
             title = file["title"]
-            desc = file["description"]
             await download_file(file["thumbnails"][-1]["url"], thumb)
             ext = "." + ytd["outtmpl"].split(".")[-1]
             if ext == ".m4a":
@@ -69,10 +68,10 @@ async def download_yt(event, link, ytd):
                 file, show_progress=True, event=event, to_delete=True
             )
             from_ = info["extractor"].split(":")[0]
-            caption = f"({num}/{total}) `{title}`\n"
+            caption = f"`[{num}/{total}]` `{title}`\n"
             if desc:
                 caption += f"**Description :** `{desc}`\n"
-            caption += "\n`From {from_}`"
+            caption += f"\n`From {from_}`"
             await event.client.send_file(
                 event.chat_id,
                 file=res,
