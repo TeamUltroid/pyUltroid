@@ -13,13 +13,27 @@ from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getL
 
 from safety.tools import *
 from telethon import __version__
-from .funcs import where_hosted
 from ..version import __version__ as __pyUltroid__
 from ..version import ultroid_version
 
 file = f"ultroid{sys.argv[6]}.log" if len(sys.argv) > 6 else "ultroid.log"
 if os.path.exists(file):
     os.remove(file)
+
+def where_hosted():
+    if os.getenv("DYNO"):
+        return "heroku"
+    if os.getenv("RAILWAY_STATIC_URL"):
+        return "railway"
+    if os.getenv("KUBERNETES_PORT"):
+        return "qovery"
+    if os.getenv("WINDOW") and os.getenv("WINDOW") != "0":
+        return "windows"
+    if os.getenv("RUNNER_USER") or os.getenv("HOSTNAME"):
+        return "github actions"
+    if os.getenv("ANDROID_ROOT"):
+        return "termux"
+    return "local"
 
 HOSTED_ON = where_hosted()
 LOGS = getLogger("pyUltLogs")
@@ -51,4 +65,4 @@ LOGS.info(
 LOGS.info(f"Python version - {platform.python_version()}")
 LOGS.info(f"py-Ultroid Version - {__pyUltroid__}")
 LOGS.info(f"Telethon Version - {__version__}")
-LOGS.info(f"Ultroid Version - {ultroid_version}")
+LOGS.info(f"Ultroid Version - {ultroid_version} [{HOSTED_ON}]")
