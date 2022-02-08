@@ -29,7 +29,15 @@ def _ask_input():
 
 
 class HOSTED_ON:
-    Attrs = ["Heroku", "Local", "Githubactions","Railway", "Windows","Qovery","Termux"]
+    Attrs = [
+        "Heroku",
+        "Local",
+        "Githubactions",
+        "Railway",
+        "Windows",
+        "Qovery",
+        "Termux",
+    ]
 
     def __init__(self):
         self._value = self.get_hosted_on()
