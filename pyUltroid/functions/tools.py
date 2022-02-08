@@ -708,7 +708,7 @@ class TgConverter:
         else:
             return input_file
 
-        if ext in allowed_formats or not (convert_to or allowed_formats):
+        if (ext in allowed_formats or ext == convert_to or not (convert_to or allowed_formats)):
             return input_file
 
         def recycle_type(exte):
