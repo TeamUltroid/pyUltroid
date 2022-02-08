@@ -608,7 +608,7 @@ class TgConverter:
         """Convert to animated sticker."""
         if out_path.endswith("webp"):
             await bash(
-                f'lottie_convert.py --webp-quality 100 --webp-speed 6 --webp-skip-frames 100 "{file}" "{out_path}"'
+                f'lottie_convert.py --webp-quality 100 --webp-skip-frames 100 "{file}" "{out_path}"'
             )
         else:
             await bash(f"lottie_convert.py '{file}' '{out_path}'")
