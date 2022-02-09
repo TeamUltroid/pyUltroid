@@ -45,6 +45,8 @@ def get_yt_link(query):
 async def download_yt(event, link, ytd):
     reply_to = event.reply_to_msg_id or event
     info = await dler(event, link, ytd, download=True)
+    if not info:
+        return
     if info.get("_type", None) == "playlist":
         total = info["playlist_count"]
         for num, file in enumerate(info["entries"]):
@@ -62,6 +64,8 @@ async def download_yt(event, link, ytd):
             for x in glob.glob(f"{id_}*"):
                 if not x.endswith("jpg"):
                     id = x
+            if not id:
+                return
             ext = "." + id.split(".")[-1]
             file = title + ext
             try:
@@ -119,6 +123,8 @@ async def download_yt(event, link, ytd):
     for x in glob.glob(f"{id_}*"):
         if not x.endswith("jpg"):
             id = x
+    if not id:
+        return
     ext = "." + id.split(".")[-1]
     file = title + ext
     try:
