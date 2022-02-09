@@ -164,7 +164,7 @@ async def get_chat_info(chat, event):
         caption += f'📹 <b>{chat_type} stickers:</b> <a href="t.me/addstickers/{full.stickerset.short_name}">{group_stickers}</a>\n'
     if not broadcast:
         if getattr(chat, "slowmode_enabled", None):
-            caption += f"👉 <b>Slow mode:</b> {slowmode}"
+            caption += f"👉 <b>Slow mode:</b> <code>True</code>"
             caption += f", 🕐 <code>{full.slowmode_seconds}s</code>\n"
         else:
             caption += f"🦸‍♂ <b>Supergroup:</b> {supergroup}\n"

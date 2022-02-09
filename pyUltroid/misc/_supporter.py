@@ -89,7 +89,6 @@ class Config((object)):
         TEMP_DIR = TMP_DOWNLOAD_DIRECTORY
         TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "Ultroid")
         OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
-        G_BAN_LOGGER_GROUP = BOT_LOG
         TG_BOT_USER_NAME_BF_HER = asst.me.username
         UB_BLACK_LIST_CHAT = [
             int(blacklist) for blacklist in udB.get_key("BLACKLIST_CHATS")
@@ -104,7 +103,7 @@ class Config((object)):
         PRIVATE_GROUP_BOT_API_ID = BOTLOG
         PM_LOGGR_BOT_API_ID = BOTLOG
         DB_URI = os.environ.get("DATABASE_URL", None)
-        HANDLR = hndlr
+        HANDLR = HNDLR
         SUDO_USERS = SUDO_M.get_sudos()
         CHANNEL_ID = int(os.environ.get("CHANNEL_ID", -100))
         BLACKLIST_CHAT = UB_BLACK_LIST_CHAT
