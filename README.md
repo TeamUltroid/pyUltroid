@@ -1,6 +1,6 @@
 # py-Ultroid Library
 
-Core library of [The Ultroid](https://github.com/TeamUltroid/pyUltroid), a python based telegram userbot.
+Core library of [The Ultroid](https://github.com/TeamUltroid/Ultroid), a python based telegram userbot.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/teamultroid/pyultroid/badge)](https://www.codefactor.io/repository/github/teamultroid/pyultroid)
 [![PyPI - Version](https://img.shields.io/pypi/v/py-Ultroid?style=round)](https://pypi.org/project/py-Ultroid)    

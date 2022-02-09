@@ -5,17 +5,36 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+import glob
 import os
 import re
+import time
 
 from telethon import Button
-from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
-from youtube_dl import YoutubeDL
-from youtubesearchpython import VideosSearch
+from youtubesearchpython import Playlist, VideosSearch
+from yt_dlp import YoutubeDL
 
-from .. import LOGS
-from .helper import download_file, humanbytes, run_async
-from .tools import async_searcher
+from .. import LOGS, udB
+from .helper import download_file, humanbytes, run_async, time_formatter
+from .tools import set_attributes
+
+
+async def ytdl_progress(k, start_time, event):
+    if k["status"] == "error":
+        return await event.edit("error")
+    while k["status"] == "downloading":
+        text = (
+            f"`Downloading: {k['filename']}\n"
+            + f"Total Size: {humanbytes(k['total_bytes'])}\n"
+            + f"Downloaded: {humanbytes(k['downloaded_bytes'])}\n"
+            + f"Speed: {humanbytes(k['speed'])}/s\n"
+            + f"ETA: {time_formatter(k['eta']*1000)}`"
+        )
+        if round((time.time() - start_time) % 10.0) == 0:
+            try:
+                await event.edit(text)
+            except Exception as ex:
+                LOGS.error(f"ytdl_progress: {ex}")
 
 
 def get_yt_link(query):
@@ -24,64 +43,113 @@ def get_yt_link(query):
 
 
 async def download_yt(event, link, ytd):
+    reply_to = event.reply_to_msg_id or event
     info = await dler(event, link, ytd, download=True)
     if not info:
         return
+    if info.get("_type", None) == "playlist":
+        total = info["playlist_count"]
+        for num, file in enumerate(info["entries"]):
+            num += 1
+            id_ = file["id"]
+            thumb = id_ + ".jpg"
+            title = file["title"]
+            await download_file(
+                file.get("thumbnail", None) or file["thumbnails"][-1]["url"], thumb
+            )
+            ext = "." + ytd["outtmpl"].split(".")[-1]
+            if ext == ".m4a":
+                ext = ".mp3"
+            id = None
+            for x in glob.glob(f"{id_}*"):
+                if not x.endswith("jpg"):
+                    id = x
+            if not id:
+                return
+            ext = "." + id.split(".")[-1]
+            file = title + ext
+            try:
+                os.rename(id, file)
+            except FileNotFoundError:
+                try:
+                    os.rename(id + ext, file)
+                except FileNotFoundError as er:
+                    if os.path.exists(id):
+                        file = id
+                    else:
+                        raise er
+            if file.endswith(".part"):
+                os.remove(file)
+                os.remove(thumb)
+                await event.client.send_message(
+                    event.chat_id,
+                    f"`[{num}/{total}]` `Invalid Video format.\nIgnoring that...`",
+                )
+                return
+            attributes = await set_attributes(file)
+            res, _ = await event.client.fast_uploader(
+                file, show_progress=True, event=event, to_delete=True
+            )
+            from_ = info["extractor"].split(":")[0]
+            caption = f"`[{num}/{total}]` `{title}`\n\n`from {from_}`"
+            await event.client.send_file(
+                event.chat_id,
+                file=res,
+                caption=caption,
+                attributes=attributes,
+                supports_streaming=True,
+                thumb=thumb,
+                reply_to=reply_to,
+            )
+            os.remove(thumb)
+        try:
+            await event.delete()
+        except BaseException:
+            pass
+        return
     title = info["title"]
+    if len(title) > 20:
+        title = title[:17] + "..."
     id_ = info["id"]
     thumb = id_ + ".jpg"
-    await download_file(f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg", thumb)
-    duration = info["duration"]
+    await download_file(
+        info.get("thumbnail", None) or f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg",
+        thumb,
+    )
     ext = "." + ytd["outtmpl"].split(".")[-1]
+    if ext == ".m4a":
+        ext = ".mp3"
+    id = None
+    for x in glob.glob(f"{id_}*"):
+        if not x.endswith("jpg"):
+            id = x
+    if not id:
+        return
+    ext = "." + id.split(".")[-1]
     file = title + ext
     try:
-        os.rename(id_ + ext, file)
+        os.rename(id, file)
     except FileNotFoundError:
-        os.rename(id_ + ext * 2, file)
+        os.rename(id + ext, file)
+    attributes = await set_attributes(file)
     res, _ = await event.client.fast_uploader(
         file, show_progress=True, event=event, to_delete=True
     )
-    if file.endswith(("mp4", "mkv", "webm")):
-        height, width = info["height"], info["width"]
-        caption = f"`{title}`\n\n`From YouTube Official`"
-        await event.client.send_file(
-            event.chat_id,
-            file=res,
-            caption=caption,
-            attributes=[
-                DocumentAttributeVideo(
-                    duration=duration,
-                    w=width,
-                    h=height,
-                    supports_streaming=True,
-                )
-            ],
-            thumb=thumb,
-        )
-    else:
-        if info.get("artist"):
-            author = info["artist"]
-        elif info.get("creator"):
-            author = info["creator"]
-        elif info.get("channel"):
-            author = info["channel"]
-        caption = f"`{title}`\n\n`From YouTubeMusic`"
-        await event.client.send_file(
-            event.chat_id,
-            file=res,
-            caption=caption,
-            supports_streaming=True,
-            thumb=thumb,
-            attributes=[
-                DocumentAttributeAudio(
-                    duration=duration,
-                    title=title,
-                    performer=author,
-                )
-            ],
-        )
+    caption = f"`{info['title']}`"
+    await event.client.send_file(
+        event.chat_id,
+        file=res,
+        caption=caption,
+        attributes=attributes,
+        supports_streaming=True,
+        thumb=thumb,
+        reply_to=reply_to,
+    )
     os.remove(thumb)
-    await event.delete()
+    try:
+        await event.delete()
+    except BaseException:
+        pass
 
 
 # ---------------YouTube Downloader Inline---------------
@@ -150,13 +218,24 @@ def get_buttons(listt):
 
 
 async def dler(event, url, opts: dict = {}, download=False):
-    await event.edit("`Getting Data from YouTube..`")
+    time.time()
+    await event.edit("`Getting Data...`")
     if "quiet" not in opts:
         opts["quiet"] = True
+    opts["username"] = udB.get_key("YT_USERNAME")
+    opts["password"] = udB.get_key("YT_PASSWORD")
+    """
+    if "progress_hooks" not in opts:
+        opts["progress_hooks"] = [
+            lambda k: asyncio.get_event_loop().create_task(
+                ytdl_progress(k, start_time, event)
+            )
+        ]
+    """
     if download:
         await ytdownload(url, opts)
     try:
-        return YoutubeDL({}).extract_info(url=url, download=False)
+        await extract_info(url)
     except Exception as e:
         await event.edit(f"{type(e)}: {e}")
         return
@@ -170,17 +249,20 @@ def ytdownload(url, opts):
         LOGS.error(ex)
 
 
-async def get_videos_link(url):
-    id_ = url[url.index("=") + 1 :]
-    try:
-        html = await async_searcher(url)
-    except BaseException:
-        return []
-    pattern = re.compile(r"watch\?v=\S+?list=" + id_)
-    v_ids = re.findall(pattern, html)
-    links = []
-    if v_ids:
-        for z in v_ids:
-            idd = re.search(r"=(.*)\\", str(z)).group(1)
-            links.append(f"https://www.youtube.com/watch?v={idd}")
-    return links
+@run_async
+def extract_info(url):
+    return YoutubeDL({}).extract_info(url=url, download=False)
+
+
+@run_async
+def get_videos_link(url):
+    to_return = []
+    regex = re.search(r"\?list=([(\w+)\-]*)", url)
+    if not regex:
+        return to_return
+    playlist_id = regex.group(1)
+    videos = Playlist(playlist_id)
+    for vid in videos.videos:
+        link = re.search(r"\?v=([(\w+)\-]*)", vid["link"]).group(1)
+        to_return.append(f"https://youtube.com/watch?v={link}")
+    return to_return

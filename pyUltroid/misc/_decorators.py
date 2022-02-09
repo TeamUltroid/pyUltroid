@@ -55,9 +55,10 @@ def compile_pattern(data, hndlr):
         data = data[1:]
     if data.startswith("."):
         data = data[1:]
-    if hndlr == "\\ ":  # No Hndlr Feature
+    if hndlr in [" ", "NO_HNDLR"]:
+        # No Hndlr Feature
         return re.compile("^" + data)
-    return re.compile(hndlr + data)
+    return re.compile("\\" + hndlr + data)
 
 
 def ultroid_cmd(pattern=None, manager=False, **kwargs):
@@ -206,7 +207,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
         _add_new = allow_sudo and HNDLR != SUDO_HNDLR
         if _add_new:
             if pattern:
-                cmd = compile_pattern(pattern, "\\" + SUDO_HNDLR)
+                cmd = compile_pattern(pattern, SUDO_HNDLR)
             ultroid_bot.add_event_handler(
                 wrapp,
                 NewMessage(
@@ -219,7 +220,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 ),
             )
         if pattern:
-            cmd = compile_pattern(pattern, "\\" + HNDLR)
+            cmd = compile_pattern(pattern, HNDLR)
         ultroid_bot.add_event_handler(
             wrapp,
             NewMessage(
@@ -272,7 +273,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                     LOGS.exception(er)
 
             if pattern:
-                cmd = compile_pattern(pattern, "\\/")
+                cmd = compile_pattern(pattern, "/")
             asst.add_event_handler(
                 manager_cmd,
                 NewMessage(
@@ -286,7 +287,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
             )
         if DUAL_MODE and not (manager and DUAL_HNDLR == "/"):
             if pattern:
-                cmd = compile_pattern(pattern, "\\" + DUAL_HNDLR)
+                cmd = compile_pattern(pattern, DUAL_HNDLR)
             asst.add_event_handler(
                 wrapp,
                 NewMessage(

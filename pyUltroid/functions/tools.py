@@ -13,17 +13,31 @@ import random
 import re
 import ssl
 import string
-import subprocess
 from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
 
 import aiohttp
-import certifi
+
+from .. import LOGS
+
+try:
+    import certifi
+except ImportError:
+    certifi = None
+    LOGS.info("'certifi' not installed!")
+
 import requests
-from PIL import Image, ImageDraw, ImageFont
+
+try:
+    from PIL import Image, ImageDraw, ImageFont
+except ImportError:
+    Image, ImageDraw, ImageFont = None, None, None
+    LOGS.info("PIL not installed!")
+
 from requests.exceptions import MissingSchema
 from telethon import Button
+from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 
 from .. import *
 from ..dB.filestore_db import get_stored_msg, store_msg
@@ -92,6 +106,10 @@ async def async_searcher(
 # @buddhhu
 
 
+def _unquote_text(text):
+    return text.replace("'", "'").replace('"', '"')
+
+
 def json_parser(data, indent=None):
     parsed = {}
     try:
@@ -125,28 +143,53 @@ def is_url_ok(url: str):
 
 
 async def metadata(file):
-    out, _ = await bash(f"mediainfo '''{file}''' --Output=JSON")
+    out, _ = await bash(f'mediainfo """{file}""" --Output=JSON')
     data = {}
-    try:
-        info = json.loads(out)
-        info = info["media"]["track"]
-        data["title"] = info[0].get("Title") or file.split("/")[-1].split(".")[0]
-        data["duration"] = (
-            int(float(info[0]["Duration"])) if info[0].get("Duration") else 69
-        )
+    _info = json.loads(out)["media"]["track"]
+    info = _info[0]
+    if info.get("Format") in ["GIF", "PNG"]:
+        return {
+            "height": _info[1]["Height"],
+            "width": _info[1]["Width"],
+            "bitrate": _info[1].get("BitRate", 320),
+        }
+    if info.get("AudioCount"):
+        data["title"] = info.get("Title", file)
         data["performer"] = (
-            info[0].get("Performer")
-            or udB.get_key("artist")
-            or ultroid_bot.me.first_name
+            info.get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
         )
-        if len(info) >= 2:
-            data["height"] = int(info[1]["Height"]) if info[1].get("Height") else 720
-            data["width"] = int(info[1]["Width"]) if info[1].get("Width") else 1280
-    except BaseException:
-        data["title"] = file.split("/")[-1].split(".")[0]
-        data["duration"] = 69
-        data["performer"] = udB.get_key("artist") or ultroid_bot.me.first_name
+    if info.get("VideoCount"):
+        data["height"] = int(float(_info[1].get("Height", 720)))
+        data["width"] = int(float(_info[1].get("Width", 1280)))
+        data["bitrate"] = int(_info[1].get("BitRate", 320))
+    data["duration"] = int(float(info.get("Duration", 0)))
     return data
+
+
+# ~~~~~~~~~~~~~~~~ Attributes ~~~~~~~~~~~~~~~~
+
+
+async def set_attributes(file):
+    data = await metadata(file)
+    if not data:
+        return None
+    if "width" in data:
+        return [
+            DocumentAttributeVideo(
+                duration=data.get("duration", 0),
+                w=data.get("width", 512),
+                h=data.get("height", 512),
+                supports_streaming=True,
+            )
+        ]
+    ext = "." + file.split(".")[-1]
+    return [
+        DocumentAttributeAudio(
+            duration=data.get("duration", 0),
+            title=data.get("title", file.split("/")[-1].replace(ext, "")),
+            performer=data.get("performer"),
+        )
+    ]
 
 
 # ~~~~~~~~~~~~~~~~ Button stuffs ~~~~~~~~~~~~~~~
@@ -278,46 +321,49 @@ def text_set(text):
 # @TechiError
 
 
-def get_text_size(text, image, font):
-    im = Image.new("RGB", (image.width, image.height))
-    draw = ImageDraw.Draw(im)
-    return draw.textsize(text, font)
+class LogoHelper:
+    @staticmethod
+    def get_text_size(text, image, font):
+        im = Image.new("RGB", (image.width, image.height))
+        draw = ImageDraw.Draw(im)
+        return draw.textsize(text, font)
 
+    @staticmethod
+    def find_font_size(text, font, image, target_width_ratio):
+        tested_font_size = 100
+        tested_font = ImageFont.truetype(font, tested_font_size)
+        observed_width, observed_height = LogoHelper.get_text_size(
+            text, image, tested_font
+        )
+        estimated_font_size = (
+            tested_font_size / (observed_width / image.width) * target_width_ratio
+        )
+        return round(estimated_font_size)
 
-def find_font_size(text, font, image, target_width_ratio):
-    tested_font_size = 100
-    tested_font = ImageFont.truetype(font, tested_font_size)
-    observed_width, observed_height = get_text_size(text, image, tested_font)
-    estimated_font_size = (
-        tested_font_size / (observed_width / image.width) * target_width_ratio
-    )
-    return round(estimated_font_size)
+    @staticmethod
+    def make_logo(imgpath, text, funt, **args):
+        fill = args.get("fill")
+        width_ratio = args.get("width_ratio") or 0.7
+        stroke_width = int(args.get("stroke_width"))
+        stroke_fill = args.get("stroke_fill")
 
-
-def make_logo(imgpath, text, funt, **args):
-    fill = args.get("fill")
-    width_ratio = args.get("width_ratio") or 0.7
-    stroke_width = int(args.get("stroke_width"))
-    stroke_fill = args.get("stroke_fill")
-
-    img = Image.open(imgpath)
-    width, height = img.size
-    draw = ImageDraw.Draw(img)
-    font_size = find_font_size(text, funt, img, width_ratio)
-    font = ImageFont.truetype(funt, font_size)
-    w, h = draw.textsize(text, font=font)
-    draw.text(
-        ((width - w) / 2, (height - h) / 2),
-        text,
-        font=font,
-        fill=fill,
-        stroke_width=stroke_width,
-        stroke_fill=stroke_fill,
-    )
-    file_name = "Logo.png"
-    img.save(f"./{file_name}", "PNG")
-    img.show()
-    return f"{file_name} Generated Successfully!"
+        img = Image.open(imgpath)
+        width, height = img.size
+        draw = ImageDraw.Draw(img)
+        font_size = LogoHelper.find_font_size(text, funt, img, width_ratio)
+        font = ImageFont.truetype(funt, font_size)
+        w, h = draw.textsize(text, font=font)
+        draw.text(
+            ((width - w) / 2, (height - h) / 2),
+            text,
+            font=font,
+            fill=fill,
+            stroke_width=stroke_width,
+            stroke_fill=stroke_fill,
+        )
+        file_name = "Logo.png"
+        img.save(f"./{file_name}", "PNG")
+        return f"{file_name} Generated Successfully!"
 
 
 # --------------------------------------
@@ -358,30 +404,6 @@ async def get_chatbot_reply(message):
         LOGS.info(f"**ERROR:**`{format_exc()}`")
 
 
-def resize_photo(photo):
-    """Resize the given photo to 512x512"""
-    image = Image.open(photo)
-    if (image.width and image.height) < 512:
-        size1 = image.width
-        size2 = image.height
-        if image.width > image.height:
-            scale = 512 / size1
-            size1new = 512
-            size2new = size2 * scale
-        else:
-            scale = 512 / size2
-            size1new = size1 * scale
-            size2new = 512
-        size1new = math.floor(size1new)
-        size2new = math.floor(size2new)
-        sizenew = (size1new, size2new)
-        image = image.resize(sizenew)
-    else:
-        maxsize = (512, 512)
-        image.thumbnail(maxsize)
-    return image
-
-
 def check_filename(filroid):
     if os.path.exists(filroid):
         no = 1
@@ -400,21 +422,12 @@ def check_filename(filroid):
 # https://github.com/1Danish-00/CompressorBot/blob/main/helper/funcn.py#L104
 
 
-def genss(file):
-    process = subprocess.Popen(
-        ["mediainfo", file, "--Output=JSON"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-    )
-    stdout, stderr = process.communicate()
-    out = stdout.decode().strip()
-    z = json.loads(out)
-    p = z["media"]["track"][0]["Duration"]
-    return int(p.split(".")[-2])
+async def genss(file):
+    return (await metadata(file)).get("duration")
 
 
-def duration_s(file, stime):
-    tsec = genss(file)
+async def duration_s(file, stime):
+    tsec = await genss(file)
     x = round(tsec / 5)
     y = round(tsec / 5 + int(stime))
     pin = stdr(x)
@@ -477,6 +490,9 @@ TELEGRAPH = []
 
 
 def telegraph_client():
+    if not Telegraph:
+        LOGS.info("'Telegraph' is not Installed!")
+        return
     if TELEGRAPH:
         return TELEGRAPH[0]
 
@@ -550,17 +566,211 @@ async def get_stored_file(event, hash):
 
     # hash = (base64.b64decode(hash.encode("ascii"))).decode("ascii")
     msg_id = get_stored_msg(hash)
+    if not msg_id:
+        return
     try:
         msg = await asst.get_messages(udB.get_key("LOG_CHANNEL"), ids=msg_id)
     except Exception as er:
         LOGS.warning(f"FileStore, Error: {er}")
         return
-    if msg is None:
-        await asst.send_message(
+    if not msg_id:
+        return await asst.send_message(
             event.chat_id, "__Message was deleted by owner!__", reply_to=event.id
         )
-        return
     await asst.send_message(event.chat_id, msg.text, file=msg.media, reply_to=event.id)
+
+
+def cmd_regex_replace(cmd):
+    return (
+        cmd.replace("$", "")
+        .replace("?(.*)", "")
+        .replace("(.*)", "")
+        .replace("(?: |)", "")
+        .replace("| ", "")
+        .replace("( |)", "")
+        .replace("?((.|//)*)", "")
+        .replace("?P<shortname>\\w+", "")
+        .replace("(", "")
+        .replace(")", "")
+        .replace("?(\\d+)", "")
+    )
+
+
+# ------------------------#
+
+
+class LottieException(Exception):
+    ...
+
+
+class TgConverter:
+    """Convert files related to Telegram"""
+
+    @staticmethod
+    async def animated_sticker(file, out_path="sticker.tgs", throw=False, remove=False):
+        """Convert to/from animated sticker."""
+        if out_path.endswith("webp"):
+            er, out = await bash(
+                f"lottie_convert.py --webp-quality 100 --webp-skip-frames 100 '{file}' '{out_path}'"
+            )
+        else:
+            er, out = await bash(f"lottie_convert.py '{file}' '{out_path}'")
+        if er and throw:
+            raise LottieException(er)
+        if remove:
+            os.remove(file)
+        if os.path.exists(out_path):
+            return out_path
+
+    @staticmethod
+    async def animated_to_gif(file, out_path="gif.gif"):
+        """Convert animated sticker to gif."""
+        await bash(
+            f"lottie_convert.py '{_unquote_text(file)}' '{_unquote_text(out_path)}'"
+        )
+        return out_path
+
+    @staticmethod
+    def resize_photo_sticker(photo):
+        """Resize the given photo to 512x512 (for creating telegram sticker)."""
+        image = Image.open(photo)
+        if (image.width and image.height) < 512:
+            size1 = image.width
+            size2 = image.height
+            if image.width > image.height:
+                scale = 512 / size1
+                size1new = 512
+                size2new = size2 * scale
+            else:
+                scale = 512 / size2
+                size1new = size1 * scale
+                size2new = 512
+            size1new = math.floor(size1new)
+            size2new = math.floor(size2new)
+            sizenew = (size1new, size2new)
+            image = image.resize(sizenew)
+        else:
+            maxsize = (512, 512)
+            image.thumbnail(maxsize)
+        return image
+
+    @staticmethod
+    async def ffmpeg_convert(input_, output, remove=False):
+        if output.endswith(".webm"):
+            return await TgConverter.create_webm(
+                input_, name=output[:-5], remove=remove
+            )
+        await bash(f"ffmpeg -i '{input_}' '{output}' -y")
+        if remove:
+            os.remove(input_)
+        if os.path.exists(output):
+            return output
+
+    @staticmethod
+    async def create_webm(file, name="video", remove=False):
+        _ = await metadata(file)
+        name += ".webm"
+        h, w = _["height"], _["width"]
+        if h == w and h != 512:
+            h, w = 512, 512
+        if h != 512 or w != 512:
+            if h > w:
+                h, w = 512, -1
+            if w > h:
+                h, w = -1, 512
+        await bash(
+            f'ffmpeg -i "{file}" -preset fast -an -to 00:00:02.95 -crf 30 -bufsize 256k -b:v {_["bitrate"]} -vf scale={w}:{h} -c:v libvpx-vp9 "{name}" -y'
+        )
+        if remove:
+            os.remove(file)
+        return name
+
+    @staticmethod
+    def to_image(input_, name, remove=False):
+        img = cv2.VideoCapture(input_)
+        ult, roid = img.read()
+        cv2.imwrite(name, roid)
+        if remove:
+            os.remove(input_)
+        return name
+
+    @staticmethod
+    async def convert(
+        input_file,
+        outname="converted",
+        convert_to=None,
+        allowed_formats=[],
+        remove_old=True,
+    ):
+        if "." in input_file:
+            ext = input_file.split(".")[-1].lower()
+        else:
+            return input_file
+
+        if (
+            ext in allowed_formats
+            or ext == convert_to
+            or not (convert_to or allowed_formats)
+        ):
+            return input_file
+
+        def recycle_type(exte):
+            return convert_to == exte or exte in allowed_formats
+
+        # Sticker to Something
+        if ext == "tgs":
+            for extn in ["webp", "json", "png", "mp4", "gif"]:
+                if recycle_type(extn):
+                    name = outname + "." + extn
+                    return await TgConverter.animated_sticker(
+                        input_file, name, remove=remove_old
+                    )
+            if recycle_type("webm"):
+                input_file = await TgConverter.convert(
+                    input_file, convert_to="gif", remove_old=remove_old
+                )
+                return await TgConverter.create_webm(input_file, outname, remove=True)
+        # Json -> Tgs
+        elif ext == "json":
+            if recycle_type("tgs"):
+                name = outname + ".tgs"
+                return await TgConverter.animated_sticker(
+                    input_file, name, remove=remove_old
+                )
+        # Video to Something
+        elif ext in ["webm", "mp4", "gif"]:
+            for exte in ["webm", "mp4", "gif"]:
+                if recycle_type(exte):
+                    name = outname + "." + exte
+                    return await TgConverter.ffmpeg_convert(
+                        input_file, name, remove=remove_old
+                    )
+            for exte in ["png", "jpg", "jpeg", "webp"]:
+                if recycle_type(exte):
+                    name = outname + "." + exte
+                    return TgConverter.to_image(input_file, name, remove=remove_old)
+        # Image to Something
+        elif ext in ["jpg", "jpeg", "png", "webp"]:
+            for extn in ["png", "webp", "ico"]:
+                if recycle_type(extn):
+                    img = Image.open(input_file)
+                    name = outname + "." + extn
+                    img.save(name, extn.upper())
+                    if remove_old:
+                        os.remove(input_file)
+                    return name
+            for extn in ["webm", "gif", "mp4"]:
+                if recycle_type(extn):
+                    name = outname + "." + extn
+                    if extn == "webm":
+                        input_file = await TgConverter.convert(
+                            input_file,
+                            convert_to="png",
+                            remove_old=remove_old,
+                        )
+                    return await TgConverter.ffmpeg_convert(
+                        input_file, name, remove=True if extn == "webm" else remove_old
+                    )
 
 
 # --------- END --------- #

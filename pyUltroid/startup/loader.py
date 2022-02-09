@@ -9,6 +9,7 @@ import glob
 import os
 from importlib import import_module
 
+from decouple import config
 from git import Repo
 
 from .. import *
@@ -25,6 +26,10 @@ class Loader:
 
     def load(self, log=True, func=import_module, cmd_help=HELP, include=[], exclude=[]):
         if include:
+            if log:
+                self._logger.info(
+                    "Including:{}".format("".join(f"• {name}" for name in include))
+                )
             files = glob.glob(f"{self.path}/_*.py")
             for file in include:
                 path = f"{self.path}/{file}.py"
@@ -90,11 +95,11 @@ class Loader:
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # for official
-    _exclude = udB.get_key("EXCLUDE_OFFICIAL")
+    _exclude = udB.get_key("EXCLUDE_OFFICIAL") or config("EXCLUDE_OFFICIAL", None)
     _exclude = _exclude.split() if _exclude else []
 
     # "INCLUDE_ONLY" was added to reduce Big List in "EXCLUDE_OFFICIAL" Plugin
-    _in_only = udB.get_key("INCLUDE_ONLY")
+    _in_only = udB.get_key("INCLUDE_ONLY") or config("INCLUDE_ONLY", None)
     _in_only = _in_only.split() if _in_only else []
     Loader().load(include=_in_only, exclude=_exclude)
 
@@ -141,4 +146,9 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
     # vc bot
     if vcbot and not vcClient._bot:
-        Loader(path="vcbot", key="VCBot").load()
+        try:
+            import pytgcalls  # ignore: pylint
+
+            Loader(path="vcbot", key="VCBot").load()
+        except ModuleNotFoundError:
+            LOGS.info("'pytgcalls' not installed!\nSkipping load of VcBot.")

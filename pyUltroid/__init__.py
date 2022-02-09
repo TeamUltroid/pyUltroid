@@ -11,14 +11,13 @@ from .configs import Var
 from .startup import *
 from .startup._database import UltroidDB
 from .startup.BaseClient import UltroidClient
-from .startup.connections import session_file, vc_connection, where_hosted
+from .startup.connections import session_file, vc_connection
 from .startup.funcs import _version_changes, autobot
 from .version import ultroid_version
 
 start_time = time.time()
 _ult_cache = {}
 # sys.exit = sys_exit()
-HOSTED_ON = where_hosted()
 
 udB = UltroidDB()
 

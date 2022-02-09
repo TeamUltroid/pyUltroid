@@ -17,13 +17,18 @@ try:
     from pymongo import MongoClient
 except ImportError:
     MongoClient = None
+    if Var.MONGO_URI:
+        LOGS.warning(
+            "'pymongo' not found!\nInstall pymongo[srv] to use Mongo database.."
+        )
+
 
 try:
     import psycopg2
 except ImportError:
     psycopg2 = None
     if Var.DATABASE_URL:
-        LOGS.error("'psycopg2' not found!\nInstall psycopg2 to use sql database..")
+        LOGS.warning("'psycopg2' not found!\nInstall psycopg2 to use sql database..")
 
 # --------------------------------------------------------------------------------------------- #
 
@@ -56,7 +61,7 @@ class MongoDB:
 
     @property
     def usage(self):
-        return 0
+        return self.db.command("dbstats")["dataSize"]
 
     def re_cache(self):
         self._cache = {}
@@ -132,6 +137,7 @@ class SqlDB:
             if self._connection:
                 self._connection.close()
             sys.exit()
+        self.re_cache()
 
     @property
     def name(self):
@@ -145,6 +151,11 @@ class SqlDB:
         data = self._cursor.fetchall()
         return int(data[0][0].split()[0])
 
+    def re_cache(self):
+        self._cache = {}
+        for key in self.keys():
+            self._cache.update({key: self.get_key(key)})
+
     def keys(self):
         self._cursor.execute(
             "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name  = 'ultroid'"
@@ -153,10 +164,14 @@ class SqlDB:
         return [_[0] for _ in data]
 
     def ping(self):
-        """They should really keep the `if udB.ping():` in try/except."""
         return True
 
-    get_key = get_data
+    def get_key(self, variable):
+        if variable in self._cache:
+            return self._cache[variable]
+        get_ = get_data(self, variable)
+        self._cache.update({variable: get_})
+        return get_
 
     def get(self, variable):
         try:
@@ -178,11 +193,14 @@ class SqlDB:
             pass
         except BaseException as er:
             LOGS.exception(er)
+        self._cache.update({key: value})
         self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
         self._cursor.execute(f"INSERT INTO Ultroid ({key}) values (%s)", (str(value),))
         return True
 
     def del_key(self, key):
+        if key in self._cache:
+            del self._cache[key]
         try:
             self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
         except psycopg2.errors.UndefinedColumn:
@@ -192,6 +210,7 @@ class SqlDB:
     delete = del_key
 
     def flushall(self):
+        self._cache.clear()
         self._cursor.execute("DROP TABLE Ultroid")
         self._cursor.execute(
             "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCli varchar(70))"
@@ -210,7 +229,7 @@ class SqlDB:
 # --------------------------------------------------------------------------------------------- #
 
 
-class RedisConnection(Redis):
+class RedisConnection:
     def __init__(
         self,
         host,
@@ -250,7 +269,12 @@ class RedisConnection(Redis):
                 kwargs["host"] = os.environ(f"QOVERY_REDIS_{hash_}_HOST")
                 kwargs["port"] = os.environ(f"QOVERY_REDIS_{hash_}_PORT")
                 kwargs["password"] = os.environ(f"QOVERY_REDIS_{hash_}_PASSWORD")
-        super().__init__(**kwargs)
+        self.db = Redis(**kwargs)
+        self.set = self.db.set
+        self.get = self.db.get
+        self.keys = self.db.keys
+        self.ping = self.db.ping
+        self.delete = self.db.delete
         self.re_cache()
 
     # dict is faster than Redis
@@ -265,7 +289,7 @@ class RedisConnection(Redis):
 
     @property
     def usage(self):
-        return sum(self.memory_usage(x) for x in self.keys())
+        return sum(self.db.memory_usage(x) for x in self.keys())
 
     def set_key(self, key, value):
         value = str(value)

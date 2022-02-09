@@ -13,7 +13,6 @@ from logging import WARNING
 from random import choice, randrange, shuffle
 from traceback import format_exc
 
-from bs4 import BeautifulSoup
 from telethon.tl import types
 from telethon.utils import get_display_name, get_peer_id
 
@@ -51,6 +50,11 @@ try:
     import numpy as np
 except ImportError:
     np = None
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    LOGS.info("'bs4' not installed.")
+    BeautifulSoup = None
 
 
 async def randomchannel(
@@ -378,6 +382,7 @@ _entities = {
     types.MessageEntityBotCommand: "bot_command",
     types.MessageEntityCode: "code",
     types.MessageEntityPre: "pre",
+    types.MessageEntitySpoiler: "spoiler",
 }
 
 
@@ -456,10 +461,13 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
     }
     if event.document and event.document.thumbs:
         file_ = await event.download_media(thumb=-1)
-        await telegraph(file_)
+        uri = await telegraph(file_)
         message["media"] = {"url": uri}
 
     return message
+
+
+O_API = "https://bot.lyo.su/quote/generate"
 
 
 async def create_quotly(
@@ -472,7 +480,12 @@ async def create_quotly(
 ):
     if not isinstance(event, list):
         event = [event]
-    bg = bg or "#1b1429"
+    from .. import udB
+
+    if udB.get_key("OQAPI"):
+        url = O_API
+    if not bg:
+        bg = "#1b1429"
     content = {
         "type": "quote",
         "format": "webp",
@@ -485,7 +498,12 @@ async def create_quotly(
             for message in event
         ],
     }
-    request = await async_searcher(url, post=True, json=content, re_json=True)
+    try:
+        request = await async_searcher(url, post=True, json=content, re_json=True)
+    except ContentTypeError as er:
+        if url != O_API:
+            return await create_quotly(O_API, post=True, json=content, re_json=True)
+        raise er
     if request.get("ok"):
         with open(file_name, "wb") as file:
             image = base64.decodebytes(request["result"]["image"].encode("utf-8"))

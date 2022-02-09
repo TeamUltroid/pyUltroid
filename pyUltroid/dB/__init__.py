@@ -15,8 +15,8 @@ ULTROID_IMAGES = [
         "3c25230ae30d246194eba",
         "b01715a61b9e876c0d45d",
         "4ceaf720a96a24527ecff",
-        "92ac7b30769bc074dba5c",
         "a96223b574f29f3f0d184",
+        "6e081d339a01cc6190393",
     ]
 ]
 

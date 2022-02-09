@@ -42,9 +42,19 @@ from .. import LOGS
 from ..configs import Var
 from ..functions.helper import download_file, updater
 
+# Better than version_changes?
+
+
+def update_envs():
+    from .. import udB
+
+    for envs in list(os.environ):
+        if envs in udB.keys():
+            udB.set_key(envs, os.environ[envs])
+
 
 def startup_stuff():
-    from .. import udB
+    from .. import LOGS, udB
 
     x = ["resources/auth", "resources/downloads", "vcbot/downloads"]
     for x in x:
@@ -75,6 +85,8 @@ def startup_stuff():
             timezone(TZ)
             os.environ["TZ"] = TZ
             time.tzset()
+        except AttributeError as er:
+            LOGS.exception(er)
         except BaseException:
             LOGS.info(
                 "Incorrect Timezone ,\nCheck Available Timezone From Here https://telegra.ph/Ultroid-06-18-2\nSo Time is Default UTC"
@@ -362,6 +374,8 @@ async def plug(plugin_channels):
                 plugin = x.file.name.replace("_", "-").replace("|", "-")
                 if not os.path.exists(f"addons/{plugin}"):
                     await asyncio.sleep(0.6)
+                    if x.text == "#IGNORE":
+                        continue
                     plugin = await x.download_media(f"addons/{plugin}")
                 try:
                     load_addons(plugin.split("/")[-1].replace(".py", ""))
@@ -434,6 +448,23 @@ async def ready():
         LOGS.exception(er)
 
 
+async def WasItRestart(udb):
+    key = udb.get_key("_RESTART")
+    if not key:
+        return
+    from .. import asst, ultroid_bot
+
+    try:
+        data = key.split("_")
+        who = asst if data[0] == "bot" else ultroid_bot
+        await who.edit_message(
+            int(data[1]), int(data[2]), "__Restarted Successfully.__"
+        )
+    except Exception as er:
+        LOGS.exception(er)
+    udb.del_key("_RESTART")
+
+
 def _version_changes(udb):
     for _ in [
         "BOT_USERS",
@@ -445,6 +476,7 @@ def _version_changes(udb):
         "PLUGIN_CHANNEL",
         "CH_SOURCE",
         "CH_DESTINATION",
+        "BROADCAST",
     ]:
         key = udb.get_key(_)
         if key and str(key)[0] != "[":

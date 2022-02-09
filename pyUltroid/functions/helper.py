@@ -198,12 +198,7 @@ async def bash(cmd):
 
 
 async def updateme_requirements():
-    """To Update requirements"""
-    reqs = "resources/startup/requirements.txt"
-    try:
-        _, __ = await bash(f"{sys.executable} -m pip install --no-cache-dir -r {reqs}")
-    except Exception:
-        return format_exc()
+    await bash(f"{sys.executable} -m pip install --no-cache-dir -r requirements.txt")
 
 
 @run_async
@@ -497,7 +492,21 @@ async def restart(ult):
                 "`HEROKU_API` or `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars.",
             )
     else:
-        os.execl(sys.executable, sys.executable, "-m", "pyUltroid")
+        if len(sys.argv) == 1:
+            os.execl(sys.executable, sys.executable, "-m", "pyUltroid")
+        else:
+            os.execl(
+                sys.executable,
+                sys.executable,
+                "-m",
+                "pyUltroid",
+                sys.argv[1],
+                sys.argv[2],
+                sys.argv[3],
+                sys.argv[4],
+                sys.argv[5],
+                sys.argv[6],
+            )
 
 
 async def shutdown(ult):
@@ -514,7 +523,7 @@ async def shutdown(ult):
             await ult.edit("`Shutting Down your app, please wait for a minute!`")
             app.process_formation()[dynotype].scale(0)
         except BaseException as e:
-            LOGS.info(e)
+            LOGS.exception(e)
             return await ult.edit(
                 "`HEROKU_API` and `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars."
             )

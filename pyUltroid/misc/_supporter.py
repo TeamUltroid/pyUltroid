@@ -12,12 +12,11 @@
 
 import inspect
 import os
-import re
 from pathlib import Path
 
 from telethon import events, types
 
-from pyUltroid.misc._decorators import ultroid_cmd
+from pyUltroid.misc._decorators import compile_pattern, ultroid_cmd
 from pyUltroid.misc._wrappers import eod, eor
 
 from .. import *
@@ -28,9 +27,9 @@ ALIVE_NAME = ultroid_bot.me.first_name
 BOTLOG_CHATID = BOTLOG = udB.get_key("LOG_CHANNEL")
 
 
-bot = borg = friday = ultroid_bot
+bot = borg = catub = friday = ultroid_bot
+catub.cat_cmd = ultroid_cmd
 
-hndlr = "\\" + HNDLR
 black_list_chats = udB.get_key("BLACKLIST_CHATS")
 
 
@@ -41,7 +40,7 @@ def admin_cmd(pattern=None, command=None, **args):
     args["outgoing"] = True
     args["forwards"] = False
     if pattern:
-        args["pattern"] = re.compile(hndlr + pattern)
+        args["pattern"] = compile_pattern(pattern, HNDLR)
         file = Path(inspect.stack()[1].filename)
         if LIST.get(file.stem):
             LIST[file.stem].append(pattern)
@@ -61,7 +60,7 @@ def sudo_cmd(allow_sudo=True, pattern=None, command=None, **args):
     args["blacklist_chats"] = True
     args["forwards"] = False
     if pattern:
-        args["pattern"] = re.compile("\\" + SUDO_HNDLR + pattern)
+        args["pattern"] = compile_pattern(pattern, SUDO_HNDLR)
     if allow_sudo:
         args["from_users"] = SUDO_M.get_sudos
         args["incoming"] = True
@@ -82,7 +81,7 @@ class Config((object)):
         LOGGER = True
         LOCATION = os.environ.get("LOCATION", None)
         OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
-        SUDO_COMMAND_HAND_LER = "\\" + SUDO_HNDLR
+        SUDO_COMMAND_HAND_LER = SUDO_HNDLR
         TMP_DOWNLOAD_DIRECTORY = os.environ.get(
             "TMP_DOWNLOAD_DIRECTORY", "resources/downloads/"
         )

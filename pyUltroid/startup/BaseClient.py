@@ -94,7 +94,7 @@ class UltroidClient(TelegramClient):
         except ApiIdInvalidError:
             self.logger.error("API ID and API_HASH combination does not match!")
 
-            sys_exit()
+            sys.exit()
         except (AuthKeyDuplicatedError, EOFError) as er:
             if self._handle_error:
                 self.logger.error("String session expired. Create new!")
@@ -107,11 +107,11 @@ class UltroidClient(TelegramClient):
             self.logger.error(
                 "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
-            sys_exit()
+            sys.exit()
         except AccessTokenInvalidError:
             self.udB.del_key("BOT_TOKEN")
             self.logger.error("The provided bot token is not valid! Quitting...")
-            sys_exit()
+            sys.exit()
 
         # Save some stuff for later use...
         self.me = await self.get_me()
@@ -148,7 +148,7 @@ class UltroidClient(TelegramClient):
         by_bot = self._bot
         size = os.path.getsize(file)
         # Don't show progress bar when file size is less than 5MB.
-        if size < 5 * 2 ** 20:
+        if size < 5 * 2**20:
             show_progress = False
         if use_cache and self._cache and self._cache.get("upload_cache"):
             for files in self._cache["upload_cache"]:
@@ -200,15 +200,15 @@ class UltroidClient(TelegramClient):
                 pass
         return raw_file, time.time() - start_time
 
-    async def fast_downloader(self, file, filename, **kwargs):
+    async def fast_downloader(self, file, **kwargs):
         """Download files in a faster way"""
         # Set to True and pass event to show progress bar.
         show_progress = kwargs.get("show_progress", False)
-        message = kwargs.get("message", f"Uploading {filename}...")
+        filename = kwargs.get("filename", None)
         if show_progress:
             event = kwargs["event"]
         # Don't show progress bar when file size is less than 10MB.
-        if file.size < 10 * 2 ** 20:
+        if file.size < 10 * 2**20:
             show_progress = False
         import mimetypes
 
@@ -231,6 +231,7 @@ class UltroidClient(TelegramClient):
                     + str(round(start_time))
                     + mimetypes.guess_extension(mimytype)
                 )
+        message = kwargs.get("message", f"Uploading {filename}...")
 
         raw_file = None
         while not raw_file:

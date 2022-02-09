@@ -20,11 +20,12 @@ from ..misc import SUDO_M
 async def ban_time(event, time_str):
     """Simplify ban time from text"""
     if not any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
-        return await event.edit(
+        await event.edit(
             "Invalid time type specified. Expected s, m,h, or d, got: {}".format(
                 time_str[-1]
             )
         )
+        return
     unit = time_str[-1]
     time_int = time_str[:-1]
     if not time_int.isdigit():
