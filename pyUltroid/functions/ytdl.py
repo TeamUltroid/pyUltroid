@@ -235,7 +235,7 @@ async def dler(event, url, opts: dict = {}, download=False):
     if download:
         await ytdownload(url, opts)
     try:
-        await extract_info(url)
+        return await extract_info(url)
     except Exception as e:
         await event.edit(f"{type(e)}: {e}")
         return
@@ -244,7 +244,7 @@ async def dler(event, url, opts: dict = {}, download=False):
 @run_async
 def ytdownload(url, opts):
     try:
-        YoutubeDL(opts).download([url])
+        return YoutubeDL(opts).download([url])
     except Exception as ex:
         LOGS.error(ex)
 
