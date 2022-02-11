@@ -679,7 +679,7 @@ class TgConverter:
             if w > h:
                 h, w = -1, 512
         await bash(
-            f'ffmpeg -i "{file}" -preset fast -an -to 00:00:02.95 -crf 30 -bufsize 256k -b:v {_["bitrate"]} -vf scale={w}:{h} -c:v libvpx-vp9 "{name}" -y'
+            f'ffmpeg -i "{file}" -preset fast -an -to 00:00:03 -crf 30 -bufsize 256k -b:v {_["bitrate"]} -vf "scale={w}:{h},fps=30" -c:v libvpx-vp9 "{name}" -y'
         )
         if remove:
             os.remove(file)
