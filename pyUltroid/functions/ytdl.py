@@ -39,8 +39,10 @@ async def ytdl_progress(k, start_time, event):
 
 def get_yt_link(query):
     search = VideosSearch(query, limit=1).result()
-    return search["result"][0]["link"]
-
+    try:
+        return search["result"][0]["link"]
+    except IndexError:
+        return 
 
 async def download_yt(event, link, ytd):
     reply_to = event.reply_to_msg_id or event
