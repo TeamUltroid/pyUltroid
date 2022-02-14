@@ -53,10 +53,16 @@ else:
 
         sys_exit()
 
+
 asst = UltroidClient(None, bot_token=udB.get_key("BOT_TOKEN"), udB=udB)
 
 if BOT_MODE:
     ultroid_bot = asst
+    if udB.get_key("OWNER_ID"):
+        try:
+            ultroid_bot.me = ultroid_bot.run_in_loop(ultroid_bot.get_entity(udB.get_key("OWNER_ID"))) 
+        except Exception as er:
+            LOGS.exception(er)
 
 vcClient = vc_connection(udB, ultroid_bot)
 
