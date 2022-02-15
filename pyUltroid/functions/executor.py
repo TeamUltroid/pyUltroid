@@ -7,7 +7,7 @@ class Terminal:
     def __init__(self):
         self._processes = {}
 
-    @property
+    @staticmethod
     def to_str(data):
         return data.decode("utf-8")
 
