@@ -46,10 +46,10 @@ if not BOT_MODE:
     ultroid_bot.run_in_loop(autobot())
 else:
     if not udB.get_key("BOT_TOKEN"):
-        LOGS.info('"BOT_TOKEN" not Found! Please add it, in order to use "BOTMODE"')
+        LOGS.critical('"BOT_TOKEN" not Found! Please add it, in order to use "BOTMODE"')
         import sys
 
-        sys_exit()
+        sys.exit()
 
 
 asst = UltroidClient(None, bot_token=udB.get_key("BOT_TOKEN"), udB=udB)

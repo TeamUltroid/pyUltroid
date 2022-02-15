@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import glob
+from logging import Logger
 import os
 from importlib import import_module
 
@@ -18,7 +19,7 @@ from .utils import load_addons
 
 
 class Loader:
-    def __init__(self, path="plugins", key="Official", logger=LOGS):
+    def __init__(self, path="plugins", key="Official", logger:Logger=LOGS):
         self.path = path
         self.key = key
         self._logger = logger
@@ -55,9 +56,11 @@ class Loader:
                 plugin = plugin.split("/")[-1]
             try:
                 doc = func(plugin)
+            except ModuleNotFoundError as er:
+                self._logger.error(f"{plugin}: '{er.name}' module not installed!")
             except Exception as exc:
                 doc = None
-                self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
+                self._logger.error(f"Ultroid - {self.key} - ERROR - {plugin}")
                 self._logger.exception(exc)
             if func == import_module:
                 plugin = plugin.split(".")[-1]
@@ -156,4 +159,4 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
             Loader(path="vcbot", key="VCBot").load()
         except ModuleNotFoundError:
-            LOGS.info("'pytgcalls' not installed!\nSkipping load of VcBot.")
+            LOGS.error("'pytgcalls' not installed!\nSkipping load of VcBot.")

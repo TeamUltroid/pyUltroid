@@ -50,7 +50,7 @@ async def _try_delete(event):
     except (MessageDeleteForbiddenError):
         pass
     except BaseException as er:
-        LOGS.info("Error while Deleting Message..")
+        LOGS.error("Error while Deleting Message..")
         LOGS.exception(er)
 
 

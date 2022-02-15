@@ -6,10 +6,7 @@ requirements = [
     "redis",
     "python-decouple",
     "python-dotenv",
-    "aiofiles",
-    "aiohttp",
-    "hiredis",
-    "pytz",
+    "hiredis"
 ]
 
 

@@ -77,11 +77,7 @@ def load_addons(plugin_name):
     modules["fridaybot.utils"] = xxx
     modules["fridaybot.Config"] = xxx
     modules["userbot.uniborgConfig"] = xxx
-    try:
-        spec.loader.exec_module(mod)
-    except ModuleNotFoundError as er:
-        LOGS.error(f"Not loading '{plugin_name}' // module '{er.name}' not installed.")
-        return
+    spec.loader.exec_module(mod)
     modules["addons." + plugin_name] = mod
     doc = (
         modules[f"addons.{plugin_name}"].__doc__.format(i=HNDLR)
