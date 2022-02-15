@@ -193,6 +193,7 @@ async def autopilot():
     if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
         udB.set_key("LOG_CHANNEL", Var.LOG_CHANNEL)
     channel = udB.get_key("LOG_CHANNEL")
+    new_channel = None
     if channel:
         try:
             chat = await ultroid_bot.get_entity(channel)
@@ -230,6 +231,7 @@ async def autopilot():
             import sys
 
             sys.exit(1)
+        new_channel = True
         chat = r.chats[0]
         channel = get_peer_id(chat)
         udB.set_key("LOG_CHANNEL", str(channel))
@@ -246,7 +248,7 @@ async def autopilot():
     except BaseException as er:
         assistant = False
         LOGS.exception(er)
-    if assistant:
+    if assistant and new_channel:
         try:
             achat = await asst.get_entity(int(channel))
         except BaseException as er:
