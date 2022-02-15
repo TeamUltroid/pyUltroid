@@ -328,8 +328,8 @@ async def get_insta_code(username, choice):
 
 async def create_instagram_client(event):
     if not Client:
-        await eor(
-            event, "`Instagrapi not Found\nInstall it to use Instagram plugin...`"
+        await event.eor
+            "`Instagrapi not Found\nInstall it to use Instagram plugin...`"
         )
         return
     try:
@@ -341,6 +341,7 @@ async def create_instagram_client(event):
     username = udB.get_key("INSTA_USERNAME")
     password = udB.get_key("INSTA_PASSWORD")
     if not (username and password):
+        await event.eor("`Please Fill Instagram Credentials to Use This...`")
         return
     settings = udB.get_key("INSTA_SET") or {}
     cl = Client(settings)
