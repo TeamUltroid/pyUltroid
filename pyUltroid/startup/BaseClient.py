@@ -92,25 +92,25 @@ class UltroidClient(TelegramClient):
         try:
             await self.start(**kwargs)
         except ApiIdInvalidError:
-            self.logger.error("API ID and API_HASH combination does not match!")
+            self.logger.critical("API ID and API_HASH combination does not match!")
 
             sys.exit()
         except (AuthKeyDuplicatedError, EOFError) as er:
             if self._handle_error:
-                self.logger.error("String session expired. Create new!")
+                self.logger.critical("String session expired. Create new!")
                 return sys.exit()
             raise er
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
             # And at Early Process, Its saved in Redis.
             self.udB.del_key("BOT_TOKEN")
-            self.logger.error(
+            self.logger.critical(
                 "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
             sys.exit()
         except AccessTokenInvalidError:
             self.udB.del_key("BOT_TOKEN")
-            self.logger.error("The provided bot token is not valid! Quitting...")
+            self.logger.critical("The provided bot token is not valid! Quitting...")
             sys.exit()
 
         # Save some stuff for later use...
@@ -121,7 +121,7 @@ class UltroidClient(TelegramClient):
             setattr(self.me, "phone", None)
             me = self.full_name
         if self._log_at:
-            self.logger.info(f"Logged in as {me}")
+            self.logger.success(f"Logged in as {me}")
 
     async def fast_uploader(self, file, **kwargs):
         """Upload files in a faster way"""
