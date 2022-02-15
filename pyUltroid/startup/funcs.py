@@ -45,10 +45,9 @@ from .. import LOGS
 from ..configs import Var
 from ..functions.helper import download_file, updater
 
-# Better than version_changes?
-
 
 def update_envs():
+    """Update Var. attributes to udB"""
     from .. import udB
 
     for envs in list(os.environ):
@@ -102,9 +101,7 @@ async def autobot():
     from .. import udB, ultroid_bot
 
     if udB.get_key("BOT_TOKEN"):
-        return
-    if Var.BOT_TOKEN:
-        return udB.set_key("BOT_TOKEN", Var.BOT_TOKEN)
+        return  
     await ultroid_bot.start()
     LOGS.info("MAKING A TELEGRAM BOT FOR YOU AT @BotFather, Kindly Wait")
     who = ultroid_bot.me
@@ -190,8 +187,6 @@ async def autobot():
 async def autopilot():
     from .. import asst, udB, ultroid_bot
 
-    if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
-        udB.set_key("LOG_CHANNEL", Var.LOG_CHANNEL)
     channel = udB.get_key("LOG_CHANNEL")
     new_channel = None
     if channel:
