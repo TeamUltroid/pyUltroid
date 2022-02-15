@@ -405,7 +405,7 @@ async def ready():
         BTTS = Button.inline("• Click to Start •", "initft_2")
         udB.set_key("INIT_DEPLOY", "Done")
     else:
-        MSG = f"**Ultroid has been deployed!**\n➖➖➖➖➖➖➖➖➖\n**UserMode**: {inline_mention(ultroid_bot.me)}\n**Assistant**: @{asst.me.username}\n➖➖➖➖➖➖➖➖➖\n**Support**: @TeamUltroid\n➖➖➖➖➖➖➖➖➖"
+        MSG = f"**Ultroid has been deployed!**\n■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■\n**UserMode**: {inline_mention(ultroid_bot.me)}\n**Assistant**: @{asst.me.username}\n■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■\n**Support**: @TeamUltroid\n■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■"
         BTTS, PHOTO = None, None
         prev_spam = udB.get_key("LAST_UPDATE_LOG_SPAM")
         if prev_spam:
@@ -440,7 +440,7 @@ async def ready():
     except ChannelsTooMuchError:
         LOGS.info("Join @TheUltroid to know about new Updates...")
     except ChannelPrivateError:
-        LOGS.info(
+        LOGS.critical(
             "You are Banned from @TheUltroid for some reason. Contact any dev if you think there is some mistake..."
         )
         import sys
