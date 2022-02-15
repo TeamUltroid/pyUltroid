@@ -57,7 +57,9 @@ def update_envs():
 
 def startup_stuff():
     from .. import LOGS, udB
-
+    if not os.path.exists("./plugins"):
+        LOGS.error("'plugins' folder not found!\nMake sure that, you are on correct path.")
+        exit()
     x = ["resources/auth", "resources/downloads", "vcbot/downloads"]
     for x in x:
         if not os.path.isdir(x):

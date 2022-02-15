@@ -19,10 +19,10 @@ OWNER = ultroid_bot.full_name
 
 MSG = f"""
 **Ultroid - UserBot**
-🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘
+■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■
 **Owner**: [{OWNER}](tg://user?id={ultroid_bot.uid})
 **Support**: @TeamUltroid
-🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘
+■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■
 """
 
 IN_BTTS = [

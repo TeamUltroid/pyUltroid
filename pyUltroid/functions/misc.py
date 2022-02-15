@@ -12,7 +12,11 @@ import string
 from logging import WARNING
 from random import choice, randrange, shuffle
 from traceback import format_exc
-from aiohttp import ContentTypeError
+
+try:
+    from aiohttp import ContentTypeError
+except ImportError:
+    ContentTypeError = None
 
 from telethon.tl import types
 from telethon.utils import get_display_name, get_peer_id
@@ -22,7 +26,7 @@ from ..dB import DEVLIST
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
-from .tools import async_searcher, check_filename, json_parser
+from .tools import async_searcher, check_filename, json_parser, bash
 
 try:
     import aiofiles
@@ -478,6 +482,7 @@ class Quotly:
         sender=None,
         file_name="quote.webp",
     ):
+        """Create quotely's quote."""
         if not isinstance(event, list):
             event = [event]
         from .. import udB
@@ -538,3 +543,15 @@ def random_string(length=3):
 
 
 setattr(random, "random_string", random_string)
+
+
+async def get_current_branch() -> str:
+    """get current git branch."""
+    try:
+        from git import Repo
+        return Repo().active_branch
+    except ImportError:
+        out, _ = await bash("git branch")
+        for line in out.split("\n"):
+            if line.startswith("*"):
+                return line[1:].strip()
