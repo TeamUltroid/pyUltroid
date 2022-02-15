@@ -14,7 +14,7 @@ class Terminal:
     async def run(self, cmd):
         process = await create_subprocess_shell(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         pid = process.pid
-        self._process[pid] = process
+        self._processes[pid] = process
         return pid
 
     async def terminate(self, pid):
