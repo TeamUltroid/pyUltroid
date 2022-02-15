@@ -55,8 +55,9 @@ if HOSTED_ON == "local":
 
     _ask_input()
 
+_LOG_FORMAT = "%(asctime)s | %(name)s [%(levelname)s] : %(message)s"
 basicConfig(
-    format="%(asctime)s || %(name)s [%(levelname)s] : %(message)s",
+    format=_LOG_FORMAT,
     level=INFO,
     datefmt="%m/%d/%Y, %H:%M:%S",
     handlers=[FileHandler(file), StreamHandler()],
@@ -64,7 +65,7 @@ basicConfig(
 try:
 
     import coloredlogs
-    coloredlogs.install(level=None, logger=LOGS)
+    coloredlogs.install(level=None, logger=LOGS, fmt=_LOG_FORMAT)
 except ImportError:
     pass
 
