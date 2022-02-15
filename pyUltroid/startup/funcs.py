@@ -13,7 +13,10 @@ import time
 from random import randint
 from urllib.request import urlretrieve
 
-from pytz import timezone
+try:
+    from pytz import timezone
+except ImportError:
+    timezone = None
 from telethon.errors import (
     BotMethodInvalidError,
     ChannelPrivateError,
@@ -80,13 +83,13 @@ def startup_stuff():
             mega.write(f"[Login]\nUsername = {MM}\nPassword = {MP}")
 
     TZ = udB.get_key("TIMEZONE")
-    if TZ:
+    if TZ and timezone:
         try:
             timezone(TZ)
             os.environ["TZ"] = TZ
             time.tzset()
         except AttributeError as er:
-            LOGS.exception(er)
+            LOGS.debug(er)
         except BaseException:
             LOGS.info(
                 "Incorrect Timezone ,\nCheck Available Timezone From Here https://telegra.ph/Ultroid-06-18-2\nSo Time is Default UTC"
