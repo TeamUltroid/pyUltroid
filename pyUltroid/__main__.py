@@ -50,6 +50,10 @@ manager = udB.get_key("MANAGER")
 addons = udB.get_key("ADDONS") or Var.ADDONS
 vcbot = udB.get_key("VCBOT") or Var.VCBOT
 
+if HOSTED_ON == "termux" and udB.get_key("EXCLUDE_OFFICIAL") == None:
+    _plugins = "gdrive pdftools writer"
+    udB.set_key("EXCLUDE_OFFICIAL", _plugins)
+
 load_other_plugins(addons=addons, pmbot=pmbot, manager=manager, vcbot=vcbot)
 
 suc_msg = """
