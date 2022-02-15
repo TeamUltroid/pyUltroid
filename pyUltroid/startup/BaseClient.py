@@ -122,7 +122,7 @@ class UltroidClient(TelegramClient):
             setattr(self.me, "phone", None)
             me = self.full_name
         if self._log_at:
-            self.logger.success(f"Logged in as {me}")
+            self.logger.info(f"Logged in as {me}")
 
     async def fast_uploader(self, file, **kwargs):
         """Upload files in a faster way"""
