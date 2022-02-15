@@ -12,7 +12,7 @@ from .startup import *
 from .startup._database import UltroidDB
 from .startup.BaseClient import UltroidClient
 from .startup.connections import session_file, vc_connection
-from .startup.funcs import _version_changes, autobot
+from .startup.funcs import _version_changes, autobot, update_envs
 from .version import ultroid_version
 
 start_time = time.time()
@@ -20,6 +20,7 @@ _ult_cache = {}
 # sys.exit = sys_exit()
 
 udB = UltroidDB()
+update_envs()
 
 LOGS.info(f"Connecting to {udB.name}...")
 if udB.ping():
@@ -45,8 +46,6 @@ else:
 if not BOT_MODE:
     ultroid_bot.run_in_loop(autobot())
 else:
-    if not udB.get_key("BOT_TOKEN") and Var.BOT_TOKEN:
-        udB.set_key("BOT_TOKEN", Var.BOT_TOKEN)
     if not udB.get_key("BOT_TOKEN"):
         LOGS.info('"BOT_TOKEN" not Found! Please add it, in order to use "BOTMODE"')
         import sys
