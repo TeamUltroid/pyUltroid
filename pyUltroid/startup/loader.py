@@ -134,7 +134,13 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
                 "rm -rf /usr/local/lib/python3.9/site-packages/pip/_vendor/.wh.appdirs.py"
             )
             os.system("pip3 install --no-cache-dir -q -r ./addons/addons.txt")
-        Loader(path="addons", key="Addons").load(func=load_addons)
+
+        _exclude = udB.get_key("EXCLUDE_ADDONS")
+        _exclude = _exclude.split() if _exclude else []
+        _in_only = udB.get_key("INCLUDE_ADDONS")
+        _in_only = _in_only.split() if _in_only else []
+
+        Loader(path="addons", key="Addons").load(func=load_addons, include=_in_only, exclude=_exclude)
 
     # group manager
     if manager:
