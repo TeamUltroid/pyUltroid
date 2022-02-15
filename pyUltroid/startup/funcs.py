@@ -173,7 +173,7 @@ async def autobot():
         await ultroid_bot.send_message(bf, f"@{username}")
         await asyncio.sleep(1)
         await ultroid_bot.send_message(bf, "Search")
-        LOGS.success(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
+        LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
     else:
         LOGS.info(
             "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
@@ -347,7 +347,7 @@ async def customize():
         await msg.edit("Completed **Auto Customisation** at @BotFather.")
         if rem:
             os.remove(file)
-        LOGS.success("Customisation Done")
+        LOGS.info("Customisation Done")
     except Exception as e:
         LOGS.exception(e)
 

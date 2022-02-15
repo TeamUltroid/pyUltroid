@@ -10,7 +10,6 @@ import os
 from importlib import import_module
 
 from decouple import config
-from git import Repo
 
 from .. import *
 from ..dB._core import HELP

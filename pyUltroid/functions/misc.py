@@ -12,6 +12,7 @@ import string
 from logging import WARNING
 from random import choice, randrange, shuffle
 from traceback import format_exc
+from aiohttp import ContentTypeError
 
 from telethon.tl import types
 from telethon.utils import get_display_name, get_peer_id
@@ -367,8 +368,9 @@ async def create_instagram_client(event):
 
 # Quotly
 
-
-_entities = {
+class Quotly:
+    _API = "https://bot.lyo.su/quote/generate"
+    _entities = {
     types.MessageEntityPhone: "phone_number",
     types.MessageEntityMention: "mention",
     types.MessageEntityBold: "bold",
@@ -384,65 +386,64 @@ _entities = {
     types.MessageEntityCode: "code",
     types.MessageEntityPre: "pre",
     types.MessageEntitySpoiler: "spoiler",
-}
+    }
 
-
-async def _format_quote(event, reply=None, sender=None, type_="private"):
-    async def telegraph(file_):
-        file = file_ + ".png"
-        Image.open(file_).save(file, "PNG")
-        files = {"file": open(file, "rb").read()}
-        uri = (
+    async def _format_quote(self, event, reply=None, sender=None, type_="private"):
+        async def telegraph(file_):
+            file = file_ + ".png"
+            Image.open(file_).save(file, "PNG")
+            files = {"file": open(file, "rb").read()}
+            uri = (
             "https://telegra.ph"
             + (
                 await async_searcher(
                     "https://telegra.ph/upload", post=True, data=files, re_json=True
                 )
             )[0]["src"]
-        )
-        os.remove(file)
-        os.remove(file_)
-        return uri
+            )
+            os.remove(file)
+            os.remove(file_)
+            return uri
 
-    if reply:
-        reply = {
+        if reply:
+            reply = {
             "name": get_display_name(reply.sender) or "Deleted Account",
             "text": reply.raw_text,
             "chatId": reply.chat_id,
-        }
-    else:
-        reply = {}
-    is_fwd = event.fwd_from
-    name = None
-    last_name = None
-    if sender and sender.id not in DEVLIST:
-        id_ = get_peer_id(sender)
-        name = get_display_name(sender)
-    elif not is_fwd:
-        id_ = event.sender_id
-        sender = await event.get_sender()
-        name = get_display_name(sender)
-    else:
-        id_, sender = None, None
-        name = is_fwd.from_name
-        if is_fwd.from_id:
-            id_ = get_peer_id(is_fwd.from_id)
-            try:
-                sender = await event.client.get_entity(id_)
-                name = get_display_name(sender)
-            except ValueError:
-                pass
-    if sender and hasattr(sender, "last_name"):
-        last_name = sender.last_name
-    entities = []
-    if event.entities:
-        for entity in event.entities:
-            if type(entity) in _entities:
-                enti_ = entity.to_dict()
-                del enti_["_"]
-                enti_["type"] = _entities[type(entity)]
-                entities.append(enti_)
-    message = {
+            }
+        else:
+            reply = {}
+        is_fwd = event.fwd_from
+        name = None
+        last_name = None
+        if sender and sender.id not in DEVLIST:
+            id_ = get_peer_id(sender)
+            name = get_display_name(sender)
+        elif not is_fwd:
+            id_ = event.sender_id
+            sender = await event.get_sender()
+            name = get_display_name(sender)
+        else:
+            id_, sender = None, None
+            name = is_fwd.from_name
+            if is_fwd.from_id:
+                id_ = get_peer_id(is_fwd.from_id)
+                try:
+                    sender = await event.client.get_entity(id_)
+                    name = get_display_name(sender)
+                except ValueError:
+                    pass
+        if sender and hasattr(sender, "last_name"):
+            last_name = sender.last_name
+        entities = []
+        if event.entities:
+            for entity in event.entities:
+                if type(entity) in self._entities:
+                    enti_ = entity.to_dict()
+                    del enti_["_"]
+                    enti_["type"] = self._entities[type(entity)]
+                    entities.append(enti_)
+        message = {
         "entities": entities,
         "chatId": id_,
         "avatar": True,
@@ -459,58 +460,56 @@ async def _format_quote(event, reply=None, sender=None, type_="private"):
         },
         "text": event.raw_text,
         "replyMessage": reply,
-    }
-    if event.document and event.document.thumbs:
-        file_ = await event.download_media(thumb=-1)
-        uri = await telegraph(file_)
-        message["media"] = {"url": uri}
+        }
+        if event.document and event.document.thumbs:
+            file_ = await event.download_media(thumb=-1)
+            uri = await telegraph(file_)
+            message["media"] = {"url": uri}
 
-    return message
-
-
-O_API = "https://bot.lyo.su/quote/generate"
+        return message
 
 
-async def create_quotly(
-    event,
-    url="https://qoute-api-akashpattnaik.koyeb.app/generate",
-    reply={},
-    bg=None,
-    sender=None,
-    file_name="quote.webp",
-):
-    if not isinstance(event, list):
-        event = [event]
-    from .. import udB
+    async def create_quotly(
+        self,
+        event,
+        url="https://qoute-api-akashpattnaik.koyeb.app/generate",
+        reply={},
+        bg=None,
+        sender=None,
+        file_name="quote.webp",
+    ):
+        if not isinstance(event, list):
+            event = [event]
+        from .. import udB
 
-    if udB.get_key("OQAPI"):
-        url = O_API
-    if not bg:
-        bg = "#1b1429"
-    content = {
-        "type": "quote",
-        "format": "webp",
-        "backgroundColor": bg,
-        "width": 512,
-        "height": 768,
-        "scale": 2,
-        "messages": [
-            await _format_quote(message, reply=reply, sender=sender)
-            for message in event
-        ],
-    }
-    try:
-        request = await async_searcher(url, post=True, json=content, re_json=True)
-    except ContentTypeError as er:
-        if url != O_API:
-            return await create_quotly(O_API, post=True, json=content, re_json=True)
-        raise er
-    if request.get("ok"):
-        with open(file_name, "wb") as file:
-            image = base64.decodebytes(request["result"]["image"].encode("utf-8"))
-            file.write(image)
-        return file_name
-    raise Exception(str(request))
+        if udB.get_key("OQAPI"):
+            url = Quotly._API
+        if not bg:
+            bg = "#1b1429"
+        content = {
+            "type": "quote",
+            "format": "webp",
+            "backgroundColor": bg,
+            "width": 512,
+            "height": 768,
+            "scale": 2,
+            "messages": [
+                await self._format_quote(message, reply=reply, sender=sender)
+                for message in event
+            ],
+        }
+        try:
+            request = await async_searcher(url, post=True, json=content, re_json=True)
+        except ContentTypeError as er:
+            if url != self._API:
+                return await self.create_quotly(self._API, post=True, json=content, re_json=True)
+            raise er
+        if request.get("ok"):
+            with open(file_name, "wb") as file:
+                image = base64.decodebytes(request["result"]["image"].encode("utf-8"))
+                file.write(image)
+            return file_name
+        raise Exception(str(request))
 
 
 # Some Sarcasm

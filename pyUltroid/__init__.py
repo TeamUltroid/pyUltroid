@@ -17,7 +17,6 @@ from .version import ultroid_version
 
 start_time = time.time()
 _ult_cache = {}
-# sys.exit = sys_exit()
 
 udB = UltroidDB()
 update_envs()
@@ -59,7 +58,9 @@ if BOT_MODE:
     ultroid_bot = asst
     if udB.get_key("OWNER_ID"):
         try:
-            ultroid_bot.me = ultroid_bot.run_in_loop(ultroid_bot.get_entity(udB.get_key("OWNER_ID"))) 
+            ultroid_bot.me = ultroid_bot.run_in_loop(
+                ultroid_bot.get_entity(udB.get_key("OWNER_ID"))
+            ) 
         except Exception as er:
             LOGS.exception(er)
 

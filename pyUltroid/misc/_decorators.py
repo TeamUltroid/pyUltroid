@@ -100,14 +100,14 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 await dec(ult)
             except FloodWaitError as fwerr:
                 await asst.send_message(
-                    int(udB.get_key("LOG_CHANNEL")),
+                    udB.get_key("LOG_CHANNEL"),
                     f"`FloodWaitError:\n{str(fwerr)}\n\nSleeping for {tf((fwerr.seconds + 10)*1000)}`",
                 )
                 await ultroid_bot.disconnect()
                 await asyncio.sleep(fwerr.seconds + 10)
                 await ultroid_bot.connect()
                 await asst.send_message(
-                    int(udB.get_key("LOG_CHANNEL")),
+                    udB.get_key("LOG_CHANNEL"),
                     "`Bot is working again`",
                 )
                 return
@@ -117,8 +117,8 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 return await eod(
                     ult, "`Sending media or sticker is not allowed in this chat.`"
                 )
-            except (BotMethodInvalidError, UserIsBotError) as boterror:
-                return await eod(ult, str(boterror))
+            except (BotMethodInvalidError, UserIsBotError):
+                return await eod(ult, "This Command Can't be used by Bot!")
             except AlreadyInConversationError:
                 return await eod(
                     ult,
@@ -133,7 +133,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
             except AuthKeyDuplicatedError as er:
                 LOGS.exception(er)
                 await asst.send_message(
-                    int(udB.get_key("LOG_CHANNEL")),
+                    udB.get_key("LOG_CHANNEL"),
                     "Session String expired, create new session from 👇",
                     buttons=[
                         Button.url("Bot", "t.me/SessionGeneratorBot?start="),

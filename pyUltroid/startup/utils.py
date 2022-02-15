@@ -80,7 +80,7 @@ def load_addons(plugin_name):
     try:
         spec.loader.exec_module(mod)
     except ModuleNotFoundError as er:
-        LOGS.exception(f"Not loading '{plugin_name}' // module '{er.name}' not installed.")
+        LOGS.error(f"Not loading '{plugin_name}' // module '{er.name}' not installed.")
         return
     modules["addons." + plugin_name] = mod
     doc = (

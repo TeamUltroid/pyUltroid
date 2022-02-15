@@ -225,7 +225,7 @@ class UltroidClient(TelegramClient):
                     mimetype.split("/")[0]
                     + "-"
                     + str(round(start_time))
-                    + mimetypes.guess_extension(mimytype)
+                    + mimetypes.guess_extension(mimetype)
                 )
         message = kwargs.get("message", f"Uploading {filename}...")
 
