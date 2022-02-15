@@ -40,13 +40,6 @@ def where_hosted():
 
 HOSTED_ON = where_hosted()
 LOGS = getLogger("pyUltLogs")
-
-try:
-    import coloredlogs
-    coloredlogs.install(level='INFO', logger=LOGS)
-except ImportError:
-    pass
-
 TelethonLogger = getLogger("Telethon")
 TelethonLogger.setLevel(INFO)
 
@@ -68,6 +61,12 @@ basicConfig(
     datefmt="%m/%d/%Y, %H:%M:%S",
     handlers=[FileHandler(file), StreamHandler()],
 )
+try:
+
+    import coloredlogs
+    coloredlogs.install(level=None, logger=LOGS)
+except ImportError:
+    pass
 
 LOGS.info(
     """
