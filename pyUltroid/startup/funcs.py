@@ -90,7 +90,7 @@ def startup_stuff():
         except AttributeError as er:
             LOGS.debug(er)
         except BaseException:
-            LOGS.info(
+            LOGS.critical(
                 "Incorrect Timezone ,\nCheck Available Timezone From Here https://telegra.ph/Ultroid-06-18-2\nSo Time is Default UTC"
             )
             os.environ["TZ"] = "UTC"
@@ -118,7 +118,7 @@ async def autobot():
     await asyncio.sleep(1)
     isdone = (await ultroid_bot.get_messages(bf, limit=1))[0].text
     if isdone.startswith("That I cannot do.") or "20 bots" in isdone:
-        LOGS.info(
+        LOGS.critical(
             "Please make a Bot from @BotFather and add it's token in BOT_TOKEN, as an env var and restart me."
         )
         import sys
@@ -132,7 +132,7 @@ async def autobot():
         await asyncio.sleep(1)
         isdone = (await ultroid_bot.get_messages(bf, limit=1))[0].text
         if not isdone.startswith("Good."):
-            LOGS.info(
+            LOGS.critical(
                 "Please make a Bot from @BotFather and add it's token in BOT_TOKEN, as an env var and restart me."
             )
             import sys
@@ -158,7 +158,7 @@ async def autobot():
             await ultroid_bot.send_message(bf, "Search")
             LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
         else:
-            LOGS.info(
+            LOGS.critical(
                 "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
             )
 
@@ -173,7 +173,7 @@ async def autobot():
         await ultroid_bot.send_message(bf, f"@{username}")
         await asyncio.sleep(1)
         await ultroid_bot.send_message(bf, "Search")
-        LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
+        LOGS.success(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
     else:
         LOGS.info(
             "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
@@ -198,7 +198,7 @@ async def autopilot():
             channel = None
     if not channel:
         if ultroid_bot._bot:
-            LOGS.info("'LOG_CHANNEL' not found! Add it in order to use 'BOTMODE'")
+            LOGS.error("'LOG_CHANNEL' not found! Add it in order to use 'BOTMODE'")
             import sys
 
             sys.exit()
@@ -212,7 +212,7 @@ async def autopilot():
                 ),
             )
         except ChannelsTooMuchError:
-            LOGS.info(
+            LOGS.critical(
                 "You Are in Too Many Channels & Groups , Leave some And Restart The Bot"
             )
             import sys
@@ -347,7 +347,7 @@ async def customize():
         await msg.edit("Completed **Auto Customisation** at @BotFather.")
         if rem:
             os.remove(file)
-        LOGS.info("Customisation Done")
+        LOGS.success("Customisation Done")
     except Exception as e:
         LOGS.exception(e)
 
