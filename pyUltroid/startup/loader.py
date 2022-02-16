@@ -13,7 +13,8 @@ from importlib import import_module
 from decouple import config
 
 from .. import *
-from ..functions.misc import get_current_branch
+from git import Repo
+
 from ..dB._core import HELP
 from .utils import load_addons
 
@@ -121,7 +122,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
             os.rmdir("addons")
         if not os.path.exists("addons"):
             os.system(
-                f"git clone -q -b {await get_current_branch()} https://github.com/TeamUltroid/UltroidAddons.git addons"
+                f"git clone -q -b {Repo().active_branch} https://github.com/TeamUltroid/UltroidAddons.git addons"
             )
         else:
             os.system("cd addons && git pull -q && cd ..")
