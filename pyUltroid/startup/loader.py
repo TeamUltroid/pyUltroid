@@ -58,6 +58,7 @@ class Loader:
             try:
                 doc = func(plugin)
             except ModuleNotFoundError as er:
+                doc = None
                 self._logger.error(f"{plugin}: '{er.name}' module not installed!")
             except Exception as exc:
                 doc = None
@@ -65,10 +66,10 @@ class Loader:
                 self._logger.exception(exc)
             if func == import_module:
                 plugin = plugin.split(".")[-1]
-            if (
+            if doc and  (
                 (cmd_help or cmd_help == {})
                 and not plugin.startswith("_")
-                and (doc and doc.__doc__)
+                and (doc.__doc__)
             ):
                 doc = doc.__doc__.format(i=HNDLR)
                 if self.key in cmd_help.keys():
