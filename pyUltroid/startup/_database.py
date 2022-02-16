@@ -229,13 +229,13 @@ class SqlDB:
 # --------------------------------------------------------------------------------------------- #
 
 
-class RedisConnection:
+class RedisDB:
     def __init__(
         self,
         host,
         port,
         password,
-        platform=None,
+        platform="",
         logger=LOGS,
         *args,
         **kwargs,
@@ -323,7 +323,7 @@ def UltroidDB():
         return SqlDB(Var.DATABASE_URL)
     from .. import HOSTED_ON
 
-    return RedisConnection(
+    return RedisDB(
         host=Var.REDIS_URI or Var.REDISHOST,
         password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
         port=Var.REDISPORT,
