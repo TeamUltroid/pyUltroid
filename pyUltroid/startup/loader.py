@@ -121,7 +121,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
             os.rmdir("addons")
         if not os.path.exists("addons"):
             os.system(
-                f"git clone -q -b {get_current_branch()} https://github.com/TeamUltroid/UltroidAddons.git addons"
+                f"git clone -q -b {await get_current_branch()} https://github.com/TeamUltroid/UltroidAddons.git addons"
             )
         else:
             os.system("cd addons && git pull -q && cd ..")
