@@ -51,7 +51,7 @@ def update_envs():
     from .. import udB
 
     for envs in list(os.environ):
-        if envs in udB.keys():
+        if envs in ["LOG_CHANNEL", "BOT_TOKEN"] or envs in udB.keys():
             udB.set_key(envs, os.environ[envs])
 
 
