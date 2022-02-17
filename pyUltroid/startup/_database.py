@@ -188,7 +188,7 @@ class SqlDB:
 
     def set_key(self, key, value):
         try:
-            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS {key}")
+            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS (%s)", (str(key),))
         except (psycopg2.errors.UndefinedColumn, psycopg2.errors.SyntaxError):
             pass
         except BaseException as er:
