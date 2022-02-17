@@ -175,7 +175,7 @@ class SqlDB:
 
     def get(self, variable):
         try:
-            self._cursor.execute(f"SELECT {variable} FROM Ultroid")
+            self._cursor.execute(f"SELECT (%s) FROM Ultroid", (str(variable),))
         except psycopg2.errors.UndefinedColumn:
             return None
         data = self._cursor.fetchall()
@@ -183,8 +183,7 @@ class SqlDB:
             return None
         if len(data) >= 1:
             for i in data:
-                if i[0]:
-                    return i[0]
+                if i[0] return i[0]
 
     def set_key(self, key, value):
         try:
@@ -194,15 +193,15 @@ class SqlDB:
         except BaseException as er:
             LOGS.exception(er)
         self._cache.update({key: value})
-        self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-        self._cursor.execute(f"INSERT INTO Ultroid ({key}) values (%s)", (str(value),))
+        self._cursor.execute(f"ALTER TABLE Ultroid ADD (%s) TEXT", (str(key),))
+        self._cursor.execute(f"INSERT INTO Ultroid (%s) values (%s)", (str(key), str(value)))
         return True
 
     def del_key(self, key):
         if key in self._cache:
             del self._cache[key]
         try:
-            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
+            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN (%s)", (str(key),))
         except psycopg2.errors.UndefinedColumn:
             return False
         return True
