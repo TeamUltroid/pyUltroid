@@ -183,7 +183,7 @@ class SqlDB:
             return None
         if len(data) >= 1:
             for i in data:
-                if i[0] return i[0]
+                if i[0]: return i[0]
 
     def set_key(self, key, value):
         try:
