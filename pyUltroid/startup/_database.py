@@ -28,7 +28,7 @@ try:
 except ImportError:
     psycopg2 = None
     if Var.DATABASE_URL:
-        LOGS.warning("'psycopg2' not found!\nInstall psycopg2 to use sql database..")
+        LOGS.warning("'psycopg2' not found!\nInstall psycopg2 to use SQL database..")
 
 # --------------------------------------------------------------------------------------------- #
 
@@ -129,7 +129,7 @@ class SqlDB:
             self._connection.autocommit = True
             self._cursor = self._connection.cursor()
             self._cursor.execute(
-                "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCli varchar(70))"
+                "CREATE TABLE IF NOT EXISTS Ultroid ()"
             )
         except Exception as error:
             LOGS.exception(error)
@@ -213,7 +213,7 @@ class SqlDB:
         self._cache.clear()
         self._cursor.execute("DROP TABLE Ultroid")
         self._cursor.execute(
-            "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCli varchar(70))"
+            "CREATE TABLE IF NOT EXISTS Ultroid ()"
         )
         return True
 
