@@ -30,6 +30,7 @@ class Terminal:
     async def error(self, pid):
         return self.to_str(await self._processes[pid].stderr.readline())
 
+    @property
     async def _auto_remove_processes(self):
         while len(self._processes) != 0:
             for proc in self._processes.keys():
