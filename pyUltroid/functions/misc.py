@@ -139,9 +139,9 @@ async def google_search(query):
         await async_searcher(_base + "/search?q=" + query, headers=headers),
         "html.parser",
     )
-    another_soup = soup.find_all("div", class_="ZINbbc xpd O9g5cc uUPGi")
+    another_soup = soup.find_all("div", class_="ZINbbc luh4tb xpd O9g5cc uUPGi")
     result = []
-    results = [someone.find_all("div", class_="kCrYT") for someone in another_soup]
+    results = [someone.find_all("div", class_="egMi0 kCrYT") for someone in another_soup]
     for data in results:
         try:
             if len(data) > 1:
