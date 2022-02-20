@@ -532,12 +532,17 @@ async def Carbon(
     code,
     base_url="https://carbonara-42.herokuapp.com/api/cook",
     file_name="ultroid",
+    download=False,
     **kwargs,
 ):
     kwargs["code"] = code
     con = await async_searcher(base_url, post=True, json=kwargs, re_content=True)
-    file = BytesIO(con)
-    file.name = file_name + ".jpg"
+    if not download:
+        file = BytesIO(con)
+        file.name = file_name + ".jpg"
+    else:
+        file = file_name
+        open(file_name, "w").write(con)
     return file
 
 
