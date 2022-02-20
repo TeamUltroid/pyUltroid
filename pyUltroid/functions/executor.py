@@ -47,8 +47,8 @@ class Terminal:
         return self._to_str(await self._processes[pid].stderr.readline())
 
     @property
-    async def _auto_remove_processes(self) -> None:
-        while len(self._processes) != 0:
+    def _auto_remove_processes(self) -> None:
+        while self._processes:
             for proc in self._processes.keys():
                 if proc.returncode != None: # process is still running
                     try:
