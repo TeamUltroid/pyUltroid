@@ -153,11 +153,7 @@ async def autobot():
         if nowdone.startswith("Done!"):
             token = nowdone.split("`")[1]
             udB.set_key("BOT_TOKEN", token)
-            await ultroid_bot.send_message(bf, "/setinline")
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message(bf, f"@{username}")
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message(bf, "Search")
+            await enable_inline(ultroid_bot, username)
             LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
         else:
             LOGS.critical(
@@ -170,11 +166,7 @@ async def autobot():
     elif isdone.startswith("Done!"):
         token = isdone.split("`")[1]
         udB.set_key("BOT_TOKEN", token)
-        await ultroid_bot.send_message(bf, "/setinline")
-        await asyncio.sleep(1)
-        await ultroid_bot.send_message(bf, f"@{username}")
-        await asyncio.sleep(1)
-        await ultroid_bot.send_message(bf, "Search")
+        await enable_inline(ultroid_bot, username)
         LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
     else:
         LOGS.info(
@@ -488,3 +480,13 @@ def _version_changes(udb):
                 for z in key.split()
             ]
             udb.set_key(_, new_)
+
+
+async def enable_inline(ultroid_bot, username):
+    bf = "BotFather"
+    await ultroid_bot.send_message(bf, "/setinline")
+    await asyncio.sleep(1)
+    await ultroid_bot.send_message(bf, f"@{username}")
+    await asyncio.sleep(1)
+    await ultroid_bot.send_message(bf, "Search")
+    await ultroid_bot.send_read_acknowledge(bf)
