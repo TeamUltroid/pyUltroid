@@ -12,7 +12,7 @@ from .startup import *
 from .startup._database import UltroidDB
 from .startup.BaseClient import UltroidClient
 from .startup.connections import session_file, vc_connection
-from .startup.funcs import _version_changes, autobot, update_envs
+from .startup.funcs import _version_changes, autobot, update_envs, enable_inline
 from .version import ultroid_version
 
 start_time = time.time()
@@ -63,6 +63,8 @@ if BOT_MODE:
             ) 
         except Exception as er:
             LOGS.exception(er)
+elif not asst.bot_inline_placeholder:
+    ultroid_bot.run_in_loop(enable_inline())
 
 vcClient = vc_connection(udB, ultroid_bot)
 
