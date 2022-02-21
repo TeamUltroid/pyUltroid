@@ -29,6 +29,7 @@ from telethon.errors.rpcerrorlist import (
     MessageIdInvalidError,
     MessageNotModifiedError,
     UserIsBotError,
+    BotInlineDisabledError
 )
 from telethon.events import MessageEdited, NewMessage
 from telethon.utils import get_display_name
@@ -124,6 +125,8 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                     ult,
                     "Conversation Is Already On, Kindly Wait Sometime Then Try Again.",
                 )
+            except (BotInlineDisabledError) as er:
+                return await eod(ult, f"`{er}`")
             except (
                 MessageIdInvalidError,
                 MessageNotModifiedError,
