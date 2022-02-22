@@ -11,7 +11,7 @@ import sys
 from redis import Redis
 
 from ..configs import Var
-from . import LOGS
+from . import *
 
 try:
     from pymongo import MongoClient
