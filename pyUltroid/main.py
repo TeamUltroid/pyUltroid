@@ -5,13 +5,13 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+from . import *
 
 def main():
     import os
     import sys
     import time
 
-    from . import *
     from .functions.helper import time_formatter, updater
     from .startup.funcs import (
         WasItRestart,
