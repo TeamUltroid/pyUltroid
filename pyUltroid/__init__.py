@@ -8,8 +8,7 @@
 import sys
 
 run_as_module = False
-print(sys.argv)
 
-if sys.argv[0].endswith("pyUltroid/__main__.py"):
+if sys.argv[0] == "-m":
     run_as_module = True
     from .init import *
