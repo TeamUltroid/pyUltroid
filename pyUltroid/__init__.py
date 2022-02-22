@@ -63,7 +63,7 @@ if BOT_MODE:
             ) 
         except Exception as er:
             LOGS.exception(er)
-elif not asst.bot_inline_placeholder:
+elif not asst.me.bot_inline_placeholder:
     ultroid_bot.run_in_loop(enable_inline(ultroid_bot, asst.me.username))
 
 vcClient = vc_connection(udB, ultroid_bot)
