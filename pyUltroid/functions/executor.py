@@ -44,7 +44,13 @@ class Terminal:
             return False
 
     async def output(self, pid: int) -> str:
-        return self._to_str(await self._processes[pid].stdout.readline())
+        output = []
+        while True:
+            out = self._to_str(await self._processes[pid].stdout.readline())
+            if not out:
+                break
+            output.append(out)
+        return output
 
     async def error(self, pid: int) -> str:
         return self._to_str(await self._processes[pid].stderr.readline())
