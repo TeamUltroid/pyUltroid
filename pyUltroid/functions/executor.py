@@ -11,7 +11,7 @@ class Terminal:
             Returns Process id (int)
         terminate(pid: int)
             pid: Process id returned in `run` method.
-            Returns True if terminated else False (bool?
+            Returns True if terminated else False (bool)
         output(pid: int)
             pid: Process id returned in `run` method.
             Returns Output of process (str)
