@@ -8,6 +8,7 @@
 import sys
 
 run_as_module = False
+print(sys.argv)
 
 if sys.argv[0].endswith("pyUltroid/__main__.py"):
     run_as_module = True
