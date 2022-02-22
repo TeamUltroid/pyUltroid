@@ -84,6 +84,7 @@ if sys.argv[0] == "-m":
     SUDO_HNDLR = udB.get_key("SUDO_HNDLR") or HNDLR
 else:
     from logging import getLogger
+
     LOGS = getLogger("pyUltroid")
     LOGS.info("pyUltroid 2022 © TeamUltroid")
     ultroid_bot = asst = udB = vcClient = None
