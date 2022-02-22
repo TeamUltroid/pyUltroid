@@ -6,7 +6,9 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import sys
+
 from .version import __version__
+
 run_as_module = False
 
 if sys.argv[0] == "-m":
@@ -21,6 +23,7 @@ if sys.argv[0] == "-m":
     from .startup.connections import session_file, vc_connection
     from .startup.funcs import _version_changes, autobot, enable_inline, update_envs
     from .version import ultroid_version
+
     start_time = time.time()
     _ult_cache = {}
 
