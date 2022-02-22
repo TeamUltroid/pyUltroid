@@ -29,7 +29,7 @@ class Terminal:
 
     async def run(self, cmd: str) -> int:
         process = await create_subprocess_exec(
-            cmd.split(" "), stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            repr(cmd.split())[1:-1], stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         pid = process.pid
         self._processes[pid] = process
