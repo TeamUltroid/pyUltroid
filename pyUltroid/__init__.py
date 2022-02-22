@@ -6,9 +6,8 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import sys
-
+from .version import __version__
 run_as_module = False
-print(sys.argv)
 
 if sys.argv[0] == "-m":
     run_as_module = True
@@ -22,7 +21,6 @@ if sys.argv[0] == "-m":
     from .startup.connections import session_file, vc_connection
     from .startup.funcs import _version_changes, autobot, enable_inline, update_envs
     from .version import ultroid_version
-
     start_time = time.time()
     _ult_cache = {}
 
@@ -82,4 +80,5 @@ if sys.argv[0] == "-m":
     DUAL_HNDLR = udB.get_key("DUAL_HNDLR") or "/"
     SUDO_HNDLR = udB.get_key("SUDO_HNDLR") or HNDLR
 else:
+    print("pyUltroid 2022 © TeamUltroid")
     ultroid_bot = asst = udB = vcClient = None
