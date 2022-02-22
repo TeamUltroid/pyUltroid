@@ -8,6 +8,8 @@
 import sys
 
 run_as_module = False
+print(sys.argv)
+
 if sys.argv[0] == "-m":
     run_as_module = True
 
@@ -79,3 +81,5 @@ if sys.argv[0] == "-m":
     HNDLR = udB.get_key("HNDLR") or "."
     DUAL_HNDLR = udB.get_key("DUAL_HNDLR") or "/"
     SUDO_HNDLR = udB.get_key("SUDO_HNDLR") or HNDLR
+else:
+    ultroid_bot = asst = udB = vcClient = None
