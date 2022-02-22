@@ -65,6 +65,7 @@ basicConfig(
 try:
 
     import coloredlogs
+
     coloredlogs.install(level=None, logger=LOGS, fmt=_LOG_FORMAT)
 except ImportError:
     pass

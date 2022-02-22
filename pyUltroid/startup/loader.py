@@ -6,21 +6,20 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import glob
-from logging import Logger
 import os
 from importlib import import_module
+from logging import Logger
 
 from decouple import config
-
-from .. import *
 from git import Repo
 
+from .. import *
 from ..dB._core import HELP
 from .utils import load_addons
 
 
 class Loader:
-    def __init__(self, path="plugins", key="Official", logger:Logger=LOGS):
+    def __init__(self, path="plugins", key="Official", logger: Logger = LOGS):
         self.path = path
         self.key = key
         self._logger = logger
@@ -66,7 +65,7 @@ class Loader:
                 self._logger.exception(exc)
             if func == import_module:
                 plugin = plugin.split(".")[-1]
-            if doc and  (
+            if doc and (
                 (cmd_help or cmd_help == {})
                 and not plugin.startswith("_")
                 and (doc.__doc__)
@@ -144,7 +143,9 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         _in_only = udB.get_key("INCLUDE_ADDONS")
         _in_only = _in_only.split() if _in_only else []
 
-        Loader(path="addons", key="Addons").load(func=load_addons, include=_in_only, exclude=_exclude)
+        Loader(path="addons", key="Addons").load(
+            func=load_addons, include=_in_only, exclude=_exclude
+        )
 
     # group manager
     if manager:

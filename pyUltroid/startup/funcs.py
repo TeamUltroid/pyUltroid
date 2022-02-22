@@ -42,7 +42,6 @@ from telethon.tl.types import (
 from telethon.utils import get_peer_id
 
 from .. import LOGS
-from ..configs import Var
 from ..functions.helper import download_file, updater
 
 
@@ -57,8 +56,11 @@ def update_envs():
 
 def startup_stuff():
     from .. import LOGS, udB
+
     if not os.path.exists("./plugins"):
-        LOGS.error("'plugins' folder not found!\nMake sure that, you are on correct path.")
+        LOGS.error(
+            "'plugins' folder not found!\nMake sure that, you are on correct path."
+        )
         exit()
     x = ["resources/auth", "resources/downloads", "vcbot/downloads"]
     for x in x:
@@ -103,7 +105,7 @@ async def autobot():
     from .. import udB, ultroid_bot
 
     if udB.get_key("BOT_TOKEN"):
-        return  
+        return
     await ultroid_bot.start()
     LOGS.info("MAKING A TELEGRAM BOT FOR YOU AT @BotFather, Kindly Wait")
     who = ultroid_bot.me

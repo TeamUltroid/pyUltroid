@@ -50,7 +50,7 @@ manager = udB.get_key("MANAGER")
 addons = udB.get_key("ADDONS") or Var.ADDONS
 vcbot = udB.get_key("VCBOT") or Var.VCBOT
 
-if HOSTED_ON == "termux" and udB.get_key("EXCLUDE_OFFICIAL") == None:
+if HOSTED_ON == "termux" and udB.get_key("EXCLUDE_OFFICIAL") is None:
     _plugins = "autocorrect autopic compressor forcesubscribe gdrive glitch instagram nsfwfilter nightmode pdftools writer youtube"
     udB.set_key("EXCLUDE_OFFICIAL", _plugins)
 

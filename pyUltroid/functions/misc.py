@@ -6,8 +6,9 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import base64
-import os, re
+import os
 import random
+import re
 import string
 from logging import WARNING
 from random import choice, randrange, shuffle
@@ -26,7 +27,7 @@ from ..dB import DEVLIST
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
-from .tools import async_searcher, check_filename, json_parser, bash
+from .tools import async_searcher, bash, check_filename, json_parser
 
 try:
     import aiofiles
@@ -141,7 +142,10 @@ async def google_search(query):
     )
     another_soup = soup.find_all("div", class_=re.compile("ZINbbc"))
     result = []
-    results = [someone.find_all("div", class_=re.compile("egMi0")) for someone in another_soup[3:-2]]
+    results = [
+        someone.find_all("div", class_=re.compile("egMi0"))
+        for someone in another_soup[3:-2]
+    ]
     for data in results:
         try:
             if len(data) > 1:
@@ -333,9 +337,7 @@ async def get_insta_code(username, choice):
 
 async def create_instagram_client(event):
     if not Client:
-        await event.eor(
-            "`Instagrapi not Found\nInstall it to use Instagram plugin...`"
-        )
+        await event.eor("`Instagrapi not Found\nInstall it to use Instagram plugin...`")
         return
     try:
         return INSTA_CLIENT[0]
@@ -372,24 +374,25 @@ async def create_instagram_client(event):
 
 # Quotly
 
+
 class Quotly:
     _API = "https://bot.lyo.su/quote/generate"
     _entities = {
-    types.MessageEntityPhone: "phone_number",
-    types.MessageEntityMention: "mention",
-    types.MessageEntityBold: "bold",
-    types.MessageEntityCashtag: "cashtag",
-    types.MessageEntityStrike: "strikethrough",
-    types.MessageEntityHashtag: "hashtag",
-    types.MessageEntityEmail: "email",
-    types.MessageEntityMentionName: "text_mention",
-    types.MessageEntityUnderline: "underline",
-    types.MessageEntityUrl: "url",
-    types.MessageEntityTextUrl: "text_link",
-    types.MessageEntityBotCommand: "bot_command",
-    types.MessageEntityCode: "code",
-    types.MessageEntityPre: "pre",
-    types.MessageEntitySpoiler: "spoiler",
+        types.MessageEntityPhone: "phone_number",
+        types.MessageEntityMention: "mention",
+        types.MessageEntityBold: "bold",
+        types.MessageEntityCashtag: "cashtag",
+        types.MessageEntityStrike: "strikethrough",
+        types.MessageEntityHashtag: "hashtag",
+        types.MessageEntityEmail: "email",
+        types.MessageEntityMentionName: "text_mention",
+        types.MessageEntityUnderline: "underline",
+        types.MessageEntityUrl: "url",
+        types.MessageEntityTextUrl: "text_link",
+        types.MessageEntityBotCommand: "bot_command",
+        types.MessageEntityCode: "code",
+        types.MessageEntityPre: "pre",
+        types.MessageEntitySpoiler: "spoiler",
     }
 
     async def _format_quote(self, event, reply=None, sender=None, type_="private"):
@@ -398,12 +401,12 @@ class Quotly:
             Image.open(file_).save(file, "PNG")
             files = {"file": open(file, "rb").read()}
             uri = (
-            "https://telegra.ph"
-            + (
-                await async_searcher(
-                    "https://telegra.ph/upload", post=True, data=files, re_json=True
-                )
-            )[0]["src"]
+                "https://telegra.ph"
+                + (
+                    await async_searcher(
+                        "https://telegra.ph/upload", post=True, data=files, re_json=True
+                    )
+                )[0]["src"]
             )
             os.remove(file)
             os.remove(file_)
@@ -411,9 +414,9 @@ class Quotly:
 
         if reply:
             reply = {
-            "name": get_display_name(reply.sender) or "Deleted Account",
-            "text": reply.raw_text,
-            "chatId": reply.chat_id,
+                "name": get_display_name(reply.sender) or "Deleted Account",
+                "text": reply.raw_text,
+                "chatId": reply.chat_id,
             }
         else:
             reply = {}
@@ -448,22 +451,22 @@ class Quotly:
                     enti_["type"] = self._entities[type(entity)]
                     entities.append(enti_)
         message = {
-        "entities": entities,
-        "chatId": id_,
-        "avatar": True,
-        "from": {
-            "id": id_,
-            "first_name": (name or (sender.first_name if sender else None))
-            or "Deleted Account",
-            "last_name": last_name,
-            "username": sender.username if sender else None,
-            "language_code": "en",
-            "title": name,
-            "name": name or "Unknown",
-            "type": type_,
-        },
-        "text": event.raw_text,
-        "replyMessage": reply,
+            "entities": entities,
+            "chatId": id_,
+            "avatar": True,
+            "from": {
+                "id": id_,
+                "first_name": (name or (sender.first_name if sender else None))
+                or "Deleted Account",
+                "last_name": last_name,
+                "username": sender.username if sender else None,
+                "language_code": "en",
+                "title": name,
+                "name": name or "Unknown",
+                "type": type_,
+            },
+            "text": event.raw_text,
+            "replyMessage": reply,
         }
         if event.document and event.document.thumbs:
             file_ = await event.download_media(thumb=-1)
@@ -471,7 +474,6 @@ class Quotly:
             message["media"] = {"url": uri}
 
         return message
-
 
     async def create_quotly(
         self,
@@ -507,7 +509,9 @@ class Quotly:
             request = await async_searcher(url, post=True, json=content, re_json=True)
         except ContentTypeError as er:
             if url != self._API:
-                return await self.create_quotly(self._API, post=True, json=content, re_json=True)
+                return await self.create_quotly(
+                    self._API, post=True, json=content, re_json=True
+                )
             raise er
         if request.get("ok"):
             with open(file_name, "wb") as file:
@@ -549,6 +553,7 @@ async def get_current_branch() -> str:
     """get current git branch."""
     try:
         from git import Repo
+
         return Repo().active_branch
     except ImportError:
         out, _ = await bash("git branch")

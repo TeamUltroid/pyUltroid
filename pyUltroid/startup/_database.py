@@ -128,9 +128,7 @@ class SqlDB:
             self._connection = psycopg2.connect(dsn=url)
             self._connection.autocommit = True
             self._cursor = self._connection.cursor()
-            self._cursor.execute(
-                "CREATE TABLE IF NOT EXISTS Ultroid ()"
-            )
+            self._cursor.execute("CREATE TABLE IF NOT EXISTS Ultroid ()")
         except Exception as error:
             LOGS.exception(error)
             LOGS.info("Invaid SQL Database")
@@ -183,18 +181,23 @@ class SqlDB:
             return None
         if len(data) >= 1:
             for i in data:
-                if i[0]: return i[0]
+                if i[0]:
+                    return i[0]
 
     def set_key(self, key, value):
         try:
-            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS (%s)", (str(key),))
+            self._cursor.execute(
+                f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS (%s)", (str(key),)
+            )
         except (psycopg2.errors.UndefinedColumn, psycopg2.errors.SyntaxError):
             pass
         except BaseException as er:
             LOGS.exception(er)
         self._cache.update({key: value})
         self._cursor.execute(f"ALTER TABLE Ultroid ADD (%s) TEXT", (str(key),))
-        self._cursor.execute(f"INSERT INTO Ultroid (%s) values (%s)", (str(key), str(value)))
+        self._cursor.execute(
+            f"INSERT INTO Ultroid (%s) values (%s)", (str(key), str(value))
+        )
         return True
 
     def del_key(self, key):
@@ -211,9 +214,7 @@ class SqlDB:
     def flushall(self):
         self._cache.clear()
         self._cursor.execute("DROP TABLE Ultroid")
-        self._cursor.execute(
-            "CREATE TABLE IF NOT EXISTS Ultroid ()"
-        )
+        self._cursor.execute("CREATE TABLE IF NOT EXISTS Ultroid ()")
         return True
 
     def rename(self, key1, key2):

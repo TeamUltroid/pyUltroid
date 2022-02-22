@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import sys
+
 run_as_module = False
 if sys.argv[0] == "-m":
     run_as_module = True
@@ -17,7 +18,7 @@ if sys.argv[0] == "-m":
     from .startup._database import UltroidDB
     from .startup.BaseClient import UltroidClient
     from .startup.connections import session_file, vc_connection
-    from .startup.funcs import _version_changes, autobot, update_envs, enable_inline
+    from .startup.funcs import _version_changes, autobot, enable_inline, update_envs
     from .version import ultroid_version
 
     start_time = time.time()
@@ -40,21 +41,22 @@ if sys.argv[0] == "-m":
         ultroid_bot = None
     else:
         ultroid_bot = UltroidClient(
-        session_file(LOGS),
-        udB=udB,
-        app_version=ultroid_version,
-        device_model="Ultroid",
-        proxy=udB.get_key("TG_PROXY"),
-       )
+            session_file(LOGS),
+            udB=udB,
+            app_version=ultroid_version,
+            device_model="Ultroid",
+            proxy=udB.get_key("TG_PROXY"),
+        )
 
     if not BOT_MODE:
         ultroid_bot.run_in_loop(autobot())
     else:
         if not udB.get_key("BOT_TOKEN"):
-            LOGS.critical('"BOT_TOKEN" not Found! Please add it, in order to use "BOTMODE"')
+            LOGS.critical(
+                '"BOT_TOKEN" not Found! Please add it, in order to use "BOTMODE"'
+            )
 
             sys.exit()
-
 
     asst = UltroidClient(None, bot_token=udB.get_key("BOT_TOKEN"), udB=udB)
 
@@ -63,8 +65,8 @@ if sys.argv[0] == "-m":
         if udB.get_key("OWNER_ID"):
             try:
                 ultroid_bot.me = ultroid_bot.run_in_loop(
-                ultroid_bot.get_entity(udB.get_key("OWNER_ID"))
-                ) 
+                    ultroid_bot.get_entity(udB.get_key("OWNER_ID"))
+                )
             except Exception as er:
                 LOGS.exception(er)
     elif not asst.me.bot_inline_placeholder:

@@ -6,9 +6,9 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import inspect
-from logging import Logger
 import sys
 import time
+from logging import Logger
 from re import findall
 
 from telethon import TelegramClient
@@ -36,7 +36,7 @@ class UltroidClient(TelegramClient):
         proxy=None,
         bot_token=None,
         udB=None,
-        logger:Logger=LOGS,
+        logger: Logger = LOGS,
         log_attempt=True,
         handle_auth_error=True,
         *args,

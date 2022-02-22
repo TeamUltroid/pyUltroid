@@ -20,6 +20,7 @@ from telethon import events
 from telethon.errors.common import AlreadyInConversationError
 from telethon.errors.rpcerrorlist import (
     AuthKeyDuplicatedError,
+    BotInlineDisabledError,
     BotMethodInvalidError,
     ChatSendInlineForbiddenError,
     ChatSendMediaForbiddenError,
@@ -29,7 +30,6 @@ from telethon.errors.rpcerrorlist import (
     MessageIdInvalidError,
     MessageNotModifiedError,
     UserIsBotError,
-    BotInlineDisabledError
 )
 from telethon.events import MessageEdited, NewMessage
 from telethon.utils import get_display_name

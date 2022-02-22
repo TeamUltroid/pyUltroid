@@ -1,4 +1,4 @@
-from asyncio import create_subprocess_shell, subprocess
+from asyncio import subprocess
 
 
 class Terminal:
@@ -19,6 +19,7 @@ class Terminal:
             pid: Process id returned in `run` method.
             Returns Error of process (str)
     """
+
     def __init__(self) -> None:
         self._processes = {}
 
@@ -27,7 +28,9 @@ class Terminal:
         return data.decode("utf-8").strip()
 
     async def run(self, cmd: str) -> int:
-        process = await create_subprocess_exec(cmd.split(" "), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process = await create_subprocess_exec(
+            cmd.split(" "), stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
         pid = process.pid
         self._processes[pid] = process
         return pid
@@ -50,7 +53,7 @@ class Terminal:
     def _auto_remove_processes(self) -> None:
         while self._processes:
             for proc in self._processes.keys():
-                if proc.returncode != None: # process is still running
+                if proc.returncode is not None:  # process is still running
                     try:
                         self._processes.pop(proc)
                     except KeyError:

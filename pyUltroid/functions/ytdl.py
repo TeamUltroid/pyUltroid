@@ -42,7 +42,8 @@ def get_yt_link(query):
     try:
         return search["result"][0]["link"]
     except IndexError:
-        return 
+        return
+
 
 async def download_yt(event, link, ytd):
     reply_to = event.reply_to_msg_id or event

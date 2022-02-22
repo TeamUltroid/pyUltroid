@@ -119,7 +119,9 @@ def json_parser(data, indent=None, ascii=False):
         if isinstance(data, str):
             parsed = json.loads(str(data))
             if indent:
-                parsed = json.dumps(json.loads(str(data)), indent=indent, ensure_ascii=ascii)
+                parsed = json.dumps(
+                    json.loads(str(data)), indent=indent, ensure_ascii=ascii
+                )
         elif isinstance(data, dict):
             parsed = data
             if indent:

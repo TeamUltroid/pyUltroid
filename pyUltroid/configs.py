@@ -16,6 +16,7 @@ try:
 except ImportError:
     pass
 
+
 class Var:
     # mandatory
     API_ID = (
