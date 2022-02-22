@@ -27,7 +27,7 @@ class Terminal:
     def _to_str(data: bytes) -> str:
         return data.decode("utf-8").strip()
 
-    async def run(self, cmd: str) -> int:
+    async def run(self, cmd: list) -> int:
         process = await create_subprocess_exec(
             str(cmd)[1:-1], stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
