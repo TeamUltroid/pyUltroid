@@ -5,6 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+
 def main():
     import os
     import sys
@@ -13,12 +14,12 @@ def main():
     from . import *
     from .functions.helper import time_formatter, updater
     from .startup.funcs import (
-    WasItRestart,
-    autopilot,
-    customize,
-    plug,
-    ready,
-    startup_stuff,
+        WasItRestart,
+        autopilot,
+        customize,
+        plug,
+        ready,
+        startup_stuff,
     )
     from .startup.loader import load_other_plugins
 
@@ -28,12 +29,13 @@ def main():
         and os.path.exists(".git")
         and ultroid_bot.run_in_loop(updater())
     ):
-        os.system("git pull -f -q && pip3 install --no-cache-dir -U -q -r requirements.txt")
-      
+        os.system(
+            "git pull -f -q && pip3 install --no-cache-dir -U -q -r requirements.txt"
+        )
+
         os.execl(sys.executable, "python3", "-m", "pyUltroid")
 
     startup_stuff()
-
 
     ultroid_bot.me.phone = None
     ultroid_bot.first_name = ultroid_bot.me.first_name
@@ -41,12 +43,10 @@ def main():
     if not ultroid_bot.me.bot:
         udB.set_key("OWNER_ID", ultroid_bot.uid)
 
-
     LOGS.info("Initialising...")
- 
 
     ultroid_bot.run_in_loop(autopilot())
- 
+
     pmbot = udB.get_key("PMBOT")
     manager = udB.get_key("MANAGER")
     addons = udB.get_key("ADDONS") or Var.ADDONS
