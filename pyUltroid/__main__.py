@@ -7,7 +7,7 @@
 
 
 if __name__ == "__main__":
-    from .main import main, asst
+    from .main import asst, main
 
     main()
     # start loop
