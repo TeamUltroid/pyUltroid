@@ -188,7 +188,7 @@ async def bash(cmd):
         stderr=asyncio.subprocess.PIPE,
     )
     stdout, stderr = await process.communicate()
-    err = stderr.decode().strip()
+    err = stderr.decode().strip() or None
     out = stdout.decode().strip()
     return out, err
 
