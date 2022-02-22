@@ -1,4 +1,4 @@
-from asyncio import subprocess
+from asyncio import subprocess, create_subprocess_exec
 
 
 class Terminal:
