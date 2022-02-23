@@ -37,6 +37,10 @@ async def eor(event, text=None, **args):
                 pass
         else:
             try:
+                try:
+                    del args["reply_to"]
+                except KeyError:
+                    pass
                 ok = await event.edit(text, **args)
             except MessageNotModifiedError:
                 pass
