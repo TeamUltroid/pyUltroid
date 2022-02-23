@@ -7,7 +7,7 @@
 
 from asyncio import sleep
 
-from telethon.errors.rpcerrorlist import MessageDeleteForbiddenError
+from telethon.errors import MessageDeleteForbiddenError, MessageNotModifiedError
 from telethon.tl.custom import Message
 from telethon.tl.types import MessageService
 
@@ -24,13 +24,23 @@ async def eor(event, text=None, **args):
     if "time" in args:
         del args["time"]
     if "link_preview" not in args:
-        args.update({"link_preview": False})
+        args["link_preview"] = False
+    args["reply_to"] = event.reply_to_msg_id or event
     if event.out and not isinstance(event, MessageService):
         if edit_time:
             await sleep(edit_time)
-        ok = await event.edit(text, **args)
+        if args["file"] and not event.media:
+            await event.delete()
+            try:
+                ok = await event.client.send_message(event.chat_id, text, **args)
+            except MessageNotModifiedError:
+                pass
+        else:
+            try:
+                ok = await event.edit(text, **args)
+            except MessageNotModifiedError:
+                pass
     else:
-        args["reply_to"] = event.reply_to_msg_id or event
         ok = await event.client.send_message(event.chat_id, text, **args)
 
     if time:
