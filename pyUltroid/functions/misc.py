@@ -27,7 +27,7 @@ from ..dB import DEVLIST
 from ..dB._core import LIST
 from ..misc._wrappers import eor
 from . import some_random_headers
-from .tools import async_searcher, bash, check_filename, json_parser
+from .tools import async_searcher, check_filename, json_parser
 
 try:
     import aiofiles
@@ -547,4 +547,3 @@ def random_string(length=3):
 
 
 setattr(random, "random_string", random_string)
-

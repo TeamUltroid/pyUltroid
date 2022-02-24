@@ -13,10 +13,12 @@ import sys
 import time
 from traceback import format_exc
 from urllib.parse import unquote
+
 from .. import run_as_module
 
 if run_as_module:
     from safety.tools import sys_exit
+
     from ..configs import Var
 
 try:
@@ -37,7 +39,7 @@ try:
     from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 except ImportError:
     Repo = None
-    
+
 
 from . import *
 
