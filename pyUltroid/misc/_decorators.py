@@ -65,6 +65,7 @@ def compile_pattern(data, hndlr):
 def ultroid_cmd(
     pattern=None, manager=False, ultroid_bot=ultroid_bot, asst=asst, **kwargs
 ):
+    owner_only = kwargs.get("owner_only", False)
     groups_only = kwargs.get("groups_only", False)
     admins_only = kwargs.get("admins_only", False)
     fullsudo = kwargs.get("fullsudo", False)
@@ -73,6 +74,8 @@ def ultroid_cmd(
 
     def decor(dec):
         async def wrapp(ult):
+            if owner_only and not ult.out:
+                return
             chat = ult.chat
             if not ult.out:
                 if ult.sender_id not in owner_and_sudos():
