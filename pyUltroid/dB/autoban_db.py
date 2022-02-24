@@ -1,3 +1,6 @@
+from .. import udB
+
+
 def get_all_channels() -> list:
     """List all chats where channels are banned."""
     return udB.get_key("AUTOBAN_CHANNELS") or []
