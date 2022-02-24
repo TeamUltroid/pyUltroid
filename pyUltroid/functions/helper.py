@@ -88,17 +88,13 @@ def inline_mention(user, custom=None, html=False):
     mention_text = get_display_name(user) or user if not custom else custom
     chat_type = None
     if isinstance(user, types.User):
-        chat_type = "User"
-    elif isinstance(user, types.Channel):
-        chat_type = "Channel"
-    if chat_type == "User":
         if html:
             return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
         return f"[{mention_text}](tg://user?id={user.id})"
-    elif chat_type == "Channel" and user.username:
+    elif isinstance(user, types.Channel) and user.username:
         if html:
             return f"<a href=https://t.me/{user.username}>{mention_text}</a>"
-        return f"[{mention_text}](https://t.me/{user.username})"
+        return f"[{mention_text}](https://t.me/{user.username})" 
     return mention_text
 
 
@@ -187,6 +183,9 @@ if run_as_module:
                 await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓")
 
     async def heroku_logs(event):
+        """
+        post heroku logs
+        """
         from .. import LOGS
 
         xx = await eor(event, "`Processing...`")
@@ -223,12 +222,32 @@ if run_as_module:
     )
 
     async def updateme_requirements():
+        """Update requirements.."""
         await bash(f"{sys.executable} -m pip install --no-cache-dir -r requirements.txt")
+
+    
+    @run_async
+    def gen_chlog(repo, diff):
+        """Generate Changelogs..."""
+        UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
+        ac_br = repo.active_branch.name
+        ch_log = tldr_log = ""
+        ch = f"<b>Ultroid {ultroid_version} updates for <a href={UPSTREAM_REPO_URL}/tree/{ac_br}>[{ac_br}]</a>:</b>"
+        ch_tl = f"Ultroid {ultroid_version} updates for {ac_br}:"
+        d_form = "%d/%m/%y || %H:%M"
+        for c in repo.iter_commits(diff):
+            ch_log += f"\n\n💬 <b>{c.count()}</b> 🗓 <b>[{c.committed_datetime.strftime(d_form)}]</b>\n<b><a href={UPSTREAM_REPO_URL.rstrip('/')}/commit/{c}>[{c.summary}]</a></b> 👨‍💻 <code>{c.author}</code>"
+            tldr_log += f"\n\n💬 {c.count()} 🗓 [{c.committed_datetime.strftime(d_form)}]\n[{c.summary}] 👨‍💻 {c.author}"
+        if ch_log:
+            return str(ch + ch_log), str(ch_tl + tldr_log)
+        return ch_log, tldr_log
 
 # --------------------------------------------------------------------- #
 
 
 async def bash(cmd):
+    """
+    run any command in subprocess and get output or error."""
     process = await asyncio.create_subprocess_shell(
         cmd,
         stdout=asyncio.subprocess.PIPE,
@@ -245,20 +264,6 @@ async def bash(cmd):
 
 
 
-@run_async
-def gen_chlog(repo, diff):
-    UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
-    ac_br = repo.active_branch.name
-    ch_log = tldr_log = ""
-    ch = f"<b>Ultroid {ultroid_version} updates for <a href={UPSTREAM_REPO_URL}/tree/{ac_br}>[{ac_br}]</a>:</b>"
-    ch_tl = f"Ultroid {ultroid_version} updates for {ac_br}:"
-    d_form = "%d/%m/%y || %H:%M"
-    for c in repo.iter_commits(diff):
-        ch_log += f"\n\n💬 <b>{c.count()}</b> 🗓 <b>[{c.committed_datetime.strftime(d_form)}]</b>\n<b><a href={UPSTREAM_REPO_URL.rstrip('/')}/commit/{c}>[{c.summary}]</a></b> 👨‍💻 <code>{c.author}</code>"
-        tldr_log += f"\n\n💬 {c.count()} 🗓 [{c.committed_datetime.strftime(d_form)}]\n[{c.summary}] 👨‍💻 {c.author}"
-    if ch_log:
-        return str(ch + ch_log), str(ch_tl + tldr_log)
-    return ch_log, tldr_log
 
 
 async def updater():
