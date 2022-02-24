@@ -179,7 +179,7 @@ def ultroid_cmd(
                 ftext += "\n\n\n**Last 5 commits:**`\n"
 
                 stdout, stderr = await bash('git log --pretty=format:"%an: %s" -5')
-                result = stdout + ( stderr or "")
+                result = stdout + (stderr or "")
 
                 ftext += result + "`"
 
