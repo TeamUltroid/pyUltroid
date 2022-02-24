@@ -14,7 +14,7 @@ release = '0.1'
 version = '0.1.0'
 
 extensions = [
-    
+    'myst_parser'
 ]
 # -- Options for HTML output
 
