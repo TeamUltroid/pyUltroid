@@ -131,6 +131,7 @@ def un_plug(shortname):
                     except KeyError:
                         pass
 
+
 if run_as_module:
 
     async def safeinstall(event):
@@ -138,7 +139,9 @@ if run_as_module:
         from ..startup.utils import load_addons
 
         if not event.reply_to:
-            return await eod(event, f"Please use `{HNDLR}install` as reply to a .py file.")
+            return await eod(
+                event, f"Please use `{HNDLR}install` as reply to a .py file."
+            )
         ok = await eor(event, "`Installing...`")
         reply = await event.get_reply_message()
         if not (
@@ -191,7 +194,9 @@ if run_as_module:
 
         xx = await eor(event, "`Processing...`")
         if not (Var.HEROKU_API and Var.HEROKU_APP_NAME):
-            return await xx.edit("Please set `HEROKU_APP_NAME` and `HEROKU_API` in vars.")
+            return await xx.edit(
+                "Please set `HEROKU_APP_NAME` and `HEROKU_API` in vars."
+            )
         try:
             app = (heroku3.from_key(Var.HEROKU_API)).app(Var.HEROKU_APP_NAME)
         except BaseException as se:
@@ -213,17 +218,19 @@ if run_as_module:
         os.remove("ultroid-heroku.log")
         await xx.delete()
 
-
     async def def_logs(ult, file):
         await ult.client.send_file(
-        ult.chat_id,
-        file=file,
-        thumb="resources/extras/ultroid.jpg",
-        caption="**Ultroid Logs.**",
-    )
+            ult.chat_id,
+            file=file,
+            thumb="resources/extras/ultroid.jpg",
+            caption="**Ultroid Logs.**",
+        )
 
     async def updateme_requirements():
-        await bash(f"{sys.executable} -m pip install --no-cache-dir -r requirements.txt")
+        await bash(
+            f"{sys.executable} -m pip install --no-cache-dir -r requirements.txt"
+        )
+
 
 # --------------------------------------------------------------------- #
 
@@ -242,7 +249,6 @@ async def bash(cmd):
 
 # ---------------------------UPDATER-------------------------------- #
 # Will add in class
-
 
 
 @run_async
@@ -573,6 +579,3 @@ async def shutdown(ult):
             )
     else:
         sys_exit()
-
-
-
