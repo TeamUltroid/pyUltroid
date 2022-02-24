@@ -43,7 +43,7 @@ setuptools.setup(
     license=license_,
     packages=setuptools.find_packages(exclude=["docs/"]),
     install_requires=requirements,
-    extras_require={"run":["redis","hiredis","python-decouple"]},
+    extras_require={"run": ["redis", "hiredis", "python-decouple"]},
     classifiers=classifiers,
     python_requires=">3.7, <3.11",
 )
