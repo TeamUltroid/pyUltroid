@@ -16,6 +16,7 @@ except ImportError:
     Redis = None
 
 from . import *
+from .. import run_as_module
 
 if run_as_module:
     from ..configs import Var
