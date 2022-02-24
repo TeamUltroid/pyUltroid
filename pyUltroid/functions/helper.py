@@ -86,7 +86,6 @@ def make_mention(user, custom=None):
 
 def inline_mention(user, custom=None, html=False):
     mention_text = get_display_name(user) or user if not custom else custom
-    chat_type = None
     if isinstance(user, types.User):
         if html:
             return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
@@ -94,7 +93,7 @@ def inline_mention(user, custom=None, html=False):
     elif isinstance(user, types.Channel) and user.username:
         if html:
             return f"<a href=https://t.me/{user.username}>{mention_text}</a>"
-        return f"[{mention_text}](https://t.me/{user.username})" 
+        return f"[{mention_text}](https://t.me/{user.username})"
     return mention_text
 
 
@@ -127,6 +126,7 @@ def un_plug(shortname):
                     except KeyError:
                         pass
 
+
 if run_as_module:
 
     async def safeinstall(event):
@@ -134,7 +134,9 @@ if run_as_module:
         from ..startup.utils import load_addons
 
         if not event.reply_to:
-            return await eod(event, f"Please use `{HNDLR}install` as reply to a .py file.")
+            return await eod(
+                event, f"Please use `{HNDLR}install` as reply to a .py file."
+            )
         ok = await eor(event, "`Installing...`")
         reply = await event.get_reply_message()
         if not (
@@ -190,7 +192,9 @@ if run_as_module:
 
         xx = await eor(event, "`Processing...`")
         if not (Var.HEROKU_API and Var.HEROKU_APP_NAME):
-            return await xx.edit("Please set `HEROKU_APP_NAME` and `HEROKU_API` in vars.")
+            return await xx.edit(
+                "Please set `HEROKU_APP_NAME` and `HEROKU_API` in vars."
+            )
         try:
             app = (heroku3.from_key(Var.HEROKU_API)).app(Var.HEROKU_APP_NAME)
         except BaseException as se:
@@ -212,24 +216,26 @@ if run_as_module:
         os.remove("ultroid-heroku.log")
         await xx.delete()
 
-
     async def def_logs(ult, file):
         await ult.client.send_file(
-        ult.chat_id,
-        file=file,
-        thumb="resources/extras/ultroid.jpg",
-        caption="**Ultroid Logs.**",
-    )
+            ult.chat_id,
+            file=file,
+            thumb="resources/extras/ultroid.jpg",
+            caption="**Ultroid Logs.**",
+        )
 
     async def updateme_requirements():
         """Update requirements.."""
-        await bash(f"{sys.executable} -m pip install --no-cache-dir -r requirements.txt")
+        await bash(
+            f"{sys.executable} -m pip install --no-cache-dir -r requirements.txt"
+        )
 
-    
     @run_async
     def gen_chlog(repo, diff):
         """Generate Changelogs..."""
-        UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
+        UPSTREAM_REPO_URL = (
+            Repo().remotes[0].config_reader.get("url").replace(".git", "")
+        )
         ac_br = repo.active_branch.name
         ch_log = tldr_log = ""
         ch = f"<b>Ultroid {ultroid_version} updates for <a href={UPSTREAM_REPO_URL}/tree/{ac_br}>[{ac_br}]</a>:</b>"
@@ -241,6 +247,7 @@ if run_as_module:
         if ch_log:
             return str(ch + ch_log), str(ch_tl + tldr_log)
         return ch_log, tldr_log
+
 
 # --------------------------------------------------------------------- #
 
@@ -261,9 +268,6 @@ async def bash(cmd):
 
 # ---------------------------UPDATER-------------------------------- #
 # Will add in class
-
-
-
 
 
 async def updater():
@@ -578,6 +582,3 @@ async def shutdown(ult):
             )
     else:
         sys_exit()
-
-
-
