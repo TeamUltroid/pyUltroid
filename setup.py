@@ -2,7 +2,7 @@ import re
 
 import setuptools
 
-requirements = ["redis", "python-decouple", "hiredis", "telethon"]
+requirements = ["telethon"]
 
 with open("pyUltroid/version.py", "rt", encoding="utf8") as x:
     version = re.search(r'__version__ = "(.*?)"', x.read()).group(1)
@@ -43,6 +43,7 @@ setuptools.setup(
     license=license_,
     packages=setuptools.find_packages(exclude=["docs/"]),
     install_requires=requirements,
+    extras_require={"run":["redis","hiredis","python-decouple"]},
     classifiers=classifiers,
     python_requires=">3.7, <3.11",
 )
