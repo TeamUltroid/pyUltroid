@@ -11,7 +11,7 @@ author = "TeamUltroid"
 release = "0.1"
 version = "0.1.0"
 
-extensions = ["myst_parser","sphinxext.opengraph"]
+extensions = ["myst_parser", "sphinxext.opengraph"]
 
 ogp_site_url = "https://pyUltroid.readthedocs.io"
 
