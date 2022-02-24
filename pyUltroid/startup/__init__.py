@@ -8,18 +8,8 @@
 import os
 import platform
 import sys
-import time
 from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
-
-from safety.tools import *
-from telethon import __version__
-
-from ..version import __version__ as __pyUltroid__
-from ..version import ultroid_version
-
-file = f"ultroid{sys.argv[6]}.log" if len(sys.argv) > 6 else "ultroid.log"
-if os.path.exists(file):
-    os.remove(file)
+from .. import run_as_module
 
 
 def where_hosted():
@@ -37,48 +27,59 @@ def where_hosted():
         return "termux"
     return "local"
 
+if run_as_module:
+    from safety.tools import *
 
-HOSTED_ON = where_hosted()
-LOGS = getLogger("pyUltLogs")
-TelethonLogger = getLogger("Telethon")
-TelethonLogger.setLevel(INFO)
+    from telethon import __version__
 
-_, v, __ = platform.python_version_tuple()
+    from ..version import __version__ as __pyUltroid__, ultroid_version
+    file = f"ultroid{sys.argv[6]}.log" if len(sys.argv) > 6 else "ultroid.log"
 
-if int(v) < 10:
-    from ._extra import _fix_logging
+    if os.path.exists(file):
+        os.remove(file)
 
-    _fix_logging(FileHandler)
 
-if HOSTED_ON == "local":
-    from ._extra import _ask_input
+    HOSTED_ON = where_hosted()
+    LOGS = getLogger("pyUltLogs")
+    TelethonLogger = getLogger("Telethon")
+    TelethonLogger.setLevel(INFO)
 
-    _ask_input()
+    _, v, __ = platform.python_version_tuple()
 
-_LOG_FORMAT = "%(asctime)s | %(name)s [%(levelname)s] : %(message)s"
-basicConfig(
-    format=_LOG_FORMAT,
-    level=INFO,
-    datefmt="%m/%d/%Y, %H:%M:%S",
-    handlers=[FileHandler(file), StreamHandler()],
-)
-try:
+    if int(v) < 10:
+        from ._extra import _fix_logging
 
-    import coloredlogs
+        _fix_logging(FileHandler)
 
-    coloredlogs.install(level=None, logger=LOGS, fmt=_LOG_FORMAT)
-except ImportError:
-    pass
+    if HOSTED_ON == "local":
+        from ._extra import _ask_input
 
-LOGS.info(
+        _ask_input()
+
+    _LOG_FORMAT = "%(asctime)s | %(name)s [%(levelname)s] : %(message)s"
+    basicConfig(
+        format=_LOG_FORMAT,
+        level=INFO,
+        datefmt="%m/%d/%Y, %H:%M:%S",
+        handlers=[FileHandler(file), StreamHandler()],
+    )
+    try:
+
+        import coloredlogs
+
+        coloredlogs.install(level=None, logger=LOGS, fmt=_LOG_FORMAT)
+    except ImportError:
+        pass
+
+    LOGS.info(
+        """
+                    -----------------------------------
+                            Starting Deployment
+                    -----------------------------------
     """
-                -----------------------------------
-                        Starting Deployment
-                -----------------------------------
-"""
-)
+    )
 
-LOGS.info(f"Python version - {platform.python_version()}")
-LOGS.info(f"py-Ultroid Version - {__pyUltroid__}")
-LOGS.info(f"Telethon Version - {__version__}")
-LOGS.info(f"Ultroid Version - {ultroid_version} [{HOSTED_ON}]")
+    LOGS.info(f"Python version - {platform.python_version()}")
+    LOGS.info(f"py-Ultroid Version - {__pyUltroid__}")
+    LOGS.info(f"Telethon Version - {__version__}")
+    LOGS.info(f"Ultroid Version - {ultroid_version} [{HOSTED_ON}]")

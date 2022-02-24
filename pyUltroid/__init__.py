@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import sys
+from types import NoneType
 
 from .version import __version__
 
@@ -87,4 +88,5 @@ else:
 
     LOGS = getLogger("pyUltroid")
     LOGS.info("pyUltroid 2022 © TeamUltroid")
+
     ultroid_bot = asst = udB = vcClient = None

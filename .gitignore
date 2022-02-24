@@ -3,3 +3,4 @@ build/*
 py_Ultroid.egg-info/*
 __pycache__
 test*
+*.log
