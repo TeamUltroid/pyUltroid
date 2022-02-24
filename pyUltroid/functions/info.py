@@ -10,7 +10,11 @@
 
 import math
 
-from telethon.tl import functions, types
+try:
+    from telethon.tl import functions, types
+except ImportError:
+    pass
+    # todo
 
 from .. import LOGS
 

@@ -6,30 +6,35 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import asyncio
+from pickle import NONE
 import time
+from tkinter import EXCEPTION
 import uuid
 
 from telethon import Button
 from telethon.errors.rpcerrorlist import UserNotParticipantError
 from telethon.tl import functions, types
 
-from .. import _ult_cache
-from ..misc import SUDO_M
+try:
+    from .. import _ult_cache
+    from ..misc import SUDO_M
+except ImportError:
+    _ult_cache = {}
+    SUDO_M = None
 
 
-async def ban_time(event, time_str):
+def ban_time(time_str):
     """Simplify ban time from text"""
     if not any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
-        await event.edit(
+        raise Exception(
             "Invalid time type specified. Expected s, m,h, or d, got: {}".format(
                 time_str[-1]
             )
         )
-        return
     unit = time_str[-1]
     time_int = time_str[:-1]
     if not time_int.isdigit():
-        return await event.edit("Invalid time amount specified.")
+        raise Exception("Invalid time amount specified.")
     if unit == "s":
         return int(time.time() + int(time_int))
     elif unit == "m":
@@ -66,7 +71,7 @@ async def _callback_check(event):
 
 
 async def admin_check(event, require=None, silent: bool = False):
-    if event.sender_id in SUDO_M.owner_and_sudos():
+    if SUDO_M and event.sender_id in SUDO_M.owner_and_sudos():
         return True
     callback = None
 
