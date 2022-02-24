@@ -6,9 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import asyncio
-from pickle import NONE
 import time
-from tkinter import EXCEPTION
 import uuid
 
 from telethon import Button
