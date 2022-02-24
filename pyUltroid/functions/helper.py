@@ -13,8 +13,11 @@ import sys
 import time
 from traceback import format_exc
 from urllib.parse import unquote
+from .. import run_as_module
 
-from safety.tools import sys_exit
+if run_as_module:
+    from safety.tools import sys_exit
+    from ..configs import Var
 
 try:
     import aiofiles
@@ -29,8 +32,12 @@ try:
 except ImportError:
     heroku3 = None
 
-from git import Repo
-from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+try:
+    from git import Repo
+    from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+except ImportError:
+    Repo = None
+    
 
 from . import *
 
@@ -47,7 +54,6 @@ from telethon.helpers import _maybe_await
 from telethon.tl import types
 from telethon.utils import get_display_name
 
-from ..configs import Var
 from ..dB._core import ADDONS, HELP, LIST, LOADED
 from ..misc import CMD_HELP
 from ..misc._wrappers import eod, eor

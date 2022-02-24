@@ -5,6 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+from ast import Import
 import base64
 import json
 import math
@@ -21,6 +22,10 @@ try:
     import aiohttp
 except ImportError:
     aiohttp = None
+    try:
+        import requests
+    except ImportError:
+        requests = None
 
 from .. import LOGS
 
@@ -29,8 +34,10 @@ try:
 except ImportError:
     certifi = None
     LOGS.info("'certifi' not installed!")
-
-import requests
+try:
+    import requests
+except ImportError:
+    pass
 
 try:
     from PIL import Image, ImageDraw, ImageFont
@@ -44,7 +51,7 @@ from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 
 from .. import *
 from ..dB.filestore_db import get_stored_msg, store_msg
-from .helper import bash
+from .helper import bash, run_async
 
 try:
     import cv2

@@ -548,15 +548,3 @@ def random_string(length=3):
 
 setattr(random, "random_string", random_string)
 
-
-async def get_current_branch() -> str:
-    """get current git branch."""
-    try:
-        from git import Repo
-
-        return Repo().active_branch
-    except ImportError:
-        out, _ = await bash("git branch")
-        for line in out.split("\n"):
-            if line.startswith("*"):
-                return line[1:].strip()

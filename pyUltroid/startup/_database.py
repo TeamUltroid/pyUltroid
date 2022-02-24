@@ -5,13 +5,21 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+from copy import deepcopy
 import os
 import sys
 
-from redis import Redis
+from ..exceptions import DependencyMissingError
 
-from ..configs import Var
+try:
+    from redis import Redis
+except ImportError:
+    Redis = None
+
 from . import *
+
+if run_as_module:
+    from ..configs import Var
 
 try:
     from pymongo import MongoClient
@@ -240,6 +248,8 @@ class RedisDB:
         *args,
         **kwargs,
     ):
+        if not Redis:
+            raise DependencyMissingError("'redis' module is not installed!\nInstall it to use RedisDB")
         if host and ":" in host:
             spli_ = host.split(":")
             host = spli_[0]
@@ -321,9 +331,10 @@ def UltroidDB():
         return MongoDB(Var.MONGO_URI)
     elif psycopg2 and Var.DATABASE_URL:
         return SqlDB(Var.DATABASE_URL)
-    from .. import HOSTED_ON
+    elif Redis:
+        from .. import HOSTED_ON
 
-    return RedisDB(
+        return RedisDB(
         host=Var.REDIS_URI or Var.REDISHOST,
         password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
         port=Var.REDISPORT,
@@ -331,7 +342,10 @@ def UltroidDB():
         decode_responses=True,
         socket_timeout=5,
         retry_on_timeout=True,
-    )
+        )
+    else:
+        LOGS.critical("No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies..")
+        exit()
 
 
 # --------------------------------------------------------------------------------------------- #

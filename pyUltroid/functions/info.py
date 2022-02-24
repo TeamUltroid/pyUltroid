@@ -9,12 +9,12 @@
 # -----------------Random Stuff--------------
 
 import math
+from ..exceptions import TelethonMissingError
 
 try:
     from telethon.tl import functions, types
 except ImportError:
-    pass
-    # todo
+    raise TelethonMissingError(f"'Telethon is not Installed!'\nfunctions present in '{__name__}' needs telethon to be installed!")
 
 from .. import LOGS
 
