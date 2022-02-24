@@ -41,7 +41,7 @@ setuptools.setup(
     url=url,
     project_urls=project_urls,
     license=license_,
-    packages=["pyUltroid"],
+    packages=setuptools.find_packages(exclude=["docs/"]),
     install_requires=requirements,
     classifiers=classifiers,
     python_requires=">3.7, <3.11",
