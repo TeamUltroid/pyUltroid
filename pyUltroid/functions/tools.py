@@ -17,9 +17,8 @@ from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
 
-from ..exceptions import DependencyMissingError
-
 from .. import LOGS
+from ..exceptions import DependencyMissingError
 
 try:
     import certifi
@@ -84,7 +83,9 @@ async def async_searcher(
     try:
         import aiohttp
     except ImportError:
-        raise DependencyMissingError("'aiohttp' is not installed!\nthis function requires aiohttp to be installed.")
+        raise DependencyMissingError(
+            "'aiohttp' is not installed!\nthis function requires aiohttp to be installed."
+        )
     async with aiohttp.ClientSession(headers=headers) as client:
         if post:
             data = await client.post(url, json=json, data=data, ssl=ssl)
