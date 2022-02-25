@@ -17,14 +17,7 @@ from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
 
-try:
-    import aiohttp
-except ImportError:
-    aiohttp = None
-    try:
-        import requests
-    except ImportError:
-        requests = None
+from ..exceptions import DependencyMissingError
 
 from .. import LOGS
 
@@ -32,11 +25,6 @@ try:
     import certifi
 except ImportError:
     certifi = None
-    LOGS.info("'certifi' not installed!")
-try:
-    import requests
-except ImportError:
-    pass
 
 try:
     from PIL import Image, ImageDraw, ImageFont
@@ -52,10 +40,6 @@ from .. import *
 from ..dB.filestore_db import get_stored_msg, store_msg
 from .helper import bash
 
-try:
-    import cv2
-except ImportError:
-    cv2 = None
 try:
     import numpy as np
 except ImportError:
@@ -97,6 +81,10 @@ async def async_searcher(
     re_content: bool = False,
     real: bool = False,
 ):
+    try:
+        import aiohttp
+    except ImportError:
+        raise DependencyMissingError("'aiohttp' is not installed!\nthis function requires aiohttp to be installed.")
     async with aiohttp.ClientSession(headers=headers) as client:
         if post:
             data = await client.post(url, json=json, data=data, ssl=ssl)
@@ -141,6 +129,10 @@ def json_parser(data, indent=None, ascii=False):
 
 
 def is_url_ok(url: str):
+    try:
+        import requests
+    except ImportError:
+        raise DependencyMissingError("This function needs 'requests' to be installed.")
     try:
         r = requests.head(url)
     except MissingSchema:
@@ -478,6 +470,10 @@ def order_points(pts):
 
 
 def four_point_transform(image, pts):
+    try:
+        import cv2
+    except ImportError:
+        raise DependencyMissingError("This function needs 'cv2' to be installed.")
     rect = order_points(pts)
     (tl, tr, br, bl) = rect
     widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
@@ -701,6 +697,10 @@ class TgConverter:
 
     @staticmethod
     def to_image(input_, name, remove=False):
+        try:
+            import cv2
+        except ImportError:
+            raise DependencyMissingError("This function needs 'cv2' to be installed.")
         img = cv2.VideoCapture(input_)
         ult, roid = img.read()
         cv2.imwrite(name, roid)

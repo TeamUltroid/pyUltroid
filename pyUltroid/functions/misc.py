@@ -14,6 +14,8 @@ from logging import WARNING
 from random import choice, randrange, shuffle
 from traceback import format_exc
 
+from pyUltroid.exceptions import DependencyMissingError
+
 try:
     from aiohttp import ContentTypeError
 except ImportError:
@@ -56,10 +58,10 @@ try:
     import numpy as np
 except ImportError:
     np = None
+
 try:
     from bs4 import BeautifulSoup
 except ImportError:
-    LOGS.info("'bs4' not installed.")
     BeautifulSoup = None
 
 
@@ -176,6 +178,8 @@ async def allcmds(event, telegraph):
 
 
 async def ReTrieveFile(input_file_name):
+    if not aiohttp:
+        raise DependencyMissingError("This function needs 'aiohttp' to be installed.")
     RMBG_API = udB.get_key("RMBG_API")
     headers = {"X-API-Key": RMBG_API}
     files = {"image_file": open(input_file_name, "rb").read()}
@@ -536,6 +540,8 @@ def split_list(List, index):
 
 
 def rotate_image(image, angle):
+    if not cv2:
+        raise DependencyMissingError("This function needs 'cv2' to be installed!")
     image_center = tuple(np.array(image.shape[1::-1]) / 2)
     rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
     return cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
