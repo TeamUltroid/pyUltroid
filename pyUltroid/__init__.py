@@ -6,7 +6,6 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import sys
-from types import NoneType
 
 from .version import __version__
 
