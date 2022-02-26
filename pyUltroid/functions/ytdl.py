@@ -125,8 +125,10 @@ async def download_yt(event, link, ytd):
         thumb,
     )
     ext = "." + ytd["outtmpl"].split(".")[-1]
-    if ext == ".m4a":
-        ext = ".mp3"
+    for _ext in [".m4a", ".mp3", ".opus"]:
+        if ext == _ext:
+            ext = _ext
+            break
     id = None
     for x in glob.glob(f"{id_}*"):
         if not x.endswith("jpg"):
@@ -226,24 +228,15 @@ def get_buttons(listt):
 
 
 async def dler(event, url, opts: dict = {}, download=False):
-    time.time()
     await event.edit("`Getting Data...`")
     if "quiet" not in opts:
         opts["quiet"] = True
     opts["username"] = udB.get_key("YT_USERNAME")
     opts["password"] = udB.get_key("YT_PASSWORD")
-    """
-    if "progress_hooks" not in opts:
-        opts["progress_hooks"] = [
-            lambda k: asyncio.get_event_loop().create_task(
-                ytdl_progress(k, start_time, event)
-            )
-        ]
-    """
     if download:
         await ytdownload(url, opts)
     try:
-        return await extract_info(url)
+        return await extract_info(url, opts)
     except Exception as e:
         await event.edit(f"{type(e)}: {e}")
         return
@@ -258,8 +251,8 @@ def ytdownload(url, opts):
 
 
 @run_async
-def extract_info(url):
-    return YoutubeDL({}).extract_info(url=url, download=False)
+def extract_info(url, opts):
+    return YoutubeDL(opts).extract_info(url=url, download=False)
 
 
 @run_async
