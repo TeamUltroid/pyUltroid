@@ -329,7 +329,11 @@ class RedisDB:
 
 
 def UltroidDB():
-    if Redis:
+    if MongoClient and Var.MONGO_URI:
+        return MongoDB(Var.MONGO_URI)
+    elif psycopg2 and Var.DATABASE_URL:
+        return SqlDB(Var.DATABASE_URL)
+    elif Var.REDIS_URI or Var.REDISHOST:
         from .. import HOSTED_ON
 
         return RedisDB(
@@ -341,10 +345,6 @@ def UltroidDB():
             socket_timeout=5,
             retry_on_timeout=True,
         )
-    if MongoClient and Var.MONGO_URI:
-        return MongoDB(Var.MONGO_URI)
-    elif psycopg2 and Var.DATABASE_URL:
-        return SqlDB(Var.DATABASE_URL)
     else:
         LOGS.critical(
             "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies.."
