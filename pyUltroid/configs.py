@@ -49,5 +49,3 @@ class Var:
     DATABASE_URL = config("DATABASE_URL", default=None)
     # for MONGODB users
     MONGO_URI = config("MONGO_URI", default=None)
-    # for future
-    MULTI_SESSIONS = config("MULTI_SESSIONS", default=None)
