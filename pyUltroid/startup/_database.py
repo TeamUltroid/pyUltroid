@@ -55,9 +55,9 @@ def get_data(self_, key):
 
 
 class MongoDB:
-    def __init__(self, key):
+    def __init__(self, key, dbname="UltroidDB"):
         self.dB = MongoClient(key, serverSelectionTimeoutMS=5000)
-        self.db = self.dB.UltroidDB
+        self.db = self.dB[dbname]
         self.re_cache()
 
     def __repr__(self):
