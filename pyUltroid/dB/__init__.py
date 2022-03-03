@@ -7,7 +7,7 @@ if not run_as_module:
         "You are running 'pyUltroid' as a functions lib, not as run module. You can't access this folder.."
     )
 
-from pyUltroid import *
+from pyUltroid import ultroid_bot, asst, udB
 
 DEVLIST = [
     719195224,  # @xditya
