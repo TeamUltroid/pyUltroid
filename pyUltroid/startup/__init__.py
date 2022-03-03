@@ -5,10 +5,10 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from ast import Import
 import os
 import platform
 import sys
+from ast import Import
 from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
 
 from .. import run_as_module
@@ -32,7 +32,9 @@ def where_hosted():
 
 if run_as_module:
     from telethon import __version__
-    from ..version import __version__ as __pyUltroid__, ultroid_version
+
+    from ..version import __version__ as __pyUltroid__
+    from ..version import ultroid_version
 
     file = f"ultroid{sys.argv[6]}.log" if len(sys.argv) > 6 else "ultroid.log"
 
