@@ -6,7 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
-from . import  udB
+from . import udB
 
 
 def get_stuff():
