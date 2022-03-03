@@ -8,6 +8,7 @@ if not run_as_module:
     )
 
 from .. import *
+from .. import udB
 
 DEVLIST = [
     719195224,  # @xditya
