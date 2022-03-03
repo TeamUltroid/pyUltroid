@@ -1,4 +1,4 @@
-from . import udB
+from .. import udB
 
 
 def get_all_channels() -> dict:
