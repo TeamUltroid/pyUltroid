@@ -9,7 +9,6 @@ if not run_as_module:
 
 from .. import *
 
-
 DEVLIST = [
     719195224,  # @xditya
     1322549723,  # @danish_00
