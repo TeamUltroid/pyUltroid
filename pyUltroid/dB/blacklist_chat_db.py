@@ -1,4 +1,4 @@
-from .. import udB
+from . import  udB
 
 
 def add_black_chat(chat_id):
