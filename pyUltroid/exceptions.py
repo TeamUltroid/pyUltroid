@@ -1,6 +1,7 @@
 class pyUltroidError(Exception):
     ...
 
+
 class TelethonMissingError(ImportError):
     ...
 
