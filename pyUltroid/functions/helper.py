@@ -17,8 +17,6 @@ from urllib.parse import unquote
 from .. import run_as_module
 
 if run_as_module:
-    from safety.tools import sys_exit
-
     from ..configs import Var
 
 try:
@@ -581,4 +579,4 @@ async def shutdown(ult):
                 "`HEROKU_API` and `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars."
             )
     else:
-        sys_exit()
+        sys.exit()
