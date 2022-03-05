@@ -5,11 +5,12 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-from . import *
-from .. import *
 from decouple import config
-from ..loader import Loader
 from git import Repo
+
+from .. import *
+from ..loader import Loader
+from . import *
 from .utils import load_addons
 
 
