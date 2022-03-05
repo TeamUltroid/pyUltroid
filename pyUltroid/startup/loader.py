@@ -6,13 +6,15 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
-from . import *
-from .. import *
 from decouple import config
-from ..loader import Loader
 from git import Repo
+
+from .. import *
 from ..dB._core import HELP
+from ..loader import Loader
+from . import *
 from .utils import load_addons
+
 
 def _after_load(loader, module, plugin_name=""):
     if module and not plugin_name.startswith("_") and (module.__doc__):
@@ -28,6 +30,7 @@ def _after_load(loader, module, plugin_name=""):
                 HELP.update({loader.key: {plugin_name: doc}})
             except BaseException as em:
                 loader._logger.exception(em)
+
 
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
 
@@ -45,7 +48,9 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         _ast_exc = ["pmbot"]
         if _in_only and "games" not in _in_only:
             _ast_exc.append("games")
-        Loader(path="assistant").load(log=False, exclude=_ast_exc, _after_load=_after_load)
+        Loader(path="assistant").load(
+            log=False, exclude=_ast_exc, _after_load=_after_load
+        )
 
     # for addons
     if addons:
@@ -78,8 +83,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         _in_only = _in_only.split() if _in_only else []
 
         Loader(path="addons", key="Addons").load(
-            func=load_addons, include=_in_only, exclude=_exclude,
-            after_load=_after_load
+            func=load_addons, include=_in_only, exclude=_exclude, after_load=_after_load
         )
 
     # group manager

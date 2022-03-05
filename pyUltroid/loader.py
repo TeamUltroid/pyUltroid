@@ -9,7 +9,9 @@ import glob
 import os
 from importlib import import_module
 from logging import Logger
+
 from . import LOGS
+
 
 class Loader:
     def __init__(self, path="plugins", key="Official", logger: Logger = LOGS):
@@ -17,12 +19,12 @@ class Loader:
         self.key = key
         self._logger = logger
 
-    def load(self, log=True, func=import_module, include=None, exclude=None, after_load=None):
+    def load(
+        self, log=True, func=import_module, include=None, exclude=None, after_load=None
+    ):
         if include:
             if log:
-                self._logger.info(
-                    "Including: {}".format("• ".join(include))
-                )
+                self._logger.info("Including: {}".format("• ".join(include)))
             files = glob.glob(f"{self.path}/_*.py")
             for file in include:
                 path = f"{self.path}/{file}.py"
@@ -71,4 +73,3 @@ class Loader:
             return self._logger.exception(er)
         if log and self._logger:
             self._logger.info(f"Successfully Loaded {plugin}!")
-
