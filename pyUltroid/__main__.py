@@ -14,7 +14,7 @@ def main():
     import time
 
     from .functions.helper import time_formatter, updater
-    from .loader import load_other_plugins
+    from .startup.loader import load_other_plugins
     from .startup.funcs import (
         WasItRestart,
         autopilot,
