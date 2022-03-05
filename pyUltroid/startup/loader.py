@@ -18,7 +18,7 @@ from .utils import load_addons
 
 def _after_load(loader, module, plugin_name=""):
     if module and not plugin_name.startswith("_") and (module.__doc__):
-        doc = doc.__doc__.format(i=HNDLR)
+        doc = module.__doc__.format(i=HNDLR)
         if loader.key in HELP.keys():
             update_cmd = HELP[loader.key]
             try:
