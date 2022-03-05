@@ -15,7 +15,7 @@ from telethon.tl import functions, types
 
 try:
     from .. import _ult_cache
-    from ..misc import SUDO_M
+    from .._misc import SUDO_M
 except ImportError:
     _ult_cache = {}
     SUDO_M = None

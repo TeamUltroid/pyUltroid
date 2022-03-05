@@ -55,8 +55,8 @@ from telethon.tl import types
 from telethon.utils import get_display_name
 
 from ..dB._core import ADDONS, HELP, LIST, LOADED
-from ..misc import CMD_HELP
-from ..misc._wrappers import eod, eor
+from .._misc import CMD_HELP
+from .._misc._wrappers import eod, eor
 from ..version import ultroid_version
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable

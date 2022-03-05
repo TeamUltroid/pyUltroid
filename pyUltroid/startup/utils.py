@@ -17,11 +17,11 @@ def load_addons(plugin_name):
     from .. import HNDLR, LOGS, asst, udB, ultroid_bot
     from ..configs import Var
     from ..dB._core import HELP
-    from ..misc import _supporter as xxx
-    from ..misc._assistant import asst_cmd, callback, in_pattern
-    from ..misc._decorators import ultroid_cmd
-    from ..misc._supporter import Config, admin_cmd, sudo_cmd
-    from ..misc._wrappers import eod, eor
+    from .._misc import _supporter as xxx
+    from .._misc._assistant import asst_cmd, callback, in_pattern
+    from .._misc._decorators import ultroid_cmd
+    from .._misc._supporter import Config, admin_cmd, sudo_cmd
+    from .._misc._wrappers import eod, eor
 
     path = "addons/" + plugin_name
     name = path.replace("/", ".").replace("\\", ".")
