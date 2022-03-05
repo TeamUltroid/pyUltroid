@@ -8,7 +8,9 @@ author = "TeamUltroid"
 author_email = "teamultroid@protonmail.ch"
 description = "Function based library for telegram telethon projects."
 license_ = "GNU AFFERO GENERAL PUBLIC LICENSE (v3)"
+
 url = "https://github.com/TeamUltroid/pyUltroid"
+
 project_urls = {
     "Bug Tracker": "https://github.com/TeamUltroid/pyUltroid/issues",
     "Documentation": "https://ultroid.tech",
@@ -34,7 +36,7 @@ setuptools.setup(
     url=url,
     project_urls=project_urls,
     license=license_,
-    packages=setuptools.find_packages(exclude=["pyUltroid/dB", "pyUltroid/_misc", "pyUltroid/startup"]),
+    packages=setuptools.find_packages(exclude=["pyUltroid.dB", "pyUltroid._misc", "pyUltroid.startup"]),
     install_requires=["telethon"],
     classifiers=classifiers,
     python_requires=">3.7, <3.11",
