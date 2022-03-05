@@ -36,7 +36,9 @@ setuptools.setup(
     url=url,
     project_urls=project_urls,
     license=license_,
-    packages=setuptools.find_packages(exclude=["pyUltroid.dB", "pyUltroid._misc", "pyUltroid.startup"]),
+    packages=setuptools.find_packages(
+        exclude=["pyUltroid.dB", "pyUltroid._misc", "pyUltroid.startup"]
+    ),
     install_requires=["telethon"],
     classifiers=classifiers,
     python_requires=">3.7, <3.11",
