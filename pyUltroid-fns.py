@@ -23,6 +23,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+
 setuptools.setup(
     name=name,
     version="0.0.1.b0",
