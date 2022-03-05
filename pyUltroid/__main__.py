@@ -14,6 +14,7 @@ def main():
     import time
 
     from .functions.helper import time_formatter, updater
+    from .loader import load_other_plugins
     from .startup.funcs import (
         WasItRestart,
         autopilot,
@@ -22,7 +23,6 @@ def main():
         ready,
         startup_stuff,
     )
-    from .loader import load_other_plugins
 
     # Option to Auto Update On Restarts..
     if (
