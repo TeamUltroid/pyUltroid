@@ -63,6 +63,7 @@ async def _try_delete(event):
         pass
     except BaseException as er:
         from . import LOGS
+
         LOGS.error("Error while Deleting Message..")
         LOGS.exception(er)
 
