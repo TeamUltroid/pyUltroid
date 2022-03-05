@@ -9,10 +9,7 @@ import glob
 import os
 from importlib import import_module
 from logging import Logger
-
-from . import *
-
-from .dB._core import HELP
+from . import LOGS
 
 class Loader:
     def __init__(self, path="plugins", key="Official", logger: Logger = LOGS):
@@ -20,11 +17,11 @@ class Loader:
         self.key = key
         self._logger = logger
 
-    def load(self, log=True, func=import_module, cmd_help=HELP, include=[], exclude=[]):
+    def load(self, log=True, func=import_module, include=None, exclude=None, after_load=None):
         if include:
             if log:
                 self._logger.info(
-                    "Including:{}".format("".join(f"• {name}" for name in include))
+                    "Including: {}".format("• ".join(include))
                 )
             files = glob.glob(f"{self.path}/_*.py")
             for file in include:
@@ -51,33 +48,18 @@ class Loader:
             else:
                 plugin = plugin.split("/")[-1]
             try:
-                doc = func(plugin)
+                modl = func(plugin)
             except ModuleNotFoundError as er:
-                doc = None
+                modl = None
                 self._logger.error(f"{plugin}: '{er.name}' module not installed!")
             except Exception as exc:
-                doc = None
-                self._logger.error(f"Ultroid - {self.key} - ERROR - {plugin}")
+                modl = None
+                self._logger.error(f"pyUltroid - {self.key} - ERROR - {plugin}")
                 self._logger.exception(exc)
-            if func == import_module:
-                plugin = plugin.split(".")[-1]
-            if doc and (
-                (cmd_help or cmd_help == {})
-                and not plugin.startswith("_")
-                and (doc.__doc__)
-            ):
-                doc = doc.__doc__.format(i=HNDLR)
-                if self.key in cmd_help.keys():
-                    update_cmd = cmd_help[self.key]
-                    try:
-                        update_cmd.update({plugin: doc})
-                    except BaseException as er:
-                        self._logger.exception(er)
-                else:
-                    try:
-                        cmd_help.update({self.key: {plugin: doc}})
-                    except BaseException as em:
-                        self._logger.exception(em)
+            if callable(after_load):
+                if func == import_module:
+                    plugin = plugin.split(".")[-1]
+                after_load(self, modl, plugin_name=plugin)
 
     def load_single(self, log=False):
         """To Load Single File"""
