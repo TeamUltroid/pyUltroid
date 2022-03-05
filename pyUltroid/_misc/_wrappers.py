@@ -11,8 +11,6 @@ from telethon.errors import MessageDeleteForbiddenError, MessageNotModifiedError
 from telethon.tl.custom import Message
 from telethon.tl.types import MessageService
 
-from .. import LOGS
-
 # edit or reply
 
 
@@ -64,6 +62,7 @@ async def _try_delete(event):
     except (MessageDeleteForbiddenError):
         pass
     except BaseException as er:
+        from . import LOGS
         LOGS.error("Error while Deleting Message..")
         LOGS.exception(er)
 

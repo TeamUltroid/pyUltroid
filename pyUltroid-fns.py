@@ -1,4 +1,6 @@
+import os
 import setuptools
+import shutil
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -25,6 +27,8 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+shutil.copy("pyUltroid/_misc/_wrappers.py", "pyUltroid/wrappers.py")
+
 setuptools.setup(
     name=name,
     version="0.0.1.b0",
@@ -41,3 +45,5 @@ setuptools.setup(
     classifiers=classifiers,
     python_requires=">3.7, <3.11",
 )
+
+os.remove("pyUltroid/wrappers.py")
