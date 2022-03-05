@@ -22,7 +22,7 @@ def main():
         ready,
         startup_stuff,
     )
-    from .startup.loader import load_other_plugins
+    from .loader import load_other_plugins
 
     # Option to Auto Update On Restarts..
     if (
