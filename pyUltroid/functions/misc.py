@@ -25,9 +25,9 @@ from telethon.tl import types
 from telethon.utils import get_display_name, get_peer_id
 
 from .. import *
+from .._misc._wrappers import eor
 from ..dB import DEVLIST
 from ..dB._core import LIST
-from .._misc._wrappers import eor
 from . import some_random_headers
 from .tools import async_searcher, check_filename, json_parser
 
