@@ -8,7 +8,6 @@
 import os
 import platform
 import sys
-from ast import Import
 from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
 
 from .. import run_as_module
