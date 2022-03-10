@@ -65,6 +65,27 @@ async def _callback_check(event):
     return key
 
 
+async def get_update_linked_chat(event):
+    if _ult_cache.get("LINKED_CHATS") and _ult_cache["LINKED_CHATS"].get(
+            event.chat_id
+        ):
+        _ignore = _ult_cache["LINKED_CHATS"][event.chat_id]["linked_chat"]
+    else:
+        channel = await event.client(
+            functions.channels.GetFullChannelRequest(event.chat_id)
+        )
+        _ignore = channel.full_chat.linked_chat_id
+        if _ult_cache.get("LINKED_CHATS"):
+            _ult_cache["LINKED_CHATS"].update(
+                {event.chat_id: {"linked_chat": _ignore}}
+            )
+        else:
+            _ult_cache.update(
+                {"LINKED_CHATS": {event.chat_id: {"linked_chat": _ignore}}}
+             )
+   return _ignore
+
+
 async def admin_check(event, require=None, silent: bool = False):
     if SUDO_M and event.sender_id in SUDO_M.owner_and_sudos():
         return True
@@ -79,23 +100,7 @@ async def admin_check(event, require=None, silent: bool = False):
             return True
         callback = True
     if isinstance(event.sender, types.Channel):
-        if _ult_cache.get("LINKED_CHATS") and _ult_cache["LINKED_CHATS"].get(
-            event.chat_id
-        ):
-            _ignore = _ult_cache["LINKED_CHATS"][event.chat_id]["linked_chat"]
-        else:
-            channel = await event.client(
-                functions.channels.GetFullChannelRequest(event.chat_id)
-            )
-            _ignore = channel.full_chat.linked_chat_id
-            if _ult_cache.get("LINKED_CHATS"):
-                _ult_cache["LINKED_CHATS"].update(
-                    {event.chat_id: {"linked_chat": _ignore}}
-                )
-            else:
-                _ult_cache.update(
-                    {"LINKED_CHATS": {event.chat_id: {"linked_chat": _ignore}}}
-                )
+        _ignore = await get_update_linked_chat(event)
         if _ignore and event.sender.id == _ignore:
             return False
         callback = True
