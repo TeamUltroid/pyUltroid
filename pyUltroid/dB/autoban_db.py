@@ -8,7 +8,7 @@ def get_all_channels() -> dict:
 
 def is_autoban_enabled(chat_id: int) -> bool:
     """Check whether channels are banned in a specific chat or not."""
-    return int(chat_id) in get_all_channels()
+    return chat_id in get_all_channels()
 
 
 def add_channel(chat_id: int) -> bool:
@@ -29,12 +29,12 @@ def del_channel(chat_id: int) -> bool:
 
 def get_whitelisted_channels(chat_id: int) -> list:
     """Get list of whitelisted channels in a given chat."""
-    return get_all_channels[int(chat_id)] if is_autoban_enabled(int(chat_id)) else []
+    return get_all_channels()[chat_id] if is_autoban_enabled(chat_id) else []
 
 
 def is_whitelisted(chat_id: int, channel_id: int) -> bool:
     """Check whether given channel is whitelisted in given chat or not."""
-    return int(channel_id) in get_whitelisted_channels(chat_id)
+    return channel_id in get_whitelisted_channels(chat_id)
 
 
 def add_to_whitelist(chat_id: int, channel_id: int) -> bool:
