@@ -83,7 +83,7 @@ async def get_update_linked_chat(event):
             _ult_cache.update(
                 {"LINKED_CHATS": {event.chat_id: {"linked_chat": _ignore}}}
              )
-   return _ignore
+    return _ignore
 
 
 async def admin_check(event, require=None, silent: bool = False):
