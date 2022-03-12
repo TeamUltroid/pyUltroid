@@ -31,7 +31,7 @@ def where_hosted():
 
 if run_as_module:
     from telethon import __version__
-
+    from telethon.tl.alltlobjects import LAYER
     from ..version import __version__ as __pyUltroid__
     from ..version import ultroid_version
 
@@ -82,7 +82,7 @@ if run_as_module:
 
     LOGS.info(f"Python version - {platform.python_version()}")
     LOGS.info(f"py-Ultroid Version - {__pyUltroid__}")
-    LOGS.info(f"Telethon Version - {__version__}")
+    LOGS.info(f"Telethon Version - {__version__} [{LAYER}]")
     LOGS.info(f"Ultroid Version - {ultroid_version} [{HOSTED_ON}]")
 
     try:
