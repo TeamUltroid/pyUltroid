@@ -66,7 +66,7 @@ def callback(data=None, from_users=[], owner=False, **kwargs):
         async def wrapper(event):
             if from_users and event.sender_id not in from_users:
                 return await event.answer("Not for You!", alert=True)
-            elif owner and event.sender_id not in owner_and_sudos():
+            if owner and event.sender_id not in owner_and_sudos():
                 return await event.answer(f"This is {OWNER}'s bot!!")
             try:
                 await func(event)

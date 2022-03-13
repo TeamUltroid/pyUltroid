@@ -247,8 +247,6 @@ class googleimagesdownload:
         try:
             with open(file_name, "wb") as output_file:
                 output_file.write(data)
-        except IOError as e:
-            raise e
         except OSError as e:
             raise e
 
@@ -588,11 +586,6 @@ class googleimagesdownload:
                     download_status = "fail"
                     download_message = (
                         "OSError on an image...trying next one..." + " Error: " + str(e)
-                    )
-                except IOError as e:
-                    download_status = "fail"
-                    download_message = (
-                        "IOError on an image...trying next one..." + " Error: " + str(e)
                     )
 
                 download_status = "success"
