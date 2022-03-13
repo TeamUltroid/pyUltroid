@@ -83,7 +83,7 @@ if run_as_module:
 
     LOGS.info(f"Python version - {platform.python_version()}")
     LOGS.info(f"py-Ultroid Version - {__pyUltroid__}")
-    LOGS.info(f"Telethon Version - {__version__} [{LAYER}]")
+    LOGS.info(f"Telethon Version - {__version__} [Layer: {LAYER}]")
     LOGS.info(f"Ultroid Version - {ultroid_version} [{HOSTED_ON}]")
 
     try:
