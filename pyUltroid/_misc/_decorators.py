@@ -263,7 +263,7 @@ def ultroid_cmd(
             async def manager_cmd(ult):
                 if not allow_all and not (await admin_check(ult, require=require)):
                     return
-                elif not allow_pm and ult.is_private:
+                if not allow_pm and ult.is_private:
                     return
                 try:
                     await dec(ult)
