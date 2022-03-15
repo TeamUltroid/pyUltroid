@@ -25,4 +25,4 @@ def _ask_input():
     def new_input(*args, **kwargs):
         raise EOFError("args=" + str(args) + ", kwargs=" + str(kwargs))
 
-    __builtins__["input"] == new_input
+    __builtins__["input"] = new_input
