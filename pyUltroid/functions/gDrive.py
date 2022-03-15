@@ -20,7 +20,7 @@ from oauth2client.file import Storage
 from .. import udB
 from .helper import humanbytes, time_formatter
 
-_auth_flow = None
+_flow = {}
 
 for log in [LOGGER, logger, _logger]:
     log.setLevel(WARNING)
@@ -50,8 +50,8 @@ class GDriveManager:
         return f"https://drive.google.com/folderview?id={folderId}"
 
     def _create_token_file(self, code: str = None):
-        global _auth_flow
-        if code and _auth_flow:
+        if code and _flow:
+            _auth_flow = _flow["_"]
             credentials = _auth_flow.step2_exchange(code)
             Storage(self.token_file).put(credentials)
             return udB.set_key("GDRIVE_AUTH_TOKEN", str(open(self.token_file).read()))
@@ -64,6 +64,7 @@ class GDriveManager:
                 self.gdrive_creds["oauth_scope"],
                 redirect_uri=self.gdrive_creds["redirect_uri"],
             )
+            _flow["_"] = _auth_flow
         except KeyError:
             return "Fill GDRIVE client credentials"
         return _auth_flow.step1_get_authorize_url()
