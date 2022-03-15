@@ -1126,9 +1126,7 @@ class googleimagesdownload:
                                 os.makedirs("logs")
                         except OSError as e:
                             LOGS.exception(e)
-                        with open(
-                            "logs/" + e + ".json", "w"
-                        ) as json_file:
+                        with open("logs/" + e + ".json", "w") as json_file:
                             json.dump(items, json_file, indent=4, sort_keys=True)
                     # Related images
                     if arguments["related_images"]:
