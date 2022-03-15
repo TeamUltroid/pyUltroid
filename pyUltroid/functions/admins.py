@@ -35,11 +35,11 @@ def ban_time(time_str):
         raise Exception("Invalid time amount specified.")
     if unit == "s":
         return int(time.time() + int(time_int))
-    elif unit == "m":
+    if unit == "m":
         return int(time.time() + int(time_int) * 60)
-    elif unit == "h":
+    if unit == "h":
         return int(time.time() + int(time_int) * 60 * 60)
-    elif unit == "d":
+    if unit == "d":
         return int(time.time() + int(time_int) * 24 * 60 * 60)
     return ""
 
