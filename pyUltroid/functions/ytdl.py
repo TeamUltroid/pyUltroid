@@ -181,7 +181,7 @@ def get_formats(type, id, data):
             )
             audio.append(_audio)
         return audio
-    elif type == "video":
+    if type == "video":
         video = []
         size = 0
         for vid in data["formats"]:
