@@ -157,7 +157,7 @@ async def autobot():
             token = nowdone.split("`")[1]
             udB.set_key("BOT_TOKEN", token)
             await enable_inline(ultroid_bot, username)
-            LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
+            LOGS.info(f"Done. Successfully created @{username} to be used as your assistant bot!")
         else:
             LOGS.critical(
                 "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
@@ -170,7 +170,7 @@ async def autobot():
         token = isdone.split("`")[1]
         udB.set_key("BOT_TOKEN", token)
         await enable_inline(ultroid_bot, username)
-        LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
+        LOGS.info(f"Done. Successfully created @{username} to be used as your assistant bot!")
     else:
         LOGS.info(
             "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
@@ -320,6 +320,10 @@ async def customize():
         await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", "/setuserpic")
         await asyncio.sleep(1)
+        isdone = (await ultroid_bot.get_messages("botfather", limit=1))[0].text
+        if isdone.startswith("Invalid bot"):
+            LOGS.info("Error while trying to customise assistant, skipping...")
+            return
         await ultroid_bot.send_message("botfather", UL)
         await asyncio.sleep(1)
         await ultroid_bot.send_file("botfather", file)
@@ -338,7 +342,7 @@ async def customize():
         await asyncio.sleep(1)
         await ultroid_bot.send_message(
             "botfather",
-            f"✨ PowerFul Ultroid Assistant Bot ✨\n✨ Master ~ {sir} ✨\n\n✨ Powered By ~ @TeamUltroid ✨",
+            f"✨ Powerful Ultroid Assistant Bot ✨\n✨ Master ~ {sir} ✨\n\n✨ Powered By ~ @TeamUltroid ✨",
         )
         await asyncio.sleep(2)
         await msg.edit("Completed **Auto Customisation** at @BotFather.")
