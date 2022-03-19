@@ -26,9 +26,11 @@ from telethon.utils import get_display_name, get_peer_id
 
 from .. import *
 from .._misc._wrappers import eor
+
 if run_as_module:
     from ..dB import DEVLIST
     from ..dB._core import LIST
+
 from . import some_random_headers
 from .tools import async_searcher, check_filename, json_parser
 
@@ -140,10 +142,7 @@ async def google_search(query):
         "User-Agent": choice(some_random_headers),
     }
     con = await async_searcher(_base + "/search?q=" + query, headers=headers)
-    soup = BeautifulSoup(
-        con,
-        "html.parser"
-    )
+    soup = BeautifulSoup(con, "html.parser")
     result = []
     pdata = soup.find_all("a", href=re.compile("url="))
     for data in pdata:
@@ -151,12 +150,12 @@ async def google_search(query):
             continue
         try:
             result.append(
-            {
+                {
                     "title": data.find("div").text,
                     "link": data["href"].split("&url=")[1].split("&ved=")[0],
-                   "description": data.find_all("div")[-1].text,
-            }
-        )
+                    "description": data.find_all("div")[-1].text,
+                }
+            )
         except BaseException as er:
             LOGS.exception(er)
     return result

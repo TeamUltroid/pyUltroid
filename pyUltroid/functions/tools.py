@@ -81,7 +81,8 @@ async def async_searcher(
     re_json: bool = False,
     re_content: bool = False,
     real: bool = False,
-    *args, **kwargs
+    *args,
+    **kwargs,
 ):
     try:
         import aiohttp
@@ -91,7 +92,9 @@ async def async_searcher(
         )
     async with aiohttp.ClientSession(headers=headers) as client:
         if post:
-            data = await client.post(url, json=json, data=data, ssl=ssl, *args, **kwargs)
+            data = await client.post(
+                url, json=json, data=data, ssl=ssl, *args, **kwargs
+            )
         else:
             data = await client.get(url, params=params, ssl=ssl, *args, **kwargs)
         if re_json:
