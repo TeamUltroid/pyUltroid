@@ -157,7 +157,9 @@ async def autobot():
             token = nowdone.split("`")[1]
             udB.set_key("BOT_TOKEN", token)
             await enable_inline(ultroid_bot, username)
-            LOGS.info(f"Done. Successfully created @{username} to be used as your assistant bot!")
+            LOGS.info(
+                f"Done. Successfully created @{username} to be used as your assistant bot!"
+            )
         else:
             LOGS.critical(
                 "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
@@ -170,7 +172,9 @@ async def autobot():
         token = isdone.split("`")[1]
         udB.set_key("BOT_TOKEN", token)
         await enable_inline(ultroid_bot, username)
-        LOGS.info(f"Done. Successfully created @{username} to be used as your assistant bot!")
+        LOGS.info(
+            f"Done. Successfully created @{username} to be used as your assistant bot!"
+        )
     else:
         LOGS.info(
             "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
