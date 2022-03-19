@@ -36,8 +36,10 @@ from telethon import Button
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 
 from .. import *
-from ..dB.filestore_db import get_stored_msg, store_msg
 from .helper import bash
+
+if run_as_module:
+    from ..dB.filestore_db import get_stored_msg, store_msg
 
 try:
     import numpy as np
@@ -79,6 +81,7 @@ async def async_searcher(
     re_json: bool = False,
     re_content: bool = False,
     real: bool = False,
+    *args, **kwargs
 ):
     try:
         import aiohttp
@@ -88,9 +91,9 @@ async def async_searcher(
         )
     async with aiohttp.ClientSession(headers=headers) as client:
         if post:
-            data = await client.post(url, json=json, data=data, ssl=ssl)
+            data = await client.post(url, json=json, data=data, ssl=ssl, *args, **kwargs)
         else:
-            data = await client.get(url, params=params, ssl=ssl)
+            data = await client.get(url, params=params, ssl=ssl, *args, **kwargs)
         if re_json:
             return await data.json()
         if re_content:

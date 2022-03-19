@@ -26,8 +26,9 @@ from telethon.utils import get_display_name, get_peer_id
 
 from .. import *
 from .._misc._wrappers import eor
-from ..dB import DEVLIST
-from ..dB._core import LIST
+if run_as_module:
+    from ..dB import DEVLIST
+    from ..dB._core import LIST
 from . import some_random_headers
 from .tools import async_searcher, check_filename, json_parser
 
@@ -138,28 +139,26 @@ async def google_search(query):
         "Connection": "keep-alive",
         "User-Agent": choice(some_random_headers),
     }
+    con = await async_searcher(_base + "/search?q=" + query, headers=headers)
     soup = BeautifulSoup(
-        await async_searcher(_base + "/search?q=" + query, headers=headers),
-        "html.parser",
+        con,
+        "html.parser"
     )
-    another_soup = soup.find_all("div", class_=re.compile("ZINbbc"))
     result = []
-    results = [
-        someone.find_all("div", class_=re.compile("egMi0"))
-        for someone in another_soup[3:-2]
-    ]
-    for data in results:
+    pdata = soup.find_all("a", href=re.compile("url="))
+    for data in pdata:
+        if not data.find("div"):
+            continue
         try:
-            if len(data) > 1:
-                result.append(
-                    {
-                        "title": data[0].h3.text,
-                        "link": _base + data[0].a["href"],
-                        "description": data[1].text,
-                    }
-                )
-        except BaseException:
-            pass
+            result.append(
+            {
+                    "title": data.find("div").text,
+                    "link": data["href"].split("&url=")[1].split("&ved=")[0],
+                   "description": data.find_all("div")[-1].text,
+            }
+        )
+        except BaseException as er:
+            LOGS.exception(er)
     return result
 
 
