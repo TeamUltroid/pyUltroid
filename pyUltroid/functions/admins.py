@@ -13,30 +13,33 @@ from telethon import Button
 from telethon.errors.rpcerrorlist import UserNotParticipantError
 from telethon.tl import functions, types
 
-from .. import _ult_cache
-from ..misc import SUDO_M
+try:
+    from .. import _ult_cache
+    from .._misc import SUDO_M
+except ImportError:
+    _ult_cache = {}
+    SUDO_M = None
 
 
-async def ban_time(event, time_str):
+def ban_time(time_str):
     """Simplify ban time from text"""
     if not any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
-        await event.edit(
+        raise Exception(
             "Invalid time type specified. Expected s, m,h, or d, got: {}".format(
                 time_str[-1]
             )
         )
-        return
     unit = time_str[-1]
     time_int = time_str[:-1]
     if not time_int.isdigit():
-        return await event.edit("Invalid time amount specified.")
+        raise Exception("Invalid time amount specified.")
     if unit == "s":
         return int(time.time() + int(time_int))
-    elif unit == "m":
+    if unit == "m":
         return int(time.time() + int(time_int) * 60)
-    elif unit == "h":
+    if unit == "h":
         return int(time.time() + int(time_int) * 60 * 60)
-    elif unit == "d":
+    if unit == "d":
         return int(time.time() + int(time_int) * 24 * 60 * 60)
     return ""
 
@@ -57,16 +60,30 @@ async def _callback_check(event):
         _ult_cache["admin_callback"].update({id_: None})
     while not _ult_cache["admin_callback"].get(id_):
         await asyncio.sleep(1)
-    # if not _ult_cache.get("admin_callback", {}).get(id_):
-    #    await msg.delete()
-    #    return
     key = _ult_cache.get("admin_callback", {}).get(id_)
     del _ult_cache["admin_callback"][id_]
     return key
 
 
+async def get_update_linked_chat(event):
+    if _ult_cache.get("LINKED_CHATS") and _ult_cache["LINKED_CHATS"].get(event.chat_id):
+        _ignore = _ult_cache["LINKED_CHATS"][event.chat_id]["linked_chat"]
+    else:
+        channel = await event.client(
+            functions.channels.GetFullChannelRequest(event.chat_id)
+        )
+        _ignore = channel.full_chat.linked_chat_id
+        if _ult_cache.get("LINKED_CHATS"):
+            _ult_cache["LINKED_CHATS"].update({event.chat_id: {"linked_chat": _ignore}})
+        else:
+            _ult_cache.update(
+                {"LINKED_CHATS": {event.chat_id: {"linked_chat": _ignore}}}
+            )
+    return _ignore
+
+
 async def admin_check(event, require=None, silent: bool = False):
-    if event.sender_id in SUDO_M.owner_and_sudos():
+    if SUDO_M and event.sender_id in SUDO_M.owner_and_sudos():
         return True
     callback = None
 
@@ -79,23 +96,7 @@ async def admin_check(event, require=None, silent: bool = False):
             return True
         callback = True
     if isinstance(event.sender, types.Channel):
-        if _ult_cache.get("LINKED_CHATS") and _ult_cache["LINKED_CHATS"].get(
-            event.chat_id
-        ):
-            _ignore = _ult_cache["LINKED_CHATS"][event.chat_id]["linked_chat"]
-        else:
-            channel = await event.client(
-                functions.channels.GetFullChannelRequest(event.chat_id)
-            )
-            _ignore = channel.full_chat.linked_chat_id
-            if _ult_cache.get("LINKED_CHATS"):
-                _ult_cache["LINKED_CHATS"].update(
-                    {event.chat_id: {"linked_chat": _ignore}}
-                )
-            else:
-                _ult_cache.update(
-                    {"LINKED_CHATS": {event.chat_id: {"linked_chat": _ignore}}}
-                )
+        _ignore = await get_update_linked_chat(event)
         if _ignore and event.sender.id == _ignore:
             return False
         callback = True

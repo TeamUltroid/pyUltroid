@@ -20,6 +20,7 @@ from telethon import events
 from telethon.errors.common import AlreadyInConversationError
 from telethon.errors.rpcerrorlist import (
     AuthKeyDuplicatedError,
+    BotInlineDisabledError,
     BotMethodInvalidError,
     ChatSendInlineForbiddenError,
     ChatSendMediaForbiddenError,
@@ -61,7 +62,10 @@ def compile_pattern(data, hndlr):
     return re.compile("\\" + hndlr + data)
 
 
-def ultroid_cmd(pattern=None, manager=False, **kwargs):
+def ultroid_cmd(
+    pattern=None, manager=False, ultroid_bot=ultroid_bot, asst=asst, **kwargs
+):
+    owner_only = kwargs.get("owner_only", False)
     groups_only = kwargs.get("groups_only", False)
     admins_only = kwargs.get("admins_only", False)
     fullsudo = kwargs.get("fullsudo", False)
@@ -70,6 +74,8 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
 
     def decor(dec):
         async def wrapp(ult):
+            if owner_only and not ult.out:
+                return
             chat = ult.chat
             if not ult.out:
                 if ult.sender_id not in owner_and_sudos():
@@ -100,14 +106,14 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 await dec(ult)
             except FloodWaitError as fwerr:
                 await asst.send_message(
-                    int(udB.get_key("LOG_CHANNEL")),
+                    udB.get_key("LOG_CHANNEL"),
                     f"`FloodWaitError:\n{str(fwerr)}\n\nSleeping for {tf((fwerr.seconds + 10)*1000)}`",
                 )
                 await ultroid_bot.disconnect()
                 await asyncio.sleep(fwerr.seconds + 10)
                 await ultroid_bot.connect()
                 await asst.send_message(
-                    int(udB.get_key("LOG_CHANNEL")),
+                    udB.get_key("LOG_CHANNEL"),
                     "`Bot is working again`",
                 )
                 return
@@ -117,13 +123,15 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 return await eod(
                     ult, "`Sending media or sticker is not allowed in this chat.`"
                 )
-            except (BotMethodInvalidError, UserIsBotError) as boterror:
-                return await eod(ult, str(boterror))
+            except (BotMethodInvalidError, UserIsBotError):
+                return await eod(ult, "This Command Can't be used by Bot!")
             except AlreadyInConversationError:
                 return await eod(
                     ult,
                     "Conversation Is Already On, Kindly Wait Sometime Then Try Again.",
                 )
+            except (BotInlineDisabledError) as er:
+                return await eod(ult, f"`{er}`")
             except (
                 MessageIdInvalidError,
                 MessageNotModifiedError,
@@ -133,7 +141,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
             except AuthKeyDuplicatedError as er:
                 LOGS.exception(er)
                 await asst.send_message(
-                    int(udB.get_key("LOG_CHANNEL")),
+                    udB.get_key("LOG_CHANNEL"),
                     "Session String expired, create new session from 👇",
                     buttons=[
                         Button.url("Bot", "t.me/SessionGeneratorBot?start="),
@@ -174,7 +182,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
                 ftext += "\n\n\n**Last 5 commits:**`\n"
 
                 stdout, stderr = await bash('git log --pretty=format:"%an: %s" -5')
-                result = stdout + stderr
+                result = stdout + (stderr or "")
 
                 ftext += result + "`"
 
@@ -255,7 +263,7 @@ def ultroid_cmd(pattern=None, manager=False, **kwargs):
             async def manager_cmd(ult):
                 if not allow_all and not (await admin_check(ult, require=require)):
                     return
-                elif not allow_pm and ult.is_private:
+                if not allow_pm and ult.is_private:
                     return
                 try:
                     await dec(ult)

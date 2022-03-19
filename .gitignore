@@ -1,4 +1,8 @@
 dist/*
 build/*
 py_Ultroid.egg-info/*
+pyUltroid_fns.egg-info/
 __pycache__
+test*
+*.log
+.vscode

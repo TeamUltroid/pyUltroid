@@ -16,8 +16,8 @@ from pathlib import Path
 
 from telethon import events, types
 
-from pyUltroid.misc._decorators import compile_pattern, ultroid_cmd
-from pyUltroid.misc._wrappers import eod, eor
+from pyUltroid._misc._decorators import compile_pattern, ultroid_cmd
+from pyUltroid._misc._wrappers import eod, eor
 
 from .. import *
 from ..dB._core import LIST

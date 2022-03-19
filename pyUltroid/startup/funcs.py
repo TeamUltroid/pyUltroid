@@ -13,7 +13,11 @@ import time
 from random import randint
 from urllib.request import urlretrieve
 
-from pytz import timezone
+try:
+    from pytz import timezone
+except ImportError:
+    timezone = None
+
 from telethon.errors import (
     BotMethodInvalidError,
     ChannelPrivateError,
@@ -39,23 +43,26 @@ from telethon.tl.types import (
 from telethon.utils import get_peer_id
 
 from .. import LOGS
-from ..configs import Var
 from ..functions.helper import download_file, updater
-
-# Better than version_changes?
 
 
 def update_envs():
+    """Update Var. attributes to udB"""
     from .. import udB
 
     for envs in list(os.environ):
-        if envs in udB.keys():
+        if envs in ["LOG_CHANNEL", "BOT_TOKEN"] or envs in udB.keys():
             udB.set_key(envs, os.environ[envs])
 
 
 def startup_stuff():
     from .. import LOGS, udB
 
+    if not os.path.exists("./plugins"):
+        LOGS.error(
+            "'plugins' folder not found!\nMake sure that, you are on correct path."
+        )
+        exit()
     x = ["resources/auth", "resources/downloads", "vcbot/downloads"]
     for x in x:
         if not os.path.isdir(x):
@@ -80,15 +87,15 @@ def startup_stuff():
             mega.write(f"[Login]\nUsername = {MM}\nPassword = {MP}")
 
     TZ = udB.get_key("TIMEZONE")
-    if TZ:
+    if TZ and timezone:
         try:
             timezone(TZ)
             os.environ["TZ"] = TZ
             time.tzset()
         except AttributeError as er:
-            LOGS.exception(er)
+            LOGS.debug(er)
         except BaseException:
-            LOGS.info(
+            LOGS.critical(
                 "Incorrect Timezone ,\nCheck Available Timezone From Here https://telegra.ph/Ultroid-06-18-2\nSo Time is Default UTC"
             )
             os.environ["TZ"] = "UTC"
@@ -100,8 +107,6 @@ async def autobot():
 
     if udB.get_key("BOT_TOKEN"):
         return
-    if Var.BOT_TOKEN:
-        return udB.set_key("BOT_TOKEN", Var.BOT_TOKEN)
     await ultroid_bot.start()
     LOGS.info("MAKING A TELEGRAM BOT FOR YOU AT @BotFather, Kindly Wait")
     who = ultroid_bot.me
@@ -118,7 +123,7 @@ async def autobot():
     await asyncio.sleep(1)
     isdone = (await ultroid_bot.get_messages(bf, limit=1))[0].text
     if isdone.startswith("That I cannot do.") or "20 bots" in isdone:
-        LOGS.info(
+        LOGS.critical(
             "Please make a Bot from @BotFather and add it's token in BOT_TOKEN, as an env var and restart me."
         )
         import sys
@@ -132,7 +137,7 @@ async def autobot():
         await asyncio.sleep(1)
         isdone = (await ultroid_bot.get_messages(bf, limit=1))[0].text
         if not isdone.startswith("Good."):
-            LOGS.info(
+            LOGS.critical(
                 "Please make a Bot from @BotFather and add it's token in BOT_TOKEN, as an env var and restart me."
             )
             import sys
@@ -151,14 +156,12 @@ async def autobot():
         if nowdone.startswith("Done!"):
             token = nowdone.split("`")[1]
             udB.set_key("BOT_TOKEN", token)
-            await ultroid_bot.send_message(bf, "/setinline")
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message(bf, f"@{username}")
-            await asyncio.sleep(1)
-            await ultroid_bot.send_message(bf, "Search")
-            LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
-        else:
+            await enable_inline(ultroid_bot, username)
             LOGS.info(
+                f"Done. Successfully created @{username} to be used as your assistant bot!"
+            )
+        else:
+            LOGS.critical(
                 "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
             )
 
@@ -168,12 +171,10 @@ async def autobot():
     elif isdone.startswith("Done!"):
         token = isdone.split("`")[1]
         udB.set_key("BOT_TOKEN", token)
-        await ultroid_bot.send_message(bf, "/setinline")
-        await asyncio.sleep(1)
-        await ultroid_bot.send_message(bf, f"@{username}")
-        await asyncio.sleep(1)
-        await ultroid_bot.send_message(bf, "Search")
-        LOGS.info(f"DONE YOUR TELEGRAM BOT IS CREATED SUCCESSFULLY @{username}")
+        await enable_inline(ultroid_bot, username)
+        LOGS.info(
+            f"Done. Successfully created @{username} to be used as your assistant bot!"
+        )
     else:
         LOGS.info(
             "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
@@ -187,9 +188,8 @@ async def autobot():
 async def autopilot():
     from .. import asst, udB, ultroid_bot
 
-    if Var.LOG_CHANNEL and str(Var.LOG_CHANNEL).startswith("-100"):
-        udB.set_key("LOG_CHANNEL", Var.LOG_CHANNEL)
     channel = udB.get_key("LOG_CHANNEL")
+    new_channel = None
     if channel:
         try:
             chat = await ultroid_bot.get_entity(channel)
@@ -199,7 +199,7 @@ async def autopilot():
             channel = None
     if not channel:
         if ultroid_bot._bot:
-            LOGS.info("'LOG_CHANNEL' not found! Add it in order to use 'BOTMODE'")
+            LOGS.error("'LOG_CHANNEL' not found! Add it in order to use 'BOTMODE'")
             import sys
 
             sys.exit()
@@ -213,7 +213,7 @@ async def autopilot():
                 ),
             )
         except ChannelsTooMuchError:
-            LOGS.info(
+            LOGS.critical(
                 "You Are in Too Many Channels & Groups , Leave some And Restart The Bot"
             )
             import sys
@@ -227,6 +227,7 @@ async def autopilot():
             import sys
 
             sys.exit(1)
+        new_channel = True
         chat = r.chats[0]
         channel = get_peer_id(chat)
         udB.set_key("LOG_CHANNEL", str(channel))
@@ -243,7 +244,7 @@ async def autopilot():
     except BaseException as er:
         assistant = False
         LOGS.exception(er)
-    if assistant:
+    if assistant and new_channel:
         try:
             achat = await asst.get_entity(int(channel))
         except BaseException as er:
@@ -323,6 +324,10 @@ async def customize():
         await asyncio.sleep(1)
         await ultroid_bot.send_message("botfather", "/setuserpic")
         await asyncio.sleep(1)
+        isdone = (await ultroid_bot.get_messages("botfather", limit=1))[0].text
+        if isdone.startswith("Invalid bot"):
+            LOGS.info("Error while trying to customise assistant, skipping...")
+            return
         await ultroid_bot.send_message("botfather", UL)
         await asyncio.sleep(1)
         await ultroid_bot.send_file("botfather", file)
@@ -341,7 +346,7 @@ async def customize():
         await asyncio.sleep(1)
         await ultroid_bot.send_message(
             "botfather",
-            f"✨ PowerFul Ultroid Assistant Bot ✨\n✨ Master ~ {sir} ✨\n\n✨ Powered By ~ @TeamUltroid ✨",
+            f"✨ Powerful Ultroid Assistant Bot ✨\n✨ Master ~ {sir} ✨\n\n✨ Powered By ~ @TeamUltroid ✨",
         )
         await asyncio.sleep(2)
         await msg.edit("Completed **Auto Customisation** at @BotFather.")
@@ -403,7 +408,7 @@ async def ready():
         BTTS = Button.inline("• Click to Start •", "initft_2")
         udB.set_key("INIT_DEPLOY", "Done")
     else:
-        MSG = f"**Ultroid has been deployed!**\n➖➖➖➖➖➖➖➖➖\n**UserMode**: {inline_mention(ultroid_bot.me)}\n**Assistant**: @{asst.me.username}\n➖➖➖➖➖➖➖➖➖\n**Support**: @TeamUltroid\n➖➖➖➖➖➖➖➖➖"
+        MSG = f"**Ultroid has been deployed!**\n➖➖➖➖➖➖➖➖➖➖\n**UserMode**: {inline_mention(ultroid_bot.me)}\n**Assistant**: @{asst.me.username}\n➖➖➖➖➖➖➖➖➖➖\n**Support**: @TeamUltroid\n➖➖➖➖➖➖➖➖➖➖"
         BTTS, PHOTO = None, None
         prev_spam = udB.get_key("LAST_UPDATE_LOG_SPAM")
         if prev_spam:
@@ -438,7 +443,7 @@ async def ready():
     except ChannelsTooMuchError:
         LOGS.info("Join @TheUltroid to know about new Updates...")
     except ChannelPrivateError:
-        LOGS.info(
+        LOGS.critical(
             "You are Banned from @TheUltroid for some reason. Contact any dev if you think there is some mistake..."
         )
         import sys
@@ -486,3 +491,13 @@ def _version_changes(udb):
                 for z in key.split()
             ]
             udb.set_key(_, new_)
+
+
+async def enable_inline(ultroid_bot, username):
+    bf = "BotFather"
+    await ultroid_bot.send_message(bf, "/setinline")
+    await asyncio.sleep(1)
+    await ultroid_bot.send_message(bf, f"@{username}")
+    await asyncio.sleep(1)
+    await ultroid_bot.send_message(bf, "Search")
+    await ultroid_bot.send_read_acknowledge(bf)

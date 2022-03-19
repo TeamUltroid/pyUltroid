@@ -247,8 +247,6 @@ class googleimagesdownload:
         try:
             with open(file_name, "wb") as output_file:
                 output_file.write(data)
-        except IOError as e:
-            raise e
         except OSError as e:
             raise e
 
@@ -588,11 +586,6 @@ class googleimagesdownload:
                     download_status = "fail"
                     download_message = (
                         "OSError on an image...trying next one..." + " Error: " + str(e)
-                    )
-                except IOError as e:
-                    download_status = "fail"
-                    download_message = (
-                        "IOError on an image...trying next one..." + " Error: " + str(e)
                     )
 
                 download_status = "success"
@@ -1070,18 +1063,18 @@ class googleimagesdownload:
         total_errors = 0
         for pky in prefix_keywords:  # 1.for every prefix keywords
             for sky in suffix_keywords:  # 2.for every suffix keywords
-                for i in range(len(search_keyword)):  # 3.for every main keyword
+                for ii, e in enumerate(search_keyword):  # 3.for every main keyword
                     iteration = (
                         "\n"
                         + "Item no.: "
-                        + str(i + 1)
+                        + str(ii + 1)
                         + " -->"
                         + " Item name = "
                         + (pky)
-                        + (search_keyword[i])
+                        + (e)
                         + (sky)
                     )
-                    search_term = pky + search_keyword[i] + sky
+                    search_term = pky + e + sky
 
                     if arguments["image_directory"]:
                         dir_name = arguments["image_directory"]
@@ -1124,7 +1117,7 @@ class googleimagesdownload:
                     items, errorCount, abs_path = self._get_all_items(
                         raw_html, main_directory, dir_name, limit, arguments
                     )  # get all image items and download images
-                    paths[pky + search_keyword[i] + sky] = abs_path
+                    paths[pky + e + sky] = abs_path
 
                     # dumps into a json file
                     if arguments["extract_metadata"]:
@@ -1133,9 +1126,7 @@ class googleimagesdownload:
                                 os.makedirs("logs")
                         except OSError as e:
                             LOGS.exception(e)
-                        with open(
-                            "logs/" + search_keyword[i] + ".json", "w"
-                        ) as json_file:
+                        with open("logs/" + e + ".json", "w") as json_file:
                             json.dump(items, json_file, indent=4, sort_keys=True)
                     # Related images
                     if arguments["related_images"]:

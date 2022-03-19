@@ -8,9 +8,13 @@
 import sys
 
 from decouple import config
-from dotenv import find_dotenv, load_dotenv
 
-load_dotenv(find_dotenv())
+try:
+    from dotenv import find_dotenv, load_dotenv
+
+    load_dotenv(find_dotenv())
+except ImportError:
+    pass
 
 
 class Var:
@@ -45,5 +49,3 @@ class Var:
     DATABASE_URL = config("DATABASE_URL", default=None)
     # for MONGODB users
     MONGO_URI = config("MONGO_URI", default=None)
-    # for future
-    MULTI_SESSIONS = config("MULTI_SESSIONS", default=None)

@@ -8,6 +8,7 @@
 import inspect
 import sys
 import time
+from logging import Logger
 from re import findall
 
 from telethon import TelegramClient
@@ -35,7 +36,7 @@ class UltroidClient(TelegramClient):
         proxy=None,
         bot_token=None,
         udB=None,
-        logger=LOGS,
+        logger: Logger = LOGS,
         log_attempt=True,
         handle_auth_error=True,
         *args,
@@ -92,34 +93,30 @@ class UltroidClient(TelegramClient):
         try:
             await self.start(**kwargs)
         except ApiIdInvalidError:
-            self.logger.error("API ID and API_HASH combination does not match!")
+            self.logger.critical("API ID and API_HASH combination does not match!")
 
             sys.exit()
         except (AuthKeyDuplicatedError, EOFError) as er:
             if self._handle_error:
-                self.logger.error("String session expired. Create new!")
+                self.logger.critical("String session expired. Create new!")
                 return sys.exit()
             raise er
         except AccessTokenExpiredError:
             # AccessTokenError can only occur for Bot account
             # And at Early Process, Its saved in Redis.
             self.udB.del_key("BOT_TOKEN")
-            self.logger.error(
+            self.logger.critical(
                 "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
             sys.exit()
         except AccessTokenInvalidError:
             self.udB.del_key("BOT_TOKEN")
-            self.logger.error("The provided bot token is not valid! Quitting...")
+            self.logger.critical("The provided bot token is not valid! Quitting...")
             sys.exit()
 
         # Save some stuff for later use...
         self.me = await self.get_me()
         if self.me.bot:
-            if self.udB:
-                myself = self.udB.get_key("OWNER_ID")
-                if myself and self.me.id == myself:
-                    self.me = await self.get_entity(myself)
             me = f"@{self.me.username}"
         else:
             setattr(self.me, "phone", None)
@@ -229,7 +226,7 @@ class UltroidClient(TelegramClient):
                     mimetype.split("/")[0]
                     + "-"
                     + str(round(start_time))
-                    + mimetypes.guess_extension(mimytype)
+                    + mimetypes.guess_extension(mimetype)
                 )
         message = kwargs.get("message", f"Uploading {filename}...")
 

@@ -14,7 +14,10 @@ import time
 from traceback import format_exc
 from urllib.parse import unquote
 
-from safety.tools import sys_exit
+from .. import run_as_module
+
+if run_as_module:
+    from ..configs import Var
 
 try:
     import aiofiles
@@ -29,8 +32,12 @@ try:
 except ImportError:
     heroku3 = None
 
-from git import Repo
-from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+try:
+    from git import Repo
+    from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+except ImportError:
+    Repo = None
+
 
 from . import *
 
@@ -47,10 +54,12 @@ from telethon.helpers import _maybe_await
 from telethon.tl import types
 from telethon.utils import get_display_name
 
-from ..configs import Var
-from ..dB._core import ADDONS, HELP, LIST, LOADED
-from ..misc import CMD_HELP
-from ..misc._wrappers import eod, eor
+from .._misc import CMD_HELP
+from .._misc._wrappers import eod, eor
+
+if run_as_module:
+    from ..dB._core import ADDONS, HELP, LIST, LOADED
+
 from ..version import ultroid_version
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
@@ -78,16 +87,11 @@ def make_mention(user, custom=None):
 
 def inline_mention(user, custom=None, html=False):
     mention_text = get_display_name(user) or user if not custom else custom
-    chat_type = None
     if isinstance(user, types.User):
-        chat_type = "User"
-    elif isinstance(user, types.Channel):
-        chat_type = "Channel"
-    if chat_type == "User":
         if html:
             return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
         return f"[{mention_text}](tg://user?id={user.id})"
-    elif chat_type == "Channel" and user.username:
+    if isinstance(user, types.Channel) and user.username:
         if html:
             return f"<a href=https://t.me/{user.username}>{mention_text}</a>"
         return f"[{mention_text}](https://t.me/{user.username})"
@@ -124,97 +128,147 @@ def un_plug(shortname):
                         pass
 
 
-async def safeinstall(event):
-    from .. import HNDLR
-    from ..startup.utils import load_addons
+if run_as_module:
 
-    if not event.reply_to:
-        return await eod(event, f"Please use `{HNDLR}install` as reply to a .py file.")
-    ok = await eor(event, "`Installing...`")
-    reply = await event.get_reply_message()
-    if not (
-        reply.media
-        and hasattr(reply.media, "document")
-        and reply.file.name
-        and reply.file.name.endswith(".py")
-    ):
-        return await eod(ok, "`Please reply to any python plugin`")
-    plug = reply.file.name.replace(".py", "")
-    if plug in list(LOADED):
-        return await eod(ok, f"Plugin `{plug}` is already installed.")
-    sm = reply.file.name.replace("_", "-").replace("|", "-")
-    dl = await reply.download_media(f"addons/{sm}")
-    if event.text[9:] != "f":
-        read = open(dl).read()
-        for dan in KEEP_SAFE().All:
-            if re.search(dan, read):
-                os.remove(dl)
-                return await ok.edit(
-                    f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{reply.file.name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
-                )
-    try:
-        load_addons(dl.split("/")[-1].replace(".py", ""))
-    except BaseException:
-        os.remove(dl)
-        return await eor(ok, f"**ERROR**\n\n`{format_exc()}`", time=30)
-    plug = sm.replace(".py", "")
-    if plug in HELP:
-        output = "**Plugin** - `{}`\n".format(plug)
-        for i in HELP[plug]:
-            output += i
-        output += "\n© @TheUltroid"
-        await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}")
-    elif plug in CMD_HELP:
-        output = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
-        output += str(CMD_HELP[plug])
-        await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}")
-    else:
+    async def safeinstall(event):
+        from .. import HNDLR
+        from ..startup.utils import load_addons
+
+        if not event.reply_to:
+            return await eod(
+                event, f"Please use `{HNDLR}install` as reply to a .py file."
+            )
+        ok = await eor(event, "`Installing...`")
+        reply = await event.get_reply_message()
+        if not (
+            reply.media
+            and hasattr(reply.media, "document")
+            and reply.file.name
+            and reply.file.name.endswith(".py")
+        ):
+            return await eod(ok, "`Please reply to any python plugin`")
+        plug = reply.file.name.replace(".py", "")
+        if plug in list(LOADED):
+            return await eod(ok, f"Plugin `{plug}` is already installed.")
+        sm = reply.file.name.replace("_", "-").replace("|", "-")
+        dl = await reply.download_media(f"addons/{sm}")
+        if event.text[9:] != "f":
+            read = open(dl).read()
+            for dan in KEEP_SAFE().All:
+                if re.search(dan, read):
+                    os.remove(dl)
+                    return await ok.edit(
+                        f"**Installation Aborted.**\n**Reason:** Occurance of `{dan}` in `{reply.file.name}`.\n\nIf you trust the provider and/or know what you're doing, use `{HNDLR}install f` to force install.",
+                    )
         try:
-            x = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
-            for d in LIST[plug]:
-                x += HNDLR + d + "\n"
-            await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n`{x}`")
+            load_addons(dl.split("/")[-1].replace(".py", ""))
         except BaseException:
-            await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓")
+            os.remove(dl)
+            return await eor(ok, f"**ERROR**\n\n`{format_exc()}`", time=30)
+        plug = sm.replace(".py", "")
+        if plug in HELP:
+            output = "**Plugin** - `{}`\n".format(plug)
+            for i in HELP[plug]:
+                output += i
+            output += "\n© @TheUltroid"
+            await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}")
+        elif plug in CMD_HELP:
+            output = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
+            output += str(CMD_HELP[plug])
+            await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n{output}")
+        else:
+            try:
+                x = f"Plugin Name-{plug}\n\n✘ Commands Available-\n\n"
+                for d in LIST[plug]:
+                    x += HNDLR + d + "\n"
+                await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓\n\n`{x}`")
+            except BaseException:
+                await eod(ok, f"✓ `Ultroid - Installed`: `{plug}` ✓")
+
+    async def heroku_logs(event):
+        """
+        post heroku logs
+        """
+        from .. import LOGS
+
+        xx = await eor(event, "`Processing...`")
+        if not (Var.HEROKU_API and Var.HEROKU_APP_NAME):
+            return await xx.edit(
+                "Please set `HEROKU_APP_NAME` and `HEROKU_API` in vars."
+            )
+        try:
+            app = (heroku3.from_key(Var.HEROKU_API)).app(Var.HEROKU_APP_NAME)
+        except BaseException as se:
+            LOGS.info(se)
+            return await xx.edit(
+                "`HEROKU_API` and `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars."
+            )
+        await xx.edit("`Downloading Logs...`")
+        ok = app.get_log()
+        with open("ultroid-heroku.log", "w") as log:
+            log.write(ok)
+        await event.client.send_file(
+            event.chat_id,
+            file="ultroid-heroku.log",
+            thumb="resources/extras/ultroid.jpg",
+            caption="**Ultroid Heroku Logs.**",
+        )
+
+        os.remove("ultroid-heroku.log")
+        await xx.delete()
+
+    async def def_logs(ult, file):
+        await ult.client.send_file(
+            ult.chat_id,
+            file=file,
+            thumb="resources/extras/ultroid.jpg",
+            caption="**Ultroid Logs.**",
+        )
+
+    async def updateme_requirements():
+        """Update requirements.."""
+        await bash(
+            f"{sys.executable} -m pip install --no-cache-dir -r requirements.txt"
+        )
+
+    @run_async
+    def gen_chlog(repo, diff):
+        """Generate Changelogs..."""
+        UPSTREAM_REPO_URL = (
+            Repo().remotes[0].config_reader.get("url").replace(".git", "")
+        )
+        ac_br = repo.active_branch.name
+        ch_log = tldr_log = ""
+        ch = f"<b>Ultroid {ultroid_version} updates for <a href={UPSTREAM_REPO_URL}/tree/{ac_br}>[{ac_br}]</a>:</b>"
+        ch_tl = f"Ultroid {ultroid_version} updates for {ac_br}:"
+        d_form = "%d/%m/%y || %H:%M"
+        for c in repo.iter_commits(diff):
+            ch_log += f"\n\n💬 <b>{c.count()}</b> 🗓 <b>[{c.committed_datetime.strftime(d_form)}]</b>\n<b><a href={UPSTREAM_REPO_URL.rstrip('/')}/commit/{c}>[{c.summary}]</a></b> 👨‍💻 <code>{c.author}</code>"
+            tldr_log += f"\n\n💬 {c.count()} 🗓 [{c.committed_datetime.strftime(d_form)}]\n[{c.summary}] 👨‍💻 {c.author}"
+        if ch_log:
+            return str(ch + ch_log), str(ch_tl + tldr_log)
+        return ch_log, tldr_log
 
 
 # --------------------------------------------------------------------- #
 
 
 async def bash(cmd):
+    """
+    run any command in subprocess and get output or error."""
     process = await asyncio.create_subprocess_shell(
         cmd,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
     )
     stdout, stderr = await process.communicate()
-    err = stderr.decode().strip()
+    err = stderr.decode().strip() or None
     out = stdout.decode().strip()
     return out, err
 
 
 # ---------------------------UPDATER-------------------------------- #
 # Will add in class
-
-
-async def updateme_requirements():
-    await bash(f"{sys.executable} -m pip install --no-cache-dir -r requirements.txt")
-
-
-@run_async
-def gen_chlog(repo, diff):
-    UPSTREAM_REPO_URL = Repo().remotes[0].config_reader.get("url").replace(".git", "")
-    ac_br = repo.active_branch.name
-    ch_log = tldr_log = ""
-    ch = f"<b>Ultroid {ultroid_version} updates for <a href={UPSTREAM_REPO_URL}/tree/{ac_br}>[{ac_br}]</a>:</b>"
-    ch_tl = f"Ultroid {ultroid_version} updates for {ac_br}:"
-    d_form = "%d/%m/%y || %H:%M"
-    for c in repo.iter_commits(diff):
-        ch_log += f"\n\n💬 <b>{c.count()}</b> 🗓 <b>[{c.committed_datetime.strftime(d_form)}]</b>\n<b><a href={UPSTREAM_REPO_URL.rstrip('/')}/commit/{c}>[{c.summary}]</a></b> 👨‍💻 <code>{c.author}</code>"
-        tldr_log += f"\n\n💬 {c.count()} 🗓 [{c.committed_datetime.strftime(d_form)}]\n[{c.summary}] 👨‍💻 {c.author}"
-    if ch_log:
-        return str(ch + ch_log), str(ch_tl + tldr_log)
-    return ch_log, tldr_log
 
 
 async def updater():
@@ -528,41 +582,4 @@ async def shutdown(ult):
                 "`HEROKU_API` and `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars."
             )
     else:
-        sys_exit()
-
-
-async def heroku_logs(event):
-    from .. import LOGS
-
-    xx = await eor(event, "`Processing...`")
-    if not (Var.HEROKU_API and Var.HEROKU_APP_NAME):
-        return await xx.edit("Please set `HEROKU_APP_NAME` and `HEROKU_API` in vars.")
-    try:
-        app = (heroku3.from_key(Var.HEROKU_API)).app(Var.HEROKU_APP_NAME)
-    except BaseException as se:
-        LOGS.info(se)
-        return await xx.edit(
-            "`HEROKU_API` and `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars."
-        )
-    await xx.edit("`Downloading Logs...`")
-    ok = app.get_log()
-    with open("ultroid-heroku.log", "w") as log:
-        log.write(ok)
-    await event.client.send_file(
-        event.chat_id,
-        file="ultroid-heroku.log",
-        thumb="resources/extras/ultroid.jpg",
-        caption="**Ultroid Heroku Logs.**",
-    )
-
-    os.remove("ultroid-heroku.log")
-    await xx.delete()
-
-
-async def def_logs(ult, file):
-    await ult.client.send_file(
-        ult.chat_id,
-        file=file,
-        thumb="resources/extras/ultroid.jpg",
-        caption="**Ultroid Logs.**",
-    )
+        sys.exit()

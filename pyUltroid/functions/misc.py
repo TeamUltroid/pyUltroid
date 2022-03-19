@@ -8,18 +8,29 @@
 import base64
 import os
 import random
+import re
 import string
 from logging import WARNING
 from random import choice, randrange, shuffle
 from traceback import format_exc
 
+from pyUltroid.exceptions import DependencyMissingError
+
+try:
+    from aiohttp import ContentTypeError
+except ImportError:
+    ContentTypeError = None
+
 from telethon.tl import types
 from telethon.utils import get_display_name, get_peer_id
 
 from .. import *
-from ..dB import DEVLIST
-from ..dB._core import LIST
-from ..misc._wrappers import eor
+from .._misc._wrappers import eor
+
+if run_as_module:
+    from ..dB import DEVLIST
+    from ..dB._core import LIST
+
 from . import some_random_headers
 from .tools import async_searcher, check_filename, json_parser
 
@@ -50,10 +61,10 @@ try:
     import numpy as np
 except ImportError:
     np = None
+
 try:
     from bs4 import BeautifulSoup
 except ImportError:
-    LOGS.info("'bs4' not installed.")
     BeautifulSoup = None
 
 
@@ -130,25 +141,23 @@ async def google_search(query):
         "Connection": "keep-alive",
         "User-Agent": choice(some_random_headers),
     }
-    soup = BeautifulSoup(
-        await async_searcher(_base + "/search?q=" + query, headers=headers),
-        "html.parser",
-    )
-    another_soup = soup.find_all("div", class_="ZINbbc xpd O9g5cc uUPGi")
+    con = await async_searcher(_base + "/search?q=" + query, headers=headers)
+    soup = BeautifulSoup(con, "html.parser")
     result = []
-    results = [someone.find_all("div", class_="kCrYT") for someone in another_soup]
-    for data in results:
+    pdata = soup.find_all("a", href=re.compile("url="))
+    for data in pdata:
+        if not data.find("div"):
+            continue
         try:
-            if len(data) > 1:
-                result.append(
-                    {
-                        "title": data[0].h3.text,
-                        "link": _base + data[0].a["href"],
-                        "description": data[1].text,
-                    }
-                )
-        except BaseException:
-            pass
+            result.append(
+                {
+                    "title": data.find("div").text,
+                    "link": data["href"].split("&url=")[1].split("&ved=")[0],
+                    "description": data.find_all("div")[-1].text,
+                }
+            )
+        except BaseException as er:
+            LOGS.exception(er)
     return result
 
 
@@ -167,6 +176,8 @@ async def allcmds(event, telegraph):
 
 
 async def ReTrieveFile(input_file_name):
+    if not aiohttp:
+        raise DependencyMissingError("This function needs 'aiohttp' to be installed.")
     RMBG_API = udB.get_key("RMBG_API")
     headers = {"X-API-Key": RMBG_API}
     files = {"image_file": open(input_file_name, "rb").read()}
@@ -328,9 +339,7 @@ async def get_insta_code(username, choice):
 
 async def create_instagram_client(event):
     if not Client:
-        await eor(
-            event, "`Instagrapi not Found\nInstall it to use Instagram plugin...`"
-        )
+        await event.eor("`Instagrapi not Found\nInstall it to use Instagram plugin...`")
         return
     try:
         return INSTA_CLIENT[0]
@@ -341,6 +350,7 @@ async def create_instagram_client(event):
     username = udB.get_key("INSTA_USERNAME")
     password = udB.get_key("INSTA_PASSWORD")
     if not (username and password):
+        await event.eor("`Please Fill Instagram Credentials to Use This...`")
         return
     settings = udB.get_key("INSTA_SET") or {}
     cl = Client(settings)
@@ -367,149 +377,150 @@ async def create_instagram_client(event):
 # Quotly
 
 
-_entities = {
-    types.MessageEntityPhone: "phone_number",
-    types.MessageEntityMention: "mention",
-    types.MessageEntityBold: "bold",
-    types.MessageEntityCashtag: "cashtag",
-    types.MessageEntityStrike: "strikethrough",
-    types.MessageEntityHashtag: "hashtag",
-    types.MessageEntityEmail: "email",
-    types.MessageEntityMentionName: "text_mention",
-    types.MessageEntityUnderline: "underline",
-    types.MessageEntityUrl: "url",
-    types.MessageEntityTextUrl: "text_link",
-    types.MessageEntityBotCommand: "bot_command",
-    types.MessageEntityCode: "code",
-    types.MessageEntityPre: "pre",
-    types.MessageEntitySpoiler: "spoiler",
-}
+class Quotly:
+    _API = "https://bot.lyo.su/quote/generate"
+    _entities = {
+        types.MessageEntityPhone: "phone_number",
+        types.MessageEntityMention: "mention",
+        types.MessageEntityBold: "bold",
+        types.MessageEntityCashtag: "cashtag",
+        types.MessageEntityStrike: "strikethrough",
+        types.MessageEntityHashtag: "hashtag",
+        types.MessageEntityEmail: "email",
+        types.MessageEntityMentionName: "text_mention",
+        types.MessageEntityUnderline: "underline",
+        types.MessageEntityUrl: "url",
+        types.MessageEntityTextUrl: "text_link",
+        types.MessageEntityBotCommand: "bot_command",
+        types.MessageEntityCode: "code",
+        types.MessageEntityPre: "pre",
+        types.MessageEntitySpoiler: "spoiler",
+    }
 
+    async def _format_quote(self, event, reply=None, sender=None, type_="private"):
+        async def telegraph(file_):
+            file = file_ + ".png"
+            Image.open(file_).save(file, "PNG")
+            files = {"file": open(file, "rb").read()}
+            uri = (
+                "https://telegra.ph"
+                + (
+                    await async_searcher(
+                        "https://telegra.ph/upload", post=True, data=files, re_json=True
+                    )
+                )[0]["src"]
+            )
+            os.remove(file)
+            os.remove(file_)
+            return uri
 
-async def _format_quote(event, reply=None, sender=None, type_="private"):
-    async def telegraph(file_):
-        file = file_ + ".png"
-        Image.open(file_).save(file, "PNG")
-        files = {"file": open(file, "rb").read()}
-        uri = (
-            "https://telegra.ph"
-            + (
-                await async_searcher(
-                    "https://telegra.ph/upload", post=True, data=files, re_json=True
-                )
-            )[0]["src"]
-        )
-        os.remove(file)
-        os.remove(file_)
-        return uri
-
-    if reply:
-        reply = {
-            "name": get_display_name(reply.sender) or "Deleted Account",
-            "text": reply.raw_text,
-            "chatId": reply.chat_id,
+        if reply:
+            reply = {
+                "name": get_display_name(reply.sender) or "Deleted Account",
+                "text": reply.raw_text,
+                "chatId": reply.chat_id,
+            }
+        else:
+            reply = {}
+        is_fwd = event.fwd_from
+        name = None
+        last_name = None
+        if sender and sender.id not in DEVLIST:
+            id_ = get_peer_id(sender)
+            name = get_display_name(sender)
+        elif not is_fwd:
+            id_ = event.sender_id
+            sender = await event.get_sender()
+            name = get_display_name(sender)
+        else:
+            id_, sender = None, None
+            name = is_fwd.from_name
+            if is_fwd.from_id:
+                id_ = get_peer_id(is_fwd.from_id)
+                try:
+                    sender = await event.client.get_entity(id_)
+                    name = get_display_name(sender)
+                except ValueError:
+                    pass
+        if sender and hasattr(sender, "last_name"):
+            last_name = sender.last_name
+        entities = []
+        if event.entities:
+            for entity in event.entities:
+                if type(entity) in self._entities:
+                    enti_ = entity.to_dict()
+                    del enti_["_"]
+                    enti_["type"] = self._entities[type(entity)]
+                    entities.append(enti_)
+        message = {
+            "entities": entities,
+            "chatId": id_,
+            "avatar": True,
+            "from": {
+                "id": id_,
+                "first_name": (name or (sender.first_name if sender else None))
+                or "Deleted Account",
+                "last_name": last_name,
+                "username": sender.username if sender else None,
+                "language_code": "en",
+                "title": name,
+                "name": name or "Unknown",
+                "type": type_,
+            },
+            "text": event.raw_text,
+            "replyMessage": reply,
         }
-    else:
-        reply = {}
-    is_fwd = event.fwd_from
-    name = None
-    last_name = None
-    if sender and sender.id not in DEVLIST:
-        id_ = get_peer_id(sender)
-        name = get_display_name(sender)
-    elif not is_fwd:
-        id_ = event.sender_id
-        sender = await event.get_sender()
-        name = get_display_name(sender)
-    else:
-        id_, sender = None, None
-        name = is_fwd.from_name
-        if is_fwd.from_id:
-            id_ = get_peer_id(is_fwd.from_id)
-            try:
-                sender = await event.client.get_entity(id_)
-                name = get_display_name(sender)
-            except ValueError:
-                pass
-    if sender and hasattr(sender, "last_name"):
-        last_name = sender.last_name
-    entities = []
-    if event.entities:
-        for entity in event.entities:
-            if type(entity) in _entities:
-                enti_ = entity.to_dict()
-                del enti_["_"]
-                enti_["type"] = _entities[type(entity)]
-                entities.append(enti_)
-    message = {
-        "entities": entities,
-        "chatId": id_,
-        "avatar": True,
-        "from": {
-            "id": id_,
-            "first_name": (name or (sender.first_name if sender else None))
-            or "Deleted Account",
-            "last_name": last_name,
-            "username": sender.username if sender else None,
-            "language_code": "en",
-            "title": name,
-            "name": name or "Unknown",
-            "type": type_,
-        },
-        "text": event.raw_text,
-        "replyMessage": reply,
-    }
-    if event.document and event.document.thumbs:
-        file_ = await event.download_media(thumb=-1)
-        uri = await telegraph(file_)
-        message["media"] = {"url": uri}
+        if event.document and event.document.thumbs:
+            file_ = await event.download_media(thumb=-1)
+            uri = await telegraph(file_)
+            message["media"] = {"url": uri}
 
-    return message
+        return message
 
+    async def create_quotly(
+        self,
+        event,
+        url="https://qoute-api-akashpattnaik.koyeb.app/generate",
+        reply={},
+        bg=None,
+        sender=None,
+        file_name="quote.webp",
+    ):
+        """Create quotely's quote."""
+        if not isinstance(event, list):
+            event = [event]
+        from .. import udB
 
-O_API = "https://bot.lyo.su/quote/generate"
-
-
-async def create_quotly(
-    event,
-    url="https://qoute-api-akashpattnaik.koyeb.app/generate",
-    reply={},
-    bg=None,
-    sender=None,
-    file_name="quote.webp",
-):
-    if not isinstance(event, list):
-        event = [event]
-    from .. import udB
-
-    if udB.get_key("OQAPI"):
-        url = O_API
-    if not bg:
-        bg = "#1b1429"
-    content = {
-        "type": "quote",
-        "format": "webp",
-        "backgroundColor": bg,
-        "width": 512,
-        "height": 768,
-        "scale": 2,
-        "messages": [
-            await _format_quote(message, reply=reply, sender=sender)
-            for message in event
-        ],
-    }
-    try:
-        request = await async_searcher(url, post=True, json=content, re_json=True)
-    except ContentTypeError as er:
-        if url != O_API:
-            return await create_quotly(O_API, post=True, json=content, re_json=True)
-        raise er
-    if request.get("ok"):
-        with open(file_name, "wb") as file:
-            image = base64.decodebytes(request["result"]["image"].encode("utf-8"))
-            file.write(image)
-        return file_name
-    raise Exception(str(request))
+        if udB.get_key("OQAPI"):
+            url = Quotly._API
+        if not bg:
+            bg = "#1b1429"
+        content = {
+            "type": "quote",
+            "format": "webp",
+            "backgroundColor": bg,
+            "width": 512,
+            "height": 768,
+            "scale": 2,
+            "messages": [
+                await self._format_quote(message, reply=reply, sender=sender)
+                for message in event
+            ],
+        }
+        try:
+            request = await async_searcher(url, post=True, json=content, re_json=True)
+        except ContentTypeError as er:
+            if url != self._API:
+                return await self.create_quotly(
+                    self._API, post=True, json=content, re_json=True
+                )
+            raise er
+        if request.get("ok"):
+            with open(file_name, "wb") as file:
+                image = base64.decodebytes(request["result"]["image"].encode("utf-8"))
+                file.write(image)
+            return file_name
+        raise Exception(str(request))
 
 
 # Some Sarcasm
@@ -527,6 +538,8 @@ def split_list(List, index):
 
 
 def rotate_image(image, angle):
+    if not cv2:
+        raise DependencyMissingError("This function needs 'cv2' to be installed!")
     image_center = tuple(np.array(image.shape[1::-1]) / 2)
     rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
     return cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)

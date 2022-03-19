@@ -10,7 +10,14 @@
 
 import math
 
-from telethon.tl import functions, types
+from ..exceptions import TelethonMissingError
+
+try:
+    from telethon.tl import functions, types
+except ImportError:
+    raise TelethonMissingError(
+        f"'Telethon is not Installed!'\nfunctions present in '{__name__}' needs telethon to be installed!"
+    )
 
 from .. import LOGS
 
@@ -105,7 +112,6 @@ async def get_chat_info(chat, event):
     messages_sent_alt = getattr(full, "read_outbox_max_id", None)
     exp_count = getattr(full, "pts", None)
     supergroup = "<b>Yes</b>" if getattr(chat, "megagroup", None) else "No"
-    "<b>Yes</b>" if getattr(chat, "restricted", None) else "No"
     creator_username = "@{}".format(creator_username) if creator_username else None
 
     if admins is None:

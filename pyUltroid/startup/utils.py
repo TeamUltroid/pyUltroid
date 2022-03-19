@@ -15,16 +15,16 @@ def load_addons(plugin_name):
     if plugin_name.startswith("__"):
         return
     from .. import HNDLR, LOGS, asst, udB, ultroid_bot
+    from .._misc import _supporter as xxx
+    from .._misc._assistant import asst_cmd, callback, in_pattern
+    from .._misc._decorators import ultroid_cmd
+    from .._misc._supporter import Config, admin_cmd, sudo_cmd
+    from .._misc._wrappers import eod, eor
     from ..configs import Var
     from ..dB._core import HELP
-    from ..misc import _supporter as xxx
-    from ..misc._assistant import asst_cmd, callback, in_pattern
-    from ..misc._decorators import ultroid_cmd
-    from ..misc._supporter import Config, admin_cmd, sudo_cmd
-    from ..misc._wrappers import eod, eor
 
     path = "addons/" + plugin_name
-    name = path.replace("/", ".")
+    name = path.replace("/", ".").replace("\\", ".")
     spec = util.spec_from_file_location(name, path + ".py")
     mod = util.module_from_spec(spec)
     mod.LOG_CHANNEL = udB.get_key("LOG_CHANNEL")

@@ -8,10 +8,18 @@
 import os
 import sys
 
-from redis import Redis
+from ..exceptions import DependencyMissingError
 
-from ..configs import Var
-from . import LOGS
+try:
+    from redis import Redis
+except ImportError:
+    Redis = None
+
+from .. import run_as_module
+from . import *
+
+if run_as_module:
+    from ..configs import Var
 
 try:
     from pymongo import MongoClient
@@ -28,7 +36,7 @@ try:
 except ImportError:
     psycopg2 = None
     if Var.DATABASE_URL:
-        LOGS.warning("'psycopg2' not found!\nInstall psycopg2 to use sql database..")
+        LOGS.warning("'psycopg2' not found!\nInstall psycopg2 to use SQL database..")
 
 # --------------------------------------------------------------------------------------------- #
 
@@ -47,9 +55,9 @@ def get_data(self_, key):
 
 
 class MongoDB:
-    def __init__(self, key):
+    def __init__(self, key, dbname="UltroidDB"):
         self.dB = MongoClient(key, serverSelectionTimeoutMS=5000)
-        self.db = self.dB.UltroidDB
+        self.db = self.dB[dbname]
         self.re_cache()
 
     def __repr__(self):
@@ -128,9 +136,7 @@ class SqlDB:
             self._connection = psycopg2.connect(dsn=url)
             self._connection.autocommit = True
             self._cursor = self._connection.cursor()
-            self._cursor.execute(
-                "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCli varchar(70))"
-            )
+            self._cursor.execute("CREATE TABLE IF NOT EXISTS Ultroid ()")
         except Exception as error:
             LOGS.exception(error)
             LOGS.info("Invaid SQL Database")
@@ -175,7 +181,7 @@ class SqlDB:
 
     def get(self, variable):
         try:
-            self._cursor.execute(f"SELECT {variable} FROM Ultroid")
+            self._cursor.execute(f"SELECT (%s) FROM Ultroid", (str(variable),))
         except psycopg2.errors.UndefinedColumn:
             return None
         data = self._cursor.fetchall()
@@ -188,21 +194,25 @@ class SqlDB:
 
     def set_key(self, key, value):
         try:
-            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS {key}")
+            self._cursor.execute(
+                f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS (%s)", (str(key),)
+            )
         except (psycopg2.errors.UndefinedColumn, psycopg2.errors.SyntaxError):
             pass
         except BaseException as er:
             LOGS.exception(er)
         self._cache.update({key: value})
-        self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
-        self._cursor.execute(f"INSERT INTO Ultroid ({key}) values (%s)", (str(value),))
+        self._cursor.execute(f"ALTER TABLE Ultroid ADD (%s) TEXT", (str(key),))
+        self._cursor.execute(
+            f"INSERT INTO Ultroid (%s) values (%s)", (str(key), str(value))
+        )
         return True
 
     def del_key(self, key):
         if key in self._cache:
             del self._cache[key]
         try:
-            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
+            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN (%s)", (str(key),))
         except psycopg2.errors.UndefinedColumn:
             return False
         return True
@@ -212,9 +222,7 @@ class SqlDB:
     def flushall(self):
         self._cache.clear()
         self._cursor.execute("DROP TABLE Ultroid")
-        self._cursor.execute(
-            "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCli varchar(70))"
-        )
+        self._cursor.execute("CREATE TABLE IF NOT EXISTS Ultroid ()")
         return True
 
     def rename(self, key1, key2):
@@ -229,17 +237,21 @@ class SqlDB:
 # --------------------------------------------------------------------------------------------- #
 
 
-class RedisConnection:
+class RedisDB:
     def __init__(
         self,
         host,
         port,
         password,
-        platform=None,
+        platform="",
         logger=LOGS,
         *args,
         **kwargs,
     ):
+        if not Redis:
+            raise DependencyMissingError(
+                "'redis' module is not installed!\nInstall it to use RedisDB"
+            )
         if host and ":" in host:
             spli_ = host.split(":")
             host = spli_[0]
@@ -317,21 +329,26 @@ class RedisConnection:
 
 
 def UltroidDB():
+    if Var.REDIS_URI or Var.REDISHOST:
+        from .. import HOSTED_ON
+
+        return RedisDB(
+            host=Var.REDIS_URI or Var.REDISHOST,
+            password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
+            port=Var.REDISPORT,
+            platform=HOSTED_ON,
+            decode_responses=True,
+            socket_timeout=5,
+            retry_on_timeout=True,
+        )
     if MongoClient and Var.MONGO_URI:
         return MongoDB(Var.MONGO_URI)
-    elif psycopg2 and Var.DATABASE_URL:
+    if psycopg2 and Var.DATABASE_URL:
         return SqlDB(Var.DATABASE_URL)
-    from .. import HOSTED_ON
-
-    return RedisConnection(
-        host=Var.REDIS_URI or Var.REDISHOST,
-        password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
-        port=Var.REDISPORT,
-        platform=HOSTED_ON,
-        decode_responses=True,
-        socket_timeout=5,
-        retry_on_timeout=True,
+    LOGS.critical(
+        "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies.."
     )
+    exit()
 
 
 # --------------------------------------------------------------------------------------------- #

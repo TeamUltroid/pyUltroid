@@ -17,17 +17,13 @@ from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
 
-import aiohttp
-
 from .. import LOGS
+from ..exceptions import DependencyMissingError
 
 try:
     import certifi
 except ImportError:
     certifi = None
-    LOGS.info("'certifi' not installed!")
-
-import requests
 
 try:
     from PIL import Image, ImageDraw, ImageFont
@@ -40,13 +36,11 @@ from telethon import Button
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 
 from .. import *
-from ..dB.filestore_db import get_stored_msg, store_msg
 from .helper import bash
 
-try:
-    import cv2
-except ImportError:
-    cv2 = None
+if run_as_module:
+    from ..dB.filestore_db import get_stored_msg, store_msg
+
 try:
     import numpy as np
 except ImportError:
@@ -87,12 +81,22 @@ async def async_searcher(
     re_json: bool = False,
     re_content: bool = False,
     real: bool = False,
+    *args,
+    **kwargs,
 ):
+    try:
+        import aiohttp
+    except ImportError:
+        raise DependencyMissingError(
+            "'aiohttp' is not installed!\nthis function requires aiohttp to be installed."
+        )
     async with aiohttp.ClientSession(headers=headers) as client:
         if post:
-            data = await client.post(url, json=json, data=data, ssl=ssl)
+            data = await client.post(
+                url, json=json, data=data, ssl=ssl, *args, **kwargs
+            )
         else:
-            data = await client.get(url, params=params, ssl=ssl)
+            data = await client.get(url, params=params, ssl=ssl, *args, **kwargs)
         if re_json:
             return await data.json()
         if re_content:
@@ -110,17 +114,19 @@ def _unquote_text(text):
     return text.replace("'", "'").replace('"', '"')
 
 
-def json_parser(data, indent=None):
+def json_parser(data, indent=None, ascii=False):
     parsed = {}
     try:
         if isinstance(data, str):
             parsed = json.loads(str(data))
             if indent:
-                parsed = json.dumps(json.loads(str(data)), indent=indent)
+                parsed = json.dumps(
+                    json.loads(str(data)), indent=indent, ensure_ascii=ascii
+                )
         elif isinstance(data, dict):
             parsed = data
             if indent:
-                parsed = json.dumps(data, indent=indent)
+                parsed = json.dumps(data, indent=indent, ensure_ascii=ascii)
     except JSONDecodeError:
         parsed = eval(data)
     return parsed
@@ -130,6 +136,10 @@ def json_parser(data, indent=None):
 
 
 def is_url_ok(url: str):
+    try:
+        import requests
+    except ImportError:
+        raise DependencyMissingError("This function needs 'requests' to be installed.")
     try:
         r = requests.head(url)
     except MissingSchema:
@@ -201,8 +211,6 @@ def get_msg_button(texts: str):
         text, url = z
         urls = url.split("|")
         url = urls[0]
-        # if not is_url_ok(url):
-        #    continue
         if len(urls) > 1:
             btn[-1].append([text, url])
         else:
@@ -469,6 +477,10 @@ def order_points(pts):
 
 
 def four_point_transform(image, pts):
+    try:
+        import cv2
+    except ImportError:
+        raise DependencyMissingError("This function needs 'cv2' to be installed.")
     rect = order_points(pts)
     (tl, tr, br, bl) = rect
     widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
@@ -529,12 +541,17 @@ async def Carbon(
     code,
     base_url="https://carbonara-42.herokuapp.com/api/cook",
     file_name="ultroid",
+    download=False,
     **kwargs,
 ):
     kwargs["code"] = code
     con = await async_searcher(base_url, post=True, json=kwargs, re_content=True)
-    file = BytesIO(con)
-    file.name = file_name + ".jpg"
+    if not download:
+        file = BytesIO(con)
+        file.name = file_name + ".jpg"
+    else:
+        file = file_name
+        open(file_name, "wb").write(con)
     return file
 
 
@@ -679,7 +696,7 @@ class TgConverter:
             if w > h:
                 h, w = -1, 512
         await bash(
-            f'ffmpeg -i "{file}" -preset fast -an -to 00:00:02.95 -crf 30 -bufsize 256k -b:v {_["bitrate"]} -vf scale={w}:{h} -c:v libvpx-vp9 "{name}" -y'
+            f'ffmpeg -i "{file}" -preset fast -an -to 00:00:03 -crf 30 -bufsize 256k -b:v {_["bitrate"]} -vf "scale={w}:{h},fps=30" -c:v libvpx-vp9 "{name}" -y'
         )
         if remove:
             os.remove(file)
@@ -687,6 +704,10 @@ class TgConverter:
 
     @staticmethod
     def to_image(input_, name, remove=False):
+        try:
+            import cv2
+        except ImportError:
+            raise DependencyMissingError("This function needs 'cv2' to be installed.")
         img = cv2.VideoCapture(input_)
         ult, roid = img.read()
         cv2.imwrite(name, roid)

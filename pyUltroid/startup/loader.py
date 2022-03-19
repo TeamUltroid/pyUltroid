@@ -5,91 +5,31 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import glob
-import os
-from importlib import import_module
 
 from decouple import config
 from git import Repo
 
 from .. import *
 from ..dB._core import HELP
+from ..loader import Loader
 from . import *
 from .utils import load_addons
 
 
-class Loader:
-    def __init__(self, path="plugins", key="Official", logger=LOGS):
-        self.path = path
-        self.key = key
-        self._logger = logger
-
-    def load(self, log=True, func=import_module, cmd_help=HELP, include=[], exclude=[]):
-        if include:
-            if log:
-                self._logger.info(
-                    "Including:{}".format("".join(f"• {name}" for name in include))
-                )
-            files = glob.glob(f"{self.path}/_*.py")
-            for file in include:
-                path = f"{self.path}/{file}.py"
-                if os.path.exists(path):
-                    files.append(path)
-        else:
-            files = glob.glob(f"{self.path}/*.py")
-            if exclude:
-                for path in exclude:
-                    if not path.startswith("_"):
-                        try:
-                            files.remove(f"{self.path}/{path}.py")
-                        except ValueError:
-                            pass
-        if log:
-            self._logger.info(
-                f"• Installing {self.key}'s Plugins || Count : {len(files)} •"
-            )
-        for plugin in sorted(files):
-            plugin = plugin.replace(".py", "")
-            if func == import_module:
-                plugin = plugin.replace("/", ".").replace("\\", ".")
-            else:
-                plugin = plugin.split("/")[-1]
+def _after_load(loader, module, plugin_name=""):
+    if module and not plugin_name.startswith("_") and (module.__doc__):
+        doc = module.__doc__.format(i=HNDLR)
+        if loader.key in HELP.keys():
+            update_cmd = HELP[loader.key]
             try:
-                doc = func(plugin)
-            except Exception as exc:
-                doc = None
-                self._logger.info(f"Ultroid - {self.key} - ERROR - {plugin}")
-                self._logger.exception(exc)
-            if func == import_module:
-                plugin = plugin.split(".")[-1]
-            if (
-                (cmd_help or cmd_help == {})
-                and not plugin.startswith("_")
-                and (doc and doc.__doc__)
-            ):
-                doc = doc.__doc__.format(i=HNDLR)
-                if self.key in cmd_help.keys():
-                    update_cmd = cmd_help[self.key]
-                    try:
-                        update_cmd.update({plugin: doc})
-                    except BaseException as er:
-                        self._logger.exception(er)
-                else:
-                    try:
-                        cmd_help.update({self.key: {plugin: doc}})
-                    except BaseException as em:
-                        self._logger.exception(em)
-
-    def load_single(self, log=False):
-        """To Load Single File"""
-        plugin = self.path.replace(".py", "").replace("/", ".")
-        try:
-            import_module(plugin)
-        except Exception as er:
-            self._logger.info(f"Error while Loading {plugin}")
-            return self._logger.exception(er)
-        if log and self._logger:
-            self._logger.info(f"Successfully Loaded {plugin}!")
+                update_cmd.update({plugin_name: doc})
+            except BaseException as er:
+                loader._logger.exception(er)
+        else:
+            try:
+                HELP.update({loader.key: {plugin_name: doc}})
+            except BaseException as em:
+                loader._logger.exception(em)
 
 
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
@@ -101,14 +41,16 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     # "INCLUDE_ONLY" was added to reduce Big List in "EXCLUDE_OFFICIAL" Plugin
     _in_only = udB.get_key("INCLUDE_ONLY") or config("INCLUDE_ONLY", None)
     _in_only = _in_only.split() if _in_only else []
-    Loader().load(include=_in_only, exclude=_exclude)
+    Loader().load(include=_in_only, exclude=_exclude, after_load=_after_load)
 
     # for assistant
     if not udB.get_key("DISABLE_AST_PLUGINS"):
         _ast_exc = ["pmbot"]
         if _in_only and "games" not in _in_only:
             _ast_exc.append("games")
-        Loader(path="assistant").load(log=False, exclude=_ast_exc)
+        Loader(path="assistant").load(
+            log=False, exclude=_ast_exc, after_load=_after_load
+        )
 
     # for addons
     if addons:
@@ -134,11 +76,19 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
                 "rm -rf /usr/local/lib/python3.9/site-packages/pip/_vendor/.wh.appdirs.py"
             )
             os.system("pip3 install --no-cache-dir -q -r ./addons/addons.txt")
-        Loader(path="addons", key="Addons").load(func=load_addons)
+
+        _exclude = udB.get_key("EXCLUDE_ADDONS")
+        _exclude = _exclude.split() if _exclude else []
+        _in_only = udB.get_key("INCLUDE_ADDONS")
+        _in_only = _in_only.split() if _in_only else []
+
+        Loader(path="addons", key="Addons").load(
+            func=load_addons, include=_in_only, exclude=_exclude, after_load=_after_load
+        )
 
     # group manager
     if manager:
-        Loader(path="assistant/manager", key="Group Manager").load(cmd_help=None)
+        Loader(path="assistant/manager", key="Group Manager").load()
 
     # chat via assistant
     if pmbot:
@@ -149,6 +99,6 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         try:
             import pytgcalls  # ignore: pylint
 
-            Loader(path="vcbot", key="VCBot").load()
+            Loader(path="vcbot", key="VCBot").load(after_load=_after_load)
         except ModuleNotFoundError:
-            LOGS.info("'pytgcalls' not installed!\nSkipping load of VcBot.")
+            LOGS.error("'pytgcalls' not installed!\nSkipping load of VcBot.")

@@ -21,9 +21,8 @@ def session_file(logger):
             logger.exception("Wrong string session. Copy paste correctly!")
             sys.exit()
         return StringSession(Var.SESSION)
-    else:
-        logger.exception("No String Session found. Quitting...")
-        sys.exit()
+    logger.exception("No String Session found. Quitting...")
+    sys.exit()
 
 
 def vc_connection(udB, ultroid_bot):

@@ -1,21 +1,21 @@
-import re
+import os
+import shutil
 
 import setuptools
-
-requirements = ["redis", "hiredis", "python-decouple", "python-dotenv"]
-
-with open("pyUltroid/version.py", "rt", encoding="utf8") as x:
-    version = re.search(r'__version__ = "(.*?)"', x.read()).group(1)
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-name = "py-Ultroid"
+long_description = "# pyUltroid-fns"
+
+name = "pyUltroid-fns"
 author = "TeamUltroid"
 author_email = "teamultroid@protonmail.ch"
-description = "A Secure and Powerful Python-Telethon Based Library For Ultroid Userbot."
+description = "Function based library for telegram telethon projects."
 license_ = "GNU AFFERO GENERAL PUBLIC LICENSE (v3)"
+
 url = "https://github.com/TeamUltroid/pyUltroid"
+
 project_urls = {
     "Bug Tracker": "https://github.com/TeamUltroid/pyUltroid/issues",
     "Documentation": "https://ultroid.tech",
@@ -30,9 +30,11 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+shutil.copy("pyUltroid/_misc/_wrappers.py", "pyUltroid/wrappers.py")
+
 setuptools.setup(
     name=name,
-    version=version,
+    version="0.0.1.b0",
     author=author,
     author_email=author_email,
     description=description,
@@ -41,8 +43,12 @@ setuptools.setup(
     url=url,
     project_urls=project_urls,
     license=license_,
-    packages=setuptools.find_packages(),
-    install_requires=requirements,
+    packages=setuptools.find_packages(
+        exclude=["pyUltroid.dB", "pyUltroid._misc", "pyUltroid.startup"]
+    ),
+    install_requires=["telethon"],
     classifiers=classifiers,
     python_requires=">3.7, <3.11",
 )
+
+os.remove("pyUltroid/wrappers.py")
