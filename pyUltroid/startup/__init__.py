@@ -18,7 +18,7 @@ def where_hosted():
         return "heroku"
     if os.getenv("RAILWAY_STATIC_URL"):
         return "railway"
-    if os.getevn("OKTETO_NAMESPACE"):
+    if os.getevnv("OKTETO_NAMESPACE"):
         return "okteto"
     if os.getenv("KUBERNETES_PORT"):
         return "qovery"
