@@ -553,7 +553,7 @@ async def Carbon(
         file = BytesIO(con)
         file.name = file_name + ".jpg"
     else:
-        file = file_name
+        file = file_name + ".jpg"
         open(file_name, "wb").write(con)
     return file
 
