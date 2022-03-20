@@ -19,7 +19,7 @@ def where_hosted():
     if os.getenv("RAILWAY_STATIC_URL"):
         return "railway"
     if os.getenv("KUBERNETES_PORT"):
-        return "qovery"
+        return "qovery | okteto | kubernetes"
     if os.getenv("WINDOW") and os.getenv("WINDOW") != "0":
         return "windows"
     if os.getenv("RUNNER_USER") or os.getenv("HOSTNAME"):
