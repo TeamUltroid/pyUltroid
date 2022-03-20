@@ -542,9 +542,12 @@ async def Carbon(
     base_url="https://carbonara-42.herokuapp.com/api/cook",
     file_name="ultroid",
     download=False,
+    rayso=False,
     **kwargs,
 ):
     kwargs["code"] = code
+    if rayso and not base_url:
+        base_url = "https://rayso.onrender.com/generate"
     con = await async_searcher(base_url, post=True, json=kwargs, re_content=True)
     if not download:
         file = BytesIO(con)
