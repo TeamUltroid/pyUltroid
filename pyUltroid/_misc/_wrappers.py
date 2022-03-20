@@ -29,10 +29,7 @@ async def eor(event, text=None, **args):
             await sleep(edit_time)
         if "file" in args and args["file"] and not event.media:
             await event.delete()
-            try:
-                ok = await event.client.send_message(event.chat_id, text, **args)
-            except MessageNotModifiedError:
-                pass
+            ok = await event.client.send_message(event.chat_id, text, **args)
         else:
             try:
                 try:
@@ -41,7 +38,7 @@ async def eor(event, text=None, **args):
                     pass
                 ok = await event.edit(text, **args)
             except MessageNotModifiedError:
-                pass
+                ok = event
     else:
         ok = await event.client.send_message(event.chat_id, text, **args)
 
