@@ -136,7 +136,9 @@ class SqlDB:
             self._connection = psycopg2.connect(dsn=url)
             self._connection.autocommit = True
             self._cursor = self._connection.cursor()
-            self._cursor.execute("CREATE TABLE IF NOT EXISTS Ultroid ()")
+            self._cursor.execute(
+                "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCli varchar(70))"
+            )
         except Exception as error:
             LOGS.exception(error)
             LOGS.info("Invaid SQL Database")
@@ -181,7 +183,7 @@ class SqlDB:
 
     def get(self, variable):
         try:
-            self._cursor.execute(f"SELECT (%s) FROM Ultroid", (str(variable),))
+            self._cursor.execute(f"SELECT {variable} FROM Ultroid")
         except psycopg2.errors.UndefinedColumn:
             return None
         data = self._cursor.fetchall()
@@ -194,25 +196,21 @@ class SqlDB:
 
     def set_key(self, key, value):
         try:
-            self._cursor.execute(
-                f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS (%s)", (str(key),)
-            )
+            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS {key}")
         except (psycopg2.errors.UndefinedColumn, psycopg2.errors.SyntaxError):
             pass
         except BaseException as er:
             LOGS.exception(er)
         self._cache.update({key: value})
-        self._cursor.execute(f"ALTER TABLE Ultroid ADD (%s) TEXT", (str(key),))
-        self._cursor.execute(
-            f"INSERT INTO Ultroid (%s) values (%s)", (str(key), str(value))
-        )
+        self._cursor.execute(f"ALTER TABLE Ultroid ADD {key} TEXT")
+        self._cursor.execute(f"INSERT INTO Ultroid ({key}) values (%s)", (str(value),))
         return True
 
     def del_key(self, key):
         if key in self._cache:
             del self._cache[key]
         try:
-            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN (%s)", (str(key),))
+            self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
         except psycopg2.errors.UndefinedColumn:
             return False
         return True
@@ -222,7 +220,9 @@ class SqlDB:
     def flushall(self):
         self._cache.clear()
         self._cursor.execute("DROP TABLE Ultroid")
-        self._cursor.execute("CREATE TABLE IF NOT EXISTS Ultroid ()")
+        self._cursor.execute(
+            "CREATE TABLE IF NOT EXISTS Ultroid (ultroidCli varchar(70))"
+        )
         return True
 
     def rename(self, key1, key2):
@@ -232,7 +232,6 @@ class SqlDB:
             self.set_key(key2, _)
             return 0
         return 1
-
 
 # --------------------------------------------------------------------------------------------- #
 
