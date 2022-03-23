@@ -34,7 +34,7 @@ except ImportError:
 from requests.exceptions import MissingSchema
 from telethon import Button
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
-
+from urllib.parse import unquote
 from .. import *
 from .helper import bash
 
@@ -111,7 +111,7 @@ async def async_searcher(
 
 
 def _unquote_text(text):
-    return text.replace("'", "'").replace('"', '"')
+    return text.replace("'", unquote("%5C%27")).replace('"', unquote("%5C%22"))
 
 
 def json_parser(data, indent=None, ascii=False):
