@@ -153,7 +153,7 @@ def is_url_ok(url: str):
 
 
 async def metadata(file):
-    out, _ = await bash(f'mediainfo """{file}""" --Output=JSON')
+    out, _ = await bash(f'mediainfo "{_unquote_text(file)}" --Output=JSON')
     data = {}
     _info = json.loads(out)["media"]["track"]
     info = _info[0]
@@ -166,7 +166,7 @@ async def metadata(file):
     if info.get("AudioCount"):
         data["title"] = info.get("Title", file)
         data["performer"] = (
-            info.get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
+            info.get("Performer") or udB.get_key("artist") or ""
         )
     if info.get("VideoCount"):
         data["height"] = int(float(_info[1].get("Height", 720)))
