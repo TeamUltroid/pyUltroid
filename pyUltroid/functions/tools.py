@@ -545,7 +545,7 @@ async def Carbon(
     rayso=False,
     **kwargs,
 ):
-    if rayso and not base_url:
+    if rayso:
         base_url = "https://raysoapi.herokuapp.com/generate"
         kwargs["text"] = code
         kwargs["theme"] = kwargs.get("theme", "meadow")
