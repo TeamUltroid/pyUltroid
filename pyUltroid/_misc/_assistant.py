@@ -12,6 +12,7 @@ from telethon import Button
 from telethon.events import CallbackQuery, InlineQuery, NewMessage
 from telethon.tl.types import InputWebDocument
 
+from ..functions.admins import admin_check
 from .. import LOGS, asst, ultroid_bot
 from . import append_or_update, owner_and_sudos
 
@@ -56,7 +57,7 @@ def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
     return ult
 
 
-def callback(data=None, from_users=[], owner=False, **kwargs):
+def callback(data=None, from_users=[], admins=False, owner=False, **kwargs):
     """Assistant's callback decorator"""
     if "me" in from_users:
         from_users.remove("me")
@@ -64,6 +65,8 @@ def callback(data=None, from_users=[], owner=False, **kwargs):
 
     def ultr(func):
         async def wrapper(event):
+            if admins and not await admin_check(event):
+                return
             if from_users and event.sender_id not in from_users:
                 return await event.answer("Not for You!", alert=True)
             if owner and event.sender_id not in owner_and_sudos():
