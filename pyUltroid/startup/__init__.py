@@ -23,7 +23,7 @@ def where_hosted():
         return "railway"
     if os.getenv("KUBERNETES_PORT"):
         return "qovery | kubernetes"
-    if os.get_env("OKTETO_TOKEN"):
+    if os.getenv("OKTETO_TOKEN"):
         return "okteto"
     if os.getenv("WINDOW") and os.getenv("WINDOW") != "0":
         return "windows"
