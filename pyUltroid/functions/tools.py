@@ -802,4 +802,31 @@ class TgConverter:
                     )
 
 
+def _get_value(stri):
+    try:
+        value = eval(stri.strip())
+    except Exception as er:
+        from .. import LOGS
+        LOGS.debug(er)
+        value = stri.strip()
+    return value
+
+def safe_load(file, *args, **kwargs):
+    read = file.readlines()
+    out = {}
+    for line in read:
+        if ":" in line: # Ignores Empty & Invalid lines
+            spli = line.split(":", maxsplit=1)
+            key = spli[0].strip()
+            value = _get_value(spli[1])
+            out.update({key: value or []})
+        elif "-" in line:
+            spli = line.split("-", maxsplit=1)
+            where = out[list(out.keys())[-1]]
+            if isinstance(where, list):
+                value = _get_value(spli[1])
+                if value:
+                    where.append(value)
+    return out
+
 # --------- END --------- #
