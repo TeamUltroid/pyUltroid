@@ -228,7 +228,7 @@ class UltroidClient(TelegramClient):
                     + str(round(start_time))
                     + mimetypes.guess_extension(mimetype)
                 )
-        message = kwargs.get("message", f"Uploading {filename}...")
+        message = kwargs.get("message", f"Downloading {filename}...")
 
         raw_file = None
         while not raw_file:
