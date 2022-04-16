@@ -512,7 +512,7 @@ class Quotly:
         except ContentTypeError as er:
             if url != self._API:
                 return await self.create_quotly(
-                    self._API, post=True, json=content, re_json=True
+                    event, url=self._API, bg=bg, sender=sender, reply=reply, file_name=file_name
                 )
             raise er
         if request.get("ok"):
