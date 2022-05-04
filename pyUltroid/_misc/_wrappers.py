@@ -13,6 +13,7 @@ from telethon.tl.types import MessageService
 
 # edit or reply
 
+_Edit = Message.edit
 
 async def eor(event, text=None, **args):
     time = args.get("time", None)
@@ -36,7 +37,7 @@ async def eor(event, text=None, **args):
                     del args["reply_to"]
                 except KeyError:
                     pass
-                ok = await event.edit(text, **args)
+                ok = await _Edit(event, text, **args)
             except MessageNotModifiedError:
                 ok = event
     else:
@@ -65,5 +66,6 @@ async def _try_delete(event):
         LOGS.exception(er)
 
 
+setattr(Message, "edit", eor)
 setattr(Message, "eor", eor)
 setattr(Message, "try_delete", _try_delete)

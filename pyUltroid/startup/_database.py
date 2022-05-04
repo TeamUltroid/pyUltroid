@@ -8,7 +8,10 @@
 import os
 import sys
 
-from ..exceptions import DependencyMissingError
+try:
+    from ..exceptions import DependencyMissingError
+except ImportError:
+    from .exceptions import DependencyMissingError
 
 try:
     from redis import Redis
