@@ -21,12 +21,10 @@ def where_hosted():
         return "heroku"
     if os.getenv("RAILWAY_STATIC_URL"):
         return "railway"
-    if os.getenv("KUBERNETES_PORT"):
-        return "qovery | kubernetes"
     if os.getenv("OKTETO_TOKEN"):
         return "okteto"
-    if os.getenv("WINDOW") and os.getenv("WINDOW") != "0":
-        return "windows"
+    if os.getenv("KUBERNETES_PORT"):
+        return "qovery | kubernetes"
     if os.getenv("RUNNER_USER") or os.getenv("HOSTNAME"):
         return "github actions"
     if os.getenv("ANDROID_ROOT"):
