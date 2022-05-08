@@ -28,7 +28,7 @@ class Var:
         else config("API_HASH", default="eb06d4abfb49dc3eeb1aeb98ae0f581e")
     )
     SESSION = sys.argv[3] if len(sys.argv) > 3 else config("SESSION", default=None)
-    REDIS_URI = sys.argv[4] if len(sys.argv) > 4 else config("REDIS_URI", default=None)
+    REDIS_URI = sys.argv[4] if len(sys.argv) > 4 else (config("REDIS_URI", default=None) or config("REDIS_URL", default=None))
     REDIS_PASSWORD = (
         sys.argv[5] if len(sys.argv) > 5 else config("REDIS_PASSWORD", default=None)
     )
