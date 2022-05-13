@@ -5,16 +5,21 @@ class Terminal:
     """
     Class for running terminal commands asynchronously.
 
+
     Methods:
+
         run(commands: str)
             commands: Terminal Commands.
             Returns Process id (int)
+
         terminate(pid: int)
             pid: Process id returned in `run` method.
             Returns True if terminated else False (bool)
+
         output(pid: int)
             pid: Process id returned in `run` method.
             Returns Output of process (str)
+
         error(pid: int)
             pid: Process id returned in `run` method.
             Returns Error of process (str)
@@ -50,10 +55,16 @@ class Terminal:
             if not out:
                 break
             output.append(out)
-        return output
+        return "\n".join(n for n in output)
 
     async def error(self, pid: int) -> str:
-        return self._to_str(await self._processes[pid].stderr.readline())
+        error = []
+        while True:
+            err = self._to_str(await self._processes[pid].stderr.readline())
+            if not err:
+                break
+            error.append(err)
+        return "\n".join(n for n in error)
 
     @property
     def _auto_remove_processes(self) -> None:
