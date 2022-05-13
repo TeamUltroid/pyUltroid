@@ -31,10 +31,12 @@ except ImportError:
     Image, ImageDraw, ImageFont = None, None, None
     LOGS.info("PIL not installed!")
 
+from urllib.parse import unquote
+
 from requests.exceptions import MissingSchema
 from telethon import Button
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
-from urllib.parse import unquote
+
 from .. import *
 from .helper import bash
 
@@ -165,9 +167,7 @@ async def metadata(file):
         }
     if info.get("AudioCount"):
         data["title"] = info.get("Title", file)
-        data["performer"] = (
-            info.get("Performer") or udB.get_key("artist") or ""
-        )
+        data["performer"] = info.get("Performer") or udB.get_key("artist") or ""
     if info.get("VideoCount"):
         data["height"] = int(float(_info[1].get("Height", 720)))
         data["width"] = int(float(_info[1].get("Width", 1280)))
@@ -807,15 +807,17 @@ def _get_value(stri):
         value = eval(stri.strip())
     except Exception as er:
         from .. import LOGS
+
         LOGS.debug(er)
         value = stri.strip()
     return value
+
 
 def safe_load(file, *args, **kwargs):
     read = file.readlines()
     out = {}
     for line in read:
-        if ":" in line: # Ignores Empty & Invalid lines
+        if ":" in line:  # Ignores Empty & Invalid lines
             spli = line.split(":", maxsplit=1)
             key = spli[0].strip()
             value = _get_value(spli[1])
@@ -828,5 +830,6 @@ def safe_load(file, *args, **kwargs):
                 if value:
                     where.append(value)
     return out
+
 
 # --------- END --------- #

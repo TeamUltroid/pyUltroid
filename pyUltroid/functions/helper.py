@@ -544,8 +544,8 @@ async def restart(ult=None):
         except BaseException as er:
             if ult:
                 return await eor(
-                ult,
-                "`HEROKU_API` or `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars.",
+                    ult,
+                    "`HEROKU_API` or `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars.",
                 )
             LOGS.exception(er)
     else:

@@ -113,7 +113,9 @@ async def YtDataScraper(url: str):
     )
     to_return["publish_date"] = common_data["dateText"]["simpleText"]
     to_return["likes"] = (
-        common_data["videoActions"]["menuRenderer"]["topLevelButtons"][0]["toggleButtonRenderer"]["defaultText"]["simpleText"]
+        common_data["videoActions"]["menuRenderer"]["topLevelButtons"][0][
+            "toggleButtonRenderer"
+        ]["defaultText"]["simpleText"]
         or like_dislike[0]["toggleButtonRenderer"]["defaultText"]["accessibility"][
             "accessibilityData"
         ]["label"]
@@ -504,7 +506,12 @@ class Quotly:
         except ContentTypeError as er:
             if url != self._API:
                 return await self.create_quotly(
-                    event, url=self._API, bg=bg, sender=sender, reply=reply, file_name=file_name
+                    event,
+                    url=self._API,
+                    bg=bg,
+                    sender=sender,
+                    reply=reply,
+                    file_name=file_name,
                 )
             raise er
         if request.get("ok"):

@@ -15,6 +15,7 @@ from telethon.tl.types import MessageService
 
 _Edit = Message.edit
 
+
 async def eor(event, text=None, **args):
     time = args.get("time", None)
     edit_time = args.get("edit_time", None)

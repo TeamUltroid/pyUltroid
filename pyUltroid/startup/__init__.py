@@ -11,10 +11,12 @@ import sys
 from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getLogger
 
 from .. import run_as_module
+
 if run_as_module:
     from ..configs import Var
 else:
     Var = None
+
 
 def where_hosted():
     if os.getenv("DYNO"):

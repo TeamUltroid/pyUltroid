@@ -7,12 +7,16 @@
 
 from .. import udB
 
-def _get() -> dict: return udB.get_key("RSSFEEDS") or {}
+
+def _get() -> dict:
+    return udB.get_key("RSSFEEDS") or {}
+
 
 def get_rss_urls(chat):
     cont = _get().get(chat)
     if cont:
         return cont.keys()
+
 
 def add_rss(chat, url, format=""):
     cont = _get()
@@ -20,9 +24,9 @@ def add_rss(chat, url, format=""):
         if url in cont[chat].keys():
             cont[chat]["format"] = format
         else:
-            cont[chat].update({url:format})
+            cont[chat].update({url: format})
     else:
-        cont[chat] = {url:format}
+        cont[chat] = {url: format}
     udB.set_key("RSSFEEDS", cont)
 
 
