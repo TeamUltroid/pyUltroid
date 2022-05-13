@@ -5,7 +5,6 @@ class Terminal:
     """
     Class for running terminal commands asynchronously.
 
-
     Methods:
 
         run(commands: str)
@@ -55,7 +54,7 @@ class Terminal:
             if not out:
                 break
             output.append(out)
-        return "\n".join(n for n in output)
+        return "\n".join(output)
 
     async def error(self, pid: int) -> str:
         error = []
@@ -64,7 +63,7 @@ class Terminal:
             if not err:
                 break
             error.append(err)
-        return "\n".join(n for n in error)
+        return "\n".join(error)
 
     @property
     def _auto_remove_processes(self) -> None:
