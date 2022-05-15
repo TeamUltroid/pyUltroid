@@ -12,7 +12,7 @@ from decouple import config
 try:
     from dotenv import find_dotenv, load_dotenv
 
-    load_dotenv(find_dotenv())
+    load_dotenv()
 except ImportError:
     pass
 
