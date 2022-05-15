@@ -569,7 +569,7 @@ async def get_file_link(msg):
         "**Message has been stored to generate a shareable link. Do not delete it.**"
     )
     msg_id = msg_id.id
-    msg_hash = secrets.token_hex(nbytes=8)  # .replace("=", "") not need ig
+    msg_hash = secrets.token_hex(nbytes=8)
     store_msg(msg_hash, msg_id)
     return msg_hash
 
