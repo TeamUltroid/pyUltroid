@@ -6,6 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import base64
+import secrets
 import json
 import math
 import os
@@ -571,17 +572,7 @@ async def get_file_link(msg):
         "**Message has been stored to generate a shareable link. Do not delete it.**"
     )
     msg_id = msg_id.id
-    msg_hash = (
-        (
-            base64.b64encode(
-                "".join(
-                    random.choices(string.ascii_letters + string.digits, k=10)
-                ).encode("ascii")
-            )
-        )
-        .decode("ascii")
-        .replace("=", "")
-    )
+    msg_hash = secrets.token_hex(nbytes=16) # .replace("=", "") not need ig
     store_msg(msg_hash, msg_id)
     return msg_hash
 
@@ -589,7 +580,6 @@ async def get_file_link(msg):
 async def get_stored_file(event, hash):
     from .. import udB
 
-    # hash = (base64.b64decode(hash.encode("ascii"))).decode("ascii")
     msg_id = get_stored_msg(hash)
     if not msg_id:
         return
