@@ -5,14 +5,12 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import base64
 import json
 import math
 import os
-import random
 import re
+import secrets
 import ssl
-import string
 from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
@@ -571,17 +569,7 @@ async def get_file_link(msg):
         "**Message has been stored to generate a shareable link. Do not delete it.**"
     )
     msg_id = msg_id.id
-    msg_hash = (
-        (
-            base64.b64encode(
-                "".join(
-                    random.choices(string.ascii_letters + string.digits, k=10)
-                ).encode("ascii")
-            )
-        )
-        .decode("ascii")
-        .replace("=", "")
-    )
+    msg_hash = secrets.token_hex(nbytes=8)
     store_msg(msg_hash, msg_id)
     return msg_hash
 
@@ -589,7 +577,6 @@ async def get_file_link(msg):
 async def get_stored_file(event, hash):
     from .. import udB
 
-    # hash = (base64.b64decode(hash.encode("ascii"))).decode("ascii")
     msg_id = get_stored_msg(hash)
     if not msg_id:
         return
