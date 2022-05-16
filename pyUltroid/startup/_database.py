@@ -46,7 +46,9 @@ try:
 except ImportError:
     firebase_admin = None
     if Var.FIREBASE_URL:
-        LOGS.warning("'firebase-admim' not found!\nInstall firebase-admin to use FireBase database..")
+        LOGS.warning(
+            "'firebase-admim' not found!\nInstall firebase-admin to use FireBase database.."
+        )
 
 # --------------------------------------------------------------------------------------------- #
 
@@ -128,7 +130,9 @@ class MongoDB:
         self._cache = {}
         return True
 
+
 # implemented by @kaif-00z
+
 
 class FireBaseDB:
     def __init__(self, fdB):
@@ -190,6 +194,8 @@ class FireBaseDB:
         self.db.delete()
         self._cache = {}
         return True
+
+
 # --------------------------------------------------------------------------------------------- #
 
 # Thanks to "Akash Pattnaik" / @BLUE-DEVIL1134
@@ -416,7 +422,9 @@ def UltroidDB():
         return MongoDB(Var.MONGO_URI)
 
     if Var.FIREBASE_SERVICE_ACCOUNT_FILE and Var.FIREBASE_URL:
-        if Var.FIREBASE_SERVICE_ACCOUNT_FILE.startswith("https://") and not Var.FIREBASE_SERVICE_ACCOUNT_FILE.endswith(".json"):
+        if Var.FIREBASE_SERVICE_ACCOUNT_FILE.startswith(
+            "https://"
+        ) and not Var.FIREBASE_SERVICE_ACCOUNT_FILE.endswith(".json"):
             LOGS.warning("firebase service account file link is wrong !")
             exit()
         if os.path.exists("serviceAccountKey.json"):
