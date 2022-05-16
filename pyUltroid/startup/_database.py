@@ -433,19 +433,19 @@ def UltroidDB():
         os.system(f"wget {Var.FIREBASE_SERVICE_ACCOUNT_FILE} -O serviceAccountKey.json")
         # need to add security above
 
-    try:
-        cred = firebase_admin.credentials.Certificate("serviceAccountKey.json")
-        firebase_admin.initialize_app(cred, {"databaseURL": Var.FIREBASE_URL})
-        fdB = firebase_admin.db.reference("Ultroid/")
-        return FireBaseDB(fdB)
-    except BaseException:
         try:
             cred = firebase_admin.credentials.Certificate("serviceAccountKey.json")
+            firebase_admin.initialize_app(cred, {"databaseURL": Var.FIREBASE_URL})
             fdB = firebase_admin.db.reference("Ultroid/")
             return FireBaseDB(fdB)
-        except Exception as ero:
-            LOGS.info(str(ero))
-            exit()
+        except BaseException:
+            try:
+                cred = firebase_admin.credentials.Certificate("serviceAccountKey.json")
+                fdB = firebase_admin.db.reference("Ultroid/")
+                return FireBaseDB(fdB)
+            except Exception as ero:
+                LOGS.info(str(ero))
+                exit()
 
     if psycopg2 and Var.DATABASE_URL:
         return SqlDB(Var.DATABASE_URL)
