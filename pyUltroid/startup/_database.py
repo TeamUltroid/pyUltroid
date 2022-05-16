@@ -427,20 +427,19 @@ def UltroidDB():
         ) and not Var.FIREBASE_SERVICE_ACCOUNT_FILE.endswith(".json"):
             LOGS.warning("firebase service account file link is wrong !")
             exit()
-        if os.path.exists("serviceAccountKey.json"):
-            os.remove("serviceAccountKey.json")
 
-        os.system(f"wget {Var.FIREBASE_SERVICE_ACCOUNT_FILE} -O serviceAccountKey.json")
-        # need to add security above
+        import requests
+
+        service_acc = requests.get(Var.FIREBASE_SERVICE_ACCOUNT_FILE).json()
 
         try:
-            cred = firebase_admin.credentials.Certificate("serviceAccountKey.json")
+            cred = firebase_admin.credentials.Certificate(service_acc)
             firebase_admin.initialize_app(cred, {"databaseURL": Var.FIREBASE_URL})
             fdB = firebase_admin.db.reference("Ultroid/")
             return FireBaseDB(fdB)
         except BaseException:
             try:
-                cred = firebase_admin.credentials.Certificate("serviceAccountKey.json")
+                cred = firebase_admin.credentials.Certificate(service_acc)
                 fdB = firebase_admin.db.reference("Ultroid/")
                 return FireBaseDB(fdB)
             except Exception as ero:
