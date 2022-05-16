@@ -55,6 +55,8 @@ class Var:
     MONGO_URI = config("MONGO_URI", default=None)
     # for FireBase users
     FIREBASE_URL = config("FIREBASE_URI", default=None)
-    FIREBASE_SERVICE_ACCOUNT_FILE = config("FIREBASE_SERVICE_ACCOUNT_FILE", default=None)
+    FIREBASE_SERVICE_ACCOUNT_FILE = config(
+        "FIREBASE_SERVICE_ACCOUNT_FILE", default=None
+    )
     # for Okteto Platform
     OKTETO = config("OKTETO", cast=bool, default=False)
