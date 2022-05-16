@@ -41,6 +41,13 @@ except ImportError:
     if Var.DATABASE_URL:
         LOGS.warning("'psycopg2' not found!\nInstall psycopg2 to use SQL database..")
 
+try:
+    import firebase_admin
+except ImportError:
+    firebase_admin = None
+    if Var.FIREBASE_URL:
+        LOGS.warning("'firebase-admim' not found!\nInstall firebase-admin to use FireBase database..")
+
 # --------------------------------------------------------------------------------------------- #
 
 
@@ -121,7 +128,68 @@ class MongoDB:
         self._cache = {}
         return True
 
+# implemented by @kaif-00z
 
+class FireBaseDB:
+    def __init__(self, fdB):
+        self.db = fdB
+        self.re_cache()
+
+    def __repr__(self):
+        return f"<Ultroid.FireBaseDB\n -total_keys: {len(self.keys())}\n>"
+
+    def re_cache(self):
+        self._cache = {}
+        for keys in self.keys():
+            self._cache.update({keys: self.get_key(keys)})
+
+    @property
+    def name(self):
+        return "Firebase"
+
+    @property
+    def usage(self):
+        return 0
+
+    def ping(self):
+        return True
+
+    def getall(self):
+        return self.db.get()
+
+    def keys(self):
+        return list(self.getall().keys())
+
+    def get_key(self, key):
+        if key in self._cache:
+            return self._cache[key]
+        if key in self.keys():
+            value = self.db.child(key).get()
+            self._cache.update({str(key): value})
+            return value
+        return None
+
+    def set_key(self, key, value):
+        self._cache.update({str(key): value})
+        self.db.update({str(key): value})
+        return True
+
+    def del_key(self, key):
+        _data = self.getall()
+        if key in _data:
+            _data.pop(key)
+            try:
+                del self._cache[key]
+            except KeyError:
+                pass
+            self.db.set(_data)
+            return True
+        return False
+
+    def flushall(self):
+        self.db.delete()
+        self._cache = {}
+        return True
 # --------------------------------------------------------------------------------------------- #
 
 # Thanks to "Akash Pattnaik" / @BLUE-DEVIL1134
@@ -346,6 +414,31 @@ def UltroidDB():
         )
     if MongoClient and Var.MONGO_URI:
         return MongoDB(Var.MONGO_URI)
+
+    if Var.FIREBASE_SERVICE_ACCOUNT_FILE and Var.FIREBASE_URL:
+        if Var.FIREBASE_SERVICE_ACCOUNT_FILE.startswith("https://") and not Var.FIREBASE_SERVICE_ACCOUNT_FILE.endswith(".json"):
+            LOGS.warning("firebase service account file link is wrong !")
+            exit()
+        if os.path.exists("serviceAccountKey.json"):
+            os.remove("serviceAccountKey.json")
+
+        os.system(f"wget {Var.FIREBASE_SERVICE_ACCOUNT_FILE} -O serviceAccountKey.json")
+        # need to add security above
+
+    try:
+        cred = firebase_admin.credentials.Certificate("serviceAccountKey.json")
+        firebase_admin.initialize_app(cred, {"databaseURL": Var.FIREBASE_URL})
+        fdB = firebase_admin.db.reference("Ultroid/")
+        return FireBaseDB(fdB)
+    except BaseException:
+        try:
+            cred = firebase_admin.credentials.Certificate("serviceAccountKey.json")
+            fdB = firebase_admin.db.reference("Ultroid/")
+            return FireBaseDB(fdB)
+        except Exception as ero:
+            LOGS.info(str(ero))
+            exit()
+
     if psycopg2 and Var.DATABASE_URL:
         return SqlDB(Var.DATABASE_URL)
     LOGS.critical(
