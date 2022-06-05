@@ -6,9 +6,10 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 
+from shutil import rmtree
+
 from decouple import config
 from git import Repo
-from shutil import rmtree
 
 from .. import *
 from ..dB._core import HELP
