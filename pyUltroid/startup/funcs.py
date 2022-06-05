@@ -63,7 +63,7 @@ def startup_stuff():
             "'plugins' folder not found!\nMake sure that, you are on correct path."
         )
         exit()
-    x = ["resources/auth", "resources/downloads", "vcbot/downloads"]
+    x = ["resources/auth", "resources/downloads"]
     for x in x:
         if not os.path.isdir(x):
             os.mkdir(x)
