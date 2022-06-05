@@ -24,9 +24,7 @@ except ImportError:
 def ban_time(time_str):
     """Simplify ban time from text"""
     if not any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
-        return (
-            f"Invalid time type specified. Expected s, m,h, or d, got: {time_str[-1]}"
-        )
+        time_str += "s"
     unit = time_str[-1]
     time_int = time_str[:-1]
     if not time_int.isdigit():
