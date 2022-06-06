@@ -10,7 +10,7 @@ from shutil import rmtree
 
 from decouple import config
 from git import Repo
-
+import os
 from .. import *
 from ..dB._core import HELP
 from ..loader import Loader
@@ -100,7 +100,8 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     if vcbot and not vcClient._bot:
         try:
             import pytgcalls  # ignore: pylint
-
+            if not os.path.isdir("vcbot/downloads"):
+                os.mkdir("vcbot/downloads")
             Loader(path="vcbot", key="VCBot").load(after_load=_after_load)
         except ModuleNotFoundError:
             LOGS.error("'pytgcalls' not installed!\nSkipping load of VcBot.")
