@@ -5,14 +5,12 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import base64
 import json
 import math
 import os
-import random
 import re
+import secrets
 import ssl
-import string
 from io import BytesIO
 from json.decoder import JSONDecodeError
 from traceback import format_exc
@@ -30,6 +28,8 @@ try:
 except ImportError:
     Image, ImageDraw, ImageFont = None, None, None
     LOGS.info("PIL not installed!")
+
+from urllib.parse import unquote
 
 from requests.exceptions import MissingSchema
 from telethon import Button
@@ -111,7 +111,7 @@ async def async_searcher(
 
 
 def _unquote_text(text):
-    return text.replace("'", "'").replace('"', '"')
+    return text.replace("'", unquote("%5C%27")).replace('"', unquote("%5C%22"))
 
 
 def json_parser(data, indent=None, ascii=False):
@@ -153,7 +153,9 @@ def is_url_ok(url: str):
 
 
 async def metadata(file):
-    out, _ = await bash(f'mediainfo """{file}""" --Output=JSON')
+    out, _ = await bash(f'mediainfo "{_unquote_text(file)}" --Output=JSON')
+    if _ and _.endswith("NOT_FOUND"):
+        return _
     data = {}
     _info = json.loads(out)["media"]["track"]
     info = _info[0]
@@ -165,9 +167,7 @@ async def metadata(file):
         }
     if info.get("AudioCount"):
         data["title"] = info.get("Title", file)
-        data["performer"] = (
-            info.get("Performer") or udB.get_key("artist") or ultroid_bot.me.first_name
-        )
+        data["performer"] = info.get("Performer") or udB.get_key("artist") or ""
     if info.get("VideoCount"):
         data["height"] = int(float(_info[1].get("Height", 720)))
         data["width"] = int(float(_info[1].get("Width", 1280)))
@@ -542,15 +542,23 @@ async def Carbon(
     base_url="https://carbonara-42.herokuapp.com/api/cook",
     file_name="ultroid",
     download=False,
+    rayso=False,
     **kwargs,
 ):
-    kwargs["code"] = code
+    if rayso:
+        base_url = "https://raysoapi.herokuapp.com/generate"
+        kwargs["text"] = code
+        kwargs["theme"] = kwargs.get("theme", "meadow")
+        kwargs["darkMode"] = kwargs.get("darkMode", True)
+        kwargs["title"] = kwargs.get("title", "Ultroid")
+    else:
+        kwargs["code"] = code
     con = await async_searcher(base_url, post=True, json=kwargs, re_content=True)
     if not download:
         file = BytesIO(con)
         file.name = file_name + ".jpg"
     else:
-        file = file_name
+        file = file_name + ".jpg"
         open(file_name, "wb").write(con)
     return file
 
@@ -563,17 +571,7 @@ async def get_file_link(msg):
         "**Message has been stored to generate a shareable link. Do not delete it.**"
     )
     msg_id = msg_id.id
-    msg_hash = (
-        (
-            base64.b64encode(
-                "".join(
-                    random.choices(string.ascii_letters + string.digits, k=10)
-                ).encode("ascii")
-            )
-        )
-        .decode("ascii")
-        .replace("=", "")
-    )
+    msg_hash = secrets.token_hex(nbytes=8)
     store_msg(msg_hash, msg_id)
     return msg_hash
 
@@ -581,7 +579,6 @@ async def get_file_link(msg):
 async def get_stored_file(event, hash):
     from .. import udB
 
-    # hash = (base64.b64decode(hash.encode("ascii"))).decode("ascii")
     msg_id = get_stored_msg(hash)
     if not msg_id:
         return
@@ -792,6 +789,36 @@ class TgConverter:
                     return await TgConverter.ffmpeg_convert(
                         input_file, name, remove=True if extn == "webm" else remove_old
                     )
+
+
+def _get_value(stri):
+    try:
+        value = eval(stri.strip())
+    except Exception as er:
+        from .. import LOGS
+
+        LOGS.debug(er)
+        value = stri.strip()
+    return value
+
+
+def safe_load(file, *args, **kwargs):
+    read = file.readlines()
+    out = {}
+    for line in read:
+        if ":" in line:  # Ignores Empty & Invalid lines
+            spli = line.split(":", maxsplit=1)
+            key = spli[0].strip()
+            value = _get_value(spli[1])
+            out.update({key: value or []})
+        elif "-" in line:
+            spli = line.split("-", maxsplit=1)
+            where = out[list(out.keys())[-1]]
+            if isinstance(where, list):
+                value = _get_value(spli[1])
+                if value:
+                    where.append(value)
+    return out
 
 
 # --------- END --------- #

@@ -12,16 +12,21 @@ from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getL
 
 from .. import run_as_module
 
+if run_as_module:
+    from ..configs import Var
+else:
+    Var = None
+
 
 def where_hosted():
     if os.getenv("DYNO"):
         return "heroku"
     if os.getenv("RAILWAY_STATIC_URL"):
         return "railway"
+    if os.getenv("OKTETO_TOKEN"):
+        return "okteto"
     if os.getenv("KUBERNETES_PORT"):
-        return "qovery"
-    if os.getenv("WINDOW") and os.getenv("WINDOW") != "0":
-        return "windows"
+        return "qovery | kubernetes"
     if os.getenv("RUNNER_USER") or os.getenv("HOSTNAME"):
         return "github actions"
     if os.getenv("ANDROID_ROOT"):

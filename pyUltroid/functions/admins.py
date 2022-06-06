@@ -24,24 +24,21 @@ except ImportError:
 def ban_time(time_str):
     """Simplify ban time from text"""
     if not any(time_str.endswith(unit) for unit in ("s", "m", "h", "d")):
-        raise Exception(
-            "Invalid time type specified. Expected s, m,h, or d, got: {}".format(
-                time_str[-1]
-            )
-        )
+        time_str += "s"
     unit = time_str[-1]
     time_int = time_str[:-1]
     if not time_int.isdigit():
-        raise Exception("Invalid time amount specified.")
+        return "Invalid time amount specified."
+    to_return = ""
     if unit == "s":
-        return int(time.time() + int(time_int))
-    if unit == "m":
-        return int(time.time() + int(time_int) * 60)
-    if unit == "h":
-        return int(time.time() + int(time_int) * 60 * 60)
-    if unit == "d":
-        return int(time.time() + int(time_int) * 24 * 60 * 60)
-    return ""
+        to_return = int(time.time() + int(time_int))
+    elif unit == "m":
+        to_return = int(time.time() + int(time_int) * 60)
+    elif unit == "h":
+        to_return = int(time.time() + int(time_int) * 60 * 60)
+    elif unit == "d":
+        to_return = int(time.time() + int(time_int) * 24 * 60 * 60)
+    return to_return
 
 
 # ------------------Admin Check--------------- #

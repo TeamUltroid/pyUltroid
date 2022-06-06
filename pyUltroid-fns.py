@@ -31,6 +31,7 @@ classifiers = [
 ]
 
 shutil.copy("pyUltroid/_misc/_wrappers.py", "pyUltroid/wrappers.py")
+shutil.copy("pyUltroid/startup/_database.py", "pyUltroid/db.py")
 
 setuptools.setup(
     name=name,
@@ -51,4 +52,5 @@ setuptools.setup(
     python_requires=">3.7, <3.11",
 )
 
-os.remove("pyUltroid/wrappers.py")
+for file in ["wrappers", "db"]:
+    os.remove(f"pyUltroid/{file}.py")

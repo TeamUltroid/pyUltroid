@@ -90,7 +90,7 @@ async def YtDataScraper(url: str):
             await async_searcher(url),
             "html.parser",
         )
-        .find_all("script")[39]
+        .find_all("script")[41]
         .text[20:-1]
     )["contents"]
     _common_data = data["twoColumnWatchNextResults"]["results"]["results"]["contents"]
@@ -104,8 +104,6 @@ async def YtDataScraper(url: str):
     description = "".join(
         description_datum["text"] for description_datum in description_data
     )
-
-    like_dislike = common_data["videoActions"]["menuRenderer"]["topLevelButtons"]
     to_return["title"] = common_data["title"]["runs"][0]["text"]
     to_return["views"] = (
         common_data["viewCount"]["videoViewCountRenderer"]["shortViewCount"][
@@ -115,18 +113,14 @@ async def YtDataScraper(url: str):
     )
     to_return["publish_date"] = common_data["dateText"]["simpleText"]
     to_return["likes"] = (
-        like_dislike[0]["toggleButtonRenderer"]["defaultText"]["simpleText"]
+        common_data["videoActions"]["menuRenderer"]["topLevelButtons"][0][
+            "toggleButtonRenderer"
+        ]["defaultText"]["simpleText"]
         or like_dislike[0]["toggleButtonRenderer"]["defaultText"]["accessibility"][
             "accessibilityData"
         ]["label"]
     )
-    to_return["dislikes"] = (
-        like_dislike[1]["toggleButtonRenderer"]["defaultText"]["simpleText"]
-        or like_dislike[1]["toggleButtonRenderer"]["defaultText"]["accessibility"][
-            "accessibilityData"
-        ]["label"]
-    )
-    to_return["description"] = description[:250] + "..."
+    to_return["description"] = description
     return to_return
 
 
@@ -512,7 +506,12 @@ class Quotly:
         except ContentTypeError as er:
             if url != self._API:
                 return await self.create_quotly(
-                    self._API, post=True, json=content, re_json=True
+                    event,
+                    url=self._API,
+                    bg=bg,
+                    sender=sender,
+                    reply=reply,
+                    file_name=file_name,
                 )
             raise er
         if request.get("ok"):

@@ -253,7 +253,7 @@ if run_as_module:
 # --------------------------------------------------------------------- #
 
 
-async def bash(cmd):
+async def bash(cmd, run_code=0):
     """
     run any command in subprocess and get output or error."""
     process = await asyncio.create_subprocess_shell(
@@ -264,6 +264,10 @@ async def bash(cmd):
     stdout, stderr = await process.communicate()
     err = stderr.decode().strip() or None
     out = stdout.decode().strip()
+    if not run_code and err:
+        split = cmd.split()[0]
+        if f"{split}: not found" in err:
+            return out, f"{split.upper()}_NOT_FOUND"
     return out, err
 
 
@@ -533,18 +537,21 @@ async def progress(current, total, event, start, type_of_ps, file_name=None):
 # @xditya @sppidy @techierror
 
 
-async def restart(ult):
+async def restart(ult=None):
     if Var.HEROKU_APP_NAME and Var.HEROKU_API:
         try:
             Heroku = heroku3.from_key(Var.HEROKU_API)
             app = Heroku.apps()[Var.HEROKU_APP_NAME]
-            await ult.edit("`Restarting your app, please wait for a minute!`")
+            if ult:
+                await ult.edit("`Restarting your app, please wait for a minute!`")
             app.restart()
-        except BaseException:
-            return await eor(
-                ult,
-                "`HEROKU_API` or `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars.",
-            )
+        except BaseException as er:
+            if ult:
+                return await eor(
+                    ult,
+                    "`HEROKU_API` or `HEROKU_APP_NAME` is wrong! Kindly re-check in config vars.",
+                )
+            LOGS.exception(er)
     else:
         if len(sys.argv) == 1:
             os.execl(sys.executable, sys.executable, "-m", "pyUltroid")
