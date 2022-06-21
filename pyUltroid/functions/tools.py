@@ -674,7 +674,10 @@ class TgConverter:
             return await TgConverter.create_webm(
                 input_, name=output[:-5], remove=remove
             )
-        await bash(f"ffmpeg -i '{input_}' '{output}' -y")
+        if output.endswith(".mp4"):
+            await bash(f"ffmpeg -i '{input_}' -an -sn -c:v copy '{output}' -y")
+        else:
+            await bash(f"ffmpeg -i '{input_}' '{output}' -y")
         if remove:
             os.remove(input_)
         if os.path.exists(output):
