@@ -674,8 +674,8 @@ class TgConverter:
             return await TgConverter.create_webm(
                 input_, name=output[:-5], remove=remove
             )
-        if output.endswith(".mp4"):
-            await bash(f"ffmpeg -i '{input_}' -an -sn -c:v copy '{output}' -y")
+        if output.endswith(".gif"):
+            await bash(f"ffmpeg -i '{input_}' -an -sn -c:v copy '{output}.mp4' -y")
         else:
             await bash(f"ffmpeg -i '{input_}' '{output}' -y")
         if remove:
