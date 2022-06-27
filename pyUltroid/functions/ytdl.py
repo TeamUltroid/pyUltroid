@@ -65,7 +65,7 @@ async def download_yt(event, link, ytd):
             await download_file(
                 file.get("thumbnail", None) or file["thumbnails"][-1]["url"], thumb
             )
-            ext = "." + ytd["outtmpl"].split(".")[-1]
+            ext = "." + ytd["outtmpl"]["default"].split(".")[-1]
             if ext == ".m4a":
                 ext = ".mp3"
             id = None
@@ -124,7 +124,7 @@ async def download_yt(event, link, ytd):
         info.get("thumbnail", None) or f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg",
         thumb,
     )
-    ext = "." + ytd["outtmpl"].split(".")[-1]
+    ext = "." + ytd["outtmpl"]["default"].split(".")[-1]
     for _ext in [".m4a", ".mp3", ".opus"]:
         if ext == _ext:
             ext = _ext
