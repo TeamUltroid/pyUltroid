@@ -99,6 +99,13 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
     if vcbot and not vcClient._bot:
         try:
             import pytgcalls  # ignore: pylint
+            if os.path.exists("vcbot"):
+                if os.path.exists("vcbot/.git"):
+                    os.system("cd vcbot && git pull")
+                else:
+                    rmtree("vcbot")
+            if not os.path.exists("vcbot");
+                os.system("git clone https://github.com/TeamUltroid/VcBot vcbot")
             if not os.path.isdir("vcbot/downloads"):
                 os.mkdir("vcbot/downloads")
             Loader(path="vcbot", key="VCBot").load(after_load=_after_load)
