@@ -104,7 +104,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
                     os.system("cd vcbot && git pull")
                 else:
                     rmtree("vcbot")
-            if not os.path.exists("vcbot");
+            if not os.path.exists("vcbot"):
                 os.system("git clone https://github.com/TeamUltroid/VcBot vcbot")
             if not os.path.isdir("vcbot/downloads"):
                 os.mkdir("vcbot/downloads")
