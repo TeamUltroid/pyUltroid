@@ -106,7 +106,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
                     rmtree("vcbot")
             if not os.path.exists("vcbot"):
                 os.system("git clone https://github.com/TeamUltroid/VcBot vcbot")
-            if not os.path.isdir("vcbot/downloads"):
+            if not os.path.exists("vcbot/downloads"):
                 os.mkdir("vcbot/downloads")
             Loader(path="vcbot", key="VCBot").load(after_load=_after_load)
         except ModuleNotFoundError:
