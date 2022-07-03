@@ -184,7 +184,7 @@ def ultroid_cmd(
                 stdout, stderr = await bash('git log --pretty=format:"%an: %s" -5')
                 result = stdout + (stderr or "")
 
-                ftext += result + "`"
+                ftext += f"{result}`"
 
                 if len(ftext) > 4096:
                     with BytesIO(ftext.encode()) as file:
@@ -192,7 +192,7 @@ def ultroid_cmd(
                         error_log = await asst.send_file(
                             udB.get_key("LOG_CHANNEL"),
                             file,
-                            caption="**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n",
+                            caption="**Ultroid Client Error:** `Forward this to` @UltroidSupportChat\n\n",
                         )
                 else:
                     error_log = await asst.send_message(

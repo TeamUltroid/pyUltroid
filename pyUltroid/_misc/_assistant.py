@@ -32,7 +32,7 @@ IN_BTTS = [
             "Repository",
             url="https://github.com/TeamUltroid/Ultroid",
         ),
-        Button.url("Support", url="https://t.me/UltroidSupport"),
+        Button.url("Support", url="https://t.me/UltroidSupportChat"),
     ]
 ]
 
@@ -47,7 +47,7 @@ def asst_cmd(pattern=None, load=None, owner=False, **kwargs):
 
     def ult(func):
         if pattern:
-            kwargs["pattern"] = re.compile("^/" + pattern)
+            kwargs["pattern"] = re.compile(f"^/{pattern}")
         if owner:
             kwargs["from_users"] = owner_and_sudos
         asst.add_event_handler(func, NewMessage(**kwargs))
