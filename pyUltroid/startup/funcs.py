@@ -70,8 +70,10 @@ def startup_stuff():
 
     CT = udB.get_key("CUSTOM_THUMBNAIL")
     if CT:
-        urlretrieve(CT, "resources/extras/ultroid.jpg")
-
+        try:
+            urlretrieve(CT, "resources/extras/ultroid.jpg")
+        except Exception as er:
+            LOGS.exception(er)
     GT = udB.get_key("GDRIVE_AUTH_TOKEN")
     if GT:
         with open("resources/auth/gdrive_creds.json", "w") as t_file:
