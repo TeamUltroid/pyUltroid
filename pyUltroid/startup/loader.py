@@ -109,8 +109,8 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
             try:
                 if not os.path.exists("vcbot/downloads"):
                     os.mkdir("vcbot/downloads")
+                Loader(path="vcbot", key="VCBot").load(after_load=_after_load)
             except FileNotFoundError as e:
                 LOGS.error(f"{e} Skipping VCBot Installation.")
-            Loader(path="vcbot", key="VCBot").load(after_load=_after_load)
         except ModuleNotFoundError:
             LOGS.error("'pytgcalls' not installed!\nSkipping load of VcBot.")
