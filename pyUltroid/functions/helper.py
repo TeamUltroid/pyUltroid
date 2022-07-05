@@ -301,10 +301,6 @@ async def updater():
         repo.heads.main.set_tracking_branch(origin.refs.main)
         repo.heads.main.checkout(True)
     ac_br = repo.active_branch.name
-    try:
-        repo.create_remote("upstream", off_repo)
-    except Exception as er:
-        LOGS.info(er)
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
     changelog, tl_chnglog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
