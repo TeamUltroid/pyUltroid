@@ -161,7 +161,7 @@ def ultroid_cmd(
                 date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
                 naam = get_display_name(chat)
                 ftext = (
-                    "**Ultroid Client Error:** `Forward this to` @UltroidSupport\n\n"
+                    "**Ultroid Client Error:** `Forward this to` @UltroidSupportChat\n\n"
                 )
                 ftext += "**Py-Ultroid Version:** `" + str(pyver)
                 ftext += "`\n**Ultroid Version:** `" + str(ult_ver)
