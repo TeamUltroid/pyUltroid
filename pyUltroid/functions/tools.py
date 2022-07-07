@@ -824,4 +824,22 @@ def safe_load(file, *args, **kwargs):
     return out
 
 
+def get_chat_and_msgid(link):
+    invalid_link_msg = "Provide a valid message link!\nEg: `https://t.me/TeamUltroid/3 or `https://t.me/c/1313492028/3`"
+    matches = re.findall("https:\\/\\/t\\.me\\/(.+)", link)
+    if matches == []:
+        raise ValueError(invalid_link_msg)
+
+    match = matches[0]
+    if "c/" in match:
+        match = match.replace("c/", "")
+
+    try:
+        chat, msg_id = match.split("/")
+    except (IndexError, ValueError) as ex:
+        raise ValueError(invalid_link_msg) from ex
+
+    return chat, msg_id
+
+
 # --------- END --------- #
