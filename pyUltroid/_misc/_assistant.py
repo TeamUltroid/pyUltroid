@@ -13,7 +13,7 @@ from telethon.events import CallbackQuery, InlineQuery, NewMessage
 from telethon.tl.types import InputWebDocument
 from traceback import format_exc
 
-from .. import LOGS, asst, ultroid_bot
+from .. import LOGS, asst, ultroid_bot, udB
 from ..functions.admins import admin_check
 from . import append_or_update, owner_and_sudos
 
