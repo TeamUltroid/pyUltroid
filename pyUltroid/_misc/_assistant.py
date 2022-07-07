@@ -11,6 +11,7 @@ import re
 from telethon import Button
 from telethon.events import CallbackQuery, InlineQuery, NewMessage
 from telethon.tl.types import InputWebDocument
+from traceback import format_exc
 
 from .. import LOGS, asst, ultroid_bot
 from ..functions.admins import admin_check
@@ -111,6 +112,8 @@ def in_pattern(pattern=None, owner=False, **kwargs):
                 await func(event)
             except Exception as er:
                 LOGS.exception(er)
+                await asst.send_message(udB.get_key("LOG_CHANNEL"),
+                                       f"**#ERROR #INLINE**\n\nQuery: `{pattern}`\n\n**Traceback:**\n`{format_exc()}`")
 
         asst.add_event_handler(wrapper, InlineQuery(pattern=pattern, **kwargs))
 
