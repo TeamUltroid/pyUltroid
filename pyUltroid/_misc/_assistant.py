@@ -111,9 +111,21 @@ def in_pattern(pattern=None, owner=False, **kwargs):
             try:
                 await func(event)
             except Exception as er:
+                error_text = lambda: f"**#ERROR #INLINE**\n\nQuery: `{asst.me.username} {pattern}`\n\n**Traceback:**\n`{format_exc()}`"
                 LOGS.exception(er)
-                await asst.send_message(udB.get_key("LOG_CHANNEL"),
-                                       f"**#ERROR #INLINE**\n\nQuery: `{pattern}`\n\n**Traceback:**\n`{format_exc()}`")
+                try:
+                    await event.answer(
+                        [
+                            await event.builder.article(
+                            title = "Unhandled Exception has Occured!",
+                            text = error_text(),
+                            buttons=Button.url("Report", "https://t.me/UltroidSupportChat"))
+                        ]
+                    )
+                except Exception as er:
+                    LOGS.exception(er)
+                    await asst.send_message(udB.get_key("LOG_CHANNEL"),
+                                       error_text())
 
         asst.add_event_handler(wrapper, InlineQuery(pattern=pattern, **kwargs))
 
