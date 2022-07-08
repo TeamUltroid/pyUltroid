@@ -38,7 +38,7 @@ try:
     import psycopg2
 except ImportError:
     psycopg2 = None
-    if Var.DATABASE_URL:
+    if Var.LOCALDB:
         LOGS.warning("'psycopg2' not found!\nInstall psycopg2 to use SQL database..")
 
 
@@ -356,8 +356,8 @@ def UltroidDB():
         return MongoDB(Var.MONGO_URI)
     if psycopg2 and Var.DATABASE_URL:
         return SqlDB(Var.DATABASE_URL)
-    if Database and Var.DATABASE_NAME:
-        return Database(Var.DATABASE.NAME)
+    if Database and Var.LOCALDB:
+        return Database() # Default database
     LOGS.critical(
         "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies.."
     )
