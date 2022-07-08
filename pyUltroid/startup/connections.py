@@ -6,21 +6,40 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import sys
-
+import struct
+import base64
+from telethon.sessions.string import CURRENT_VERSION, _STRUCT_PREFORMAT, StringSession
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
-from telethon.sessions import StringSession
 
 from ..configs import Var
 from . import *
 from .BaseClient import UltroidClient
 
+_PYRO_FORM = {
+351:">B?256sI?",
+356:">B?256sQ?",
+362:">BI?256sQ?"}
 
-def session_file(logger):
-    if Var.SESSION:
-        if len(Var.SESSION.strip()) != 353:
-            logger.exception("Wrong string session. Copy paste correctly!")
-            sys.exit()
-        return StringSession(Var.SESSION)
+def validate_session(session, logger):
+    if session:
+        # Telethon Session
+        if session.startswith(CURRENT_VERSION):
+            if len(session.strip()) != 353:
+                logger.exception("Wrong string session. Copy paste correctly!")
+                sys.exit()
+            return StringSession(session)
+        # Pyrogram Session
+        elif len(session) in _PYRO_FORM.keys():
+            dc_id, _, auth_key, __, ___ = struct.unpack(_PYRO_FORM[len(session)]
+                    base64.urlsafe_b64decode(session + "=" * (-len(session) % 4))
+                )
+            return StringSession(CURRENT_VERSION + StringSession.encode(struct.pack(
+            _STRUCT_PREFORMAT.format(len(ip)),
+            dc_id,
+            b'\x95\x9a\xa73',
+            443,
+            auth_key
+            )))
     logger.exception("No String Session found. Quitting...")
     sys.exit()
 
