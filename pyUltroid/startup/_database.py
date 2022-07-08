@@ -362,6 +362,7 @@ def UltroidDB():
         _.get_key = _.get
         _.keys = _._cache.keys
         _.del_key = _.delete
+        _.ping = lambda: True
         return _
     LOGS.critical(
         "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies.."
