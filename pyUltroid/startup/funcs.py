@@ -200,6 +200,9 @@ async def autopilot():
             udB.del_key("LOG_CHANNEL")
             channel = None
     if not channel:
+        async def _save(exc):
+            udB.set_key("LOG_CHANNEL", ultroid_bot.me.id, save=False)
+            await asst.send_message(ultroid_bot.me.id, f"Failed to Create Log Channel due to {exc}..")
         if ultroid_bot._bot:
             LOGS.error("'LOG_CHANNEL' not found! Add it in order to use 'BOTMODE'")
             import sys
@@ -214,21 +217,18 @@ async def autopilot():
                     megagroup=True,
                 ),
             )
-        except ChannelsTooMuchError:
+        except ChannelsTooMuchError as er:
             LOGS.critical(
                 "You Are in Too Many Channels & Groups , Leave some And Restart The Bot"
             )
-            import sys
-
-            sys.exit(1)
+            return await _save(str(er))
         except BaseException as er:
-            LOGS.info(er)
+            LOGS.exception(er)
             LOGS.info(
                 "Something Went Wrong , Create A Group and set its id on config var LOG_CHANNEL."
             )
-            import sys
-
-            sys.exit(1)
+            
+            return await _save(str(er))
         new_channel = True
         chat = r.chats[0]
         channel = get_peer_id(chat)
