@@ -30,10 +30,16 @@ def validate_session(session, logger=LOGS):
             return StringSession(session)
         # Pyrogram Session
         elif len(session) in _PYRO_FORM.keys():
-            dc_id, _, auth_key, __, ___ = struct.unpack(
-                _PYRO_FORM[len(session)],
-                base64.urlsafe_b64decode(session + "=" * (-len(session) % 4))
-            )
+            if len(session) in [351, 356]:
+                dc_id, _, auth_key, _, _ = struct.unpack(
+                    _PYRO_FORM[len(session)],
+                    base64.urlsafe_b64decode(session + "=" * (-len(session) % 4))
+                )
+            else:
+                dc_id, _, _, auth_key, _, _ = struct.unpack(
+                    _PYRO_FORM[len(session)],
+                    base64.urlsafe_b64decode(session + "=" * (-len(session) % 4))
+                )
             return StringSession(CURRENT_VERSION + StringSession.encode(struct.pack(
             _STRUCT_PREFORMAT.format(len(ip)),
             dc_id,
