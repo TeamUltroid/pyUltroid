@@ -76,7 +76,7 @@ def ultroid_cmd(
         async def wrapp(ult):
             if not ult.out:
                 if owner_only:
-                    return
+                    return 
                 if ult.sender_id not in owner_and_sudos():
                     return
                 if fullsudo and ult.sender_id not in SUDO_M.fullsudos:

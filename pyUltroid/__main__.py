@@ -55,7 +55,7 @@ def main():
     if HOSTED_ON == "okteto":
         vcbot = False
 
-    if HOSTED_ON == "termux" and udB.get_key("EXCLUDE_OFFICIAL") is None:
+    if (HOSTED_ON == "termux" or udB.get_key("LITE_DEPLOY")) and udB.get_key("EXCLUDE_OFFICIAL") is None:
         _plugins = "autocorrect autopic compressor forcesubscribe gdrive glitch instagram nsfwfilter nightmode pdftools writer youtube"
         udB.set_key("EXCLUDE_OFFICIAL", _plugins)
 

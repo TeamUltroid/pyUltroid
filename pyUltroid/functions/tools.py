@@ -400,6 +400,7 @@ async def get_paste(data: str, extension: str = "txt"):
 
 
 # Thanks https://t.me/KukiUpdates/23 for ChatBotApi
+
 async def get_chatbot_reply(message):
     chatbot_base = "https://kukiapi.xyz/api/apikey=ULTROIDUSERBOT/Ultroid/{}/message={}"
     req_link = chatbot_base.format(
@@ -559,7 +560,8 @@ async def Carbon(
         file.name = file_name + ".jpg"
     else:
         file = file_name + ".jpg"
-        open(file_name, "wb").write(con)
+        with open(file_name, "wb") as f:
+            f.write(con)
     return file
 
 
