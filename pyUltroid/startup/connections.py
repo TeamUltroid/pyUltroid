@@ -50,7 +50,7 @@ def vc_connection(udB, ultroid_bot):
     if VC_SESSION and VC_SESSION != Var.SESSION:
         try:
             return UltroidClient(
-                StringSession(VC_SESSION), log_attempt=False, handle_auth_error=False
+                validate_session(VC_SESSION), log_attempt=False, handle_auth_error=False
             )
         except (AuthKeyDuplicatedError, EOFError):
             LOGS.info(
