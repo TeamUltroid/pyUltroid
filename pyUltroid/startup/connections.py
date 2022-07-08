@@ -20,7 +20,7 @@ _PYRO_FORM = {
 356:">B?256sQ?",
 362:">BI?256sQ?"}
 
-def validate_session(session, logger):
+def validate_session(session, logger=LOGS):
     if session:
         # Telethon Session
         if session.startswith(CURRENT_VERSION):
