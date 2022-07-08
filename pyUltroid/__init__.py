@@ -75,7 +75,7 @@ if sys.argv[0] == "-m":
     elif not asst.me.bot_inline_placeholder:
         ultroid_bot.run_in_loop(enable_inline(ultroid_bot, asst.me.username))
 
-    vcClient = vc_connection(udB, ultroid_bot)
+    vcClient = vc_connection(udB, ultroid_bot, LOGS)
 
     _version_changes(udB)
 
