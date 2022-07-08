@@ -45,12 +45,12 @@ def validate_session(session, logger):
     sys.exit()
 
 
-def vc_connection(udB, ultroid_bot, logs):
+def vc_connection(udB, ultroid_bot):
     VC_SESSION = Var.VC_SESSION or udB.get_key("VC_SESSION")
     if VC_SESSION and VC_SESSION != Var.SESSION:
         try:
             return UltroidClient(
-                validate_session(VC_SESSION, logs), log_attempt=False, handle_auth_error=False
+                validate_session(VC_SESSION, LOGS), log_attempt=False, handle_auth_error=False
             )
         except (AuthKeyDuplicatedError, EOFError):
             LOGS.info(
