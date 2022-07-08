@@ -20,7 +20,7 @@ if sys.argv[0] == "-m":
     from .startup import *
     from .startup._database import UltroidDB
     from .startup.BaseClient import UltroidClient
-    from .startup.connections import session_file, vc_connection
+    from .startup.connections import validate_session, vc_connection
     from .startup.funcs import _version_changes, autobot, enable_inline, update_envs
     from .version import ultroid_version
 
@@ -44,7 +44,7 @@ if sys.argv[0] == "-m":
         ultroid_bot = None
     else:
         ultroid_bot = UltroidClient(
-            session_file(LOGS),
+            validate_session(Var.SESSION, LOGS),
             udB=udB,
             app_version=ultroid_version,
             device_model="Ultroid",
