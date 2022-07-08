@@ -356,18 +356,17 @@ def UltroidDB():
         return MongoDB(Var.MONGO_URI)
     if psycopg2 and Var.DATABASE_URL:
         return SqlDB(Var.DATABASE_URL)
-    if Database and Var.LOCALDB:
-        _ = Database() # Default database
-        _.set_key = _.set
-        _.get_key = _.get
-        _.keys = _._cache.keys
-        _.del_key = _.delete
-        _.ping = lambda: True
-        return _
     LOGS.critical(
-        "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies.."
+        "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies...\nTill then using local file as database."
     )
-    exit()
-
+    os.system("pip3 install -q localdb.json")
+    from localdb import Database
+    _ = Database() # Default database
+    _.set_key = _.set
+    _.get_key = _.get
+    _.keys = _._cache.keys
+    _.del_key = _.delete
+    _.ping = lambda: True
+    return _
 
 # --------------------------------------------------------------------------------------------- #
