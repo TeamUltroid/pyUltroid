@@ -401,6 +401,7 @@ async def get_paste(data: str, extension: str = "txt"):
 
 # Thanks https://t.me/KukiUpdates/23 for ChatBotApi
 
+
 async def get_chatbot_reply(message):
     chatbot_base = "https://kukiapi.xyz/api/apikey=ULTROIDUSERBOT/Ultroid/{}/message={}"
     req_link = chatbot_base.format(
@@ -827,21 +828,13 @@ def safe_load(file, *args, **kwargs):
 
 
 def get_chat_and_msgid(link):
-    invalid_link_msg = "Provide a valid message link!\nEg: `https://t.me/TeamUltroid/3 or `https://t.me/c/1313492028/3`"
-    matches = re.findall("https:\\/\\/t\\.me\\/(.+)", link)
-    if matches == []:
-        raise ValueError(invalid_link_msg)
-
-    match = matches[0]
-    if "c/" in match:
-        match = match.replace("c/", "")
-
-    try:
-        chat, msg_id = match.split("/")
-    except (IndexError, ValueError) as ex:
-        raise ValueError(invalid_link_msg) from ex
-
-    return chat, msg_id
+    matches = re.findall("https:\\/\\/t\\.me\\/(c\\/|)(.*)\\/(.*)", link)
+    if not matches:
+        return None, None
+    _, chat, msg_id = matches[0]
+    if chat.isdigit():
+        chat = int("-100" + chat)
+    return chat, int(msg_id)
 
 
 # --------- END --------- #
