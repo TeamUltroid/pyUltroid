@@ -11,7 +11,6 @@ import os
 import random
 import time
 from random import randint
-from urllib.request import urlretrieve
 
 try:
     from pytz import timezone
@@ -55,7 +54,7 @@ def update_envs():
             udB.set_key(envs, os.environ[envs])
 
 
-def startup_stuff():
+async def startup_stuff():
     from .. import LOGS, udB
 
     if not os.path.exists("./plugins"):
@@ -71,7 +70,7 @@ def startup_stuff():
     CT = udB.get_key("CUSTOM_THUMBNAIL")
     if CT:
         try:
-            urlretrieve(CT, "resources/extras/ultroid.jpg")
+            await download_file(CT, "resources/extras/ultroid.jpg")
         except Exception as er:
             LOGS.exception(er)
     GT = udB.get_key("GDRIVE_AUTH_TOKEN")
