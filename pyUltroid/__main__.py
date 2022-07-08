@@ -36,7 +36,7 @@ def main():
 
         os.execl(sys.executable, "python3", "-m", "pyUltroid")
 
-    startup_stuff()
+    ultroid_bot.run_in_loop(startup_stuff())
 
     ultroid_bot.me.phone = None
     ultroid_bot.first_name = ultroid_bot.me.first_name
