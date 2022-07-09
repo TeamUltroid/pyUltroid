@@ -7,6 +7,7 @@
 
 import sys
 import struct
+import ipaddress
 import base64
 from telethon.sessions.string import CURRENT_VERSION, _STRUCT_PREFORMAT, StringSession
 from telethon.errors.rpcerrorlist import AuthKeyDuplicatedError
@@ -19,6 +20,14 @@ _PYRO_FORM = {
 351:">B?256sI?",
 356:">B?256sQ?",
 362:">BI?256sQ?"}
+
+# https://github.com/pyrogram/pyrogram/blob/master/docs/source/faq/what-are-the-ip-addresses-of-telegram-data-centers.rst
+
+DC_IPV4 = {1:"149.154.175.53",
+          2:"149.154.167.51",
+          3:"149.154.175.100",
+          4:"149.154.167.91",
+          5:"91.108.56.130"}
 
 def validate_session(session, logger=LOGS):
     if session:
@@ -43,7 +52,7 @@ def validate_session(session, logger=LOGS):
             return StringSession(CURRENT_VERSION + base64.urlsafe_b64encode(struct.pack(
             _STRUCT_PREFORMAT.format(4),
             dc_id,
-            b'\x95\x9a\xa73',
+            ipaddress.ip_address(DC_IPV4[dc_id]).packed,
             443,
             auth_key
             )).decode('ascii'))
