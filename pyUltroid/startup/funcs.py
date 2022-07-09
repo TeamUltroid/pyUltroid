@@ -49,26 +49,26 @@ from ..functions.helper import download_file, updater
 db_url = 0
 
 async def autoupdate_local_database():
-    from .. import udB, ultroid_bot
+    from .. import udB, asst
     global db_url
     db_url = udB.get_key("TGDB_URL") or Var.TGDB_URL or ultroid_bot._cache.get("TGDB_URL")
     if db_url:
         _split = db_url.split("/")
         _channel = _split[-2]
         _id = _split[-1]
-        try: await ultroid_bot.edit_message(int(_channel) if _channel.isdigit() else _channel, message=_id, file="database.json", text="**Do not delete this file.**")
+        try: await asst.edit_message(int(_channel) if _channel.isdigit() else _channel, message=_id, file="database.json", text="**Do not delete this file.**")
         except MessageNotModifiedError: pass
         except MessageIdInvalidError:
-            LOG_CHANNEL = udB.get_key("LOG_CHANNEL") or Var.LOG_CHANNEL or ultroid_bot._cache.get("LOG_CHANNEL") or "me"
-            msg = await ultroid_bot.send_message(LOG_CHANNEL, "**Do not delete this file.**", file="database.json")
-            ultroid_bot._cache["TGDB_URL"] = msg.message_link
+            LOG_CHANNEL = udB.get_key("LOG_CHANNEL") or Var.LOG_CHANNEL or asst._cache.get("LOG_CHANNEL") or "me"
+            msg = await asst.send_message(LOG_CHANNEL, "**Do not delete this file.**", file="database.json")
+            asst._cache["TGDB_URL"] = msg.message_link
             udB.set_key("TGDB_URL", msg.message_link)
         except Exception as ex:
             LOGS.error(f"Error on autoupdate_local_database: {ex}")
     else:
-        LOG_CHANNEL = udB.get_key("LOG_CHANNEL") or Var.LOG_CHANNEL or ultroid_bot._cache.get("LOG_CHANNEL") or "me"
-        msg = await ultroid_bot.send_message(LOG_CHANNEL, "**Do not delete this file.**", file="database.json")
-        ultroid_bot._cache["TGDB_URL"] = msg.message_link
+        LOG_CHANNEL = udB.get_key("LOG_CHANNEL") or Var.LOG_CHANNEL or asst._cache.get("LOG_CHANNEL") or "me"
+        msg = await asst.send_message(LOG_CHANNEL, "**Do not delete this file.**", file="database.json")
+        asst._cache["TGDB_URL"] = msg.message_link
         udB.set_key("TGDB_URL", msg.message_link)
 
 def update_envs():
