@@ -68,22 +68,10 @@ async def autoupdate_local_database():
                 text="**Do not delete this file.**",
             )
         except MessageNotModifiedError:
-            pass
+           return
         except MessageIdInvalidError:
-            LOG_CHANNEL = (
-                udB.get_key("LOG_CHANNEL")
-                or Var.LOG_CHANNEL
-                or asst._cache.get("LOG_CHANNEL")
-                or "me"
-            )
-            msg = await asst.send_message(
-                LOG_CHANNEL, "**Do not delete this file.**", file="database.json"
-            )
-            asst._cache["TGDB_URL"] = msg.message_link
-            udB.set_key("TGDB_URL", msg.message_link)
-        except Exception as ex:
-            LOGS.error(f"Error on autoupdate_local_database: {ex}")
-    else:
+           pass
+    try:
         LOG_CHANNEL = (
             udB.get_key("LOG_CHANNEL")
             or Var.LOG_CHANNEL
@@ -95,6 +83,8 @@ async def autoupdate_local_database():
         )
         asst._cache["TGDB_URL"] = msg.message_link
         udB.set_key("TGDB_URL", msg.message_link)
+    except Exception as ex:
+        LOGS.error(f"Error on autoupdate_local_database: {ex}")
 
 
 def update_envs():
