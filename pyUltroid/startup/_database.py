@@ -341,7 +341,7 @@ class RedisDB:
 # --------------------------------------------------------------------------------------------- #
 
 
-class LocalDatabase(Database):
+class LocalDB(Database):
     def __init__(self, database_name="ultroid"):
         self.set_key = self.set
         self.get_key = self.get
@@ -349,6 +349,13 @@ class LocalDatabase(Database):
         self.del_key = self.delete
         self.ping = lambda: True
         super().__init__(database_name=database_name)
+
+    def __repr__(self):
+        return f"<Ultroid.LocalDB\n -total_keys: {len(self.keys())}\n>"
+
+    @property
+    def name(self):
+        return "Local"
 
     def re_cache(self):
         self._cache = {}
@@ -372,24 +379,24 @@ def UltroidDB():
             )
         except ConnectionError:
             os.system("pip3 install -q localdb.json")
-            return LocalDatabase()
+            return LocalDB()
     if MongoClient and Var.MONGO_URI:
         try:
             return MongoDB(Var.MONGO_URI)
         except BaseException:
             os.system("pip3 install -q localdb.json")
-            return LocalDatabase()
+            return LocalDB()
     if psycopg2 and Var.DATABASE_URL:
         try:
             return SqlDB(Var.DATABASE_URL)
         except BaseException:
             os.system("pip3 install -q localdb.json")
-            return LocalDatabase("ultroid")
+            return LocalDB()
     LOGS.critical(
         "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies...\nTill then using local file as database."
     )
     os.system("pip3 install -q localdb.json")
-    return LocalDatabase()
+    return LocalDB()
 
 
 # --------------------------------------------------------------------------------------------- #
