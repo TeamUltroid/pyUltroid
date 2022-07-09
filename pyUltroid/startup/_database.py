@@ -49,7 +49,6 @@ except ImportError:
     if Var.LOCALDB:
         LOGS.warning(
             "'localdb.json' not found!\nInstall localdb.json to use local file as database..."
-            ""
         )
 
 # --------------------------------------------------------------------------------------------- #
