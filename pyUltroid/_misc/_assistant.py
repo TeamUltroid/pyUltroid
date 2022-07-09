@@ -7,13 +7,13 @@
 
 import inspect
 import re
+from traceback import format_exc
 
 from telethon import Button
 from telethon.events import CallbackQuery, InlineQuery, NewMessage
 from telethon.tl.types import InputWebDocument
-from traceback import format_exc
 
-from .. import LOGS, asst, ultroid_bot, udB
+from .. import LOGS, asst, udB, ultroid_bot
 from ..functions.admins import admin_check
 from . import append_or_update, owner_and_sudos
 
@@ -111,21 +111,26 @@ def in_pattern(pattern=None, owner=False, **kwargs):
             try:
                 await func(event)
             except Exception as er:
-                error_text = lambda: f"**#ERROR #INLINE**\n\nQuery: `{asst.me.username} {pattern}`\n\n**Traceback:**\n`{format_exc()}`"
+
+                def error_text():
+                    return f"**#ERROR #INLINE**\n\nQuery: `{asst.me.username} {pattern}`\n\n**Traceback:**\n`{format_exc()}`"
+
                 LOGS.exception(er)
                 try:
                     await event.answer(
                         [
                             await event.builder.article(
-                            title = "Unhandled Exception has Occured!",
-                            text = error_text(),
-                            buttons=Button.url("Report", "https://t.me/UltroidSupportChat"))
+                                title="Unhandled Exception has Occured!",
+                                text=error_text(),
+                                buttons=Button.url(
+                                    "Report", "https://t.me/UltroidSupportChat"
+                                ),
+                            )
                         ]
                     )
                 except Exception as er:
                     LOGS.exception(er)
-                    await asst.send_message(udB.get_key("LOG_CHANNEL"),
-                                       error_text())
+                    await asst.send_message(udB.get_key("LOG_CHANNEL"), error_text())
 
         asst.add_event_handler(wrapper, InlineQuery(pattern=pattern, **kwargs))
 

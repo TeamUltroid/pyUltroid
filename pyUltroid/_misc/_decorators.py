@@ -76,7 +76,7 @@ def ultroid_cmd(
         async def wrapp(ult):
             if not ult.out:
                 if owner_only:
-                    return 
+                    return
                 if ult.sender_id not in owner_and_sudos():
                     return
                 if fullsudo and ult.sender_id not in SUDO_M.fullsudos:
@@ -160,9 +160,7 @@ def ultroid_cmd(
                 LOGS.exception(e)
                 date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
                 naam = get_display_name(chat)
-                ftext = (
-                    "**Ultroid Client Error:** `Forward this to` @UltroidSupportChat\n\n"
-                )
+                ftext = "**Ultroid Client Error:** `Forward this to` @UltroidSupportChat\n\n"
                 ftext += "**Py-Ultroid Version:** `" + str(pyver)
                 ftext += "`\n**Ultroid Version:** `" + str(ult_ver)
                 ftext += "`\n**Telethon Version:** `" + str(telever)

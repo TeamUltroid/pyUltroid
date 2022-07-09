@@ -22,9 +22,9 @@ from telethon.errors import (
     ChannelPrivateError,
     ChannelsTooMuchError,
     ChatAdminRequiredError,
-    UserNotParticipantError,
+    MessageIdInvalidError,
     MessageNotModifiedError,
-    MessageIdInvalidError
+    UserNotParticipantError,
 )
 from telethon.tl.custom import Button
 from telethon.tl.functions.channels import (
@@ -48,28 +48,54 @@ from ..functions.helper import download_file, updater
 
 db_url = 0
 
+
 async def autoupdate_local_database():
-    from .. import udB, asst
+    from .. import asst, udB
+
     global db_url
-    db_url = udB.get_key("TGDB_URL") or Var.TGDB_URL or ultroid_bot._cache.get("TGDB_URL")
+    db_url = (
+        udB.get_key("TGDB_URL") or Var.TGDB_URL or ultroid_bot._cache.get("TGDB_URL")
+    )
     if db_url:
         _split = db_url.split("/")
         _channel = _split[-2]
         _id = _split[-1]
-        try: await asst.edit_message(int(_channel) if _channel.isdigit() else _channel, message=_id, file="database.json", text="**Do not delete this file.**")
-        except MessageNotModifiedError: pass
+        try:
+            await asst.edit_message(
+                int(_channel) if _channel.isdigit() else _channel,
+                message=_id,
+                file="database.json",
+                text="**Do not delete this file.**",
+            )
+        except MessageNotModifiedError:
+            pass
         except MessageIdInvalidError:
-            LOG_CHANNEL = udB.get_key("LOG_CHANNEL") or Var.LOG_CHANNEL or asst._cache.get("LOG_CHANNEL") or "me"
-            msg = await asst.send_message(LOG_CHANNEL, "**Do not delete this file.**", file="database.json")
+            LOG_CHANNEL = (
+                udB.get_key("LOG_CHANNEL")
+                or Var.LOG_CHANNEL
+                or asst._cache.get("LOG_CHANNEL")
+                or "me"
+            )
+            msg = await asst.send_message(
+                LOG_CHANNEL, "**Do not delete this file.**", file="database.json"
+            )
             asst._cache["TGDB_URL"] = msg.message_link
             udB.set_key("TGDB_URL", msg.message_link)
         except Exception as ex:
             LOGS.error(f"Error on autoupdate_local_database: {ex}")
     else:
-        LOG_CHANNEL = udB.get_key("LOG_CHANNEL") or Var.LOG_CHANNEL or asst._cache.get("LOG_CHANNEL") or "me"
-        msg = await asst.send_message(LOG_CHANNEL, "**Do not delete this file.**", file="database.json")
+        LOG_CHANNEL = (
+            udB.get_key("LOG_CHANNEL")
+            or Var.LOG_CHANNEL
+            or asst._cache.get("LOG_CHANNEL")
+            or "me"
+        )
+        msg = await asst.send_message(
+            LOG_CHANNEL, "**Do not delete this file.**", file="database.json"
+        )
         asst._cache["TGDB_URL"] = msg.message_link
         udB.set_key("TGDB_URL", msg.message_link)
+
 
 def update_envs():
     """Update Var. attributes to udB"""
@@ -225,9 +251,13 @@ async def autopilot():
             udB.del_key("LOG_CHANNEL")
             channel = None
     if not channel:
+
         async def _save(exc):
             udB.set_key("LOG_CHANNEL", ultroid_bot.me.id, save=False)
-            await asst.send_message(ultroid_bot.me.id, f"Failed to Create Log Channel due to {exc}..")
+            await asst.send_message(
+                ultroid_bot.me.id, f"Failed to Create Log Channel due to {exc}.."
+            )
+
         if ultroid_bot._bot:
             LOGS.error("'LOG_CHANNEL' not found! Add it in order to use 'BOTMODE'")
             import sys
@@ -252,7 +282,7 @@ async def autopilot():
             LOGS.info(
                 "Something Went Wrong , Create A Group and set its id on config var LOG_CHANNEL."
             )
-            
+
             return await _save(str(er))
         new_channel = True
         chat = r.chats[0]

@@ -21,14 +21,22 @@ async def eor(event, text=None, time=None, link_preview=False, edit_time=None, *
             await sleep(edit_time)
         if "file" in args and args["file"] and not event.media:
             await event.delete()
-            ok = await event.client.send_message(event.chat_id, text, link_preview=link_preview, reply_to=reply_to, **args)
+            ok = await event.client.send_message(
+                event.chat_id,
+                text,
+                link_preview=link_preview,
+                reply_to=reply_to,
+                **args
+            )
         else:
             try:
                 ok = await event.edit(text, link_preview=link_preview, **args)
             except MessageNotModifiedError:
                 ok = event
     else:
-        ok = await event.client.send_message(event.chat_id, text, link_preview=link_preview,reply_to=reply_to, **args)
+        ok = await event.client.send_message(
+            event.chat_id, text, link_preview=link_preview, reply_to=reply_to, **args
+        )
 
     if time:
         await sleep(time)

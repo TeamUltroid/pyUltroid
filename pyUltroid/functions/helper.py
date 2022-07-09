@@ -301,7 +301,7 @@ async def updater():
         repo.heads.main.set_tracking_branch(origin.refs.main)
         repo.heads.main.checkout(True)
     ac_br = repo.active_branch.name
-    repo.create_remote("upstream", off_repo) if not "upstream" in repo.remotes else None
+    repo.create_remote("upstream", off_repo) if "upstream" not in repo.remotes else None
     ups_rem = repo.remote("upstream")
     ups_rem.fetch(ac_br)
     changelog, tl_chnglog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
