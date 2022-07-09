@@ -14,7 +14,7 @@ except ImportError:
     from .exceptions import DependencyMissingError
 
 try:
-    from redis import Redis
+    from redis import Redis, ConnectionError
 except ImportError:
     Redis = None
 
@@ -340,12 +340,27 @@ class RedisDB:
 
 # --------------------------------------------------------------------------------------------- #
 
+class LocalDatabase(Database):
+    def __init__(self, database_name="ultroid"):
+        self.set_key = self.set
+        self.get_key = self.get
+        self.keys = self._cache.keys
+        self.del_key = self.delete
+        self.ping = lambda: True
+        super().__init__(database_name=database_name)
+
+    def re_cache(self):
+        self._cache = {}
+        for keys in self.keys():
+            self._cache.update({keys: self.get_key(keys)})
+
 
 def UltroidDB():
     if Var.REDIS_URI or Var.REDISHOST:
         from .. import HOSTED_ON
 
-        return RedisDB(
+        try:
+            return RedisDB(
             host=Var.REDIS_URI or Var.REDISHOST,
             password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
             port=Var.REDISPORT,
@@ -353,24 +368,27 @@ def UltroidDB():
             decode_responses=True,
             socket_timeout=5,
             retry_on_timeout=True,
-        )
+            )
+        except ConnectionError:
+            os.system("pip3 install -q localdb.json")
+            return LocalDatabase()
     if MongoClient and Var.MONGO_URI:
-        return MongoDB(Var.MONGO_URI)
+        try:
+            return MongoDB(Var.MONGO_URI)
+        except:
+            os.system("pip3 install -q localdb.json")
+            return LocalDatabase()
     if psycopg2 and Var.DATABASE_URL:
-        return SqlDB(Var.DATABASE_URL)
+        try:
+            return SqlDB(Var.DATABASE_URL)
+        except:
+            os.system("pip3 install -q localdb.json")
+            return LocalDatabase("ultroid")
     LOGS.critical(
         "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies...\nTill then using local file as database."
     )
     os.system("pip3 install -q localdb.json")
-    from localdb import Database
-
-    _ = Database("ultroid")  # Default database
-    _.set_key = _.set
-    _.get_key = _.get
-    _.keys = _._cache.keys
-    _.del_key = _.delete
-    _.ping = lambda: True
-    return _
+    return LocalDatabase()
 
 
 # --------------------------------------------------------------------------------------------- #
