@@ -14,7 +14,7 @@ except ImportError:
     from .exceptions import DependencyMissingError
 
 try:
-    from redis import Redis, ConnectionError
+    from redis import ConnectionError, Redis
 except ImportError:
     Redis = None
 
@@ -340,6 +340,7 @@ class RedisDB:
 
 # --------------------------------------------------------------------------------------------- #
 
+
 class LocalDatabase(Database):
     def __init__(self, database_name="ultroid"):
         self.set_key = self.set
@@ -361,13 +362,13 @@ def UltroidDB():
 
         try:
             return RedisDB(
-            host=Var.REDIS_URI or Var.REDISHOST,
-            password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
-            port=Var.REDISPORT,
-            platform=HOSTED_ON,
-            decode_responses=True,
-            socket_timeout=5,
-            retry_on_timeout=True,
+                host=Var.REDIS_URI or Var.REDISHOST,
+                password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
+                port=Var.REDISPORT,
+                platform=HOSTED_ON,
+                decode_responses=True,
+                socket_timeout=5,
+                retry_on_timeout=True,
             )
         except ConnectionError:
             os.system("pip3 install -q localdb.json")
@@ -375,13 +376,13 @@ def UltroidDB():
     if MongoClient and Var.MONGO_URI:
         try:
             return MongoDB(Var.MONGO_URI)
-        except:
+        except BaseException:
             os.system("pip3 install -q localdb.json")
             return LocalDatabase()
     if psycopg2 and Var.DATABASE_URL:
         try:
             return SqlDB(Var.DATABASE_URL)
-        except:
+        except BaseException:
             os.system("pip3 install -q localdb.json")
             return LocalDatabase("ultroid")
     LOGS.critical(
