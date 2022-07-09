@@ -68,9 +68,9 @@ async def autoupdate_local_database():
                 text="**Do not delete this file.**",
             )
         except MessageNotModifiedError:
-           return
+            return
         except MessageIdInvalidError:
-           pass
+            pass
     try:
         LOG_CHANNEL = (
             udB.get_key("LOG_CHANNEL")
