@@ -364,7 +364,7 @@ def UltroidDB():
     os.system("pip3 install -q localdb.json")
     from localdb import Database
 
-    _ = Database()  # Default database
+    _ = Database("ultroid")  # Default database
     _.set_key = _.set
     _.get_key = _.get
     _.keys = _._cache.keys
