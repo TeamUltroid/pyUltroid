@@ -343,10 +343,6 @@ class LocalDB(Database):
     def __repr__(self):
         return f"<Ultroid.LocalDB\n -total_keys: {len(self.keys())}\n>"
 
-    @property
-    def name(self):
-        return "Local"
-
     def re_cache(self):
         self._cache = {}
         for keys in self.keys():
