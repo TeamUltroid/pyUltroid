@@ -258,10 +258,6 @@ class RedisDB:
         *args,
         **kwargs,
     ):
-        if not Redis:
-            raise DependencyMissingError(
-                "'redis' module is not installed!\nInstall it to use RedisDB"
-            )
         if host and ":" in host:
             spli_ = host.split(":")
             host = spli_[0]
@@ -361,7 +357,7 @@ class LocalDB(Database):
 
 
 def UltroidDB():
-    if Var.REDIS_URI or Var.REDISHOST:
+    if Redis and (Var.REDIS_URI or Var.REDISHOST):
         from .. import HOSTED_ON
 
         try:
