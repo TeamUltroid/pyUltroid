@@ -330,12 +330,12 @@ class RedisDB:
 
 
 class LocalDB(Database):
-    def __init__(self, database_name="ultroid"):
+    def __init__(self):
         self.set_key = self.set
         self.get_key = self.get
         self.del_key = self.delete
         self.ping = lambda: True
-        super().__init__(database_name=database_name)
+        super().__init__(database_name="ultroid.json")
 
     def keys(self):
         return self._cache.keys()
