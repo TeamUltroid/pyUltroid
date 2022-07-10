@@ -9,9 +9,9 @@ import os
 import sys
 
 try:
-    from ..exceptions import DependencyMissingError
+    pass
 except ImportError:
-    from .exceptions import DependencyMissingError
+    pass
 
 try:
     from redis import ConnectionError, Redis
