@@ -9,11 +9,6 @@ import os
 import sys
 
 try:
-    pass
-except ImportError:
-    pass
-
-try:
     from redis import ConnectionError, Redis
 except ImportError:
     Redis = None
