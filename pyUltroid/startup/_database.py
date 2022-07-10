@@ -45,11 +45,8 @@ except ImportError:
 try:
     from localdb import Database
 except ImportError:
-    Database = None
-    if Var.LOCALDB:
-        LOGS.warning(
-            "'localdb.json' not found!\nInstall localdb.json to use local file as database..."
-        )
+    os.system("pip3 install -q localdb.json")
+    from localdb import Database
 
 # --------------------------------------------------------------------------------------------- #
 
@@ -378,24 +375,20 @@ def UltroidDB():
                 retry_on_timeout=True,
             )
         except ConnectionError:
-            os.system("pip3 install -q localdb.json")
             return LocalDB()
     if MongoClient and Var.MONGO_URI:
         try:
             return MongoDB(Var.MONGO_URI)
         except BaseException:
-            os.system("pip3 install -q localdb.json")
             return LocalDB()
     if psycopg2 and Var.DATABASE_URL:
         try:
             return SqlDB(Var.DATABASE_URL)
         except BaseException:
-            os.system("pip3 install -q localdb.json")
             return LocalDB()
     LOGS.critical(
         "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies...\nTill then using local file as database."
     )
-    os.system("pip3 install -q localdb.json")
     return LocalDB()
 
 
