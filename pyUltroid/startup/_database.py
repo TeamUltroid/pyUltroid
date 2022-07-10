@@ -338,10 +338,12 @@ class LocalDB(Database):
     def __init__(self, database_name="ultroid"):
         self.set_key = self.set
         self.get_key = self.get
-        self.keys = self._cache.keys
         self.del_key = self.delete
         self.ping = lambda: True
         super().__init__(database_name=database_name)
+
+    def keys(self):
+        return self._cache.keys()
 
     def __repr__(self):
         return f"<Ultroid.LocalDB\n -total_keys: {len(self.keys())}\n>"
