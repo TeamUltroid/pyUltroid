@@ -20,7 +20,6 @@ from oauth2client.file import Storage
 from .. import udB
 from .helper import humanbytes, time_formatter
 
-
 for log in [LOGGER, logger, _logger]:
     log.setLevel(WARNING)
 
