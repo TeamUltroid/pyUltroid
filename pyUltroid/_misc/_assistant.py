@@ -12,7 +12,7 @@ from traceback import format_exc
 from telethon import Button
 from telethon.events import CallbackQuery, InlineQuery, NewMessage
 from telethon.tl.types import InputWebDocument
-
+from telethon.errors import QueryIdInvalidError
 from .. import LOGS, asst, udB, ultroid_bot
 from ..functions.admins import admin_check
 from . import append_or_update, owner_and_sudos
@@ -111,7 +111,7 @@ def in_pattern(pattern=None, owner=False, **kwargs):
             try:
                 await func(event)
             except Exception as er:
-
+                err = format_exc()
                 def error_text():
                     return f"**#ERROR #INLINE**\n\nQuery: `{asst.me.username} {pattern}`\n\n**Traceback:**\n`{format_exc()}`"
 
@@ -128,6 +128,8 @@ def in_pattern(pattern=None, owner=False, **kwargs):
                             )
                         ]
                     )
+                except QueryIdInvalidError:
+                    LOGS.exception(err)
                 except Exception as er:
                     LOGS.exception(er)
                     await asst.send_message(udB.get_key("LOG_CHANNEL"), error_text())
