@@ -9,7 +9,7 @@ import os
 import sys
 
 try:
-    from redis import ConnectionError, Redis
+    from redis import Redis
 except ImportError:
     Redis = None
 
@@ -63,7 +63,7 @@ class _BaseDatabase:
     def __init__(self, *args, **kwargs):
         self._cache = {}
 
-    def get_key(self, key):        
+    def get_key(self, key):
         if key in self._cache:
             return self._cache[key]
         if key in self.keys():
@@ -71,20 +71,26 @@ class _BaseDatabase:
             self._cache.update({key: value})
             return value
         return None
-    
+
     def re_cache(self):
         self._cache.clear()
         for key in self.keys():
             self._cache.update({key: self.get_key(key)})
-    
-    def ping(self): return 1
+
+    def ping(self):
+        return 1
 
     @property
-    def name(self): return ""
+    def name(self):
+        return ""
+
     @property
-    def usage(self): return 0
-    def keys(self): return []
-    
+    def usage(self):
+        return 0
+
+    def keys(self):
+        return []
+
     def del_key(self, key):
         if key in self._cache:
             del self._cache[key]
@@ -184,7 +190,6 @@ class SqlDB(_BaseDatabase):
         data = self._cursor.fetchall()
         return [_[0] for _ in data]
 
-
     def get(self, variable):
         try:
             self._cursor.execute(f"SELECT {variable} FROM Ultroid")
@@ -216,7 +221,7 @@ class SqlDB(_BaseDatabase):
         except psycopg2.errors.UndefinedColumn:
             return False
         return True
-    
+
     def flushall(self):
         self._cache.clear()
         self._cursor.execute("DROP TABLE Ultroid")
@@ -301,6 +306,7 @@ class RedisDB(_BaseDatabase):
         self._cache.update({key: value})
         return self.set(str(key), str(value))
 
+
 # --------------------------------------------------------------------------------------------- #
 
 
@@ -329,7 +335,7 @@ def UltroidDB():
     try:
         if Redis and (Var.REDIS_URI or Var.REDISHOST):
             from .. import HOSTED_ON
-    
+
             return RedisDB(
                 host=Var.REDIS_URI or Var.REDISHOST,
                 password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
@@ -338,7 +344,7 @@ def UltroidDB():
                 decode_responses=True,
                 socket_timeout=5,
                 retry_on_timeout=True,
-                )
+            )
         if MongoClient and Var.MONGO_URI:
             return MongoDB(Var.MONGO_URI)
         if psycopg2 and Var.DATABASE_URL:
@@ -348,7 +354,7 @@ def UltroidDB():
         _er = True
     if not _er:
         LOGS.critical(
-        "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies...\nTill then using local file as database."
+            "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies...\nTill then using local file as database."
         )
     return LocalDB()
 
