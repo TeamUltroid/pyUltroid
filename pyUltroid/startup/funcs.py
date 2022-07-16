@@ -6,7 +6,6 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import asyncio
-import logging
 import os
 import random
 import time
