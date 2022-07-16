@@ -54,7 +54,7 @@ class _BaseDatabase:
         if key in self._cache:
             return self._cache[key]
         if key in self.keys():
-            value = self._get_data(self, key)
+            value = self._get_data(key)
             self._cache.update({key: value})
             return value
         return None
