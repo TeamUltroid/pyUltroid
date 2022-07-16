@@ -55,4 +55,3 @@ class Var:
     MONGO_URI = config("MONGO_URI", default=None)
     # for Okteto Platform
     OKTETO = config("OKTETO", cast=bool, default=False)
-    LOCALDB = config("LOCALDB", cast=bool, default=False)
