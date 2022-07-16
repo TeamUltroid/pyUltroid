@@ -147,7 +147,7 @@ async def autobot():
     await ultroid_bot.start()
     LOGS.info("MAKING A TELEGRAM BOT FOR YOU AT @BotFather, Kindly Wait")
     who = ultroid_bot.me
-    name = who.first_name + "'s Assistant Bot"
+    name = who.first_name + "'s Bot"
     if who.username:
         username = who.username + "_bot"
     else:
@@ -189,23 +189,8 @@ async def autobot():
         username = "ultroid_" + (str(who.id))[6:] + str(ran) + "_bot"
         await ultroid_bot.send_message(bf, username)
         await asyncio.sleep(1)
-        nowdone = (await ultroid_bot.get_messages(bf, limit=1))[0].text
-        if nowdone.startswith("Done!"):
-            token = nowdone.split("`")[1]
-            udB.set_key("BOT_TOKEN", token)
-            await enable_inline(ultroid_bot, username)
-            LOGS.info(
-                f"Done. Successfully created @{username} to be used as your assistant bot!"
-            )
-        else:
-            LOGS.critical(
-                "Please Delete Some Of your Telegram bots at @Botfather or Set Var BOT_TOKEN with token of a bot"
-            )
-
-            import sys
-
-            sys.exit(1)
-    elif isdone.startswith("Done!"):
+        isdone = (await ultroid_bot.get_messages(bf, limit=1))[0].text
+   if isdone.startswith("Done!"):
         token = isdone.split("`")[1]
         udB.set_key("BOT_TOKEN", token)
         await enable_inline(ultroid_bot, username)
@@ -237,7 +222,7 @@ async def autopilot():
     if not channel:
 
         async def _save(exc):
-            udB.set_key("LOG_CHANNEL", ultroid_bot.me.id, save=False)
+            udB._cache["LOG_CHANNEL"] = ultroid_bot.me.id
             await asst.send_message(
                 ultroid_bot.me.id, f"Failed to Create Log Channel due to {exc}.."
             )
