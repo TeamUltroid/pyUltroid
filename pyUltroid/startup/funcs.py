@@ -99,11 +99,6 @@ def update_envs():
 async def startup_stuff():
     from .. import udB
 
-    if not os.path.exists("./plugins"):
-        LOGS.error(
-            "'plugins' folder not found!\nMake sure that, you are on correct path."
-        )
-        exit()
     x = ["resources/auth", "resources/downloads"]
     for x in x:
         if not os.path.isdir(x):
@@ -236,8 +231,8 @@ async def autopilot():
     if channel:
         try:
             chat = await ultroid_bot.get_entity(channel)
-        except BaseException:
-            logging.exception("message")
+        except BaseException as err:
+            LOGS.exception(err)
             udB.del_key("LOG_CHANNEL")
             channel = None
     if not channel:
@@ -249,10 +244,9 @@ async def autopilot():
             )
 
         if ultroid_bot._bot:
-            LOGS.error("'LOG_CHANNEL' not found! Add it in order to use 'BOTMODE'")
-            import sys
-
-            sys.exit()
+            msg_ = "'LOG_CHANNEL' not found! Add it in order to use 'BOTMODE'"
+            LOGS.error(msg_)
+            return await _save(msg_)
         LOGS.info("Creating a Log Channel for You!")
         try:
             r = await ultroid_bot(
