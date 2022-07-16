@@ -58,7 +58,7 @@ def main():
     if (HOSTED_ON == "termux" or udB.get_key("LITE_DEPLOY")) and udB.get_key(
         "EXCLUDE_OFFICIAL"
     ) is None:
-        _plugins = "autocorrect autopic compressor forcesubscribe gdrive glitch instagram nsfwfilter nightmode pdftools writer youtube"
+        _plugins = "autocorrect autopic audiotools compressor forcesubscribe fedutils gdrive glitch instagram nsfwfilter nightmode pdftools profanityfilter writer youtube"
         udB.set_key("EXCLUDE_OFFICIAL", _plugins)
 
     load_other_plugins(addons=addons, pmbot=pmbot, manager=manager, vcbot=vcbot)
