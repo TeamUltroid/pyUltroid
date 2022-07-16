@@ -39,7 +39,6 @@ def main():
     ultroid_bot.run_in_loop(startup_stuff())
 
     ultroid_bot.me.phone = None
-    ultroid_bot.first_name = ultroid_bot.me.first_name
 
     if not ultroid_bot.me.bot:
         udB.set_key("OWNER_ID", ultroid_bot.uid)
