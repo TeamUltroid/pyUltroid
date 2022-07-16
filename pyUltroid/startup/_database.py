@@ -46,19 +46,6 @@ except ImportError:
 # --------------------------------------------------------------------------------------------- #
 
 
-def get_data(self_, key):
-    data = self_.get(str(key))
-    if data:
-        try:
-            data = eval(data)
-        except BaseException:
-            pass
-    return data
-
-
-# --------------------------------------------------------------------------------------------- #
-
-
 class _BaseDatabase:
     def __init__(self, *args, **kwargs):
         self._cache = {}
@@ -67,7 +54,7 @@ class _BaseDatabase:
         if key in self._cache:
             return self._cache[key]
         if key in self.keys():
-            value = get_data(self, key)
+            value = self._get_data(self, key)
             self._cache.update({key: value})
             return value
         return None
@@ -96,6 +83,28 @@ class _BaseDatabase:
             del self._cache[key]
         self.delete(key)
         return True
+    
+    def _get_data(self, key):
+        data = self.get(str(key))
+        if data:
+            try:
+                data = eval(data)
+            except BaseException:
+                pass
+        return data
+
+    def set_key(self, key, value):
+        value = self._get_data(value)
+        self._cache.update({key: value})
+        return self.set(str(key), str(value))
+
+    def rename(self, key1, key2):
+        _ = self.get_key(key1)
+        if _:
+            self.del_key(key1)
+            self.set_key(key2, _)
+            return 0
+        return 1
 
 
 class MongoDB(_BaseDatabase):
@@ -230,15 +239,6 @@ class SqlDB(_BaseDatabase):
         )
         return True
 
-    def rename(self, key1, key2):
-        _ = self.get_key(key1)
-        if _:
-            self.del_key(key1)
-            self.set_key(key2, _)
-            return 0
-        return 1
-
-
 # --------------------------------------------------------------------------------------------- #
 
 
@@ -297,25 +297,11 @@ class RedisDB(_BaseDatabase):
     def usage(self):
         return sum(self.db.memory_usage(x) for x in self.keys())
 
-    def set_key(self, key, value):
-        value = str(value)
-        try:
-            value = eval(value)
-        except BaseException:
-            pass
-        self._cache.update({key: value})
-        return self.set(str(key), str(value))
-
-
 # --------------------------------------------------------------------------------------------- #
 
 
 class LocalDB(Database, _BaseDatabase):
     def __init__(self):
-        self.set_key = self.set
-        self.get_key = self.get
-        self.del_key = self.delete
-        self.ping = lambda: True
         super().__init__(database_name="ultroid.json")
 
     def keys(self):
@@ -323,12 +309,6 @@ class LocalDB(Database, _BaseDatabase):
 
     def __repr__(self):
         return f"<Ultroid.LocalDB\n -total_keys: {len(self.keys())}\n>"
-
-    def re_cache(self):
-        self._cache = {}
-        for keys in self.keys():
-            self._cache.update({keys: self.get_key(keys)})
-
 
 def UltroidDB():
     _er = False
