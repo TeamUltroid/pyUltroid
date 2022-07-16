@@ -5,7 +5,7 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
-import sys
+import sys, os
 
 from .version import __version__
 
@@ -23,6 +23,12 @@ if sys.argv[0] == "-m":
     from .startup.connections import validate_session, vc_connection
     from .startup.funcs import _version_changes, autobot, enable_inline, update_envs
     from .version import ultroid_version
+
+    if not os.path.exists("./plugins"):	
+        LOGS.error(	
+            "'plugins' folder not found!\nMake sure that, you are on correct path."	
+        )	
+        exit()
 
     start_time = time.time()
     _ult_cache = {}
