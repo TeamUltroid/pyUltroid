@@ -809,7 +809,10 @@ def _get_value(stri):
 
 
 def safe_load(file, *args, **kwargs):
-    read = file.readlines()
+    if isinstance(file, str):
+        read = file.split("\n")
+    else:
+        read = file.readlines()
     out = {}
     for line in read:
         if ":" in line:  # Ignores Empty & Invalid lines
