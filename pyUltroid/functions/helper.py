@@ -454,7 +454,7 @@ def time_formatter(milliseconds):
         + ((str(seconds) + "s") if seconds else "")
     )
     if not tmp:
-        return "0 s"
+        return "0s"
 
     if tmp.endswith(":"):
         return tmp[:-1]
