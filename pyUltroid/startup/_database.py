@@ -59,11 +59,44 @@ def get_data(self_, key):
 # --------------------------------------------------------------------------------------------- #
 
 
-class MongoDB:
+class _BaseDatabase:
+    def __init__(self, *args, **kwargs):
+        self._cache = {}
+
+    def get_key(self, key):        
+        if key in self._cache:
+            return self._cache[key]
+        if key in self.keys():
+            value = get_data(self, key)
+            self._cache.update({key: value})
+            return value
+        return None
+    
+    def re_cache(self):
+        self._cache.clear()
+        for key in self.keys():
+            self._cache.update({key: self.get_key(key)})
+    
+    def ping(self): return 1
+
+    @property
+    def name(self): return ""
+    @property
+    def usage(self): return 0
+    def keys(self): return []
+    
+    def del_key(self, key):
+        if key in self._cache:
+            del self._cache[key]
+        self.delete(key)
+        return True
+
+
+class MongoDB(_BaseDatabase):
     def __init__(self, key, dbname="UltroidDB"):
         self.dB = MongoClient(key, serverSelectionTimeoutMS=5000)
         self.db = self.dB[dbname]
-        self.re_cache()
+        super().__init__()
 
     def __repr__(self):
         return f"<Ultroid.MonGoDB\n -total_keys: {len(self.keys())}\n>"
@@ -75,11 +108,6 @@ class MongoDB:
     @property
     def usage(self):
         return self.db.command("dbstats")["dataSize"]
-
-    def re_cache(self):
-        self._cache = {}
-        for key in self.keys():
-            self._cache.update({key: self.get_key(key)})
 
     def ping(self):
         if self.dB.server_info():
@@ -96,23 +124,8 @@ class MongoDB:
         self._cache.update({key: value})
         return True
 
-    def del_key(self, key):
-        if key in self.keys():
-            try:
-                del self._cache[key]
-            except KeyError:
-                pass
-            self.db.drop_collection(key)
-            return True
-
-    def get_key(self, key):
-        if key in self._cache:
-            return self._cache[key]
-        if key in self.keys():
-            value = get_data(self, key)
-            self._cache.update({key: value})
-            return value
-        return None
+    def delete(self, key):
+        self.db.drop_collection(key)
 
     def get(self, key):
         if x := self.db[key].find_one({"_id": key}):
@@ -120,7 +133,7 @@ class MongoDB:
 
     def flushall(self):
         self.dB.drop_database("UltroidDB")
-        self._cache = {}
+        self._cache.clear()
         return True
 
 
@@ -132,7 +145,7 @@ class MongoDB:
 # Please use https://elephantsql.com/ !
 
 
-class SqlDB:
+class SqlDB(_BaseDatabase):
     def __init__(self, url):
         self._url = url
         self._connection = None
@@ -150,7 +163,7 @@ class SqlDB:
             if self._connection:
                 self._connection.close()
             sys.exit()
-        self.re_cache()
+        super().__init__()
 
     @property
     def name(self):
@@ -164,11 +177,6 @@ class SqlDB:
         data = self._cursor.fetchall()
         return int(data[0][0].split()[0])
 
-    def re_cache(self):
-        self._cache = {}
-        for key in self.keys():
-            self._cache.update({key: self.get_key(key)})
-
     def keys(self):
         self._cursor.execute(
             "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name  = 'ultroid'"
@@ -176,15 +184,6 @@ class SqlDB:
         data = self._cursor.fetchall()
         return [_[0] for _ in data]
 
-    def ping(self):
-        return True
-
-    def get_key(self, variable):
-        if variable in self._cache:
-            return self._cache[variable]
-        get_ = get_data(self, variable)
-        self._cache.update({variable: get_})
-        return get_
 
     def get(self, variable):
         try:
@@ -199,7 +198,7 @@ class SqlDB:
                 if i[0]:
                     return i[0]
 
-    def set_key(self, key, value):
+    def set(self, key, value):
         try:
             self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN IF EXISTS {key}")
         except (psycopg2.errors.UndefinedColumn, psycopg2.errors.SyntaxError):
@@ -211,17 +210,13 @@ class SqlDB:
         self._cursor.execute(f"INSERT INTO Ultroid ({key}) values (%s)", (str(value),))
         return True
 
-    def del_key(self, key):
-        if key in self._cache:
-            del self._cache[key]
+    def delete(self, key):
         try:
             self._cursor.execute(f"ALTER TABLE Ultroid DROP COLUMN {key}")
         except psycopg2.errors.UndefinedColumn:
             return False
         return True
-
-    delete = del_key
-
+    
     def flushall(self):
         self._cache.clear()
         self._cursor.execute("DROP TABLE Ultroid")
@@ -242,7 +237,7 @@ class SqlDB:
 # --------------------------------------------------------------------------------------------- #
 
 
-class RedisDB:
+class RedisDB(_BaseDatabase):
     def __init__(
         self,
         host,
@@ -286,15 +281,8 @@ class RedisDB:
         self.set = self.db.set
         self.get = self.db.get
         self.keys = self.db.keys
-        self.ping = self.db.ping
         self.delete = self.db.delete
-        self.re_cache()
-
-    # dict is faster than Redis
-    def re_cache(self):
-        self._cache = {}
-        for keys in self.keys():
-            self._cache.update({keys: self.get_key(keys)})
+        super().__init__()
 
     @property
     def name(self):
@@ -313,23 +301,10 @@ class RedisDB:
         self._cache.update({key: value})
         return self.set(str(key), str(value))
 
-    def get_key(self, key):
-        if key in self._cache:
-            return self._cache[key]
-        _ = get_data(self, key)
-        self._cache.update({key: _})
-        return _
-
-    def del_key(self, key):
-        if key in self._cache:
-            del self._cache[key]
-        return bool(self.delete(str(key)))
-
-
 # --------------------------------------------------------------------------------------------- #
 
 
-class LocalDB(Database):
+class LocalDB(Database, _BaseDatabase):
     def __init__(self):
         self.set_key = self.set
         self.get_key = self.get
@@ -350,10 +325,11 @@ class LocalDB(Database):
 
 
 def UltroidDB():
-    if Redis and (Var.REDIS_URI or Var.REDISHOST):
-        from .. import HOSTED_ON
-
-        try:
+    _er = False
+    try:
+        if Redis and (Var.REDIS_URI or Var.REDISHOST):
+            from .. import HOSTED_ON
+    
             return RedisDB(
                 host=Var.REDIS_URI or Var.REDISHOST,
                 password=Var.REDIS_PASSWORD or Var.REDISPASSWORD,
@@ -362,22 +338,18 @@ def UltroidDB():
                 decode_responses=True,
                 socket_timeout=5,
                 retry_on_timeout=True,
-            )
-        except ConnectionError:
-            return LocalDB()
-    if MongoClient and Var.MONGO_URI:
-        try:
+                )
+        if MongoClient and Var.MONGO_URI:
             return MongoDB(Var.MONGO_URI)
-        except BaseException:
-            return LocalDB()
-    if psycopg2 and Var.DATABASE_URL:
-        try:
+        if psycopg2 and Var.DATABASE_URL:
             return SqlDB(Var.DATABASE_URL)
-        except BaseException:
-            return LocalDB()
-    LOGS.critical(
+    except BaseException as err:
+        LOGS.exception(err)
+        _er = True
+    if not _er:
+        LOGS.critical(
         "No DB requirement fullfilled!\nPlease install redis, mongo or sql dependencies...\nTill then using local file as database."
-    )
+        )
     return LocalDB()
 
 
