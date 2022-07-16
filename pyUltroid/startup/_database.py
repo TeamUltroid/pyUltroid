@@ -83,7 +83,7 @@ class _BaseDatabase:
             del self._cache[key]
         self.delete(key)
         return True
-    
+
     def _get_data(self, key):
         data = self.get(str(key))
         if data:
@@ -239,6 +239,7 @@ class SqlDB(_BaseDatabase):
         )
         return True
 
+
 # --------------------------------------------------------------------------------------------- #
 
 
@@ -297,6 +298,7 @@ class RedisDB(_BaseDatabase):
     def usage(self):
         return sum(self.db.memory_usage(x) for x in self.keys())
 
+
 # --------------------------------------------------------------------------------------------- #
 
 
@@ -309,6 +311,7 @@ class LocalDB(Database, _BaseDatabase):
 
     def __repr__(self):
         return f"<Ultroid.LocalDB\n -total_keys: {len(self.keys())}\n>"
+
 
 def UltroidDB():
     _er = False
