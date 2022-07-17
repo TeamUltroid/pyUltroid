@@ -19,10 +19,6 @@ from telethon.errors import (
     ApiIdInvalidError,
     AuthKeyDuplicatedError,
 )
-from telethon.network.connection import (
-    ConnectionTcpMTProxyRandomizedIntermediate as MtProxy,
-)
-
 from ..configs import Var
 from . import *
 
@@ -33,7 +29,6 @@ class UltroidClient(TelegramClient):
         session,
         api_id=None,
         api_hash=None,
-        proxy=None,
         bot_token=None,
         udB=None,
         logger: Logger = LOGS,
@@ -48,32 +43,11 @@ class UltroidClient(TelegramClient):
         self._log_at = log_attempt
         self.logger = logger
         self.udB = udB
-        self.proxy = proxy
         kwargs["api_id"] = api_id or Var.API_ID
         kwargs["api_hash"] = api_hash or Var.API_HASH
         kwargs["base_logger"] = TelethonLogger
-        if proxy:
-            try:
-                _proxy = findall("\\=([^&]+)", proxy)
-                if findall("socks", proxy):
-                    kwargs["proxy"] = ("socks5", _proxy[0], int(_proxy[1]))
-                else:
-                    kwargs["connection"] = MtProxy
-                    kwargs["proxy"] = (_proxy[0], int(_proxy[1]), _proxy[2])
-            except ValueError:
-                kwargs["connection"] = None
-                kwargs["proxy"] = None
         super().__init__(session, **kwargs)
-        try:
-            self.run_in_loop(self.start_client(bot_token=bot_token))
-        except ValueError as er:
-            LOGS.info(er)
-            if proxy:
-                udB.del_key("TG_PROXY")
-                del kwargs["connection"]
-                del kwargs["proxy"]
-            super().__init__(session, **kwargs)
-            self.run_in_loop(self.start_client(bot_token=bot_token))
+        self.run_in_loop(self.start_client(bot_token=bot_token))
         self.dc_id = self.session.dc_id
 
     def __repr__(self):
