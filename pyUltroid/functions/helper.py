@@ -14,13 +14,13 @@ import time
 from traceback import format_exc
 from urllib.parse import unquote
 from urllib.request import urlretrieve
+
 from .. import run_as_module
 
 if run_as_module:
     from ..configs import Var
 
 try:
-    import aiofiles
     import aiohttp
 except ImportError:
     aiohttp = None
