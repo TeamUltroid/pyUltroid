@@ -301,11 +301,12 @@ async def webuploader(chat_id: int, msg_id: int, uploader: str):
     return status
 
 
-def get_all_files(path):
+def get_all_files(path, extension=None):
     filelist = []
     for root, dirs, files in os.walk(path):
         for file in files:
-            filelist.append(os.path.join(root, file))
+            if not (extension and not file.endswith(extension)):
+                filelist.append(os.path.join(root, file))
     return sorted(filelist)
 
 
