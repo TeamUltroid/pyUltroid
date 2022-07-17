@@ -85,7 +85,7 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         _in_only = _in_only.split() if _in_only else []
 
         Loader(path="addons", key="Addons").load(
-            func=load_addons, include=_in_only, exclude=_exclude, after_load=_after_load
+            func=load_addons, include=_in_only, exclude=_exclude, after_load=_after_load, load_all=True
         )
 
     # group manager
