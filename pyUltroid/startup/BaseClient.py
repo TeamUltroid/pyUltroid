@@ -9,7 +9,6 @@ import inspect
 import sys
 import time
 from logging import Logger
-from re import findall
 
 from telethon import TelegramClient
 from telethon import utils as telethon_utils
@@ -19,6 +18,7 @@ from telethon.errors import (
     ApiIdInvalidError,
     AuthKeyDuplicatedError,
 )
+
 from ..configs import Var
 from . import *
 
