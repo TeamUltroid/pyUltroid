@@ -33,6 +33,7 @@ if sys.argv[0] == "-m":
 
     start_time = time.time()
     _ult_cache = {}
+    _ignore_eval = []
 
     udB = UltroidDB()
     update_envs()
