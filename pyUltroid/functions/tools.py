@@ -8,8 +8,9 @@
 import json
 import math
 import os
+import random
 import re
-import secrets, random
+import secrets
 import ssl
 from io import BytesIO
 from json.decoder import JSONDecodeError
@@ -29,7 +30,7 @@ except ImportError:
     Image, ImageDraw, ImageFont = None, None, None
     LOGS.info("PIL not installed!")
 
-from urllib.parse import unquote, quote
+from urllib.parse import quote, unquote
 
 from requests.exceptions import MissingSchema
 from telethon import Button
@@ -597,30 +598,37 @@ async def get_stored_file(event, hash):
         )
     await asst.send_message(event.chat_id, msg.text, file=msg.media, reply_to=event.id)
 
-def _package_rpc(text, lang_src='auto', lang_tgt='auto'):
-        GOOGLE_TTS_RPC = ["MkEWBc"]
-        parameter = [[text.strip(), lang_src, lang_tgt, True], [1]]
-        escaped_parameter = json.dumps(parameter, separators=(',', ':'))
-        rpc = [[[random.choice(GOOGLE_TTS_RPC), escaped_parameter, None, "generic"]]]
-        espaced_rpc = json.dumps(rpc, separators=(',', ':'))
-        freq_initial = "f.req={}&".format(quote(espaced_rpc))
-        freq = freq_initial
-        return freq
+
+def _package_rpc(text, lang_src="auto", lang_tgt="auto"):
+    GOOGLE_TTS_RPC = ["MkEWBc"]
+    parameter = [[text.strip(), lang_src, lang_tgt, True], [1]]
+    escaped_parameter = json.dumps(parameter, separators=(",", ":"))
+    rpc = [[[random.choice(GOOGLE_TTS_RPC), escaped_parameter, None, "generic"]]]
+    espaced_rpc = json.dumps(rpc, separators=(",", ":"))
+    freq_initial = "f.req={}&".format(quote(espaced_rpc))
+    freq = freq_initial
+    return freq
+
 
 async def translate(*args, **kwargs):
     headers = {
-            "Referer": "https://translate.google.co.in",
-            "User-Agent":
-                "Mozilla/5.0 (Windows NT 10.0; WOW64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/47.0.2526.106 Safari/537.36",
-            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        "Referer": "https://translate.google.co.in",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/47.0.2526.106 Safari/537.36",
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
     }
-    x = await async_searcher("https://translate.google.co.in/_/TranslateWebserverUi/data/batchexecute", headers=headers, data=_package_rpc(*args, **kwargs), post=True)
+    x = await async_searcher(
+        "https://translate.google.co.in/_/TranslateWebserverUi/data/batchexecute",
+        headers=headers,
+        data=_package_rpc(*args, **kwargs),
+        post=True,
+    )
     response = ""
     for i in json.loads(json.loads(x[4:])[0][2])[1][0][0][-1]:
-        response += i[0].replace("\n\n","\n")
+        response += i[0].replace("\n\n", "\n")
     return response
+
 
 def cmd_regex_replace(cmd):
     return (
