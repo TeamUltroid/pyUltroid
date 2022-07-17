@@ -369,9 +369,9 @@ class LogoHelper:
             stroke_width=stroke_width,
             stroke_fill=stroke_fill,
         )
-        file_name = "Logo.png"
-        img.save(f"./{file_name}", "PNG")
-        return f"{file_name} Generated Successfully!"
+        file_name = check_filename("logo.png")
+        img.save(file_name, "PNG")
+        return file_name
 
 
 # --------------------------------------
