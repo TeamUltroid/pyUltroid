@@ -13,7 +13,7 @@ import sys
 import time
 from traceback import format_exc
 from urllib.parse import unquote
-
+from urllib.request import urlretrieve
 from .. import run_as_module
 
 if run_as_module:
@@ -23,8 +23,6 @@ try:
     import aiofiles
     import aiohttp
 except ImportError:
-    import urllib
-
     aiohttp = None
 
 try:
@@ -357,13 +355,12 @@ async def downloader(filename, file, event, taime, msg):
 async def download_file(link, name):
     """for files, without progress callback with aiohttp"""
     if not aiohttp:
-        urllib.request.urlretrieve(link, name)
+        urlretrieve(link, name)
         return name
     async with aiohttp.ClientSession() as ses:
         async with ses.get(link) as re_ses:
-            file = await aiofiles.open(name, "wb")
-            await file.write(await re_ses.read())
-            await file.close()
+            with open(name, "wb") as file:
+                file.write(await re_ses.read())
     return name
 
 
