@@ -62,8 +62,7 @@ if sys.argv[0] == "-m":
             validate_session(Var.SESSION, LOGS),
             udB=udB,
             app_version=ultroid_version,
-            device_model="Ultroid",
-            proxy=udB.get_key("TG_PROXY"),
+            device_model="Ultroid"
         )
         ultroid_bot.run_in_loop(autobot())
 
