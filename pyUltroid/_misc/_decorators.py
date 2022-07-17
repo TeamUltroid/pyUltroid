@@ -79,6 +79,10 @@ def ultroid_cmd(
                     return
                 if ult.sender_id not in owner_and_sudos():
                     return
+                if ult.sender_id in _ignore_eval:
+                    return await eod(
+                        ult, "`You cannot use this command now. Contact owner of this bot!`"
+                    )
                 if fullsudo and ult.sender_id not in SUDO_M.fullsudos:
                     return await eod(ult, "`Full Sudo User Required...`", time=15)
             chat = ult.chat
@@ -89,10 +93,6 @@ def ultroid_cmd(
                     and not (ult.sender_id in DEVLIST)
                 ):
                     return
-            if event.sender_id in _ignore_eval:
-                return await eod(
-                    ult, "`You cannot use this command now. Contact owner of this bot!`"
-                )
             if admins_only:
                 if ult.is_private:
                     return await eod(ult, "`Use this in group/channel.`")
