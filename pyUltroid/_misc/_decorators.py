@@ -81,7 +81,8 @@ def ultroid_cmd(
                     return
                 if ult.sender_id in _ignore_eval:
                     return await eod(
-                        ult, "`You cannot use this command now. Contact owner of this bot!`"
+                        ult,
+                        "`You cannot use this command now. Contact owner of this bot!`",
                     )
                 if fullsudo and ult.sender_id not in SUDO_M.fullsudos:
                     return await eod(ult, "`Full Sudo User Required...`", time=15)
