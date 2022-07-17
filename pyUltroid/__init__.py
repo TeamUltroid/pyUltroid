@@ -50,7 +50,7 @@ if sys.argv[0] == "-m":
             udB.del_key("DUAL_MODE")
             DUAL_MODE = False
         ultroid_bot = None
- 
+
         if not udB.get_key("BOT_TOKEN"):
             LOGS.critical(
                 '"BOT_TOKEN" not Found! Please add it, in order to use "BOTMODE"'
@@ -65,7 +65,7 @@ if sys.argv[0] == "-m":
             device_model="Ultroid",
             proxy=udB.get_key("TG_PROXY"),
         )
-         ultroid_bot.run_in_loop(autobot())
+        ultroid_bot.run_in_loop(autobot())
 
     asst = UltroidClient(None, bot_token=udB.get_key("BOT_TOKEN"), udB=udB)
 
