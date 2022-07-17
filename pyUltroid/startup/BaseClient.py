@@ -101,19 +101,14 @@ class UltroidClient(TelegramClient):
                 self.logger.critical("String session expired. Create new!")
                 return sys.exit()
             raise er
-        except AccessTokenExpiredError:
+        except (AccessTokenExpiredError,  AccessTokenInvalidError):
             # AccessTokenError can only occur for Bot account
-            # And at Early Process, Its saved in Redis.
+            # And at Early Process, Its saved in DB.
             self.udB.del_key("BOT_TOKEN")
             self.logger.critical(
-                "Bot token expired. Create new from @Botfather and add in BOT_TOKEN env variable!"
+                "Bot token is expired or invalid. Create new from @Botfather and add in BOT_TOKEN env variable!"
             )
             sys.exit()
-        except AccessTokenInvalidError:
-            self.udB.del_key("BOT_TOKEN")
-            self.logger.critical("The provided bot token is not valid! Quitting...")
-            sys.exit()
-
         # Save some stuff for later use...
         self.me = await self.get_me()
         if self.me.bot:
@@ -257,9 +252,8 @@ class UltroidClient(TelegramClient):
 
     def add_handler(self, func, *args, **kwargs):
         """Add new event handler, ignoring if exists"""
-        for f_, _ in self.list_event_handlers():
-            if f_ == func:
-                return
+        if func in [_[0] for _ in self.list_event_handlers()]:
+            return
         self.add_event_handler(func, *args, **kwargs)
 
     @property
