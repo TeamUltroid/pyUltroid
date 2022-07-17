@@ -16,7 +16,6 @@ try:
 except ImportError:
     pass
 
-
 class Var:
     # mandatory
     API_ID = (
@@ -53,5 +52,3 @@ class Var:
     DATABASE_URL = config("DATABASE_URL", default=None)
     # for MONGODB users
     MONGO_URI = config("MONGO_URI", default=None)
-    # for Okteto Platform
-    OKTETO = config("OKTETO", cast=bool, default=False)
