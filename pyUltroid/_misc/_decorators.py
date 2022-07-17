@@ -35,6 +35,7 @@ from telethon.events import MessageEdited, NewMessage
 from telethon.utils import get_display_name
 
 from .. import *
+from .. import _ignore_eval
 from ..dB import DEVLIST
 from ..dB._core import LIST, LOADED
 from ..functions.admins import admin_check
