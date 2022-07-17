@@ -9,8 +9,9 @@ import glob
 import os
 from importlib import import_module
 from logging import Logger
-from .functions.tools import get_all_files
+
 from . import LOGS
+from .functions.tools import get_all_files
 
 
 class Loader:
@@ -20,8 +21,13 @@ class Loader:
         self._logger = logger
 
     def load(
-        self, log=True, func=import_module, include=None, exclude=None, after_load=None,
-        load_all=False
+        self,
+        log=True,
+        func=import_module,
+        include=None,
+        exclude=None,
+        after_load=None,
+        load_all=False,
     ):
         if include:
             if log:
