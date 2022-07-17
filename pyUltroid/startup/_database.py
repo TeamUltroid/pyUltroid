@@ -68,10 +68,6 @@ class _BaseDatabase:
         return 1
 
     @property
-    def name(self):
-        return ""
-
-    @property
     def usage(self):
         return 0
 
