@@ -5,8 +5,10 @@
 # PLease read the GNU Affero General Public License in
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
+import ast
 import os
-import sys, ast
+import sys
+
 try:
     from redis import Redis
 except ImportError:
