@@ -38,11 +38,6 @@ except ImportError:
 
 
 from . import *
-
-try:
-    from html_telegraph_poster import TelegraphPoster
-except ImportError:
-    TelegraphPoster = None
 import asyncio
 import multiprocessing
 from concurrent.futures import ThreadPoolExecutor
@@ -385,19 +380,6 @@ async def fast_download(download_url, filename=None, progress_callback=None):
 
 
 # --------------------------Media Funcs-------------------------------- #
-
-
-@run_async
-def make_html_telegraph(title, author, text):
-    client = TelegraphPoster(use_api=True)
-    client.create_api_token(title)
-    page = client.post(
-        title=title,
-        author=author,
-        author_url="https://t.me/TeamUltroid",
-        text=text,
-    )
-    return page["url"]
 
 
 def mediainfo(media):
