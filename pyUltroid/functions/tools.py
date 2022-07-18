@@ -638,7 +638,7 @@ def translate(*args, **kwargs):
         "https://translate.google.co.in/_/TranslateWebserverUi/data/batchexecute",
         headers=headers,
         data=_package_rpc(*args, **kwargs),
-    )
+    ).text
     response = ""
     data = json.loads(json.loads(x[4:])[0][2])[1][0][0]
     subind = data[-2]
