@@ -83,7 +83,9 @@ class _BaseDatabase:
             data = self.get(str(key))
         if data:
             try:
-                data = eval(data)
+                _ = eval(data)
+                if not callable(_):
+                    data = _
             except BaseException:
                 pass
         return data
