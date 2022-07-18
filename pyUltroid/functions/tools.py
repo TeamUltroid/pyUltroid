@@ -552,7 +552,6 @@ def make_html_telegraph(title, html=""):
     telegraph = telegraph_client()
     page = telegraph.create_page(
         title=title,
-        author_url="https://t.me/TeamUltroid",
         html_content=html,
     )
     return page["url"]
