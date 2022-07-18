@@ -53,11 +53,9 @@ class _BaseDatabase:
     def get_key(self, key):
         if key in self._cache:
             return self._cache[key]
-        if key in self.keys():
-            value = self._get_data(key)
-            self._cache.update({key: value})
-            return value
-        return None
+        value = self._get_data(key)
+        self._cache.update({key: value})
+        return value
 
     def re_cache(self):
         self._cache.clear()
@@ -80,8 +78,9 @@ class _BaseDatabase:
         self.delete(key)
         return True
 
-    def _get_data(self, key):
-        data = self.get(str(key))
+    def _get_data(self, key=None, data=None):
+        if key:
+            data = self.get(str(key))
         if data:
             try:
                 data = eval(data)
@@ -90,8 +89,8 @@ class _BaseDatabase:
         return data
 
     def set_key(self, key, value):
-        value = self._get_data(value)
-        self._cache.update({key: value})
+        value = self._get_data(data=value)
+        self._cache[key] = value
         return self.set(str(key), str(value))
 
     def rename(self, key1, key2):
