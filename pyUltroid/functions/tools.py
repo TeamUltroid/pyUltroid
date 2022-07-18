@@ -625,7 +625,12 @@ async def translate(*args, **kwargs):
         post=True,
     )
     response = ""
-    for i in json.loads(json.loads(x[4:])[0][2])[1][0][0][-1]:
+    data = json.loads(json.loads(x[4:])[0][2])[1][0][0]
+    try:
+        subind = data[-2]
+    except IndexError:
+        subind = data[-1]
+    for i in subind:
         response += i[0].replace("\n\n", "\n")
     return response
 
