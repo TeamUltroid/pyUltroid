@@ -631,7 +631,7 @@ async def translate(*args, **kwargs):
     except IndexError:
         subind = data[-1]
     for i in subind:
-        response += i[0].replace("\n\n", "\n")
+        response += i[0]
     return response
 
 
