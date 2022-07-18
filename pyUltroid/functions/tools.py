@@ -31,8 +31,11 @@ except ImportError:
     LOGS.info("PIL not installed!")
 
 from urllib.parse import quote, unquote
-
-from requests.exceptions import MissingSchema
+try:
+    import requests
+    from requests.exceptions import MissingSchema
+except ImportError:
+    requests = None
 from telethon import Button
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 
@@ -610,7 +613,7 @@ def _package_rpc(text, lang_src="auto", lang_tgt="auto"):
     return freq
 
 
-async def translate(*args, **kwargs):
+def translate(*args, **kwargs):
     headers = {
         "Referer": "https://translate.google.co.in",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) "
@@ -618,11 +621,10 @@ async def translate(*args, **kwargs):
         "Chrome/47.0.2526.106 Safari/537.36",
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
     }
-    x = await async_searcher(
+    x = requests.post(
         "https://translate.google.co.in/_/TranslateWebserverUi/data/batchexecute",
         headers=headers,
-        data=_package_rpc(*args, **kwargs),
-        post=True,
+        data=_package_rpc(*args, **kwargs)
     )
     response = ""
     data = json.loads(json.loads(x[4:])[0][2])[1][0][0]
