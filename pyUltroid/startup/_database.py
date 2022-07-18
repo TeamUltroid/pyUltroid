@@ -6,8 +6,7 @@
 # <https://github.com/TeamUltroid/pyUltroid/blob/main/LICENSE>.
 
 import os
-import sys
-
+import sys, ast
 try:
     from redis import Redis
 except ImportError:
@@ -83,9 +82,7 @@ class _BaseDatabase:
             data = self.get(str(key))
         if data:
             try:
-                _ = eval(data)
-                if not callable(_):
-                    data = _
+                data = ast.literal_eval(data)
             except BaseException:
                 pass
         return data
