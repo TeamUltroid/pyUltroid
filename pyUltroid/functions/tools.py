@@ -41,7 +41,7 @@ from telethon import Button
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 
 from .. import *
-from .helper import bash
+from .helper import bash, run_async
 
 if run_as_module:
     from ..dB.filestore_db import get_stored_msg, store_msg
@@ -508,7 +508,6 @@ def four_point_transform(image, pts):
 # ------------------------------------- Telegraph ---------------------------------- #
 TELEGRAPH = []
 
-
 def telegraph_client():
     if not Telegraph:
         LOGS.info("'Telegraph' is not Installed!")
@@ -526,7 +525,7 @@ def telegraph_client():
     gd_name = ultroid_bot.full_name
     short_name = gd_name[:30]
     profile_url = (
-        f"https://t.me/{ultroid_bot.me.username}" if ultroid_bot.me.username else None
+        f"https://t.me/{ultroid_bot.me.username}" if ultroid_bot.me.username else "https://t.me/TheUltroid"
     )
     try:
         TelegraphClient.create_account(
@@ -543,6 +542,17 @@ def telegraph_client():
     udB.set_key("_TELEGRAPH_TOKEN", TelegraphClient.get_access_token())
     TELEGRAPH.append(TelegraphClient)
     return TelegraphClient
+
+
+@run_async
+def make_html_telegraph(title, html=""):
+    telegraph = telegraph_client()
+    page = telegraph.create_page(
+        title=title,
+        author_url="https://t.me/TeamUltroid",
+        html_content=html,
+    )
+    return page["url"]
 
 
 async def Carbon(
