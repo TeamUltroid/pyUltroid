@@ -508,6 +508,7 @@ def four_point_transform(image, pts):
 # ------------------------------------- Telegraph ---------------------------------- #
 TELEGRAPH = []
 
+
 def telegraph_client():
     if not Telegraph:
         LOGS.info("'Telegraph' is not Installed!")
@@ -525,7 +526,9 @@ def telegraph_client():
     gd_name = ultroid_bot.full_name
     short_name = gd_name[:30]
     profile_url = (
-        f"https://t.me/{ultroid_bot.me.username}" if ultroid_bot.me.username else "https://t.me/TheUltroid"
+        f"https://t.me/{ultroid_bot.me.username}"
+        if ultroid_bot.me.username
+        else "https://t.me/TheUltroid"
     )
     try:
         TelegraphClient.create_account(
