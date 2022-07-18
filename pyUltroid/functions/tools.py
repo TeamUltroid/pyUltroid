@@ -31,6 +31,7 @@ except ImportError:
     LOGS.info("PIL not installed!")
 
 from urllib.parse import quote, unquote
+
 try:
     import requests
     from requests.exceptions import MissingSchema
@@ -624,7 +625,7 @@ def translate(*args, **kwargs):
     x = requests.post(
         "https://translate.google.co.in/_/TranslateWebserverUi/data/batchexecute",
         headers=headers,
-        data=_package_rpc(*args, **kwargs)
+        data=_package_rpc(*args, **kwargs),
     )
     response = ""
     data = json.loads(json.loads(x[4:])[0][2])[1][0][0]
