@@ -37,7 +37,6 @@ except ImportError:
     Repo = None
 
 
-from . import *
 import asyncio
 import multiprocessing
 from concurrent.futures import ThreadPoolExecutor
@@ -49,6 +48,7 @@ from telethon.utils import get_display_name
 
 from .._misc import CMD_HELP
 from .._misc._wrappers import eod, eor
+from . import *
 
 if run_as_module:
     from ..dB._core import ADDONS, HELP, LIST, LOADED
