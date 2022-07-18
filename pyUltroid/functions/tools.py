@@ -626,9 +626,8 @@ async def translate(*args, **kwargs):
     )
     response = ""
     data = json.loads(json.loads(x[4:])[0][2])[1][0][0]
-    try:
-        subind = data[-2]
-    except IndexError:
+    subind = data[-2]
+    if not subind[0]:
         subind = data[-1]
     for i in subind:
         response += i[0]
