@@ -261,7 +261,7 @@ def format_btn(buttons: list):
 async def saavn_search(query: str):
     try:
         data = await async_searcher(
-            url=f"https://jostapi.herokuapp.com/saavn?query={query.replace(' ', '%20')}",
+            url=f"https://saavn-api.vercel.app/search/{query.replace(' ', '%20')}",
             re_json=True,
         )
     except BaseException:
