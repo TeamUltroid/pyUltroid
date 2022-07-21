@@ -79,11 +79,7 @@ def load_addons(plugin_name):
     modules["userbot.uniborgConfig"] = xxx
     spec.loader.exec_module(mod)
     modules[name] = mod
-    doc = (
-        modules[name].__doc__.format(i=HNDLR)
-        if modules[name].__doc__
-        else ""
-    )
+    doc = modules[name].__doc__.format(i=HNDLR) if modules[name].__doc__ else ""
     if "Addons" in HELP.keys():
         update_cmd = HELP["Addons"]
         try:
