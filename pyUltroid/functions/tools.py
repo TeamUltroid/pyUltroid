@@ -869,7 +869,7 @@ def safe_load(file, *args, **kwargs):
     for line in read:
         if ":" in line:  # Ignores Empty & Invalid lines
             ct = line.count('"')
-            vls = out.values()
+            vls = list(out.values())
             if ct != 2 and len(vls) > 1 and isinstance(vls[-1], str):
                 out[list(out.keys())[-1]] += line
                 return
