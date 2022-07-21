@@ -54,7 +54,8 @@ class Loader:
                 f"• Installing {self.key}'s Plugins || Count : {len(files)} •"
             )
         for plugin in sorted(files):
-            plugin = plugin.replace(".py", "").replace("/", ".").replace("\\", ".")
+            if func == import_module:
+                plugin = plugin.replace(".py", "").replace("/", ".").replace("\\", ".")
             try:
                 modl = func(plugin)
             except ModuleNotFoundError as er:
