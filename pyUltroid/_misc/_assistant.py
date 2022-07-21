@@ -111,6 +111,8 @@ def in_pattern(pattern=None, owner=False, **kwargs):
                 )
             try:
                 await func(event)
+            except QueryIdInvalidError:
+                pass
             except Exception as er:
                 err = format_exc()
 
