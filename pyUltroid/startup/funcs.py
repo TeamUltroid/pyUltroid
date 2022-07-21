@@ -466,7 +466,7 @@ async def ready():
             "https://ultroid-api.vercel.app/announcements", post=True, re_json=True
         )
         for upt in updts:
-            key = upt.keys()[0]
+            key = list(upt.keys())[0]
             if key not in get_:
                 await asst.send_message(chat_id, upt[key])
                 get_.append(upt)
