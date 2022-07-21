@@ -12,7 +12,8 @@ from sys import modules
 
 
 def load_addons(plugin_name):
-    if plugin_name.startswith("__"):
+    base_name = plugin_name.split("/")[-1].split("\\")[-1].replace(".py", "")
+    if base_name.startswith("__"):
         return
     from .. import HNDLR, LOGS, asst, udB, ultroid_bot
     from .._misc import _supporter as xxx
@@ -23,9 +24,8 @@ def load_addons(plugin_name):
     from ..configs import Var
     from ..dB._core import HELP
 
-    path = "addons/" + plugin_name
-    name = path.replace("/", ".").replace("\\", ".")
-    spec = util.spec_from_file_location(name, path + ".py")
+    name = plugin_name.replace("/", ".").replace("\\", ".")
+    spec = util.spec_from_file_location(name, plugin_name)
     mod = util.module_from_spec(spec)
     mod.LOG_CHANNEL = udB.get_key("LOG_CHANNEL")
     mod.udB = udB
@@ -78,20 +78,20 @@ def load_addons(plugin_name):
     modules["fridaybot.Config"] = xxx
     modules["userbot.uniborgConfig"] = xxx
     spec.loader.exec_module(mod)
-    modules["addons." + plugin_name] = mod
+    modules[name] = mod
     doc = (
-        modules[f"addons.{plugin_name}"].__doc__.format(i=HNDLR)
-        if modules[f"addons.{plugin_name}"].__doc__
+        modules[name].__doc__.format(i=HNDLR)
+        if modules[name].__doc__
         else ""
     )
     if "Addons" in HELP.keys():
         update_cmd = HELP["Addons"]
         try:
-            update_cmd.update({plugin_name: doc})
+            update_cmd.update({base_name: doc})
         except BaseException:
             pass
     else:
         try:
-            HELP.update({"Addons": {plugin_name: doc}})
+            HELP.update({"Addons": {base_name: doc}})
         except BaseException as em:
             pass
