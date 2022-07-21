@@ -469,7 +469,7 @@ async def ready():
             key = list(upt.keys())[0]
             if key not in get_:
                 await asst.send_message(chat_id, upt[key])
-                get_.append(upt)
+                get_.append(key)
         udB.set_key("OLDANN", get_)
     except Exception as er:
         LOGS.exception(er)
