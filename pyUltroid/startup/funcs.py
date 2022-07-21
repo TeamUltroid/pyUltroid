@@ -468,25 +468,16 @@ async def ready():
         for upt in updts:
             key = list(upt.keys())[0]
             if key not in get_:
-                await asst.send_message(chat_id, upt[key])
+                cont = upt[key]
+                if isinstance(cont, str):
+                    await asst.send_message(chat_id, cont)
+                elif isinstance(cont, dict) and cont.get("chat"):
+                    await asst.forward_messages(chat_id, cont["msg_id"], cont["chat"])
+                else:
+                    LOGS.info(cont)
+                    LOGS.info("Invalid Type of Announcement Detected!\nMake sure you are on latest version..")
                 get_.append(key)
         udB.set_key("OLDANN", get_)
-    except Exception as er:
-        LOGS.exception(er)
-    try:
-        # To Let Them know About New Updates and Changes
-        await ultroid_bot(JoinChannelRequest("@TheUltroid"))
-    except BotMethodInvalidError:
-        pass
-    except ChannelsTooMuchError:
-        LOGS.info("Join @TheUltroid to know about new Updates...")
-    except ChannelPrivateError:
-        LOGS.critical(
-            "You are Banned from @TheUltroid for some reason. Contact any dev if you think there is some mistake..."
-        )
-        import sys
-
-        sys.exit()
     except Exception as er:
         LOGS.exception(er)
 
