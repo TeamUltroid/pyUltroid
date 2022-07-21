@@ -17,8 +17,6 @@ except ImportError:
     timezone = None
 
 from telethon.errors import (
-    BotMethodInvalidError,
-    ChannelPrivateError,
     ChannelsTooMuchError,
     ChatAdminRequiredError,
     MessageIdInvalidError,
@@ -31,7 +29,6 @@ from telethon.tl.functions.channels import (
     EditAdminRequest,
     EditPhotoRequest,
     InviteToChannelRequest,
-    JoinChannelRequest,
 )
 from telethon.tl.functions.contacts import UnblockRequest
 from telethon.tl.types import (
@@ -475,7 +472,9 @@ async def ready():
                     await asst.forward_messages(chat_id, cont["msg_id"], cont["chat"])
                 else:
                     LOGS.info(cont)
-                    LOGS.info("Invalid Type of Announcement Detected!\nMake sure you are on latest version..")
+                    LOGS.info(
+                        "Invalid Type of Announcement Detected!\nMake sure you are on latest version.."
+                    )
                 get_.append(key)
         udB.set_key("OLDANN", get_)
     except Exception as er:
