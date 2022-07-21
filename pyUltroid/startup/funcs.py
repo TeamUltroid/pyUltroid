@@ -465,9 +465,10 @@ async def ready():
         updts = await async_searcher(
             "https://ultroid-api.vercel.app/announcements", post=True, re_json=True
         )
-        for upt in updts.keys():
-            if upt not in updts:
-                await asst.send_message(chat_id, updts[upt])
+        for upt in updts:
+            key = upt.keys()[0]
+            if key not in get_:
+                await asst.send_message(chat_id, upt[key])
                 get_.append(upt)
         udB.set_key("OLDANN", get_)
     except Exception as er:
