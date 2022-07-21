@@ -43,6 +43,7 @@ from telethon.tl.types import (
 from telethon.utils import get_peer_id
 
 from .. import LOGS
+from ..functions.tools import async_searcher
 from ..functions.helper import download_file, updater
 
 db_url = 0
@@ -460,6 +461,16 @@ async def ready():
             LOGS.info(ef)
     if spam_sent and not spam_sent.media:
         udB.set_key("LAST_UPDATE_LOG_SPAM", spam_sent.id)
+    get_ = udB.get_key("OLDANN") or []
+    try:
+        updts = await async_searcher("https://ultroid-api.vercel.app/announcements", post=True, re_json=True)
+        for upt in updts.keys():
+            if upt not in updts:
+                await asst.send_message(chat_id, updts[upt])
+                get_.append(upt)
+        udB.set_key("OLDANN", get_) 
+    except Exception as er:
+        LOGS.exception(er)
     try:
         # To Let Them know About New Updates and Changes
         await ultroid_bot(JoinChannelRequest("@TheUltroid"))
