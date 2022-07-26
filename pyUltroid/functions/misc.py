@@ -408,7 +408,7 @@ class Quotly:
             os.remove(file_)
             return uri
 
-        if reply:
+        if reply and reply.raw_text:
             reply = {
                 "name": get_display_name(reply.sender) or "Deleted Account",
                 "text": reply.raw_text,
@@ -446,6 +446,13 @@ class Quotly:
                     del enti_["_"]
                     enti_["type"] = self._entities[type(entity)]
                     entities.append(enti_)
+        text = event.raw_text
+        if isinstance(event, types.MessageService):
+            if isinstance (event.action, types.MessageActionGameScore):
+                text = f"{name} scored {event.action.score}"
+                rep = await event.get_reply_message()
+                if rep and rep.game:
+                    text += f" in {rep.game.title}"
         message = {
             "entities": entities,
             "chatId": id_,
