@@ -468,7 +468,7 @@ class Quotly:
                 "name": name or "Unknown",
                 "type": type_,
             },
-            "text": event.raw_text,
+            "text": text,
             "replyMessage": reply,
         }
         if event.document and event.document.thumbs:
