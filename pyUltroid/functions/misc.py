@@ -448,7 +448,7 @@ class Quotly:
                     entities.append(enti_)
         text = event.raw_text
         if isinstance(event, types.MessageService):
-            if isinstance (event.action, types.MessageActionGameScore):
+            if isinstance(event.action, types.MessageActionGameScore):
                 text = f"{name} scored {event.action.score}"
                 rep = await event.get_reply_message()
                 if rep and rep.game:
