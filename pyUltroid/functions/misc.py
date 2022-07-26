@@ -449,10 +449,12 @@ class Quotly:
         text = event.raw_text
         if isinstance(event, types.MessageService):
             if isinstance(event.action, types.MessageActionGameScore):
-                text = f"{name} scored {event.action.score}"
+                text = f"scored {event.action.score}"
                 rep = await event.get_reply_message()
                 if rep and rep.game:
                     text += f" in {rep.game.title}"
+            elif isinstance(event.action, types.MessageActionPinMessage):
+                text = "pinned a message."
         message = {
             "entities": entities,
             "chatId": id_,
