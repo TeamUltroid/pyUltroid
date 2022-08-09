@@ -25,8 +25,7 @@ def list_all_stored_msgs():
 
 def get_stored_msg(hash):
     all = get_stored()
-    if all.get(hash):
-        return all[hash]
+    return all.get(hash)
 
 
 def del_stored(hash):
